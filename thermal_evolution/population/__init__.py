@@ -10,7 +10,8 @@ from thermal_evolution.population.selection_effects import (
     transit_selection_weight,
 )
 from thermal_evolution.population.simulator import (
-    PopulationSimulationResult,
+    IncrementalModelStats,
+    IncrementalPopulationResult,
     PopulationSimulator,
 )
 
@@ -21,6 +22,7 @@ __all__ = [
     "geometric_transit_probability",
     "transit_detection_completeness",
     "transit_selection_weight",
-    "PopulationSimulationResult",
+    "IncrementalModelStats",
+    "IncrementalPopulationResult",
     "PopulationSimulator",
 ]
