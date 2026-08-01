@@ -12,6 +12,10 @@ venv/
 # Pytest
 .pytest_cache/
 
+# Process Lockfiles
+.paper_build.lock
+paper/.paper_build.lock
+
 # LaTeX build outputs and compiled PDF binaries
 *.aux
 *.log
