@@ -17,8 +17,8 @@ from thermal_evolution.visualization import plot_evolution_track, plot_internal_
 def main():
     print("--- Simulating Jupiter Thermal Evolution (1 Myr to 4.56 Gyr) ---")
 
-    # 1. Setup Tabular EOS using high-resolution synthetic grid
-    eos = TabularEOS.create_synthetic_grid(n_P=100, n_T=100)
+    # 1. Setup Tabular EOS using cached synthetic grid
+    eos = TabularEOS.create_synthetic_grid()
     solver = InteriorSolver(envelope_eos=eos)
     atmosphere = GuillotAtmosphere(envelope_eos=eos)
 

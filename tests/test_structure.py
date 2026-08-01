@@ -37,7 +37,7 @@ def test_jupiter_structure_analytical():
 
 
 def test_structure_tabular_eos():
-    tab_eos = TabularEOS.create_synthetic_grid(n_P=100, n_T=100)
+    tab_eos = TabularEOS.create_synthetic_grid()
     solver = InteriorSolver(envelope_eos=tab_eos)
 
     M_p = 1.0 * M_JUP
