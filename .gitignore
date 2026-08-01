@@ -12,7 +12,7 @@ venv/
 # Pytest
 .pytest_cache/
 
-# LaTeX build outputs
+# LaTeX build outputs and compiled PDF binaries
 *.aux
 *.log
 *.out
@@ -20,6 +20,7 @@ venv/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.pdf
 
 # Outputs (large generated binary figures can be generated on demand via build_paper.py)
 outputs/*.png
