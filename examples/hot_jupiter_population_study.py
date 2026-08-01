@@ -31,7 +31,7 @@ def main():
 
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
-    fig_path = os.path.join(output_dir, "hot_jupiter_incremental_ks_comparison.png")
+    fig_path = os.path.join(output_dir, "hot_jupiter_incremental_ks_comparison.pdf")
     fig = simulator.plot_incremental_stages(result, savepath=fig_path)
     plt.close(fig)
 

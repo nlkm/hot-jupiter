@@ -52,19 +52,19 @@ def main():
     # 3. Save evolutionary track plot
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
-    fig_evo = plot_evolution_track(
+    # Save 4-panel cooling track vector PDF plot
+    fig_track = plot_evolution_track(
         result,
-        title="Jupiter 4.56 Gyr Thermal Cooling Track",
-        savepath=os.path.join(output_dir, "jupiter_cooling_track.png"),
+        title="Jupiter Thermal Evolution Track (1 Myr to 4.56 Gyr)",
+        savepath=os.path.join(output_dir, "jupiter_cooling_track.pdf"),
     )
-    plt.close(fig_evo)
+    plt.close(fig_track)
 
-    # 4. Compute final 1D interior profile at 4.56 Gyr
-    final_struct = solver.solve_structure(M_p=M_p, M_c=M_c, S_env=result.S[-1])
+    # Save 1D interior profile vector PDF plot at current epoch
     fig_prof = plot_internal_profile(
-        final_struct,
-        title="Jupiter Interior Hydrostatic Profile at 4.56 Gyr",
-        savepath=os.path.join(output_dir, "jupiter_internal_profile.png"),
+        result.final_structure,
+        title="Jupiter Present-Day Hydrostatic Interior Profile",
+        savepath=os.path.join(output_dir, "jupiter_internal_profile.pdf"),
     )
     plt.close(fig_prof)
 

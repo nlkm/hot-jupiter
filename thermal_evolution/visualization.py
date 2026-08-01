@@ -1,5 +1,6 @@
 """
 Visualization module for thermal evolution tracks and interior hydrostatic profiles.
+Generates publication-quality vector graphics (PDF) for LaTeX documents.
 """
 
 from typing import Optional
@@ -18,9 +19,10 @@ def plot_evolution_track(
 ) -> plt.Figure:
     """
     Plot 4-panel evolutionary track: Radius, Luminosity, Temperatures, Entropy over time.
+    Saves publication-ready vector graphic (.pdf) by default.
     """
-    fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    fig.suptitle(title, fontsize=14, fontweight="bold")
+    fig, axes = plt.subplots(2, 2, figsize=(10, 7), sharex=True)
+    fig.suptitle(title, fontsize=13, fontweight="bold")
 
     t_gyr = result.t_gyr
 
@@ -34,7 +36,7 @@ def plot_evolution_track(
     # Panel 2: Intrinsic Luminosity vs Time
     ax2 = axes[0, 1]
     ax2.plot(t_gyr, result.L_int_sun, "r-", lw=2)
-    ax2.set_ylabel(r"Intrinsic Luminosity $L_{\mathrm{int}}$ [$L_\odot$]")
+    ax2.set_ylabel(r"Luminosity $L_{\mathrm{int}}$ [$L_\odot$]")
     ax2.set_xscale("log")
     ax2.set_yscale("log")
     ax2.grid(True, alpha=0.3)
@@ -53,13 +55,16 @@ def plot_evolution_track(
     ax4 = axes[1, 1]
     ax4.plot(t_gyr, result.S, "m-", lw=2)
     ax4.set_xlabel("Age [Gyr]")
-    ax4.set_ylabel(r"Envelope Entropy $S$ [J kg$^{-1}$ K$^{-1}$]")
+    ax4.set_ylabel(r"Entropy $S$ [J kg$^{-1}$ K$^{-1}$]")
     ax4.set_xscale("log")
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
     if savepath:
-        fig.savefig(savepath, dpi=300, bbox_inches="tight")
+        fig.savefig(savepath, bbox_inches="tight")
+        # If savepath ends with .pdf, also save a PNG copy if needed
+        if savepath.endswith(".pdf"):
+            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
     return fig
 
 
@@ -70,6 +75,7 @@ def plot_internal_profile(
 ) -> plt.Figure:
     """
     Plot 4-panel 1D interior hydrostatic profile: Density, Pressure, Temperature, nabla_ad.
+    Saves publication-ready vector graphic (.pdf) by default.
     """
     if struct.profile is None:
         raise ValueError("PlanetStructure does not contain an internal profile.")
@@ -77,8 +83,8 @@ def plot_internal_profile(
     prof = struct.profile
     r_norm = prof.r / R_JUP
 
-    fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    fig.suptitle(f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)", fontsize=14, fontweight="bold")
+    fig, axes = plt.subplots(2, 2, figsize=(10, 7), sharex=True)
+    fig.suptitle(f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)", fontsize=13, fontweight="bold")
 
     # Panel 1: Mass Density
     ax1 = axes[0, 0]
@@ -110,5 +116,7 @@ def plot_internal_profile(
 
     plt.tight_layout()
     if savepath:
-        fig.savefig(savepath, dpi=300, bbox_inches="tight")
+        fig.savefig(savepath, bbox_inches="tight")
+        if savepath.endswith(".pdf"):
+            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
     return fig

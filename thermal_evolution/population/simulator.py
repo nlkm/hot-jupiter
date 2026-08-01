@@ -243,5 +243,8 @@ class PopulationSimulator:
 
         plt.tight_layout()
         if savepath:
-            fig.savefig(savepath, dpi=300, bbox_inches="tight")
+            fig.savefig(savepath, bbox_inches="tight")
+            if savepath.endswith(".pdf"):
+                fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+
         return fig

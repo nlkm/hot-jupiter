@@ -1,10 +1,10 @@
 """
-Modular CLI Paper Compilation System for paper/paper.tex.
+Modular CLI Paper Compilation System for paper/paper.tex using Vector Graphics (PDF).
 
 Usage:
-  python3 paper/build_paper.py             # Fast PDF compilation using cached figures (< 2 seconds)
-  python3 paper/build_paper.py --jupiter   # Re-run ONLY Jupiter single-planet benchmark analysis & compile
-  python3 paper/build_paper.py --population# Re-run ONLY Hot Jupiter population synthesis analysis & compile
+  python3 paper/build_paper.py             # Fast PDF compilation using cached vector figures (< 2 seconds)
+  python3 paper/build_paper.py --jupiter   # Re-run ONLY Jupiter benchmark simulation & compile
+  python3 paper/build_paper.py --population# Re-run ONLY Population synthesis simulation & compile
   python3 paper/build_paper.py --all       # Re-run ALL simulation analyses from scratch & compile
 """
 
@@ -16,7 +16,7 @@ import sys
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Modular Paper Build System")
+    parser = argparse.ArgumentParser(description="Modular Paper Build System (Vector PDF Figures)")
     parser.add_argument("--jupiter", action="store_true", help="Re-run Jupiter benchmark simulation")
     parser.add_argument("--population", action="store_true", help="Re-run Population synthesis simulation")
     parser.add_argument("--all", action="store_true", help="Re-run ALL simulations from scratch")
@@ -30,25 +30,25 @@ def main():
     os.makedirs(outputs_dir, exist_ok=True)
     os.makedirs(figures_dir, exist_ok=True)
 
-    fig1 = os.path.join(outputs_dir, "jupiter_cooling_track.png")
-    fig2 = os.path.join(outputs_dir, "jupiter_internal_profile.png")
-    fig3 = os.path.join(outputs_dir, "hot_jupiter_incremental_ks_comparison.png")
+    fig1 = os.path.join(outputs_dir, "jupiter_cooling_track.pdf")
+    fig2 = os.path.join(outputs_dir, "jupiter_internal_profile.pdf")
+    fig3 = os.path.join(outputs_dir, "hot_jupiter_incremental_ks_comparison.pdf")
 
     # Step 1: Run selective simulation tasks if requested or missing
     if args.jupiter or args.all or not (os.path.exists(fig1) and os.path.exists(fig2)):
-        print("--> Running examples/jupiter_cooling.py...")
+        print("--> Running examples/jupiter_cooling.py (Vector Graphics)...")
         env = os.environ.copy()
         env["PYTHONPATH"] = repo_dir
         subprocess.run([sys.executable, os.path.join(repo_dir, "examples", "jupiter_cooling.py")], cwd=repo_dir, env=env, check=True)
 
     if args.population or args.all or not os.path.exists(fig3):
-        print("--> Running examples/hot_jupiter_population_study.py...")
+        print("--> Running examples/hot_jupiter_population_study.py (Vector Graphics)...")
         env = os.environ.copy()
         env["PYTHONPATH"] = repo_dir
         subprocess.run([sys.executable, os.path.join(repo_dir, "examples", "hot_jupiter_population_study.py")], cwd=repo_dir, env=env, check=True)
 
-    # Step 2: Sync figures to paper/figures/
-    print("--> Syncing figures to paper/figures/...")
+    # Step 2: Sync vector figures to paper/figures/
+    print("--> Syncing vector PDF figures to paper/figures/...")
     for fig_path in [fig1, fig2, fig3]:
         if os.path.exists(fig_path):
             shutil.copy(fig_path, figures_dir)
