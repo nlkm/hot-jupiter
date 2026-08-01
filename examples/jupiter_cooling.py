@@ -1,15 +1,15 @@
 """
-Benchmark Example: Thermal Evolution of Jupiter over 4.56 Billion Years.
+Example script: Simulating Jupiter Thermal Cooling Track (1 Myr to 4.56 Gyr).
+Outputs vector PDF plots for paper insertion.
 """
 
 import os
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, GYR
-from thermal_evolution.eos import AnalyticalHHeEOS, TabularEOS
+from thermal_evolution.constants import M_JUP, M_EARTH, BAR, YEAR
+from thermal_evolution.eos import TabularEOS
 from thermal_evolution.structure import InteriorSolver
 from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import ZeroHeating
 from thermal_evolution.evolution import ThermalEvolutionIntegrator
 from thermal_evolution.visualization import plot_evolution_track, plot_internal_profile
 
@@ -25,14 +25,13 @@ def main():
     integrator = ThermalEvolutionIntegrator(
         interior_solver=solver,
         atmosphere_model=atmosphere,
-        heating_source=ZeroHeating(),
     )
 
-    # 2. Jupiter mass M_p = 1.0 M_Jup, core mass M_c = 10.0 M_Earth
+    # Jupiter parameters
     M_p = 1.0 * M_JUP
     M_c = 10.0 * M_EARTH
 
-    # Initial high entropy at 1 Myr (T_1bar ~ 600 K)
+    # Initial specific entropy at ~600 K surface temperature
     S_initial = eos.specific_entropy(1.0 * BAR, 600.0)
 
     # Evolve from 1 Myr to 4.56 Gyr
@@ -49,9 +48,9 @@ def main():
     print(f"Final Radius (4.56 Gyr): {result.R_p_jup[-1]:.2f} R_Jup")
     print(f"Final T_eff (4.56 Gyr):  {result.T_eff[-1]:.1f} K")
 
-    # 3. Save evolutionary track plot
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
+
     # Save 4-panel cooling track vector PDF plot
     fig_track = plot_evolution_track(
         result,
@@ -60,15 +59,18 @@ def main():
     )
     plt.close(fig_track)
 
+    # Solve final 1D interior hydrostatic structure at present age
+    final_struct = solver.solve_structure(M_p=M_p, M_c=M_c, S_env=result.S[-1])
+
     # Save 1D interior profile vector PDF plot at current epoch
     fig_prof = plot_internal_profile(
-        result.final_structure,
+        final_struct,
         title="Jupiter Present-Day Hydrostatic Interior Profile",
         savepath=os.path.join(output_dir, "jupiter_internal_profile.pdf"),
     )
     plt.close(fig_prof)
 
-    print(f"Plots saved to {output_dir}/ directory.")
+    print("Plots saved to outputs/ directory.\n")
 
 
 if __name__ == "__main__":
