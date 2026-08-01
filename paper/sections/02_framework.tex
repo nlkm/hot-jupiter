@@ -1,0 +1,36 @@
+\section{Physical \& Mathematical Framework}
+
+\subsection{1D Hydrostatic Interior Structure}
+Assuming spherical symmetry and instantaneous convective mixing along an envelope adiabat $S_{\mathrm{env}}$:
+\begin{equation}
+\frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}, \quad \frac{dP}{dm} = -\frac{G m}{4\pi r^4}, \quad \frac{dT}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
+\end{equation}
+
+\subsection{Equations of State (EOS)}
+\begin{itemize}
+    \item \textbf{Central Core ($0 \le m \le M_c$)}: Solved via a 3rd-order Birch-Murnaghan isothermal EOS for high-pressure rock/ice mixtures.
+    \item \textbf{Envelope ($M_c < m \le M_p$)}: Modeled via SCVH/CMS tabular data or non-ideal degenerate gas law.
+\end{itemize}
+
+\subsection{Atmospheric Boundary Conditions}
+Coupled to Guillot (2010) semi-analytical irradiated atmosphere profile:
+\begin{equation}
+T^4(\tau) = \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
+\end{equation}
+
+\subsection{Core Mass \& Metallicity Dependence}
+Heavy-element core mass $M_c$ scales with host star metallicity $[\mathrm{Fe/H}]$ (Thorngren et al. 2016):
+\begin{equation}
+M_c([\mathrm{Fe/H}], M_p) \approx 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
+\end{equation}
+
+\subsection{Interior Energy Injection (Tidal \& Ohmic)}
+\begin{align}
+P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5 e^2}{a^6} \\
+P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
+\end{align}
+
+\subsection{Observational Selection Function}
+\begin{equation}
+W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}} = \left(\frac{R_* + R_p}{a}\right) \cdot \frac{1}{1 + \exp\left(-\frac{\mathrm{SNR} - 7.1}{1.5}\right)}
+\end{equation}

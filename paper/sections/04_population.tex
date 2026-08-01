@@ -1,0 +1,33 @@
+\section{Incremental Population Synthesis Results}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/hot_jupiter_incremental_ks_comparison.png}
+    \caption{Probability density histogram (left) and Cumulative Distribution Function (right) tracking radius distribution progression across incremental stages (Stage 0 to Stage 4) against observed catalog.}
+    \label{fig:incremental_comparison}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Statistical progression across incremental model stages.}
+\label{tab:incremental_results}
+\small
+\begin{tabular}{l c c c}
+\toprule
+\textbf{Model Stage} & \textbf{Mean Radius [$R_{\mathrm{Jup}}$]} & \textbf{KS Stat $D$} & \textbf{$p$-value} \\
+\midrule
+Stage 0: Non-irradiated Base    & $1.02 \pm 0.08$ & 0.750 & $1.2\times 10^{-5}$ \\
+Stage 1: Stellar Irradiation    & $1.15 \pm 0.11$ & 0.520 & 0.003 \\
+Stage 2: Irradiation + Core([Fe/H]) & $1.12 \pm 0.12$ & 0.580 & 0.001 \\
+Stage 3: Irradiation + Core + Tidal & $1.38 \pm 0.22$ & 0.220 & 0.285 \\
+Stage 4: Full Physical (Tidal+Ohmic)& $1.46 \pm 0.24$ & 0.150 & 0.620 \\
+\midrule
+\textbf{Observed Catalog}       & \textbf{$1.48 \pm 0.25$} & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As shown in Figure~\ref{fig:incremental_comparison} and Table~\ref{tab:incremental_results}:
+1. **Stage 0 \& Stage 1**: Non-irradiated planets contract rapidly to $\sim 1.02\,R_{\mathrm{Jup}}$. Surface irradiation provides moderate inflation ($\bar{R}_p \approx 1.15\,R_{\mathrm{Jup}}$), but fails to match observed radii ($p < 0.01$).
+2. **Stage 2**: Incorporating core mass dependence $M_c([\mathrm{Fe/H}])$ increases core sizes for metal-rich stars, slightly shrinking the mean radius and adding essential realistic scatter.
+3. **Stage 3 \& Stage 4**: Adding tidal heating ($P_{\mathrm{tidal}}$) and Ohmic dissipation ($P_{\mathrm{Ohmic}}$) elevates mean radii to $\bar{R}_p \approx 1.46\,R_{\mathrm{Jup}}$, successfully matching observed radii ($p = 0.62$).

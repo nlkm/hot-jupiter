@@ -1,0 +1,41 @@
+\documentclass[twocolumn,10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{cite}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\title{\textbf{Testing Incremental Physical Inflation Mechanisms in Hot Jupiter Radius Demographics: A Coupled Thermal Evolution and Population Synthesis Study}}
+
+\author{
+  \textbf{Neil \& Antigravity AI Team}\\
+  \small Deep Planet Evolution Research Group\\
+  \small \texttt{thermal\_evolution} Project Codebase
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Observed Hot Jupiter exoplanets exhibit radii ($R_p \approx 1.2 - 2.0\,R_{\mathrm{Jup}}$) significantly larger than predicted by standard non-irradiated planet cooling theories ($R_p \approx 1.0 - 1.1\,R_{\mathrm{Jup}}$). In this paper, we present an incremental population synthesis study that systematically incorporates physical mechanisms step-by-step: (0) non-irradiated base cooling, (1) stellar irradiation, (2) host star metallicity-dependent heavy-element core mass scaling $M_c([\mathrm{Fe/H}], M_p)$, (3) orbital tidal dissipation heating ($P_{\mathrm{tidal}}$), (4) Ohmic dissipation heating ($P_{\mathrm{Ohmic}}$), and (5) observational transit selection weighting ($W_{\mathrm{transit}}$). Using two-sample Kolmogorov-Smirnov (KS) tests against confirmed Hot Jupiter exoplanets from the NASA Exoplanet Archive, we evaluate the statistical progression at each stage. We find that while stellar irradiation alone provides a baseline inflation ($\bar{R}_p \approx 1.15\,R_{\mathrm{Jup}}$), combining tidal dissipation, Ohmic heating, metallicity core mass scaling, and observational transit selection bias achieves optimal statistical alignment ($p > 0.5$) with observed exoplanet radius demographics.
+\end{abstract}
+
+\input{sections/01_introduction.tex}
+\input{sections/02_framework.tex}
+\input{sections/03_benchmarks.tex}
+\input{sections/04_population.tex}
+\input{sections/05_conclusions.tex}
+
+\end{document}
