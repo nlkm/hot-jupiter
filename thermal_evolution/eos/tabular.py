@@ -124,6 +124,24 @@ class TabularEOS(BaseEOS):
 
         return float(nad[0]) if is_scalar else nad
 
+    def get_state_from_PS(
+        self,
+        P: Union[float, np.ndarray],
+        S: Union[float, np.ndarray],
+        X: float = 0.75,
+        Y: float = 0.25,
+    ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray], Union[float, np.ndarray]]:
+        """
+        Given P [Pa] and envelope specific entropy S [J/kg/K], return (T [K], rho [kg/m^3], nabla_ad).
+        """
+        P_clamped = np.clip(P, 10.0**self.log10_P[0], 10.0**self.log10_P[-1])
+        T = self.temperature_from_PS(P_clamped, S, X, Y)
+        T_clamped = np.clip(T, 10.0**self.log10_T[0], 10.0**self.log10_T[-1])
+        rho = self.density(P_clamped, T_clamped, X, Y)
+        nad = self.nabla_ad(P_clamped, T_clamped, X, Y)
+        nad_clamped = np.clip(nad, 0.05, 0.50)
+        return T, rho, nad_clamped
+
     def internal_energy(
         self,
         P: Union[float, np.ndarray],
