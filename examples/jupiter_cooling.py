@@ -1,57 +1,92 @@
 """
-Example script: Simulating Jupiter Thermal Cooling Track (1 Myr to 4.56 Gyr).
-Outputs vector PDF plots for paper insertion.
+Jupiter Benchmark Validation Study.
+Simulates 1D Hydrostatic Thermal Evolution of Jupiter from 1 Myr to 4.56 Gyr.
+Compares present-day model output against Juno & Voyager observational measurements:
+  - Radius: R_p(4.56 Gyr) ~ 1.00 R_Jup
+  - Effective Temperature: T_eff ~ 124.4 K
+  - Intrinsic Temperature: T_int ~ 99.6 K
 """
 
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, M_EARTH, BAR, YEAR
+from thermal_evolution.constants import M_JUP, R_JUP, M_EARTH, BAR, YEAR, GYR, L_SUN, SIGMA_SB
 from thermal_evolution.eos import TabularEOS
 from thermal_evolution.structure import InteriorSolver
 from thermal_evolution.atmosphere import GuillotAtmosphere
+from thermal_evolution.heating import RadiogenicHeating
 from thermal_evolution.evolution import ThermalEvolutionIntegrator
 from thermal_evolution.visualization import plot_evolution_track, plot_internal_profile
 
 
 def main():
-    print("--- Simulating Jupiter Thermal Evolution (1 Myr to 4.56 Gyr) ---")
+    print("==========================================================")
+    print("      JUPITER THERMAL EVOLUTION BENCHMARK VALIDATION      ")
+    print("==========================================================")
 
-    # 1. Setup Tabular EOS using cached synthetic grid
+    # 1. Initialize tabular EOS grid
     eos = TabularEOS.create_synthetic_grid()
     solver = InteriorSolver(envelope_eos=eos)
     atmosphere = GuillotAtmosphere(envelope_eos=eos)
 
+    # Core radiogenic heating from 12 Earth-mass rocky core
+    heating = RadiogenicHeating(M_c=12.0 * M_EARTH)
+
     integrator = ThermalEvolutionIntegrator(
         interior_solver=solver,
         atmosphere_model=atmosphere,
+        heating_source=heating,
     )
 
-    # Jupiter parameters
+    # Jupiter Physical Parameters
     M_p = 1.0 * M_JUP
-    M_c = 10.0 * M_EARTH
+    M_c = 12.0 * M_EARTH  # 12 Earth-mass core (matching Juno gravimetry estimates)
 
-    # Initial specific entropy at ~600 K surface temperature
-    S_initial = eos.specific_entropy(1.0 * BAR, 600.0)
+    # Initial high-entropy adiabat at 1 Myr (T_1bar ~ 800 K)
+    # Physical dimensionful entropy S ~ 1.85e5 J/(kg K)
+    S_initial = 1.85e5
 
-    # Evolve from 1 Myr to 4.56 Gyr
+    # Jupiter solar insolation at 5.204 AU: F_inc = L_sun / (4 * pi * a^2) ~ 50.3 W/m^2
+    F_inc_jupiter = 50.3  # W/m^2
+    A_b_jupiter = 0.34    # Bond albedo of Jupiter
+
+    # Evolve from t = 1 Myr to t = 4.56 Gyr (Jupiter's present age)
     t_span = (1.0e6 * YEAR, 4.56e9 * YEAR)
+
+    print(f"Evolving planet structure (M_p = 1.00 M_J, M_c = {M_c/M_EARTH:.1f} M_Earth, a = 5.20 AU)...")
     result = integrator.evolve(
         M_p=M_p,
         M_c=M_c,
         S_initial=S_initial,
         t_span=t_span,
-        num_eval=5,
+        F_inc=F_inc_jupiter,
+        A_b=A_b_jupiter,
+        num_eval=20,
     )
 
-    print(f"Initial Radius (1 Myr):  {result.R_p_jup[0]:.2f} R_Jup")
-    print(f"Final Radius (4.56 Gyr): {result.R_p_jup[-1]:.2f} R_Jup")
-    print(f"Final T_eff (4.56 Gyr):  {result.T_eff[-1]:.1f} K")
+    # Extract present-day values at 4.56 Gyr
+    R_final_jup = result.R_p_jup[-1]
+    T_eff_final = result.T_eff[-1]
+    T_int_final = result.T_int[-1]
+    L_int_final_sun = result.L_int_sun[-1]
+    S_final = result.S[-1]
+
+    print("\n----------------------------------------------------------")
+    print("PRESENT-DAY JUPITER MODEL vs OBSERVATIONAL MEASUREMENTS:")
+    print("----------------------------------------------------------")
+    print(f"Age:                    {result.t_gyr[-1]:.2f} Gyr")
+    print(f"Radius R_p:             {R_final_jup:.3f} R_Jup  (Observed: 1.000 R_Jup)")
+    print(f"Effective Temp T_eff:   {T_eff_final:.1f} K       (Observed: 124.4 +/- 0.3 K)")
+    print(f"Intrinsic Temp T_int:   {T_int_final:.1f} K        (Observed:  99.6 +/- 3.0 K)")
+    print(f"Intrinsic Luminosity:   {L_int_final_sun:.2e} L_sun (Observed: 8.7e-10 L_sun)")
+    print(f"Final Entropy S:        {S_final:.2e} J/(kg K)")
+    print("----------------------------------------------------------\n")
 
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
 
-    # Save 4-panel cooling track vector PDF plot
+    # Save 4-panel evolutionary track vector PDF plot
     fig_track = plot_evolution_track(
         result,
         title="Jupiter Thermal Evolution Track (1 Myr to 4.56 Gyr)",
@@ -59,10 +94,10 @@ def main():
     )
     plt.close(fig_track)
 
-    # Solve final 1D interior hydrostatic structure at present age
-    final_struct = solver.solve_structure(M_p=M_p, M_c=M_c, S_env=result.S[-1])
+    # Solve 1D interior hydrostatic structure at 4.56 Gyr
+    final_struct = solver.solve_structure(M_p=M_p, M_c=M_c, S_env=S_final)
 
-    # Save 1D interior profile vector PDF plot at current epoch
+    # Save 1D interior profile vector PDF plot at 4.56 Gyr
     fig_prof = plot_internal_profile(
         final_struct,
         title="Jupiter Present-Day Hydrostatic Interior Profile",
@@ -70,7 +105,7 @@ def main():
     )
     plt.close(fig_prof)
 
-    print("Plots saved to outputs/ directory.\n")
+    print(f"Vector PDF figures saved to {output_dir}/.")
 
 
 if __name__ == "__main__":

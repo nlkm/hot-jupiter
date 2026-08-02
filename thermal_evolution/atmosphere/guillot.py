@@ -92,7 +92,7 @@ class GuillotAtmosphere(BaseAtmosphere):
             f3000 = residual(3000.0)
             T_int = 5.0 if abs(f5) < abs(f3000) else 3000.0
 
-        T_eff = (T_int**4 + (T_irr / np.sqrt(2.0))**4)**0.25 if T_irr > 0 else T_int
+        T_eff = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int
         L_int = 4.0 * np.pi * (R_p**2) * SIGMA_SB * (T_int**4)
         T_rcb = self.temperature_profile(tau_rcb, T_int, T_irr)
 
