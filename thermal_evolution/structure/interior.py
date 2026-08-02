@@ -1,13 +1,13 @@
 """
 1D Hydrostatic Interior Solver for Giant Planets.
-Uses ultra-fast RK4 integration and central pressure shooting.
+Uses smooth inward radial RK4 integration and total radius (R_p) shooting.
 """
 
 from typing import Tuple, Optional
 import numpy as np
 from scipy.optimize import brentq
 
-from thermal_evolution.constants import G, BAR, M_JUP, M_EARTH, R_JUP, GPa, MBAR
+from thermal_evolution.constants import G, BAR, M_JUP, M_EARTH, R_JUP
 from thermal_evolution.eos.base import BaseEOS
 from thermal_evolution.eos.core_eos import BaseCoreEOS, BirchMurnaghanCoreEOS
 from thermal_evolution.structure.planet_state import PlanetStructure, InternalProfile
@@ -16,109 +16,91 @@ from thermal_evolution.structure.planet_state import PlanetStructure, InternalPr
 class InteriorSolver:
     """
     Solves 1D hydrostatic equilibrium for a giant planet given (M_p, M_c, S_env).
+    Integrates inward from r = R_p to r = 0 with shooting on planet radius R_p.
     """
 
     def __init__(self, envelope_eos: BaseEOS, core_eos: Optional[BaseCoreEOS] = None):
         self.envelope_eos = envelope_eos
         self.core_eos = core_eos if core_eos is not None else BirchMurnaghanCoreEOS()
 
-    def _integrate_outward(
+    def _integrate_inward(
         self,
-        log10_Pc: float,
+        R_p_try: float,
         M_p: float,
         M_c: float,
         S_env: float,
         P_surf: float = 1.0 * BAR,
         X: float = 0.75,
         Y: float = 0.25,
-        num_pts: int = 150,
+        num_pts: int = 250,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
-        Integrate hydrostatic equilibrium outward from m ~ 0 to m = M_p using vectorized RK4.
+        Integrate hydrostatic equilibrium inward from r = R_p down to r ~ 0.
         """
-        P_c = 10.0**log10_Pc
-        rho_c = float(self.core_eos.density(P_c))
+        T_surf = float(self.envelope_eos.temperature_from_PS(P_surf, S_env, X, Y))
+        r_grid = np.linspace(R_p_try, 1e4, num_pts)  # r from R_p down to 10 km
 
-        m_start = max(1e-6 * M_p, 1e-12)
-        r_start = (3.0 * m_start / (4.0 * np.pi * rho_c))**(1.0 / 3.0)
-        P_start = max(100.0, P_c - (2.0 / 3.0) * np.pi * G * (rho_c**2) * (r_start**2))
+        m_arr = np.zeros(num_pts)
+        P_arr = np.zeros(num_pts)
+        T_arr = np.zeros(num_pts)
+        rho_arr = np.zeros(num_pts)
+        nad_arr = np.zeros(num_pts)
 
-        # Mass grid (dense near core, extending to M_p)
-        if M_c > 0 and m_start < M_c:
-            m_core_grid = np.linspace(m_start, M_c, max(20, int(num_pts * (M_c / M_p))))
-            m_env_grid = np.linspace(M_c, M_p, num_pts)
-            m_grid = np.unique(np.concatenate([m_core_grid, m_env_grid]))
-        else:
-            m_grid = np.linspace(m_start, M_p, num_pts)
+        m_arr[0] = M_p
+        P_arr[0] = P_surf
+        T_arr[0] = T_surf
+        _, rho_arr[0], nad_arr[0] = self.envelope_eos.get_state_from_PS(P_surf, S_env, X, Y)
 
-        N = len(m_grid)
-        r_arr = np.zeros(N)
-        P_arr = np.zeros(N)
-        T_arr = np.zeros(N)
-        rho_arr = np.zeros(N)
-        nad_arr = np.zeros(N)
-
-        r_arr[0] = r_start
-        P_arr[0] = P_start
-        T_env_start = float(self.envelope_eos.temperature_from_PS(P_start, S_env, X, Y))
-        T_arr[0] = T_env_start
-
-        # Vectorized RK4 Stepper
-        for i in range(N - 1):
-            m = m_grid[i]
-            dm = m_grid[i + 1] - m
-            r = r_arr[i]
+        for i in range(num_pts - 1):
+            r = r_grid[i]
+            dr = r_grid[i + 1] - r  # negative step
+            m = m_arr[i]
             P = P_arr[i]
             T = T_arr[i]
 
-            if r <= 0 or P <= 10.0 or T <= 10.0:
-                # Flow floor
-                r_arr[i + 1:] = r
-                P_arr[i + 1:] = 10.0
-                T_arr[i + 1:] = 10.0
-                break
-
-            def derivatives(m_curr, r_curr, P_curr, T_curr):
+            def derivatives(r_curr, m_curr, P_curr, T_curr):
                 P_s = max(P_curr, 10.0)
                 T_s = max(T_curr, 10.0)
-                r_s = max(r_curr, 1e2)
+                r_s = max(r_curr, 1e3)
+                m_s = max(m_curr, 1e15)
 
-                if m_curr <= M_c:
+                if m_s <= M_c:
                     rho = float(self.core_eos.density(P_s))
                     nad = 0.0
                 else:
                     _, rho, nad = self.envelope_eos.get_state_from_PS(P_s, S_env, X, Y)
 
-                dr = 1.0 / (4.0 * np.pi * r_s**2 * max(rho, 1e-4))
-                dP = - (G * m_curr) / (4.0 * np.pi * r_s**4)
-                dT = - (G * m_curr * T_s * nad) / (4.0 * np.pi * r_s**4 * P_s) if m_curr > M_c else 0.0
-                return dr, dP, dT, rho, nad
+                dm = 4.0 * np.pi * r_s**2 * rho
+                dP = - (G * m_s * rho) / (r_s**2)
+                dT = nad * (T_s / P_s) * dP if m_s > M_c else 0.0
 
-            # RK4 step
-            dr1, dP1, dT1, rho1, nad1 = derivatives(m, r, P, T)
+                return dm, dP, dT, rho, nad
+
+            # RK4 inward step
+            dm1, dP1, dT1, rho1, nad1 = derivatives(r, m, P, T)
             rho_arr[i] = rho1
             nad_arr[i] = nad1
 
-            dr2, dP2, dT2, _, _ = derivatives(m + 0.5 * dm, r + 0.5 * dm * dr1, P + 0.5 * dm * dP1, T + 0.5 * dm * dT1)
-            dr3, dP3, dT3, _, _ = derivatives(m + 0.5 * dm, r + 0.5 * dm * dr2, P + 0.5 * dm * dP2, T + 0.5 * dm * dT2)
-            dr4, dP4, dT4, _, _ = derivatives(m + dm, r + dm * dr3, P + dm * dP3, T + dm * dT3)
+            dm2, dP2, dT2, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm1, P + 0.5 * dr * dP1, T + 0.5 * dr * dT1)
+            dm3, dP3, dT3, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm2, P + 0.5 * dr * dP2, T + 0.5 * dr * dT2)
+            dm4, dP4, dT4, _, _ = derivatives(r + dr, m + dr * dm3, P + dr * dP3, T + dr * dT3)
 
-            r_arr[i + 1] = r + (dm / 6.0) * (dr1 + 2 * dr2 + 2 * dr3 + dr4)
-            P_arr[i + 1] = max(10.0, P + (dm / 6.0) * (dP1 + 2 * dP2 + 2 * dP3 + dP4))
-            T_arr[i + 1] = max(10.0, T + (dm / 6.0) * (dT1 + 2 * dT2 + 2 * dT3 + dT4))
+            m_arr[i + 1] = max(0.0, m + (dr / 6.0) * (dm1 + 2 * dm2 + 2 * dm3 + dm4))
+            P_arr[i + 1] = max(P_surf, P + (dr / 6.0) * (dP1 + 2 * dP2 + 2 * dP3 + dP4))
+            T_arr[i + 1] = max(T_surf, T + (dr / 6.0) * (dT1 + 2 * dT2 + 2 * dT3 + dT4))
 
-        # Fill end point
-        if m_grid[-1] <= M_c:
+        if m_arr[-1] <= M_c:
             rho_arr[-1] = float(self.core_eos.density(P_arr[-1]))
             nad_arr[-1] = 0.0
         else:
             _, rho_arr[-1], nad_arr[-1] = self.envelope_eos.get_state_from_PS(P_arr[-1], S_env, X, Y)
 
-        return m_grid, r_arr, P_arr, rho_arr, T_arr, nad_arr
+        # Reverse arrays so they go from center r ~ 0 to surface r = R_p
+        return r_grid[::-1], m_arr[::-1], P_arr[::-1], rho_arr[::-1], T_arr[::-1], nad_arr[::-1]
 
-    def _surface_pressure_residual(
+    def _mass_residual(
         self,
-        log10_Pc: float,
+        R_p_try: float,
         M_p: float,
         M_c: float,
         S_env: float,
@@ -126,12 +108,11 @@ class InteriorSolver:
         X: float,
         Y: float,
     ) -> float:
-        """Residual function: log10(P_surface(P_c)) - log10(P_target)."""
-        _, _, P_arr, _, _, _ = self._integrate_outward(
-            log10_Pc, M_p, M_c, S_env, P_surf, X, Y, num_pts=50
+        """Residual: m(r=0) - 0.0."""
+        r_arr, m_arr, _, _, _, _ = self._integrate_inward(
+            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=80
         )
-        P_surface_found = max(P_arr[-1], 10.0)
-        return np.log10(P_surface_found) - np.log10(P_surf)
+        return float(m_arr[0] - 0.0)
 
     def solve_structure(
         self,
@@ -141,36 +122,37 @@ class InteriorSolver:
         P_surf: float = 1.0 * BAR,
         X: float = 0.75,
         Y: float = 0.25,
-        num_pts: int = 40,
+        num_pts: int = 300,
     ) -> PlanetStructure:
         """
-        Solve 1D hydrostatic equilibrium for a planet.
+        Solve 1D hydrostatic equilibrium for a planet given (M_p, M_c, S_env).
+        Returns PlanetStructure with smooth 1D internal profile extending to r = R_p.
         """
-        logP_min = 11.0
-        logP_max = 13.5
+        R_min = 0.4 * R_JUP
+        R_max = 2.5 * R_JUP
 
-        f_min = self._surface_pressure_residual(logP_min, M_p, M_c, S_env, P_surf, X, Y)
-        f_max = self._surface_pressure_residual(logP_max, M_p, M_c, S_env, P_surf, X, Y)
+        f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y)
+        f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y)
 
         if f_min * f_max > 0:
-            if f_min > 0:
-                logP_min = 10.0
-            if f_max < 0:
-                logP_max = 14.5
+            if f_min < 0:
+                R_min = 0.2 * R_JUP
+            if f_max > 0:
+                R_max = 3.5 * R_JUP
 
         try:
-            log10_Pc_sol = brentq(
-                self._surface_pressure_residual,
-                logP_min,
-                logP_max,
+            R_p_sol = brentq(
+                self._mass_residual,
+                R_min,
+                R_max,
                 args=(M_p, M_c, S_env, P_surf, X, Y),
-                xtol=1e-3,
+                xtol=1e-4 * R_JUP,
             )
         except ValueError:
-            log10_Pc_sol = logP_min if abs(f_min) < abs(f_max) else logP_max
+            R_p_sol = R_min if abs(f_min) < abs(f_max) else R_max
 
-        m_full, r_full, P_full, rho_full, T_full, nad_full = self._integrate_outward(
-            log10_Pc_sol, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts
+        r_full, m_full, P_full, rho_full, T_full, nad_full = self._integrate_inward(
+            R_p_sol, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts
         )
 
         R_p = float(r_full[-1])
