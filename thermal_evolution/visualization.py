@@ -62,7 +62,6 @@ def plot_evolution_track(
     plt.tight_layout()
     if savepath:
         fig.savefig(savepath, bbox_inches="tight")
-        # If savepath ends with .pdf, also save a PNG copy if needed
         if savepath.endswith(".pdf"):
             fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
     return fig
@@ -70,11 +69,12 @@ def plot_evolution_track(
 
 def plot_internal_profile(
     struct: PlanetStructure,
-    title: str = "1D Interior Profile",
+    title: str = "1D Interior Hydrostatic Profile",
     savepath: Optional[str] = None,
 ) -> plt.Figure:
     """
     Plot 4-panel 1D interior hydrostatic profile: Density, Pressure, Temperature, nabla_ad.
+    Uses log-scale y-axes for Density and Pressure to show multi-order-of-magnitude variations.
     Saves publication-ready vector graphic (.pdf) by default.
     """
     if struct.profile is None:
@@ -86,26 +86,32 @@ def plot_internal_profile(
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), sharex=True)
     fig.suptitle(f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)", fontsize=13, fontweight="bold")
 
-    # Panel 1: Mass Density
+    # Panel 1: Mass Density (log scale spanning 6-8 orders of magnitude)
     ax1 = axes[0, 0]
-    ax1.plot(r_norm, prof.rho / 1000.0, "k-", lw=2)  # g/cm^3
+    rho_gcm3 = prof.rho / 1000.0  # g/cm^3
+    ax1.plot(r_norm, rho_gcm3, "k-", lw=2)
     ax1.set_ylabel(r"Density $\rho$ [g/cm$^3$]")
-    ax1.axvline(struct.R_c / R_JUP, color="red", linestyle="--", alpha=0.7, label="Core Boundary")
-    ax1.grid(True, alpha=0.3)
-    ax1.legend(loc="best")
+    ax1.set_yscale("log")
+    if struct.R_c > 0:
+        ax1.axvline(struct.R_c / R_JUP, color="red", linestyle="--", alpha=0.7, label="Core Boundary")
+        ax1.legend(loc="best")
+    ax1.grid(True, alpha=0.3, which="both")
 
-    # Panel 2: Pressure
+    # Panel 2: Pressure (log scale spanning 7-12 orders of magnitude)
     ax2 = axes[0, 1]
-    ax2.plot(r_norm, prof.P / 1e11, "r-", lw=2)  # Mbar
+    P_mbar = prof.P / 1e11  # Mbar
+    ax2.plot(r_norm, P_mbar, "r-", lw=2)
     ax2.set_ylabel(r"Pressure $P$ [Mbar]")
-    ax2.grid(True, alpha=0.3)
+    ax2.set_yscale("log")
+    ax2.grid(True, alpha=0.3, which="both")
 
-    # Panel 3: Temperature
+    # Panel 3: Temperature (semi-log scale spanning 2-3 orders of magnitude)
     ax3 = axes[1, 0]
     ax3.plot(r_norm, prof.T, "b-", lw=2)
     ax3.set_xlabel(r"Radius $r$ [$R_{\mathrm{Jup}}$]")
     ax3.set_ylabel(r"Temperature $T$ [K]")
-    ax3.grid(True, alpha=0.3)
+    ax3.set_yscale("log")
+    ax3.grid(True, alpha=0.3, which="both")
 
     # Panel 4: Adiabatic Gradient nabla_ad
     ax4 = axes[1, 1]
