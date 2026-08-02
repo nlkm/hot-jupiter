@@ -110,7 +110,7 @@ class InteriorSolver:
     ) -> float:
         """Residual: m(r=0) - 0.0."""
         r_arr, m_arr, _, _, _, _ = self._integrate_inward(
-            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=80
+            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=50
         )
         return float(m_arr[0] - 0.0)
 

@@ -62,7 +62,8 @@ def main():
         t_span=t_span,
         F_inc=F_inc_jupiter,
         A_b=A_b_jupiter,
-        num_eval=20,
+        num_eval=8,
+        method="RK23",
     )
 
     # Extract present-day values at 4.56 Gyr
