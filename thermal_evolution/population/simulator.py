@@ -9,7 +9,7 @@ from scipy.stats import ks_2samp
 import matplotlib.pyplot as plt
 
 from thermal_evolution.constants import M_JUP, R_JUP, L_SUN, YEAR, GYR, BAR, M_EARTH
-from thermal_evolution.eos import BaseEOS, AnalyticalHHeEOS
+from thermal_evolution.eos import BaseEOS, TabularEOS, AnalyticalHHeEOS
 from thermal_evolution.structure import InteriorSolver
 from thermal_evolution.atmosphere import GuillotAtmosphere
 from thermal_evolution.heating import (
@@ -77,7 +77,7 @@ class PopulationSimulator:
         k2_over_Q: float = 2.0e-5,
     ):
         self.catalog = catalog if catalog is not None else get_curated_hot_jupiter_catalog()
-        self.envelope_eos = envelope_eos if envelope_eos is not None else AnalyticalHHeEOS()
+        self.envelope_eos = envelope_eos if envelope_eos is not None else TabularEOS.create_synthetic_grid()
         self.k2_over_Q = k2_over_Q
         self.solver = InteriorSolver(envelope_eos=self.envelope_eos)
         self.atmosphere = GuillotAtmosphere(envelope_eos=self.envelope_eos)
