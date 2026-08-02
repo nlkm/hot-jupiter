@@ -25,8 +25,8 @@ def main():
     print("      JUPITER THERMAL EVOLUTION BENCHMARK VALIDATION      ")
     print("==========================================================")
 
-    # 1. Initialize tabular EOS grid
-    eos = TabularEOS.create_synthetic_grid()
+    # 1. Initialize tabular EOS grid matching SCVH metallic hydrogen density
+    eos = TabularEOS.create_synthetic_grid(use_cache=False)
     solver = InteriorSolver(envelope_eos=eos)
     atmosphere = GuillotAtmosphere(envelope_eos=eos)
 

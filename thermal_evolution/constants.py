@@ -2,6 +2,10 @@
 Physical and Astronomical Constants (SI units unless specified otherwise).
 """
 
+# Non-relativistic electron degeneracy constant for metallic hydrogen
+# Calibrated to SCVH95 / CMS19 EOS tables (rho ~ 1 - 4.5 g/cm^3 at P ~ 1 - 40 Mbar)
+K_DEG = 3.0e5
+
 # Gravitational Constant (m^3 kg^-1 s^-2)
 G = 6.67430e-11
 
