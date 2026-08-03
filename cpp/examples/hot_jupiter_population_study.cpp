@@ -26,6 +26,9 @@ int main() {
     std::vector<double> radii_coupled(N_pop);
     std::vector<double> radii_observed(N_pop);
 
+    std::ofstream raw_csv("outputs/hot_jupiter_population_10000_samples.csv");
+    raw_csv << "system_id,M_star_Msun,Fe_H,M_p_Mjup,M_c_Mearth,a_AU,e_0,is_multi_planet,T_eq_K,P_total_W,R_base_Rjup,R_coupled_Rjup,R_obs_Rjup\n";
+
     std::normal_distribution<double> dist_norm(0.0, 1.0);
     std::uniform_real_distribution<double> dist_unif(0.0, 1.0);
 
@@ -49,7 +52,6 @@ int main() {
 
         if (is_multi_planet) {
             count_multi++;
-            // Secular forced eccentricity floor from outer planet c
             double e_forced = 0.02 + 0.05 * dist_unif(rng);
             e_0 = std::sqrt(e_0 * e_0 + e_forced * e_forced);
         }
@@ -70,16 +72,29 @@ int main() {
         if (delta_R > 0.70) delta_R = 0.70;
 
         double R_coupled = R_base + delta_R * R_JUP;
-
-        // Observed distribution (Kepler/WASP catalog fit)
         double R_obs = (1.30 + 0.19 * dist_norm(rng)) * R_JUP;
 
         radii_baseline[i] = R_base / R_JUP;
         radii_coupled[i] = R_coupled / R_JUP;
         radii_observed[i] = R_obs / R_JUP;
+
+        raw_csv << (i + 1) << ","
+                << (M_star / M_SUN) << ","
+                << Fe_H << ","
+                << (M_p / M_JUP) << ","
+                << (M_c / M_EARTH) << ","
+                << (a / AU) << ","
+                << e_0 << ","
+                << (is_multi_planet ? 1 : 0) << ","
+                << T_eq << ","
+                << P_total << ","
+                << (R_base / R_JUP) << ","
+                << (R_coupled / R_JUP) << ","
+                << (R_obs / R_JUP) << "\n";
     }
 
-    std::cout << "Successfully integrated " << N_pop << " synthetic systems (" << count_multi << " multi-planet secular systems included)." << std::endl;
+    raw_csv.close();
+    std::cout << "Raw 10,000 system simulation dataset written to outputs/hot_jupiter_population_10000_samples.csv" << std::endl;
 
     // Export cumulative distribution functions
     std::ofstream csv("outputs/hot_jupiter_incremental_ks_comparison.csv");
@@ -104,6 +119,6 @@ int main() {
     }
 
     csv.close();
-    std::cout << "CSV data written to outputs/hot_jupiter_incremental_ks_comparison.csv" << std::endl;
+    std::cout << "CDF metric dataset written to outputs/hot_jupiter_incremental_ks_comparison.csv" << std::endl;
     return 0;
 }
