@@ -56,21 +56,39 @@ class AnalyticalHHeEOS(BaseEOS):
         P_arr = np.asarray(P, dtype=float)
         T_arr = np.asarray(T, dtype=float)
 
+        P_flat = P_arr.ravel()
+        T_flat = T_arr.ravel()
+
         mu = self._mean_molecular_weight(X, Y)
+        mu_e = self._electron_molecular_weight(X)
         R_spec = K_B / (mu * M_H)
 
-        # Thermal ideal gas density
-        rho_gas = P_arr / (R_spec * np.maximum(T_arr, 1.0))
+        rho_flat = np.zeros_like(P_flat, dtype=float)
 
-        # SCVH / CMS liquid metallic hydrogen compression fit (mean density ~1326 kg/m^3 for Jupiter)
-        P_mbar = np.maximum(1e-5, P_arr / 1.0e11)
-        rho_metallic = 1070.0 * (P_mbar)**0.10
+        for i in range(len(P_flat)):
+            p_val = P_flat[i]
+            t_val = T_flat[i]
 
-        rho_out = np.maximum(rho_gas, rho_metallic)
+            # Solve P = rho * R_spec * T + K_DEG * (rho / mu_e)^(5/3)
+            def residual(log_rho):
+                r = np.exp(log_rho)
+                p_th = r * R_spec * np.maximum(t_val, 1.0)
+                p_deg = K_DEG * (r / mu_e)**(5.0 / 3.0)
+                return p_th + p_deg - p_val
+
+            # Find root in log(rho) space
+            log_rho_min = np.log(1e-10)
+            log_rho_max = np.log(1e6)
+            try:
+                log_rho_sol = brentq(residual, log_rho_min, log_rho_max)
+                rho_flat[i] = np.exp(log_rho_sol)
+            except ValueError:
+                # Fallback to pure ideal gas if out of bounds
+                rho_flat[i] = p_val / (R_spec * np.maximum(t_val, 1.0))
 
         if is_scalar:
-            return float(rho_out)
-        return rho_out
+            return float(rho_flat[0])
+        return rho_flat.reshape(P_arr.shape)
 
     def specific_entropy(
         self,

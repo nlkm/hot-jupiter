@@ -135,10 +135,10 @@ class InteriorSolver:
         f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y)
 
         if f_min * f_max > 0:
-            if f_min < 0:
-                R_min = 0.2 * R_JUP
-            if f_max > 0:
-                R_max = 3.5 * R_JUP
+            R_min = 0.1 * R_JUP
+            R_max = 3.5 * R_JUP
+            f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y)
+            f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y)
 
         try:
             R_p_sol = brentq(
