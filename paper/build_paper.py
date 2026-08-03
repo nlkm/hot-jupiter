@@ -65,6 +65,7 @@ def main():
         fig3 = os.path.join(outputs_dir, "hot_jupiter_incremental_ks_comparison.pdf")
         fig4 = os.path.join(outputs_dir, "hot_jupiter_coupled_orbital_spin_evolution.pdf")
         fig5 = os.path.join(outputs_dir, "multi_planet_system_evolution.pdf")
+        fig6 = os.path.join(outputs_dir, "stellar_misaligned_orbit_evolution.pdf")
 
         # Tier 3: Re-running Numerical Simulation Analysis
         run_all_sims = args.analysis or args.all
@@ -86,6 +87,10 @@ def main():
         if run_all_sims or not os.path.exists(fig5):
             print("--> [Tier 3: Analysis] Running examples/multi_planet_system_benchmark.py...")
             subprocess.run([sys.executable, os.path.join(repo_dir, "examples", "multi_planet_system_benchmark.py")], cwd=repo_dir, env=env, check=True)
+
+        if run_all_sims or not os.path.exists(fig6):
+            print("--> [Tier 3: Analysis] Running examples/stellar_misaligned_orbit_scenario.py...")
+            subprocess.run([sys.executable, os.path.join(repo_dir, "examples", "stellar_misaligned_orbit_scenario.py")], cwd=repo_dir, env=env, check=True)
 
         # Tier 2: Syncing Vector Figures to paper/figures/
         print("--> [Tier 2: Figures] Syncing all vector PDF figures from outputs/ to paper/figures/...")
