@@ -40,12 +40,25 @@ M_c([\mathrm{Fe/H}], M_p) \approx 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{
 \end{equation}
 where $[\mathrm{Fe/H}] \equiv \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_* - \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_\odot$ and $M_\oplus = 5.972 \times 10^{24}\text{ kg}$.
 
-\subsection{Interior Energy Injection (Tidal \& Ohmic)}
+\subsection{Interior Energy Injection (Tidal \& Ohmic Heating)}
+To explain why Hot Jupiters exhibit inflated radii ($R_p > 1.4\,R_{\mathrm{Jup}}$), heat must be deposited directly into the deep interior ($P > 1 - 10\text{ bar}$). We model two primary interior heating mechanisms:
 \begin{align}
 P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5 e^2}{a^6} + \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2 \\
 P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
 \end{align}
-where $M_*$ is stellar mass, $a$ is semi-major axis, $e$ is eccentricity, $\Omega_{\mathrm{rot}}$ is spin frequency, $\varepsilon$ is spin obliquity, $n \equiv \sqrt{G M_* / a^3}$ is mean motion, $k_2/Q \approx 10^{-5}$ is the tidal dissipation quality factor, $T_{\mathrm{eq}} = (F_{\mathrm{inc}}(1-A_b)/(4\sigma_{\mathrm{SB}}))^{1/4}$ is equilibrium temperature, and $\epsilon_0 \approx 0.03$ is the peak Ohmic conversion efficiency.
+
+\subsubsection{Physical Intuition for First-Year Physics Students}
+\begin{enumerate}
+    \item \textbf{Stellar Irradiation (Surface Heat Blanket)}: 
+          \textit{Analogy}: Wrapping a hot potato in a thick insulated blanket does not generate heat *inside* the potato, but it drastically slows down how fast heat escapes.
+          \textit{Physics}: Extreme stellar flux ($F_{\text{inc}} \sim 10^5 - 10^6\text{ W/m}^2$) heats the outer atmosphere to $T > 1500\text{ K}$, flattening the temperature gradient near the surface so internal cooling heat ($L_{\text{int}}$) escapes much slower.
+    \item \textbf{Tidal Dissipation (Orbital Friction \& Flexing)}:
+          \textit{Analogy}: Bending a metal paperclip back and forth repeatedly makes it hot to the touch because internal friction between adjacent metal grains converts mechanical bending work into thermal heat.
+          \textit{Physics}: As an eccentric planet orbits close to its star, strong gravitational tidal forces stretch and squeeze the planet's fluid body. Frictional resistance between moving interior layers converts orbital kinetic energy into thermal power ($P_{\mathrm{tidal}}$) deposited deep in the envelope.
+    \item \textbf{Ohmic Dissipation (Atmospheric Wind Magnetohydrodynamics \& Joule Heating)}:
+          \textit{Analogy}: Passing an electric current through a resistive wire in a toaster converts electrical energy into heat ($P = I^2 R$, Joule heating).
+          \textit{Physics}: At temperatures above $1500\text{ K}$, alkali metals (like sodium and potassium) in the atmosphere shed electrons, turning atmospheric gas into a conducting plasma. Fast neutral winds ($\sim \text{km/s}$) blow this plasma through the planet's magnetic field $\mathbf{B}$, generating electric currents ($\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$). Electrical resistance in the deep interior converts these currents into Joule heat ($P_{\mathrm{Ohmic}}$), inflating the envelope.
+\end{enumerate}
 
 \subsection{Coupled Orbital Element \& Spin Vector Evolution}
 The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
