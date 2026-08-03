@@ -42,10 +42,10 @@ where $[\mathrm{Fe/H}] \equiv \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_* - \log
 
 \subsection{Interior Energy Injection (Tidal \& Ohmic)}
 \begin{align}
-P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5 e^2}{a^6} \\
+P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5 e^2}{a^6} + \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2 \\
 P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
 \end{align}
-where $M_*$ is stellar mass, $a$ is semi-major axis, $e$ is eccentricity, $k_2/Q \approx 10^{-5}$ is the tidal dissipation quality factor, $T_{\mathrm{eq}} = (F_{\mathrm{inc}}(1-A_b)/(4\sigma_{\mathrm{SB}}))^{1/4}$ is equilibrium temperature, and $\epsilon_0 \approx 0.03$ is the peak Ohmic conversion efficiency.
+where $M_*$ is stellar mass, $a$ is semi-major axis, $e$ is eccentricity, $\Omega_{\mathrm{rot}}$ is spin frequency, $\varepsilon$ is spin obliquity, $n \equiv \sqrt{G M_* / a^3}$ is mean motion, $k_2/Q \approx 10^{-5}$ is the tidal dissipation quality factor, $T_{\mathrm{eq}} = (F_{\mathrm{inc}}(1-A_b)/(4\sigma_{\mathrm{SB}}))^{1/4}$ is equilibrium temperature, and $\epsilon_0 \approx 0.03$ is the peak Ohmic conversion efficiency.
 
 \subsection{Coupled Orbital Element \& Spin Vector Evolution}
 The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
@@ -55,7 +55,7 @@ The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}
 \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \left(\Omega_{\text{rot}} - n \cos\varepsilon\right) - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\
 \frac{d\varepsilon}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
 \end{align}
-where $n \equiv \sqrt{G M_* / a^3}$ is mean motion [$\text{rad/s}$], $\Omega_{\mathrm{rot}}$ is spin frequency [$\text{rad/s}$], $\varepsilon$ is spin obliquity [$\text{rad}$], and $C_p \equiv I_p / (M_p R_p^2) \approx 0.25$ is the dimensionless moment of inertia. Derived in Appendix~\ref{sec:derivation_a5}.
+where $C_p \equiv I_p / (M_p R_p^2) \approx 0.25$ is the dimensionless moment of inertia. Derived in Appendix~\ref{sec:derivation_a5}.
 
 \subsection{Observational Selection Function}
 \begin{equation}
