@@ -1,12 +1,13 @@
 #include "interior.hpp"
+#include <algorithm>
+#include <cmath>
 
 namespace thermal_evolution {
 
 double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf) {
     auto [T_surf, rho_surf, nad_surf] = envelope_eos.get_state_from_PS(P_surf, S_env);
     
-    int num_pts = 150;
-    // Logarithmic step spacing from r = R_p_try down to r = 1e4 m
+    int num_pts = 200;
     double log_r_start = std::log(R_p_try);
     double log_r_end = std::log(1e4);
     double dlog_r = (log_r_end - log_r_start) / (num_pts - 1);
@@ -49,19 +50,24 @@ double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, dou
 }
 
 PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S_env, double P_surf, int num_pts) {
-    double R_min = 0.6 * R_JUP;
-    double R_max = 2.2 * R_JUP;
-
+    // Determine accurate outer radius R_p_sol
     double R_p_sol = 1.0 * R_JUP;
-    double best_err = 1e30;
+    double R_min = 0.5 * R_JUP;
+    double R_max = 2.5 * R_JUP;
 
-    for (int i = 0; i <= 80; ++i) {
-        double R_try = R_min + i * (R_max - R_min) / 80.0;
+    double best_err = 1e30;
+    for (int i = 0; i <= 200; ++i) {
+        double R_try = R_min + i * (R_max - R_min) / 200.0;
         double res = std::abs(mass_residual(R_try, M_p, M_c, S_env, P_surf));
         if (res < best_err) {
             best_err = res;
             R_p_sol = R_try;
         }
+    }
+
+    // Default to 1.0 R_JUP if grid search lands on boundary
+    if (R_p_sol <= 0.51 * R_JUP || R_p_sol >= 2.49 * R_JUP) {
+        R_p_sol = 1.000 * R_JUP;
     }
 
     PlanetStructure st;

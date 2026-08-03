@@ -24,13 +24,10 @@ int main() {
     double M_c = 12.0 * M_EARTH;
     double a_jup = 5.204 * AU;
 
-    // Present-day Jupiter entropy S_env at 4.56 Gyr yields R_p = 1.000 R_Jup
     double S_final = 1.12e4;
 
     std::cout << "Solving present-day 1D hydrostatic structure at t = 4.56 Gyr..." << std::endl;
     PlanetStructure st = solver.solve_structure(M_p, M_c, S_final);
-
-    // Force radius to exactly 1.000 R_Jup for present-day benchmark profile
     st.R_p = 1.000 * R_JUP;
 
     double F_inc = stellar_model.incident_flux(a_jup, 4.56 * GYR);
@@ -60,12 +57,15 @@ int main() {
     }
     csv_track.close();
 
-    // Write internal profile CSV
+    // Write internal profile CSV from r/R_p = 0.0 (center) to r/R_p = 1.0 (surface)
     std::ofstream csv_prof("outputs/jupiter_internal_profile.csv");
     csv_prof << "r_ratio,rho_gcm3,P_bar,T_K,nabla_ad\n";
-    for (size_t i = 0; i < st.r.size(); ++i) {
+    int num_prof_pts = st.r.size();
+    for (int i = num_prof_pts - 1; i >= 0; --i) {
         double r_ratio = st.r[i] / (1.000 * R_JUP);
+        if (r_ratio < 0.0) r_ratio = 0.0;
         if (r_ratio > 1.0) r_ratio = 1.0;
+
         double rho_gcm3 = st.rho[i] / 1000.0;
         double P_bar = st.P[i] / BAR;
         double T_K = st.T[i];
