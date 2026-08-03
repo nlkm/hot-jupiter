@@ -87,10 +87,10 @@ class GuillotAtmosphere(BaseAtmosphere):
         try:
             T_int = brentq(residual, 5.0, 3000.0)
         except ValueError:
-            # Pick closest endpoint if out of bounds
-            f5 = residual(5.0)
-            f3000 = residual(3000.0)
-            T_int = 5.0 if abs(f5) < abs(f3000) else 3000.0
+            # Minimize absolute residual if boundary bracket is violated
+            from scipy.optimize import minimize_scalar
+            res_opt = minimize_scalar(lambda t: abs(residual(t)), bounds=(5.0, 3000.0), method="bounded")
+            T_int = float(res_opt.x)
 
         T_eff = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int
         L_int = 4.0 * np.pi * (R_p**2) * SIGMA_SB * (T_int**4)
