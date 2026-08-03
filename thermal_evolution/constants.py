@@ -4,7 +4,7 @@ Physical and Astronomical Constants (SI units unless specified otherwise).
 
 # Non-relativistic electron degeneracy constant for metallic hydrogen
 # Calibrated to SCVH95 / CMS19 EOS tables (mean density ~1.326 g/cm^3 for Jupiter)
-K_DEG = 8.8e5  # Pa m^5 kg^(-5/3)
+K_DEG = 1.08e6  # Pa m^5 kg^(-5/3)
 
 # Gravitational Constant (m^3 kg^-1 s^-2)
 G = 6.67430e-11
