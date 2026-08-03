@@ -91,7 +91,7 @@ Evaluates the impact of host star rotation frequency $\Omega_* = 2\pi / P_*$ on 
 
 \subsection{Scenario 7: Roche Lobe Overflow (RLOF) Atmospheric Mass Loss}
 \subsubsection{Simulation Walkthrough}
-Simulates an ultra-short-period Hot Jupiter ($a = 0.018\text{ AU}, P_{\mathrm{orb}} \sim 0.75\text{ days}$) with volume-equivalent Roche lobe radius $R_{\mathrm{Roche}} = 1.79\,R_{\mathrm{Jup}}$.
+Simulates an ultra-short-period Hot Jupiter ($a = 0.020\text{ AU}, e_0 = 0.35, P_{\mathrm{orb}} = 1.0\text{ day}$) with volume-equivalent Roche lobe radius $R_{\mathrm{Roche}} = 1.79\,R_{\mathrm{Jup}}$ at periastron ($r_{\text{peri}} = a(1-e)$).
 - **Phase 1 ($1 - 100\text{ Myr}$)**: Thermal inflation maintains radius near the Roche threshold ($R_p \approx 1.65\,R_{\mathrm{Jup}}, \mu_{\mathrm{Roche}} \approx 0.92$).
 - **Phase 2 ($0.1 - 4.56\text{ Gyr}$)**: When $R_p \ge R_{\mathrm{Roche}}$ ($\mu_{\mathrm{Roche}} \ge 1.0$), gas escapes through the inner Lagrange point $L_1$ at sound speed, stripping envelope mass ($\dot{M}_{\mathrm{RLOF}}$) and driving orbital angular momentum back-reaction ($da/dt|_{\mathrm{RLOF}}$).
 
@@ -102,10 +102,10 @@ Simulates an ultra-short-period Hot Jupiter ($a = 0.018\text{ AU}, P_{\mathrm{or
     \label{fig:rlof_scenario}
 \end{figure}
 
-\subsection{Scenario 8: Synthetic Exoplanet Population Study \& KS Metric Metric}
+\subsection{Scenario 8: Synthetic Exoplanet Population Study \& KS Metric}
 \subsubsection{Simulation Walkthrough}
 Simulates a synthetic population of 100 giant exoplanets across varying stellar fluxes, planet masses ($0.3 - 3.0\,M_{\mathrm{Jup}}$), and core masses.
-- **Walkthrough**: Standard cooling models without interior heating fail to explain observed inflated radii, yielding a high Kolmogorov-Smirnov distance ($D_{\mathrm{KS}} = 0.42$). Including coupled Ohmic and tidal dissipation reduces $D_{\mathrm{KS}}$ to $0.08$, matching the empirical Kepler/WASP radius distribution.
+- **Walkthrough**: Standard cooling models without interior heating fail to explain observed inflated radii, yielding a high Kolmogorov-Smirnov distance ($D_{\mathrm{KS}} = 0.52$). Including coupled Ohmic and tidal dissipation reduces $D_{\mathrm{KS}}$ to $0.08$, matching the empirical Kepler/WASP radius distribution.
 
 \begin{figure}[htbp]
     \centering
