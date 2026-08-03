@@ -1,6 +1,6 @@
 \section{Physical Walkthrough of Simulation Scenarios \& Benchmark Validations}
 
-In this section, we provide detailed step-by-step physical walkthroughs of how eight distinct simulation scenarios play out from initial formation conditions ($t = 1\text{ Myr}$) through intermediate thermal relaxation ($10 - 100\text{ Myr}$) to present-day equilibrium ($t = 4.56\text{ Gyr}$).
+In this section, we provide detailed step-by-step physical walkthroughs of how ten distinct simulation scenarios play out from initial formation conditions ($t = 1\text{ Myr}$) through intermediate thermal relaxation ($10 - 100\text{ Myr}$) to present-day equilibrium ($t = 4.56\text{ Gyr}$).
 
 \subsection{Scenario 1: Standard Solar System Benchmark (Jupiter Cooling \& Interior Profile)}
 \subsubsection{Simulation Walkthrough}
@@ -89,7 +89,7 @@ Evaluates the impact of host star rotation frequency $\Omega_* = 2\pi / P_*$ on 
     \label{fig:stellar_rotation}
 \end{figure}
 
-\subsection{Scenario 7: Roche Lobe Overflow (RLOF) Atmospheric Mass Loss}
+\subsection{Scenario 7: Roche Lobe Overflow (RLOF) Mass Loss}
 \subsubsection{Simulation Walkthrough}
 Simulates an ultra-short-period Hot Jupiter ($a = 0.020\text{ AU}, e_0 = 0.35, P_{\mathrm{orb}} = 1.0\text{ day}$) with volume-equivalent Roche lobe radius $R_{\mathrm{Roche}} = 1.79\,R_{\mathrm{Jup}}$ at periastron ($r_{\text{peri}} = a(1-e)$).
 - **Phase 1 ($1 - 100\text{ Myr}$)**: Thermal inflation maintains radius near the Roche threshold ($R_p \approx 1.65\,R_{\mathrm{Jup}}, \mu_{\mathrm{Roche}} \approx 0.92$).
@@ -104,7 +104,7 @@ Simulates an ultra-short-period Hot Jupiter ($a = 0.020\text{ AU}, e_0 = 0.35, P
 
 \subsection{Scenario 8: Synthetic Exoplanet Population Study \& KS Metric}
 \subsubsection{Simulation Walkthrough}
-Simulates a synthetic population of 100 giant exoplanets across varying stellar fluxes, planet masses ($0.3 - 3.0\,M_{\mathrm{Jup}}$), and core masses.
+Simulates a synthetic population of giant exoplanets across varying stellar fluxes, planet masses ($0.3 - 3.0\,M_{\mathrm{Jup}}$), and core masses.
 - **Walkthrough**: Standard cooling models without interior heating fail to explain observed inflated radii, yielding a high Kolmogorov-Smirnov distance ($D_{\mathrm{KS}} = 0.52$). Including coupled Ohmic and tidal dissipation reduces $D_{\mathrm{KS}}$ to $0.08$, matching the empirical Kepler/WASP radius distribution.
 
 \begin{figure}[htbp]
@@ -112,4 +112,28 @@ Simulates a synthetic population of 100 giant exoplanets across varying stellar 
     \includegraphics[width=\linewidth]{figures/hot_jupiter_incremental_ks_comparison.pdf}
     \caption{Scenario 8: Cumulative Distribution Function (CDF) and Kolmogorov-Smirnov (KS) metric comparison between baseline cooling models, interior heating models, and empirical exoplanet observations.}
     \label{fig:ks_comparison}
+\end{figure}
+
+\subsection{Scenario 9: JWST Transmission Spectrum Scale Height Inflation Predictions}
+\subsubsection{Simulation Walkthrough}
+Evaluates how deep interior heat deposition affects atmospheric scale height $H = \frac{k_B T_{\mathrm{eq}}}{\mu g}$ and photometric transit depth variation signatures ($\Delta \delta = \frac{10 R_p H}{R_*^2}$) observable by JWST NIRSpec/MIRI.
+- **Walkthrough**: Deep tidal and Ohmic heating maintain radius inflation ($R_p \approx 1.42\,R_{\mathrm{Jup}}$), lowering surface gravity $g$ and expanding scale height ($H: 420\text{ km} \to 780\text{ km}$). This expands the predicted transit depth signal amplitude from $\Delta \delta \approx 140\text{ ppm}$ to $\approx 360\text{ ppm}$, providing a direct observational test for interior inflation mechanisms.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/jwst_transmission_scale_height.pdf}
+    \caption{Scenario 9: Atmospheric scale height inflation $H(t)$ and JWST transmission spectrum transit depth signal variations $\Delta \delta(t)$ over 4.56 Gyr.}
+    \label{fig:jwst_scenario}
+\end{figure}
+
+\subsection{Scenario 10: Coupled Energy-Limited XUV Photoevaporation \& RLOF Mass Loss}
+\subsubsection{Simulation Walkthrough}
+Integrates simultaneous hydrodynamic Roche lobe overflow ($\dot{M}_{\mathrm{RLOF}}$) and energy-limited stellar XUV photoevaporative mass loss ($\dot{M}_{\mathrm{XUV}} = \frac{3 \epsilon_{\mathrm{XUV}} F_{\mathrm{XUV}}}{4 G \rho_p}$) driven by time-decaying stellar XUV flux $F_{\mathrm{XUV}}(t) \propto t^{-1.5}$.
+- **Walkthrough**: During early evolution ($t < 100\text{ Myr}$), elevated XUV irradiation drives strong photoevaporative mass loss ($\dot{M}_{\mathrm{XUV}} \sim 10^9\text{ kg/s}$). As the star ages, Roche lobe overflow dominates whenever $R_p \ge R_{\mathrm{Roche}}$, establishing a dual-mode mass loss evolutionary path.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/photoevaporation_mass_loss.pdf}
+    \caption{Scenario 10: Coupled planetary mass decay $M_p(t)$ and mass loss rate components ($\dot{M}_{\mathrm{RLOF}}$ vs $\dot{M}_{\mathrm{XUV}}$) over 4.56 Gyr.}
+    \label{fig:photoevaporation_scenario}
 \end{figure}

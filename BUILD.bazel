@@ -81,3 +81,17 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":thermal_evolution_lib"],
 )
+
+cc_binary(
+    name = "jwst_transmission_inflation",
+    srcs = ["cpp/examples/jwst_transmission_inflation.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "photoevaporation_rlof_coupling",
+    srcs = ["cpp/examples/photoevaporation_rlof_coupling.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)

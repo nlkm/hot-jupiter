@@ -31,6 +31,7 @@ public:
     double gamma = 0.1;       // Opacity ratio kappa_vis / kappa_th
     double kappa_th = 0.01;   // Thermal opacity [m^2/kg]
     double A_b = 0.34;        // Bond albedo
+    double mu_atm = 2.3 * MASS_P; // Mean molecular weight [kg] (H2/He)
 
     double T_irr_from_flux(double F_inc, double albedo) const {
         return std::pow((1.0 - albedo) * F_inc / (4.0 * SIGMA_SB), 0.25);
@@ -44,6 +45,17 @@ public:
         double term2 = 0.75 * T_irr_4 * (2.0 / 3.0 + (2.0 / (3.0 * gamma)) * (1.0 + (0.5 * gamma * tau - 1.0) * std::exp(-gamma * tau)));
 
         return std::pow(std::max(0.0, term1 + term2), 0.25);
+    }
+
+    double compute_scale_height(double T_eq, double M_p, double R_p) const {
+        double g = G * M_p / (R_p * R_p);
+        return (KB * T_eq) / (mu_atm * g); // Scale height in meters
+    }
+
+    double compute_transit_depth_variation_ppm(double R_p, double R_star, double H_m, int n_scale_heights = 5) const {
+        double delta_area = 2.0 * M_PI * R_p * (n_scale_heights * H_m);
+        double star_area = M_PI * R_star * R_star;
+        return (delta_area / star_area) * 1.0e6; // Signal amplitude in ppm
     }
 };
 

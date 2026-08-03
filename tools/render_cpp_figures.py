@@ -131,7 +131,6 @@ def main():
         df = read_csv_columns("outputs/multi_planet_system_evolution.csv")
         fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(7, 8.5), sharex=True)
 
-        # Panel 1: Eccentricities
         ax1.plot(df['t_gyr'], df['e_b'], label=r"Planet $b$ ($1.0\,M_{\mathrm{Jup}}, a=0.04\text{ AU}$)", color='#1f77b4', lw=1.5)
         ax1.plot(df['t_gyr'], df['e_c'], label=r"Planet $c$ ($0.3\,M_{\mathrm{Jup}}, a=0.12\text{ AU}$)", color='#ff7f0e', lw=1.5)
         ax1.plot(df['t_gyr'], df['e_d'], label=r"Planet $d$ ($1.5\,M_{\mathrm{Jup}}, a=0.50\text{ AU}$)", color='#2ca02c', lw=1.5)
@@ -139,13 +138,11 @@ def main():
         ax1.grid(True, alpha=0.3)
         ax1.legend(loc="upper right")
 
-        # Panel 2: Tidal Power
         ax2.plot(df['t_gyr'], df['P_tidal_b_W'], color='#d62728', lw=1.5)
         ax2.set_ylabel(r"Tidal Power $P_{\mathrm{tidal},b}$ [W]")
         ax2.set_yscale("log")
         ax2.grid(True, alpha=0.3, which="both")
 
-        # Panel 3: Inner Planet Radius Evolution
         ax3.plot(df['t_gyr'], df['R_p_b_Rjup'], label=r"Secular Tidal Inflation ($R_{p,b} \to 1.38\,R_{\mathrm{Jup}}$)", color='#1f77b4', lw=2)
         ax3.plot(df['t_gyr'], df['R_p_unheated_Rjup'], label=r"Un-heated Contraction ($R_p \to 1.02\,R_{\mathrm{Jup}}$)", color='gray', ls='--', lw=1.5)
         ax3.set_ylabel(r"Inner Radius $R_{p,b}$ [$R_{\mathrm{Jup}}$]")
@@ -236,6 +233,52 @@ def main():
         plt.tight_layout()
         fig.savefig("outputs/hot_jupiter_incremental_ks_comparison.pdf", bbox_inches="tight")
         fig.savefig("paper/figures/hot_jupiter_incremental_ks_comparison.pdf", bbox_inches="tight")
+        plt.close(fig)
+
+    # 9. JWST Transmission Spectrum Scale Height Plot
+    if os.path.exists("outputs/jwst_transmission_scale_height.csv"):
+        df = read_csv_columns("outputs/jwst_transmission_scale_height.csv")
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
+        ax1.plot(df['t_gyr'], df['H_inflated_km'], label="Inflated Planet ($R_p \sim 1.42\,R_{\mathrm{Jup}}$)", color='#1f77b4', lw=2)
+        ax1.plot(df['t_gyr'], df['H_base_km'], label="Un-heated Planet ($R_p \sim 1.02\,R_{\mathrm{Jup}}$)", color='gray', ls='--', lw=1.5)
+        ax1.set_ylabel(r"Scale Height $H$ [km]")
+        ax1.grid(True, alpha=0.3)
+        ax1.legend(loc="upper right")
+
+        ax2.plot(df['t_gyr'], df['delta_ppm_inflated'], label=r"Inflated JWST Transit Depth Signal $\Delta \delta$", color='#2ca02c', lw=2)
+        ax2.plot(df['t_gyr'], df['delta_ppm_base'], label=r"Un-heated Transit Depth Signal", color='gray', ls='--', lw=1.5)
+        ax2.set_xlabel("Age [Gyr]")
+        ax2.set_ylabel(r"Transit Depth Variation $\Delta \delta$ [ppm]")
+        ax2.grid(True, alpha=0.3)
+        ax2.legend(loc="upper right")
+
+        fig.suptitle("C++ JWST Transmission Spectrum Scale Height & Transit Depth Inflation", fontsize=11, fontweight="bold")
+        plt.tight_layout()
+        fig.savefig("outputs/jwst_transmission_scale_height.pdf", bbox_inches="tight")
+        fig.savefig("paper/figures/jwst_transmission_scale_height.pdf", bbox_inches="tight")
+        plt.close(fig)
+
+    # 10. Photoevaporation & RLOF Coupled Mass Loss Plot
+    if os.path.exists("outputs/photoevaporation_mass_loss.csv"):
+        df = read_csv_columns("outputs/photoevaporation_mass_loss.csv")
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
+        ax1.plot(df['t_gyr'], df['M_p_Mjup'], color='#d62728', lw=2, label=r"Planet Mass $M_p$ [$M_{\mathrm{Jup}}$]")
+        ax1.set_ylabel(r"Planet Mass $M_p$ [$M_{\mathrm{Jup}}$]")
+        ax1.grid(True, alpha=0.3)
+        ax1.legend(loc="upper right")
+
+        ax2.plot(df['t_gyr'], df['M_dot_rlof_kg_s'], label=r"RLOF Mass Loss Rate $\dot{M}_{\mathrm{RLOF}}$", color='#ff7f0e', lw=1.8)
+        ax2.plot(df['t_gyr'], df['M_dot_xuv_kg_s'], label=r"XUV Photoevaporation $\dot{M}_{\mathrm{XUV}}$", color='#9467bd', lw=1.8)
+        ax2.set_xlabel("Age [Gyr]")
+        ax2.set_ylabel(r"Mass Loss Rate $\dot{M}$ [kg/s]")
+        ax2.set_yscale("log")
+        ax2.grid(True, alpha=0.3, which="both")
+        ax2.legend(loc="upper right")
+
+        fig.suptitle("C++ Coupled RLOF & Energy-Limited XUV Photoevaporation", fontsize=11, fontweight="bold")
+        plt.tight_layout()
+        fig.savefig("outputs/photoevaporation_mass_loss.pdf", bbox_inches="tight")
+        fig.savefig("paper/figures/photoevaporation_mass_loss.pdf", bbox_inches="tight")
         plt.close(fig)
 
     print("All C++ generated vector PDF figures rendered and saved to paper/figures/.")
