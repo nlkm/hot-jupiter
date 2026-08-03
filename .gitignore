@@ -1,31 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-.eggs/
 build/
-dist/
-venv/
-.venv/
-
-# Pytest
-.pytest_cache/
-
-# Process Lockfiles
+bazel-*
+MODULE.bazel.lock
 .paper_build.lock
-paper/.paper_build.lock
-
-# LaTeX build outputs and compiled PDF binaries
-*.aux
-*.log
-*.out
-*.toc
-*.synctex.gz
-*.fls
-*.fdb_latexmk
-*.pdf
-
-# Outputs (large generated binary figures can be generated on demand via build_paper.py)
-outputs/*.png
-paper/figures/*.png
+__pycache__/
+*.pyc
