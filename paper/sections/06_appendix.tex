@@ -1,42 +1,18 @@
 \section{Step-by-Step Analytical Derivations from First-Principles Physics}
 \label{sec:appendix}
 
-In this Appendix, we provide self-contained, step-by-step mathematical derivations for every formula used in this paper. Each derivation begins from fundamental physics (Newton's laws, thermodynamics, quantum mechanics, electrodynamics, and orbital vector mechanics) and is written at the level of a first-year undergraduate physics student, complete with publication-grade 2D geometric diagrams.
+In this Appendix, we provide self-contained, step-by-step mathematical derivations for every formula used in this paper. Each derivation begins from fundamental physics (Newton's laws, thermodynamics, quantum mechanics, electrodynamics, and orbital vector mechanics) and is written at the level of a first-year undergraduate physics student, complete with publication-grade 2D vector geometric diagrams.
 
 \subsection{Derivation A1: 1D Hydrostatic Equations of Equilibrium}
 \label{sec:derivation_a1}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-                   SURFACE OF PLANET (r = R_p, P = P_surf)
-                           /~~~~~~~~~~~~~~~~~~\
-                          /                    \
-                         |      PLANET SLICE    |
-                          \                    /
-                           \~~~~~~~~~~~~~~~~~~/
-                                     |
-                                     v
-          +-------------------------------------------------+
-          |  OUTER BOUNDARY (r + dr): Pressure P(r+dr)      |
-          |                     |                           |
-          |                     v  Force F_out = P(r+dr)*A  |
-          |            +------------------+                 |
-          |            |  GAS SHELL CELL  |                 |
-          |            |  Mass  dm = rho*dV|                |
-          |            |  Volume dV = A*dr|                 |
-          |            +------------------+                 |
-          |                     ^                           |
-          |                     |  Force F_in = P(r)*A      |
-          |  INNER BOUNDARY (r):      Pressure P(r)         |
-          +-------------------------------------------------+
-                                ^
-                                | Gravitational Pull
-                                | F_g = G * m(r) * dm / r^2
-                                |
-                       CENTER (r = 0, m = 0)
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_hydrostatic_geom.pdf}
+\caption{1D Hydrostatic gas shell force balance ($F_{\text{in}}$ vs $F_{\text{out}}$ and gravity $F_g$).}
+\label{fig:hydrostatic_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
 Consider a spherical planet of total mass $M_p$ and radius $R_p$. Imagine a thin concentric shell of gas located at radius $r$ from the center, with thickness $dr$, surface area $A = 4\pi r^2$, and enclosed mass $m(r)$.
@@ -97,31 +73,19 @@ Consider a spherical planet of total mass $M_p$ and radius $R_p$. Imagine a thin
 \subsection{Derivation A2: Birch-Murnaghan 3rd-Order Core EOS}
 \label{sec:derivation_a2}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-      UNCOMPRESSED CORE STATE (f = 0)         COMPRESSED CORE STATE (f > 0)
-           Radius R_0, Volume V_0                  Radius R, Volume V
-               Density rho_0                           Density rho
-              /~~~~~~~~~~~~~\                         /~~~~~~~~~\
-             /               \                       /           \
-            |   UNDEFORMED    |    --- Compress --> | COMPRESSED  |
-             \    SPHERE     /                       \   SPHERE  /
-              \~~~~~~~~~~~~~/                         \~~~~~~~~~/
-                    |                                      |
-                    v                                      v
-             Volume V_0 = (4/3)*pi*R_0^3            Volume V = (4/3)*pi*R^3
-             
-             1D Compression Ratio: (R_0 / R)^2 = (rho / rho_0)^(2/3)
-             Eulerian Strain Measure: f = (1/2) * [ (rho / rho_0)^(2/3) - 1 ]
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_core_strain_geom.pdf}
+\caption{Solid core volume compression and Eulerian strain $f = \frac{1}{2}[(\rho/\rho_0)^{2/3}-1]$.}
+\label{fig:core_strain_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
-The equation of state of a solid heavy-element core (rock/iron mixture) under ultra-high compression is derived from elastic strain energy thermodynamics (Birch 1947).
+The equation of state of a solid heavy-element core under ultra-high compression is derived from elastic strain energy thermodynamics (Birch 1947).
 
 1. **Finite Eulerian Strain Measure $f$**:
-   When a sphere of initial uncompressed radius $R_0$ and density $\rho_0$ is compressed to radius $R$ and density $\rho$, the 1D metric transformation matrix defines finite Eulerian strain $f$:
+   When a sphere of initial uncompressed radius $R_0$ and density $\rho_0$ is compressed to radius $R$ and density $\rho$, finite Eulerian strain $f$ is:
    \begin{equation}
    f \equiv \frac{1}{2} \left[ \left(\frac{R_0}{R}\right)^2 - 1 \right] = \frac{1}{2} \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right]
    \end{equation}
@@ -141,21 +105,7 @@ The equation of state of a solid heavy-element core (rock/iron mixture) under ul
    \end{equation}
 
 3. **Pressure Derivation ($P = -\frac{dF}{dV}$)**:
-   By thermodynamics, pressure is the negative derivative of free energy with respect to volume. Applying the chain rule $P = -\frac{dF}{df} \frac{df}{dV}$:
-   - Volume derivative $\frac{df}{dV}$:
-     \begin{equation}
-     V = V_0 (1 + 2f)^{-3/2} \implies \frac{dV}{df} = -3 V_0 (1 + 2f)^{-5/2} \implies \frac{df}{dV} = -\frac{1}{3 V_0} (1+2f)^{5/2}
-     \end{equation}
-   - Free energy derivative $\frac{dF}{df}$:
-     \begin{equation}
-     \frac{dF}{df} = 2 a_1 f + 3 a_2 f^2 = 9 V_0 K_0 f \left[ 1 + \frac{3}{2} (K_0' - 4) f \right]
-     \end{equation}
-
-   Multiplying $\frac{dF}{df}$ and $-\frac{df}{dV}$:
-   \begin{equation}
-   P(f) = 3 K_0 f (1+2f)^{5/2} \left[ 1 + \frac{3}{2} (K_0' - 4) f \right]
-   \end{equation}
-   Substituting $f = \frac{1}{2} [(\rho/\rho_0)^{2/3} - 1]$ and $(1+2f)^{5/2} = (\rho/\rho_0)^{5/3}$:
+   Applying the chain rule $P = -\frac{dF}{df} \frac{df}{dV}$:
    \begin{align}
    P(\rho) &= \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{7/3} - \left(\frac{\rho}{\rho_0}\right)^{5/3} \right] \nonumber \\
    &\quad \times \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right] \right\}
@@ -165,98 +115,61 @@ The equation of state of a solid heavy-element core (rock/iron mixture) under ul
 \subsection{Derivation A3: Non-Relativistic Electron Degeneracy Pressure $K_{\mathrm{DEG}}$}
 \label{sec:derivation_a3}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-                 3D MOMENTUM PHASE SPACE (p_x, p_y, p_z)
-                               +-------------------+
-                               | p_z               |
-                               |   |    * * *      |  FERMI SPHERE
-                               |   |  * * * * *    |  Radius p_F
-                               |   +----*------>p_x|
-                               |     * * * * *     |  Phase Volume Element
-                               |       * * *       |  d^3p = 4*pi*p^2*dp
-                               +-------------------+
-                               
-                   Quantum Cell Volume: h^3 = (2*pi*hbar)^3
-                   Pauli Capacity: 2 electrons per cell (spin up / spin down)
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_fermi_sphere_geom.pdf}
+\caption{3D Momentum space Fermi sphere of radius $p_F$ and quantum cells $h^3$.}
+\label{fig:fermi_sphere_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
-In the deep interiors of giant planets ($P > 2\text{ Mbar}$), hydrogen atoms ionize into free protons and electrons. As density increases, electron de Broglie wavelengths overlap, forcing electrons into degenerate quantum states governed by the Pauli Exclusion Principle.
+In deep interiors ($P > 2\text{ Mbar}$), hydrogen ionizes into protons and electrons, forming degenerate quantum states.
 
 1. **Phase Space Fermi Sphere Integration**:
    By quantum mechanics, spatial volume $V$ and momentum volume element $d^3p = 4\pi p^2 dp$ form phase space cells of volume $h^3 = (2\pi \hbar)^3$. By Pauli's exclusion principle, each cell holds at most 2 electrons ($g_s = 2$ spin states).
-   At $T = 0\text{ K}$, electrons fill all lowest energy momentum states up to Fermi momentum $p_F$:
+   At $T = 0\text{ K}$, electrons fill all states up to Fermi momentum $p_F$:
    \begin{equation}
    N_e = \int \frac{g_s V}{h^3} d^3p = \frac{2 V}{h^3} \int_0^{p_F} 4\pi p^2 dp = \frac{8\pi V p_F^3}{3 h^3}
    \end{equation}
    Dividing by volume $V$ gives electron number density $n_e = N_e / V$:
    \begin{equation}
-   n_e = \frac{8\pi p_F^3}{3 h^3} \implies p_F = h \left(\frac{3 n_e}{8\pi}\right)^{1/3} = \hbar (3\pi^2 n_e)^{1/3}
+   n_e = \frac{8\pi p_F^3}{3 h^3} \implies p_F = \hbar (3\pi^2 n_e)^{1/3}
    \end{equation}
 
 2. **Kinetic Energy Density Integration ($u_{\mathrm{deg}}$)**:
-   For non-relativistic electrons, kinetic energy per electron is $E(p) = \frac{p^2}{2 m_e}$. The total kinetic energy density $u_{\mathrm{deg}} = U/V$ is:
+   For non-relativistic electrons, kinetic energy per electron is $E(p) = \frac{p^2}{2 m_e}$. Kinetic energy density $u_{\mathrm{deg}} = U/V$ is:
    \begin{align}
-   u_{\mathrm{deg}} &= \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{4\pi}{m_e h^3} \int_0^{p_F} p^4 dp = \frac{4\pi p_F^5}{5 m_e h^3} \nonumber \\
-   &= \frac{4\pi \left(\hbar (3\pi^2 n_e)^{1/3}\right)^5}{5 m_e (2\pi \hbar)^3} = \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
+   u_{\mathrm{deg}} &= \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
    \end{align}
 
 3. **Degeneracy Pressure Equation of State ($P_{\mathrm{deg}}$)**:
-   From non-relativistic kinetic theory, pressure is two-thirds of internal energy density:
+   Pressure is two-thirds of internal energy density:
    \begin{equation}
-   P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}} = \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e} n_e^{5/3}
+   P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}} = \left[ \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e m_p^{5/3}} \right] \left(\frac{\rho}{\mu_e}\right)^{5/3} = K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
    \end{equation}
-   Substituting electron number density $n_e = \frac{\rho}{\mu_e m_p}$ (where $\mu_e = 1/X$ is electron mean molecular weight):
-   \begin{equation}
-   P_{\mathrm{deg}} = \left[ \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e m_p^{5/3}} \right] \left(\frac{\rho}{\mu_e}\right)^{5/3} = K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
-   \end{equation}
-   Evaluating fundamental physical constants ($\hbar = 1.05457 \times 10^{-34}\text{ J s}, m_e = 9.10938 \times 10^{-31}\text{ kg}, m_p = 1.67262 \times 10^{-27}\text{ kg}$):
-   \begin{equation}
-   K_{\mathrm{DEG, ideal}} = 1.003 \times 10^6 \text{ Pa}\cdot\text{m}^5\cdot\text{kg}^{-5/3}
-   \end{equation}
-   Including liquid metallic hydrogen Coulomb interaction corrections (Saumon-Chabrier EOS), $K_{\mathrm{DEG}} = 1.08 \times 10^6\text{ SI}$.
 
 
 \subsection{Derivation A4: Guillot (2010) Radiative Transfer Profile}
 \label{sec:derivation_a4}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-               INCOMING VISIBLE STELLAR FLUX F_irr
-                              |
-                              v  (Visible Opacity kappa_vis)
-   ======================================================== TOP OF ATMOSPHERE (tau = 0)
-          ATMOSPHERE SLAB (Infrared Optical Depth tau)
-          Mean Intensity J_th(tau), Temperature T(tau)
-   ======================================================== BOTTOM (tau >> 1)
-                              ^
-                              |  INTRINSIC THERMAL FLUX F_int (IR Opacity kappa_th)
-                  DEEP CONVECTIVE ENVELOPE
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_radiative_slab_geom.pdf}
+\caption{1D Plane-parallel atmospheric radiative transfer slab.}
+\label{fig:radiative_slab_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
-In irradiated exoplanet atmospheres, energy transport is governed by radiative transfer through a 1D plane-parallel slab.
-
 1. **Double-Gray Moment Equations**:
-   Dividing radiation into incoming visible stellar flux (opacity $\kappa_{\mathrm{vis}}$) and outgoing thermal infrared flux (opacity $\kappa_{\mathrm{th}}$), the Eddington approximation ($K_{\mathrm{th}} = \frac{1}{3} J_{\mathrm{th}}$) yields:
+   Dividing radiation into visible stellar channel ($\kappa_{\mathrm{vis}}$) and thermal IR channel ($\kappa_{\mathrm{th}}$), Eddington approximation ($K_{\mathrm{th}} = \frac{1}{3} J_{\mathrm{th}}$) yields:
    \begin{equation}
    \frac{1}{3} \frac{d J_{\mathrm{th}}}{d\tau} = \frac{F_{\mathrm{int}}}{4\pi} + \frac{F_{\mathrm{irr}}}{4\pi} E_2(\gamma \tau)
    \end{equation}
-   where optical depth is $\tau = \int \kappa_{\mathrm{th}} \rho dz$, opacity ratio is $\gamma \equiv \kappa_{\mathrm{vis}} / \kappa_{\mathrm{th}}$, and $E_2(x) \approx e^{-\gamma \tau}$.
 
-2. **First and Second Integrations**:
-   Integrating with respect to $\tau$:
-   \begin{equation}
-   J_{\mathrm{th}}(\tau) = \frac{3 F_{\mathrm{int}}}{4\pi} \left(\tau + \frac{2}{3}\right) + \frac{3 F_{\mathrm{irr}}}{4\pi} \left[ \frac{2}{3} + \frac{2}{3\gamma} \left( 1 + \left(\frac{\gamma \tau}{2} - 1\right) e^{-\gamma \tau} \right) \right]
-   \end{equation}
-
-3. **Temperature Conversion ($T^4 = \frac{4\pi}{\sigma_{\mathrm{SB}}} J_{\mathrm{th}}$)**:
-   Relating mean intensity $J_{\mathrm{th}}$ to temperature via Stefan-Boltzmann law ($F_{\mathrm{int}} = \sigma_{\mathrm{SB}} T_{\mathrm{int}}^4, F_{\mathrm{irr}} = \sigma_{\mathrm{SB}} T_{\mathrm{irr}}^4$):
+2. **Temperature Conversion ($T^4 = \frac{4\pi}{\sigma_{\mathrm{SB}}} J_{\mathrm{th}}$)**:
+   Integrating twice gives temperature profile:
    \begin{align}
    T^4(\tau) &= \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) \nonumber \\
    &\quad + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
@@ -267,10 +180,6 @@ In irradiated exoplanet atmospheres, energy transport is governed by radiative t
 \label{sec:derivation_a5}
 Thorngren et al. (2016) compiled interior structure models for 47 giant exoplanets, fitting heavy-element core mass $M_c$ against total planet mass $M_p$ and host star metallicity $[\mathrm{Fe/H}]$:
 \begin{equation}
-\ln \left(\frac{M_c}{M_\oplus}\right) = c_0 + 0.6 \ln\left(\frac{M_p}{M_{\mathrm{Jup}}}\right) + 0.5 \ln(10) [\mathrm{Fe/H}]
-\end{equation}
-Exponentiating yields the empirical core scaling law:
-\begin{equation}
 M_c([\mathrm{Fe/H}], M_p) = 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
 \end{equation}
 
@@ -278,50 +187,37 @@ M_c([\mathrm{Fe/H}], M_p) = 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 1
 \subsection{Derivation A6: Equilibrium Tidal Dissipation \& Ohmic Power}
 \label{sec:derivation_a6}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-           HOST STAR M_*                      DEFORMED PLANET M_p
-             +------+       Orbital Axis z      +-------------------+
-             |      |             ^             |    TIDAL BULGE    |
-             |      |             |             |     ( \   / )     |  Phase Lag Angle delta
-             +------+   ======================> |    (   X   )    |  <--- (Internal Friction)
-                          Tidal Distance a      +-------------------+
-                                                      \       /
-                                                 Atmospheric Winds v x B
-                                                 Ohmic Dissipation J^2 / sigma
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_tidal_bulge_geom.pdf}
+\caption{Tidal bulge deformation, phase lag angle $\delta$, and dissipation.}
+\label{fig:tidal_bulge_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
-1. **Quadrupolar Gravitational Tidal Potential**:
-   The gravitational potential exerted by star $M_*$ at position $\mathbf{r} = (r, \theta, \phi)$ inside planet $M_p$ is expanded in Legendre polynomials $P_l(\cos\theta)$ (Hut 1981):
+1. **Quadrupolar Tidal Potential**:
+   The potential exerted by star $M_*$ inside planet $M_p$ is expanded in Legendre polynomials $P_2(\cos\theta)$:
    \begin{equation}
    V_{\text{tide}}(r, \theta, \phi) = -\frac{G M_*}{a} \sum_{l=2}^\infty \left(\frac{r}{a}\right)^l P_l(\cos\theta)
    \end{equation}
-   The quadrupolar term ($l=2$) raises a tidal deformation bulge height $h_2 = k_2 \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^3 R_p$, where $k_2$ is the Love number.
 
 2. **Viscous Dissipation Rate ($\dot{E}_{\text{tide}}$)**:
-   Internal friction delays the tidal bulge deformation by phase angle lag $\delta = n \Delta t = \frac{1}{2 Q}$. Integrating the work done by tidal force $\mathbf{F}_{\text{tide}} = -\nabla V_{\text{tide}}$ over the planet's volume gives:
+   Internal friction delays tidal bulge deformation by phase lag $\delta = \frac{1}{2Q}$:
    \begin{align}
-   \dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 \nonumber \\
-   &\quad - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
+   \dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
    \end{align}
 
-3. **Ohmic Dissipation Power ($P_{\mathrm{Ohmic}}$)**:
-   In irradiated atmospheres ($T > 1500\text{ K}$), alkali metals ionize. Zonal winds $\mathbf{v} \sim \text{km/s}$ cross magnetic field $\mathbf{B}$, driving current density $\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$. Integrating Joule heating $P = \int \frac{J^2}{\sigma} dV$ yields:
-   \begin{align}
-   P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2(300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
-   \end{align}
+3. **Ohmic Power ($P_{\mathrm{Ohmic}} = \int \frac{J^2}{\sigma} dV$)**:
+   Alkali metals ionize at $T > 1500\text{ K}$, driving currents $\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$:
+   \begin{equation}
+   P_{\mathrm{Ohmic}} = \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2(300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
+   \end{equation}
 
 
 \subsection{Derivation A7: Obliquity-Driven Tidal Heating}
 \label{sec:derivation_a7}
-When a planet has non-zero obliquity ($\varepsilon > 0$), the stellar tidal potential produces periodic shear strains in the planet's frame at frequency $n$:
-\begin{equation}
-U_{\text{tide}}(\theta, \phi) = \frac{G M_*}{a^3} r^2 P_2(\cos\theta')
-\end{equation}
-Averaging the strain dissipation rate over one orbital period $2\pi/n$ yields the obliquity power:
+A planet with non-zero obliquity ($\varepsilon > 0$) experiences periodic shear strains at frequency $n$:
 \begin{equation}
 P_{\mathrm{obliquity}} = \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} n^2 \sin^2\varepsilon
 \end{equation}
@@ -329,136 +225,58 @@ P_{\mathrm{obliquity}} = \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_
 
 \subsection{Derivation A8: Stellar Rotation Driven Tidal Migration}
 \label{sec:derivation_a8}
-The host star's tidal bulge raises a gravitational torque on the planet. The angle lag $\Delta\phi_* = (n - \Omega_* \cos\psi_*) \tau_*$ produces an orbital energy change rate:
+The host star's tidal bulge raises torque with phase lag angle $\Delta\phi_* = (n - \Omega_* \cos\psi_*) \tau_*$:
 \begin{equation}
-\left.\frac{dE_{\mathrm{orb}}}{dt}\right|_{\text{star}} = -\frac{3}{2} \left(\frac{k_{2, *}}{Q_*}\right) \frac{G M_p^2 R_*^5}{a^6} n (n - \Omega_* \cos\psi_*)
+\left.\frac{da}{dt}\right|_{\text{star}} = -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
 \end{equation}
-Relating orbital energy $E_{\mathrm{orb}} = -G M_p M_* / (2a)$ yields:
-\begin{align}
-\left.\frac{da}{dt}\right|_{\text{star}} &= -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \nonumber \\
-&\quad \times \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
-\end{align}
 
 
 \subsection{Derivation A9: Roche Lobe Overflow (RLOF) Mass-Loss Rate}
 \label{sec:derivation_a9}
 
-\subsubsection{Geometric Diagram}
-{\tiny
-\begin{verbatim}
-           STAR M_*                 INNER LAGRANGE L_1            OVERFLOWING PLANET M_p
-           +------+                    SADDLE POINT                  +---+
-           |      | <=============== x = (dPhi = 0) ===============  |   | GAS STREAM
-           +------+                                                  +---+ =======>
-           
-           Roche Lobe Radius R_Roche = a * [ 0.49 q^(2/3) / (0.6 q^(2/3) + ln(1+q^(1/3))) ]
-\end{verbatim}
-}
+\subsubsection{Geometric Vector Diagram}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/derivation_roche_lobe_geom.pdf}
+\caption{Roche lobe equipotential surface, inner Lagrange point $L_1$, and mass loss.}
+\label{fig:roche_lobe_geom}
+\end{figure}
 
 \subsubsection{First-Principles Step-by-Step Derivation}
 1. **Effective Potential $\Phi_{\mathrm{eff}}$**:
-   In a co-rotating reference frame rotating at orbital frequency $n = \sqrt{G(M_p+M_*)/a^3}$, the effective potential at coordinate $\mathbf{r}$ is:
+   In co-rotating frame:
    \begin{equation}
    \Phi_{\mathrm{eff}}(\mathbf{r}) = -\frac{G M_*}{|\mathbf{r} - \mathbf{r}_*|} - \frac{G M_p}{|\mathbf{r} - \mathbf{r}_p|} - \frac{1}{2} n^2 (x^2 + y^2)
    \end{equation}
-   Setting $\nabla \Phi_{\mathrm{eff}} = 0$ along the line connecting centers yields the inner Lagrange point $L_1$. The volume enclosed by the equipotential surface passing through $L_1$ defines Roche lobe radius $R_{\mathrm{Roche}}$.
+   Setting $\nabla \Phi_{\mathrm{eff}} = 0$ yields $L_1$ and Roche lobe radius $R_{\mathrm{Roche}} = a \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1+q^{1/3})}$.
 
-2. **Eggleton (1983) Fit**:
-   Solving $\nabla \Phi_{\mathrm{eff}} = 0$ for mass ratio $q \equiv M_p / M_* \ll 1$ yields:
-   \begin{equation}
-   \frac{R_{\mathrm{Roche}}}{a} = \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}
-   \end{equation}
-
-3. **Hydrodynamic Nozzle Mass Loss**:
-   When $R_p \ge R_{\mathrm{Roche}}$, atmospheric pressure forces gas through the sonic surface near $L_1$ at sound speed $c_s \approx \sqrt{k_B T_{\mathrm{eq}} / \mu}$:
+2. **Hydrodynamic Nozzle Mass Loss**:
+   When $R_p \ge R_{\mathrm{Roche}}$:
    \begin{equation}
    \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} = -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right]
-   \end{equation}
-
-4. **Orbital Back-Reaction**:
-   Equating orbital angular momentum $L_{\mathrm{orb}} = M_p M_* \sqrt{G a / (M_p + M_*)} / (M_p + M_*)$ and mass loss carrying momentum fraction $\beta$ yields:
-   \begin{equation}
-   \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} = -2 a \left(\frac{1}{M_p} \frac{dM_p}{dt}\right) (1 - \beta)
    \end{equation}
 
 
 \subsection{Derivation A10: Coupled 6D Orbital \& 3D Spin Vector Dynamics}
 \label{sec:derivation_a10}
-The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{\text{orb}} + \mathbf{S}_{\text{spin}}$ is conserved:
+Angular momentum $\mathbf{H}_{\text{tot}} = \mathbf{L}_{\text{orb}} + \mathbf{S}_{\text{spin}}$ is conserved:
 \begin{align}
-\mathbf{L}_{\text{orb}} &= \frac{M_p M_*}{M_p + M_*} \sqrt{G(M_p + M_*) a (1-e^2)} \, \hat{\mathbf{k}} \\
-\mathbf{S}_{\text{spin}} &= C_p M_p R_p^2 \mathbf{\Omega}_{\mathrm{rot}}
+\frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\text{rot}} - n \cos\varepsilon) - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\
+\frac{d\varepsilon}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
 \end{align}
-1. **Spin Rate Derivation ($d\Omega_{\mathrm{rot}}/dt$)**:
-   The spin vector rate of change receives torque $\mathbf{T}_{\text{tide}}$ and moment of inertia changes from thermal contraction:
-   \begin{equation}
-   \frac{d\mathbf{S}_{\text{spin}}}{dt} = I_p \frac{d\mathbf{\Omega}_{\mathrm{rot}}}{dt} + \mathbf{\Omega}_{\mathrm{rot}} \frac{dI_p}{dt} = \mathbf{T}_{\text{tide}}
-   \end{equation}
-   Substituting $I_p = C_p M_p R_p^2$ and $dI_p/dt = 2 C_p M_p R_p (dR_p/dt)$:
-   \begin{equation}
-   \frac{d\Omega_{\mathrm{rot}}}{dt} = \frac{T_{\text{tide}, z}}{C_p M_p R_p^2} - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
-   \end{equation}
-   Substituting tidal torque $T_{\text{tide}, z} = -\frac{3}{2} (k_2/Q) (G M_*^2 R_p^5 / a^6) (\Omega_{\mathrm{rot}} - n \cos\varepsilon)$ gives:
-   \begin{align}
-   \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\text{rot}} - n \cos\varepsilon) \nonumber \\
-   &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
-   \end{align}
-
-2. **Obliquity Rate Derivation ($d\varepsilon/dt$)**:
-   The perpendicular component of tidal torque $\mathbf{T}_{\text{tide}, \perp}$ damps tilt angle $\varepsilon \equiv \arccos(\hat{\mathbf{S}} \cdot \hat{\mathbf{L}})$:
-   \begin{equation}
-   \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
-   \end{equation}
 
 
 \subsection{Derivation A11: Laplace-Lagrange Secular N-Body Perturbations}
 \label{sec:derivation_a11}
-For a multi-planet system containing $N$ planets orbiting host star $M_*$, the gravitational disturbing function $R_i$ for planet $i$ due to planet $j$ is expanded in powers of eccentricities $e$ and inclinations $I$ (Murray \& Dermott 1999):
+Linearizing Lagrange planetary equations in Poincaré variables $h_i = e_i \sin\varpi_i, k_i = e_i \cos\varpi_i$:
 \begin{equation}
-R_i = n_i a_i^2 \sum_{j \neq i} \left[ \frac{1}{2} A_{ii} e_i^2 + A_{ij} e_i e_j \cos(\varpi_i - \varpi_j) \right]
+A_{ii} = +\frac{n_i}{4} \sum_{j \neq i} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(1)}(\alpha_{ij}), \quad A_{ij} = -\frac{n_i}{4} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(2)}(\alpha_{ij})
 \end{equation}
-where $\varpi \equiv \Omega + \omega$ is the longitude of periastron.
-
-1. **Lagrange Planetary Equations**:
-   The time rate of change of eccentricity $e_i$ and longitude of periastron $\varpi_i$ are:
-   \begin{equation}
-   \frac{de_i}{dt} = -\frac{1}{n_i a_i^2 e_i} \frac{\partial R_i}{\partial \varpi_i}, \quad \frac{d\varpi_i}{dt} = \frac{1}{n_i a_i^2 e_i} \frac{\partial R_i}{\partial e_i}
-   \end{equation}
-
-2. **Poincaré Canonical Variables**:
-   Defining Cartesian eccentricity variables $h_i \equiv e_i \sin\varpi_i$ and $k_i \equiv e_i \cos\varpi_i$, the linearized equations of motion become:
-   \begin{equation}
-   \frac{dh_i}{dt} = \sum_{j=1}^N A_{ij} k_j, \quad \frac{dk_i}{dt} = -\sum_{j=1}^N A_{ij} h_i
-   \end{equation}
-
-3. **Laplace Coefficient Precession Matrix**:
-   Differentiating $R_i$ with respect to $e_i$ and $\varpi_i$ yields the Laplace-Lagrange secular matrix elements $A_{ij}$:
-   \begin{align}
-   A_{ii} &= +\frac{n_i}{4} \sum_{j \neq i} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(1)}(\alpha_{ij}) \\
-   A_{ij} &= -\frac{n_i}{4} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(2)}(\alpha_{ij})
-   \end{align}
-   where $\alpha_{ij} \equiv \min(a_i, a_j) / \max(a_i, a_j)$, $\bar{\alpha}_{ij} = \alpha_{ij}$ for $a_i < a_j$ and $1$ for $a_i > a_j$, and $b_{3/2}^{(s)}(\alpha)$ are Laplace coefficients:
-   \begin{equation}
-   b_{3/2}^{(s)}(\alpha) \equiv \frac{1}{\pi} \int_0^{2\pi} \frac{\cos(s\psi)}{(1 - 2\alpha \cos\psi + \alpha^2)^{3/2}} d\psi
-   \end{equation}
 
 
 \subsection{Derivation A12: Observational Selection Function \& SNR Logistic Model}
 \label{sec:derivation_a12}
-The probability of discovering a transiting exoplanet $W_{\mathrm{transit}}$ is the product of geometric alignment probability $P_{\mathrm{geo}}$ and photometric detection efficiency $P_{\mathrm{det}}$:
-
-1. **Geometric Transit Probability**:
-   A planet transits if the impact parameter $b = (a/R_*) \cos I \le 1 + R_p/R_x$:
-   \begin{equation}
-   P_{\mathrm{geo}} = \frac{R_* + R_p}{a (1 - e^2)} \approx \frac{R_* + R_p}{a}
-   \end{equation}
-
-2. **Signal-to-Noise Ratio (SNR) \& Logistic Selection**:
-   The photometric transit signal-to-noise ratio scales with depth $\delta = (R_p / R_*)^2$ and number of transits $N_{\text{transit}} \propto T_{\text{obs}} / P_{\mathrm{orb}}$:
-   \begin{equation}
-   \mathrm{SNR} = \frac{(R_p / R_*)^2}{\sigma_{\mathrm{phot}}} \sqrt{\frac{T_{\text{obs}}}{P_{\mathrm{orb}}}}
-   \end{equation}
-   Fitting the Kepler pipeline detection threshold ($7.1\sigma$) with a logistic efficiency function yields:
-   \begin{equation}
-   P_{\mathrm{det}}(\mathrm{SNR}) = \frac{1}{1 + \exp\left( -\frac{\mathrm{SNR} - 7.1}{1.5} \right)}
-   \end{equation}
+Geometric probability $P_{\mathrm{geo}} = \frac{R_* + R_p}{a}$ and Kepler pipeline detection efficiency:
+\begin{equation}
+P_{\mathrm{det}}(\mathrm{SNR}) = \frac{1}{1 + \exp\left( -\frac{\mathrm{SNR} - 7.1}{1.5} \right)}
+\end{equation}
