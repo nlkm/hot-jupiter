@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <vector>
 #include <cmath>
@@ -25,34 +26,32 @@ int main() {
     double e = 0.25;
     SpinState spin = SpinState::from_period_hours(10.0, 15.0);
 
+    std::ofstream csv("outputs/hot_jupiter_coupled_orbital_spin_evolution.csv");
+    csv << "t_gyr,a_AU,e,P_rot_hrs,obliquity_deg,R_p_Rjup,P_tidal_W\n";
+
     double dt = 1.0e6 * YEAR;
     int num_steps = 1000;
 
-    std::cout << "Evolving coupled orbital element and spin vector dynamics over 1.0 Gyr..." << std::endl;
     for (int step = 0; step < num_steps; ++step) {
+        double t_gyr = (step * dt) / GYR;
         auto [da_dt, de_dt, dOmega_dt, dobl_dt] = tidal_rates.evaluate_rates(
             M_p, R_p, M_star, a, e, spin.Omega_rot, spin.obliquity
         );
 
-        a += da_dt * dt;
+        a = std::max(0.01 * AU, a + da_dt * dt);
         e = std::max(0.0, e + de_dt * dt);
-        spin.Omega_rot += dOmega_dt * dt;
+        spin.Omega_rot = std::max(1.0e-6, spin.Omega_rot + dOmega_dt * dt);
         spin.obliquity = std::max(0.0, spin.obliquity + dobl_dt * dt);
 
-        if (step % 200 == 0 || step == num_steps - 1) {
-            double P_rot_hrs = (2.0 * M_PI / spin.Omega_rot) / HOUR;
-            double obl_deg = spin.obliquity * 180.0 / M_PI;
-            double P_tidal = heating.compute_tidal_power(M_p, M_star, a, e, R_p, spin.Omega_rot, spin.obliquity);
+        double P_rot_hrs = (2.0 * M_PI / spin.Omega_rot) / HOUR;
+        double obl_deg = spin.obliquity * 180.0 / M_PI;
+        double P_tidal = heating.compute_tidal_power(M_p, M_star, a, e, R_p, spin.Omega_rot, spin.obliquity);
+        double R_p_curr = (1.25 + 0.20 * e * std::exp(-t_gyr / 0.5)) * R_JUP;
 
-            std::cout << "Time: " << std::fixed << std::setprecision(1) << (step * dt / GYR) << " Gyr"
-                      << " | a = " << std::setprecision(4) << (a / AU) << " AU"
-                      << " | e = " << std::setprecision(4) << e
-                      << " | P_rot = " << std::setprecision(2) << P_rot_hrs << " hrs"
-                      << " | obl = " << std::setprecision(1) << obl_deg << " deg"
-                      << " | P_tide = " << std::scientific << std::setprecision(2) << P_tidal << " W" << std::endl;
-        }
+        csv << t_gyr << "," << (a / AU) << "," << e << "," << P_rot_hrs << "," << obl_deg << "," << (R_p_curr / R_JUP) << "," << P_tidal << "\n";
     }
 
-    std::cout << "\nCoupled dynamics integration clean success.\n" << std::endl;
+    csv.close();
+    std::cout << "CSV data written to outputs/hot_jupiter_coupled_orbital_spin_evolution.csv" << std::endl;
     return 0;
 }

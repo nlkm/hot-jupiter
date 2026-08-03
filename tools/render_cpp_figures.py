@@ -24,7 +24,37 @@ def main():
 
     print("Rendering publication-quality vector PDF figures from C++ simulation data...")
 
-    # 1. Multi-Planet Evolution Plot
+    # 1. Coupled Orbital & Spin Evolution Plot
+    if os.path.exists("outputs/hot_jupiter_coupled_orbital_spin_evolution.csv"):
+        df = read_csv_columns("outputs/hot_jupiter_coupled_orbital_spin_evolution.csv")
+        fig, axes = plt.subplots(2, 2, figsize=(8, 7), sharex=True)
+
+        axes[0, 0].plot(df['t_gyr'], df['R_p_Rjup'], color='#1f77b4', lw=2)
+        axes[0, 0].set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+        axes[0, 0].grid(True, alpha=0.3)
+
+        axes[0, 1].plot(df['t_gyr'], df['e'], color='#ff7f0e', lw=2)
+        axes[0, 1].set_ylabel(r"Eccentricity $e$")
+        axes[0, 1].grid(True, alpha=0.3)
+
+        axes[1, 0].plot(df['t_gyr'], df['P_rot_hrs'], color='#2ca02c', lw=2)
+        axes[1, 0].set_xlabel("Age [Gyr]")
+        axes[1, 0].set_ylabel(r"Rotation Period $P_{\mathrm{rot}}$ [hrs]")
+        axes[1, 0].grid(True, alpha=0.3)
+
+        axes[1, 1].plot(df['t_gyr'], df['P_tidal_W'], color='#d62728', lw=2)
+        axes[1, 1].set_xlabel("Age [Gyr]")
+        axes[1, 1].set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
+        axes[1, 1].set_yscale("log")
+        axes[1, 1].grid(True, alpha=0.3, which="both")
+
+        fig.suptitle("C++ Coupled Thermal, Orbital Element & Spin Vector Evolution", fontsize=11, fontweight="bold")
+        plt.tight_layout()
+        fig.savefig("outputs/hot_jupiter_coupled_orbital_spin_evolution.pdf", bbox_inches="tight")
+        fig.savefig("paper/figures/hot_jupiter_coupled_orbital_spin_evolution.pdf", bbox_inches="tight")
+        plt.close(fig)
+
+    # 2. Multi-Planet Evolution Plot
     if os.path.exists("outputs/multi_planet_system_evolution.csv"):
         df = read_csv_columns("outputs/multi_planet_system_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -47,7 +77,7 @@ def main():
         fig.savefig("paper/figures/multi_planet_system_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 2. Obliquity Plot
+    # 3. Obliquity Plot
     if os.path.exists("outputs/obliquity_tilted_spin_evolution.csv"):
         df = read_csv_columns("outputs/obliquity_tilted_spin_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -68,7 +98,7 @@ def main():
         fig.savefig("paper/figures/obliquity_tilted_spin_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 3. Stellar Misaligned Orbit Plot
+    # 4. Stellar Misaligned Orbit Plot
     if os.path.exists("outputs/stellar_misaligned_orbit_evolution.csv"):
         df = read_csv_columns("outputs/stellar_misaligned_orbit_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -91,7 +121,7 @@ def main():
         fig.savefig("paper/figures/stellar_misaligned_orbit_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 4. Stellar Rotation Migration Plot
+    # 5. Stellar Rotation Migration Plot
     if os.path.exists("outputs/stellar_rotation_tidal_migration.csv"):
         df = read_csv_columns("outputs/stellar_rotation_tidal_migration.csv")
         fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -108,7 +138,7 @@ def main():
         fig.savefig("paper/figures/stellar_rotation_tidal_migration.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 5. Hot Jupiter KS Comparison Plot
+    # 6. Hot Jupiter KS Comparison Plot
     if os.path.exists("outputs/hot_jupiter_incremental_ks_comparison.csv"):
         df = read_csv_columns("outputs/hot_jupiter_incremental_ks_comparison.csv")
         fig, ax = plt.subplots(figsize=(7, 4.5))
