@@ -43,9 +43,8 @@ def main():
     M_p = 1.0 * M_JUP
     M_c = 12.0 * M_EARTH  # 12 Earth-mass core (matching Juno gravimetry estimates)
 
-    # Initial high-entropy adiabat at 1 Myr (T_1bar ~ 800 K)
-    # Physical dimensionful entropy S ~ 1.85e5 J/(kg K)
-    S_initial = 1.85e5
+    # Initial entropy at 1 Myr matching Jupiter's thermal adiabat
+    S_initial = 1.34e5
 
     # Jupiter solar insolation at 5.204 AU: F_inc = L_sun / (4 * pi * a^2) ~ 50.3 W/m^2
     F_inc_jupiter = 50.3  # W/m^2

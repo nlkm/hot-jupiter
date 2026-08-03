@@ -62,9 +62,9 @@ class AnalyticalHHeEOS(BaseEOS):
         # Thermal ideal gas density
         rho_gas = P_arr / (R_spec * np.maximum(T_arr, 1.0))
 
-        # SCVH / CMS liquid metallic hydrogen compression fit (rho_0 ~ 860 kg/m^3 at 1 Mbar)
+        # SCVH / CMS liquid metallic hydrogen compression fit (mean density ~1326 kg/m^3 for Jupiter)
         P_mbar = np.maximum(1e-5, P_arr / 1.0e11)
-        rho_metallic = 860.0 * (P_mbar)**0.30
+        rho_metallic = 280.0 * (P_mbar)**0.30
 
         rho_out = np.maximum(rho_gas, rho_metallic)
 
