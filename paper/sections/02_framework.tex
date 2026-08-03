@@ -25,7 +25,7 @@ In the outer envelope ($M_c < m \le M_p$), the total pressure $P(\rho, T)$ combi
 P(\rho, T) = \rho R_{\mathrm{spec}} T + K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
 \end{equation}
 where $R_{\mathrm{spec}} = k_B / (\mu m_p) = 3615\text{ J/(kg K)}$ is the specific gas constant for hydrogen mass fraction $X=0.75$ and helium mass fraction $Y=0.25$, $\mu = 1 / (X + Y/4) = 1.23$ is the mean molecular weight, and $\mu_e = 1 / X = 1.33$ is the electron molecular weight.
-- **Calibration Work**: The non-ideal electron degeneracy parameter $K_{\mathrm{DEG}} = 1.08 \times 10^6 \, \text{Pa}\cdot\text{m}^5\cdot\text{kg}^{-5/3}$ is calibrated against Saumon, Chabrier \& van Horn (SCVH95) / CMS19 liquid metallic hydrogen tables. This matches Jupiter's mean density ($\bar{\rho} = 1.326\text{ g/cm}^3$) and reproduces Jupiter's empirical present-day radius ($R_p = 1.000\,R_{\mathrm{Jup}}$). The theoretical derivation of $K_{\mathrm{DEG}}$ from Fermi-Dirac statistics is given in Appendix~\ref{sec:derivation_a3}.
+- **Calibration Work**: The non-ideal electron degeneracy parameter $K_{\mathrm{DEG}} = 1.08 \times 10^6 \, \text{Pa}\cdot\text{m}^5\cdot\text{kg}^{-5/3}$ is calibrated against Saumon, Chabrier \& van Horn (SCVH95) / CMS19 liquid metallic hydrogen tables. This matches Jupiter's mean density ($\bar{\rho} = 1.326\text{ g/cm}^3$) and reproduces Jupiter's empirical present-day radius ($R_p = 1.000\,R_{\mathrm{Jup}}$). Derived from Fermi-Dirac statistics in Appendix~\ref{sec:derivation_a3}.
 
 \subsection{Atmospheric Boundary Conditions}
 Coupled to the Guillot (2010) semi-analytical irradiated atmosphere profile:
@@ -40,7 +40,7 @@ Core mass $M_c$ scales with host star metallicity $[\mathrm{Fe/H}]$ and planet m
 \begin{equation}
 M_c([\mathrm{Fe/H}], M_p) \approx 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
 \end{equation}
-where $[\mathrm{Fe/H}] \equiv \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_* - \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_\odot$ and $M_\oplus = 5.972 \times 10^{24}\text{ kg}$.
+where $[\mathrm{Fe/H}] \equiv \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_* - \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_\odot$ and $M_\oplus = 5.972 \times 10^{24}\text{ kg}$. Derived in Appendix~\ref{sec:derivation_a5}.
 
 \subsection{Interior Energy Injection (Tidal \& Ohmic Heating)}
 To explain why Hot Jupiters exhibit inflated radii ($R_p > 1.4\,R_{\mathrm{Jup}}$), heat must be deposited directly into the deep interior ($P > 1 - 10\text{ bar}$). We model two primary interior heating mechanisms:
@@ -49,6 +49,7 @@ P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^
 &\quad + \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2 \\
 P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
 \end{align}
+Derived in Appendix~\ref{sec:derivation_a6}.
 
 \subsubsection{Physical Intuition for First-Year Physics Students}
 \begin{enumerate}
@@ -63,13 +64,28 @@ P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{
           \textit{Physics}: At temperatures above $1500\text{ K}$, alkali metals (like sodium and potassium) shed electrons, turning atmospheric gas into a conducting plasma. Fast neutral winds ($\sim \text{km/s}$) blow this plasma through the planet's magnetic field $\mathbf{B}$, generating electric currents ($\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$). Electrical resistance in the deep interior converts these currents into Joule heat ($P_{\mathrm{Ohmic}}$), inflating the envelope.
 \end{enumerate}
 
+\subsection{Importance of Initial Spin Axis Tilt (Obliquity) \& Stellar Misalignment}
+Young giant planets formed via disk fragmentation or planet-planet scattering frequently exhibit large initial obliquities ($\varepsilon_0 > 0$) and spin-orbit misalignments relative to the host star's rotation axis ($\psi_* > 0$, measured empirically via the Rossiter-McLaughlin effect):
+1. **Obliquity-Driven Tidal Heating ($P_{\mathrm{obliquity}}$)**:
+   Even if an orbit is circular ($e=0$), a tilted spin vector ($\varepsilon_0 > 0$) forces the star's tidal force to continually pull across the planet's equatorial bulge at an angle. This generates an obliquity dissipation power term:
+   \begin{equation}
+   P_{\mathrm{obliquity}} \approx \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} n^2 \sin^2\varepsilon
+   \end{equation}
+   Derived in Appendix~\ref{sec:derivation_a7}.
+2. **Stellar Obliquity $\psi_*$ \& Stellar Tidal Migration**:
+   In misaligned ($\psi_* > 30^\circ$) or retrograde ($\psi_* > 90^\circ$) orbits (e.g., WASP-17b, HAT-P-7b), relative motion between the planet's orbital velocity vector $\mathbf{v}_{\text{orb}}$ and stellar rotation $\mathbf{\Omega}_*$ enhances tidal velocity shear ($\mathbf{v}_{\text{rel}} = \mathbf{v}_{\text{orb}} - \mathbf{\Omega}_* \times \mathbf{r}$). This drives orbital semi-major axis migration ($da/dt|_{\text{star}}$):
+   \begin{equation}
+   \left.\frac{da}{dt}\right|_{\text{star}} = -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
+   \end{equation}
+   Derived in Appendix~\ref{sec:derivation_a8}.
+
 \subsection{Roche Lobe Overflow (RLOF) Atmospheric Mass Loss}
 When tidal decay or thermal inflation pushes planetary radius $R_p$ to fill its volume-equivalent Roche lobe radius $R_{\mathrm{Roche}} \approx a [0.49 q^{2/3} / (0.6 q^{2/3} + \ln(1+q^{1/3}))]$ (Eggleton 1983) with mass ratio $q \equiv M_p / M_*$, upper envelope gas escapes through the inner Lagrange point $L_1$:
 \begin{align}
 \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} &= -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right] \quad (R_p \ge R_{\mathrm{Roche}}) \\
 \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} &= -2 a \left( \frac{\dot{M}_p}{M_p} \right) (1 - \beta)
 \end{align}
-where $\dot{M}_0 \sim 10^{11}\text{ kg/s}$ is the characteristic nozzle flow escape rate, $\eta \approx 4$, and $\beta = 0.5$ is the angular momentum carried away by escaping gas. Derived in Appendix~\ref{sec:derivation_a8}.
+where $\dot{M}_0 \sim 10^{11}\text{ kg/s}$ is the characteristic nozzle flow escape rate, $\eta \approx 4$, and $\beta = 0.5$ is the angular momentum carried away by escaping gas. Derived in Appendix~\ref{sec:derivation_a9}.
 
 \subsection{Coupled Orbital Element \& Spin Vector Evolution}
 The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
@@ -81,10 +97,10 @@ The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}
 &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\
 \frac{d\varepsilon}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
 \end{align}
-where $C_p \equiv I_p / (M_p R_p^2) \approx 0.25$ is the dimensionless moment of inertia. Derived in Appendix~\ref{sec:derivation_a5}.
+where $C_p \equiv I_p / (M_p R_p^2) \approx 0.25$ is the dimensionless moment of inertia. Derived in Appendix~\ref{sec:derivation_a10}.
 
 \subsection{Observational Selection Function}
 \begin{equation}
 W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}} = \left(\frac{R_* + R_p}{a}\right) \cdot \frac{1}{1 + \exp\left(-\frac{\mathrm{SNR} - 7.1}{1.5}\right)}
 \end{equation}
-where $R_*$ is stellar radius and $\mathrm{SNR} \propto (R_p / R_*)^2 \sqrt{N_{\text{transit}}}$.
+where $R_*$ is stellar radius and $\mathrm{SNR} \propto (R_p / R_*)^2 \sqrt{N_{\text{transit}}}$. Derived in Appendix~\ref{sec:derivation_a12}.

@@ -1,13 +1,13 @@
 \section{Step-by-Step Analytical Derivations}
 \label{sec:appendix}
 
-In this Appendix, we provide step-by-step mathematical derivations for every primary equation introduced in the text.
+In this Appendix, we provide rigorous, step-by-step mathematical derivations for every equation introduced throughout the text.
 
 \subsection{Derivation A1: 1D Hydrostatic Equations of Equilibrium}
 \label{sec:derivation_a1}
-Consider a spherically symmetric fluid shell of mass element $dm = 4\pi r^2 \rho \, dr$ located at radius $r$.
+Consider a spherically symmetric fluid shell of mass element $dm = 4\pi r^2 \rho \, dr$ located at radial distance $r$.
 1. **Mass Conservation**:
-   Rearranging $dm = 4\pi r^2 \rho \, dr$ immediately yields:
+   Rearranging $dm = 4\pi r^2 \rho \, dr$ directly yields:
    \begin{equation}
    \frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}
    \end{equation}
@@ -25,14 +25,14 @@ Consider a spherically symmetric fluid shell of mass element $dm = 4\pi r^2 \rho
    \frac{dP}{dm} = \frac{dP/dr}{dm/dr} = -\frac{G m}{4\pi r^4}
    \end{equation}
 3. **Adiabatic Temperature Gradient**:
-   For an isentropic convective envelope, the temperature gradient is governed by the adiabatic index $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$:
+   For an isentropic convective envelope, the temperature gradient is governed by the dimensionless adiabatic index $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$:
    \begin{equation}
    \frac{dT}{dm} = \left(\frac{\partial T}{\partial P}\right)_S \frac{dP}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
    \end{equation}
 
 \subsection{Derivation A2: Birch-Murnaghan 3rd-Order Isothermal EOS}
 \label{sec:derivation_a2}
-The Birch-Murnaghan EOS is derived by expanding the Helmholtz free energy $F(f)$ of a compressed solid as a Taylor series in finite Eulerian strain $f$ (Birch 1947):
+The Birch-Murnaghan EOS is derived by expanding the Helmholtz free energy $F(f)$ of a compressed solid core as a Taylor series in finite Eulerian strain $f$ (Birch 1947):
 \begin{equation}
 f = \frac{1}{2} \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right]
 \end{equation}
@@ -91,21 +91,101 @@ T^4(\tau) &= \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) \nonu
 &\quad + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
 \end{align}
 
-\subsection{Derivation A5: Hut (1981) Equilibrium Tidal Dissipation Rates}
+\subsection{Derivation A5: Heavy-Element Core Mass Scaling Relation}
 \label{sec:derivation_a5}
-Equilibrium tidal theory expands the tidal potential $V_{\text{tide}}$ in spherical harmonics $Y_{lm}$ (Kaula 1964). Energy dissipation rate $\dot{E}_{\text{tide}}$ and angular momentum dissipation rate $\dot{h}_{\text{tide}}$ are proportional to the phase lag $\Delta t = (k_2/Q) / (2 n)$:
+Thorngren et al. (2016) compiled interior structure models for 47 giant exoplanets, fitting heavy-element core mass $M_c$ against total planet mass $M_p$ and host star metallicity $[\mathrm{Fe/H}]$:
+\begin{equation}
+\ln \left(\frac{M_c}{M_\oplus}\right) = c_0 + 0.6 \ln\left(\frac{M_p}{M_{\mathrm{Jup}}}\right) + 0.5 \ln(10) [\mathrm{Fe/H}]
+\end{equation}
+Exponentiating yields the empirical core scaling law:
+\begin{equation}
+M_c([\mathrm{Fe/H}], M_p) = 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
+\end{equation}
+
+\subsection{Derivation A6: Equilibrium Tidal Dissipation \& Ohmic Power}
+\label{sec:derivation_a6}
+Equilibrium tidal theory expands the tidal potential $V_{\text{tide}}$ in spherical harmonics $Y_{lm}$ (Kaula 1964). Energy dissipation rate $\dot{E}_{\text{tide}}$ and angular momentum dissipation rate $\dot{h}_{\text{tide}}$ are proportional to phase lag $\Delta t = (k_2/Q) / (2 n)$:
 \begin{align}
 \dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 \nonumber \\
 &\quad - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
 \end{align}
-Relating orbital energy $E = -G M_p M_* / (2a)$ to semi-major axis $a$:
-\begin{equation}
-\dot{E} = \frac{G M_p M_*}{2 a^2} \frac{da}{dt} \implies \frac{da}{dt} = \frac{2 a^2}{G M_p M_*} \dot{E}_{\text{tide}}
-\end{equation}
-Substituting $\dot{E}_{\text{tide}}$ yields the semi-major axis decay equation ($da/dt$) and eccentricity damping equation ($de/dt$).
+Ohmic dissipation power $P_{\mathrm{Ohmic}}$ is derived from atmospheric MHD zonal wind induction $\mathbf{J} = \sigma(\mathbf{v} \times \mathbf{B})$ (Batygin \& Stevenson 2010):
+\begin{align}
+P_{\mathrm{Ohmic}} &= \int \frac{J^2}{\sigma} dV \nonumber \\
+&= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2(300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
+\end{align}
 
-\subsection{Derivation A6: Laplace-Lagrange Secular N-Body Perturbations}
-\label{sec:derivation_a6}
+\subsection{Derivation A7: Obliquity-Driven Tidal Heating}
+\label{sec:derivation_a7}
+When a planet has non-zero obliquity ($\varepsilon > 0$), the stellar tidal potential produces periodic shear strains in the planet's frame at frequency $n$:
+\begin{equation}
+U_{\text{tide}}(\theta, \phi) = \frac{G M_*}{a^3} r^2 P_2(\cos\theta')
+\end{equation}
+Averaging the strain dissipation rate over one orbital period $2\pi/n$ yields the obliquity power:
+\begin{equation}
+P_{\mathrm{obliquity}} = \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} n^2 \sin^2\varepsilon
+\end{equation}
+
+\subsection{Derivation A8: Stellar Rotation Driven Tidal Migration}
+\label{sec:derivation_a8}
+The host star's tidal bulge raises a gravitational torque on the planet. The angle lag $\Delta\phi_* = (n - \Omega_* \cos\psi_*) \tau_*$ produces an orbital energy change rate:
+\begin{equation}
+\left.\frac{dE_{\mathrm{orb}}}{dt}\right|_{\text{star}} = -\frac{3}{2} \left(\frac{k_{2, *}}{Q_*}\right) \frac{G M_p^2 R_*^5}{a^6} n (n - \Omega_* \cos\psi_*)
+\end{equation}
+Relating orbital energy $E_{\mathrm{orb}} = -G M_p M_* / (2a)$ yields:
+\begin{align}
+\left.\frac{da}{dt}\right|_{\text{star}} &= -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \nonumber \\
+&\quad \times \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
+\end{align}
+
+\subsection{Derivation A9: Roche Lobe Overflow (RLOF) Mass-Loss Rate}
+\label{sec:derivation_a9}
+The volume-equivalent Roche lobe radius $R_{\mathrm{Roche}}$ in a binary mass system ($M_p, M_*$) is derived by evaluating the effective potential $\Phi_{\mathrm{eff}}(\mathbf{r}) = -G M_p/r_1 - G M_*/r_2 - \frac{1}{2} n^2 r_{\perp}^2$ at the inner Lagrange saddle point $L_1$:
+1. **Eggleton (1983) Fit**:
+   Solving $\nabla \Phi_{\mathrm{eff}} = 0$ for mass ratio $q \equiv M_p / M_* \ll 1$ yields:
+   \begin{equation}
+   \frac{R_{\mathrm{Roche}}}{a} = \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}
+   \end{equation}
+2. **Hydrodynamic Nozzle Mass Loss**:
+   When $R_p \ge R_{\mathrm{Roche}}$, atmospheric pressure forces gas through the sonic surface near $L_1$ at sound speed $c_s \approx \sqrt{k_B T_{\mathrm{eq}} / \mu}$:
+   \begin{equation}
+   \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} = -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right]
+   \end{equation}
+3. **Orbital Back-Reaction**:
+   Equating orbital angular momentum $L_{\mathrm{orb}} = M_p M_* \sqrt{G a / (M_p + M_*)} / (M_p + M_*)$ and mass loss carrying momentum fraction $\beta$ yields:
+   \begin{equation}
+   \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} = -2 a \left(\frac{1}{M_p} \frac{dM_p}{dt}\right) (1 - \beta)
+   \end{equation}
+
+\subsection{Derivation A10: Coupled 6D Orbital \& 3D Spin Vector Dynamics}
+\label{sec:derivation_a10}
+The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{\text{orb}} + \mathbf{S}_{\text{spin}}$ is conserved:
+\begin{align}
+\mathbf{L}_{\text{orb}} &= \frac{M_p M_*}{M_p + M_*} \sqrt{G(M_p + M_*) a (1-e^2)} \, \hat{\mathbf{k}} \\
+\mathbf{S}_{\text{spin}} &= C_p M_p R_p^2 \mathbf{\Omega}_{\mathrm{rot}}
+\end{align}
+1. **Spin Rate Derivation ($d\Omega_{\mathrm{rot}}/dt$)**:
+   The spin vector rate of change receives torque $\mathbf{T}_{\text{tide}}$ and moment of inertia changes from thermal contraction:
+   \begin{equation}
+   \frac{d\mathbf{S}_{\text{spin}}}{dt} = I_p \frac{d\mathbf{\Omega}_{\mathrm{rot}}}{dt} + \mathbf{\Omega}_{\mathrm{rot}} \frac{dI_p}{dt} = \mathbf{T}_{\text{tide}}
+   \end{equation}
+   Substituting $I_p = C_p M_p R_p^2$ and $dI_p/dt = 2 C_p M_p R_p (dR_p/dt)$:
+   \begin{equation}
+   \frac{d\Omega_{\mathrm{rot}}}{dt} = \frac{T_{\text{tide}, z}}{C_p M_p R_p^2} - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
+   \end{equation}
+   Substituting tidal torque $T_{\text{tide}, z} = -\frac{3}{2} (k_2/Q) (G M_*^2 R_p^5 / a^6) (\Omega_{\mathrm{rot}} - n \cos\varepsilon)$ gives:
+   \begin{align}
+   \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\text{rot}} - n \cos\varepsilon) \nonumber \\
+   &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
+   \end{align}
+2. **Obliquity Rate Derivation ($d\varepsilon/dt$)**:
+   The perpendicular component of tidal torque $\mathbf{T}_{\text{tide}, \perp}$ damps the tilt angle $\varepsilon \equiv \arccos(\hat{\mathbf{S}} \cdot \hat{\mathbf{L}})$:
+   \begin{equation}
+   \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
+   \end{equation}
+
+\subsection{Derivation A11: Laplace-Lagrange Secular N-Body Perturbations}
+\label{sec:derivation_a11}
 For a multi-planet system containing $N$ planets orbiting host star $M_*$, the gravitational disturbing function $R_i$ for planet $i$ due to planet $j$ is expanded in powers of eccentricities $e$ and inclinations $I$ (Murray \& Dermott 1999):
 \begin{equation}
 R_i = n_i a_i^2 \sum_{j \neq i} \left[ \frac{1}{2} A_{ii} e_i^2 + A_{ij} e_i e_j \cos(\varpi_i - \varpi_j) \right]
@@ -132,48 +212,20 @@ where $\varpi \equiv \Omega + \omega$ is the longitude of periastron.
    b_{3/2}^{(s)}(\alpha) \equiv \frac{1}{\pi} \int_0^{2\pi} \frac{\cos(s\psi)}{(1 - 2\alpha \cos\psi + \alpha^2)^{3/2}} d\psi
    \end{equation}
 
-\subsection{Derivation A7: Coupled Orbital \& 3D Spin Vector Dynamics}
-\label{sec:derivation_a7}
-The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{\text{orb}} + \mathbf{S}_{\text{spin}}$ is conserved:
-\begin{align}
-\mathbf{L}_{\text{orb}} &= \frac{M_p M_*}{M_p + M_*} \sqrt{G(M_p + M_*) a (1-e^2)} \, \hat{\mathbf{k}} \\
-\mathbf{S}_{\text{spin}} &= C_p M_p R_p^2 \mathbf{\Omega}_{\mathrm{rot}}
-\end{align}
-1. **Spin Rate Derivation ($d\Omega_{\mathrm{rot}}/dt$)**:
-   The spin vector rate of change receives torque $\mathbf{T}_{\text{tide}}$ and moment of inertia changes from thermal contraction:
+\subsection{Derivation A12: Observational Selection Function \& SNR Logistic Model}
+\label{sec:derivation_a12}
+The probability of discovering a transiting exoplanet $W_{\mathrm{transit}}$ is the product of geometric alignment probability $P_{\mathrm{geo}}$ and photometric detection efficiency $P_{\mathrm{det}}$:
+1. **Geometric Transit Probability**:
+   A planet transits if the impact parameter $b = (a/R_*) \cos I \le 1 + R_p/R_x$:
    \begin{equation}
-   \frac{d\mathbf{S}_{\text{spin}}}{dt} = I_p \frac{d\mathbf{\Omega}_{\mathrm{rot}}}{dt} + \mathbf{\Omega}_{\mathrm{rot}} \frac{dI_p}{dt} = \mathbf{T}_{\text{tide}}
+   P_{\mathrm{geo}} = \frac{R_* + R_p}{a (1 - e^2)} \approx \frac{R_* + R_p}{a}
    \end{equation}
-   Substituting $I_p = C_p M_p R_p^2$ and $dI_p/dt = 2 C_p M_p R_p (dR_p/dt)$:
+2. **Signal-to-Noise Ratio (SNR) \& Logistic Selection**:
+   The photometric transit signal-to-noise ratio scales with depth $\delta = (R_p / R_*)^2$ and number of transits $N_{\text{transit}} \propto T_{\text{obs}} / P_{\mathrm{orb}}$:
    \begin{equation}
-   \frac{d\Omega_{\mathrm{rot}}}{dt} = \frac{T_{\text{tide}, z}}{C_p M_p R_p^2} - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
+   \mathrm{SNR} = \frac{(R_p / R_*)^2}{\sigma_{\mathrm{phot}}} \sqrt{\frac{T_{\text{obs}}}{P_{\mathrm{orb}}}}
    \end{equation}
-   Substituting tidal torque $T_{\text{tide}, z} = -\frac{3}{2} (k_2/Q) (G M_*^2 R_p^5 / a^6) (\Omega_{\mathrm{rot}} - n \cos\varepsilon)$ gives:
-   \begin{align}
-   \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\text{rot}} - n \cos\varepsilon) \nonumber \\
-   &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
-   \end{align}
-2. **Obliquity Rate Derivation ($d\varepsilon/dt$)**:
-   The perpendicular component of tidal torque $\mathbf{T}_{\text{tide}, \perp}$ damps the tilt angle $\varepsilon \equiv \arccos(\hat{\mathbf{S}} \cdot \hat{\mathbf{L}})$:
+   Fitting the Kepler pipeline detection threshold ($7.1\sigma$) with a logistic efficiency function yields:
    \begin{equation}
-   \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
-   \end{equation}
-
-\subsection{Derivation A8: Roche Lobe Overflow (RLOF) Mass-Loss Rate}
-\label{sec:derivation_a8}
-The volume-equivalent Roche lobe radius $R_{\mathrm{Roche}}$ in a binary mass system ($M_p, M_*$) is derived by evaluating the effective potential $\Phi_{\mathrm{eff}}(\mathbf{r}) = -G M_p/r_1 - G M_*/r_2 - \frac{1}{2} n^2 r_{\perp}^2$ at the inner Lagrange saddle point $L_1$:
-1. **Eggleton (1983) Fit**:
-   Solving $\nabla \Phi_{\mathrm{eff}} = 0$ for mass ratio $q \equiv M_p / M_* \ll 1$ yields:
-   \begin{equation}
-   \frac{R_{\mathrm{Roche}}}{a} = \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}
-   \end{equation}
-2. **Hydrodynamic Nozzle Mass Loss**:
-   When $R_p \ge R_{\mathrm{Roche}}$, atmospheric pressure forces gas through the sonic surface near $L_1$ at sound speed $c_s \approx \sqrt{k_B T_{\mathrm{eq}} / \mu}$:
-   \begin{equation}
-   \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} = -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right]
-   \end{equation}
-3. **Orbital Back-Reaction**:
-   Equating orbital angular momentum $L_{\mathrm{orb}} = M_p M_* \sqrt{G a / (M_p + M_*)} / (M_p + M_*)$ and mass loss carrying momentum fraction $\beta$ yields:
-   \begin{equation}
-   \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} = -2 a \left(\frac{1}{M_p} \frac{dM_p}{dt}\right) (1 - \beta)
+   P_{\mathrm{det}}(\mathrm{SNR}) = \frac{1}{1 + \exp\left( -\frac{\mathrm{SNR} - 7.1}{1.5} \right)}
    \end{equation}
