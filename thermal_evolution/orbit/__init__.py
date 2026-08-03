@@ -6,6 +6,7 @@ from thermal_evolution.orbit.orbital_elements import (
     OrbitalState,
     SpinVectorState,
     TidalOrbitalSpinRates,
+    StellarTidalRates,
 )
 from thermal_evolution.orbit.multi_planet import (
     PlanetSystemMember,
@@ -17,6 +18,7 @@ __all__ = [
     "OrbitalState",
     "SpinVectorState",
     "TidalOrbitalSpinRates",
+    "StellarTidalRates",
     "PlanetSystemMember",
     "MultiPlanetSystem",
     "MultiPlanetEvolutionResult",

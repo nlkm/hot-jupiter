@@ -148,3 +148,54 @@ class TidalOrbitalSpinRates:
             dobl_dt = 0.0
 
         return float(da_dt), float(de_dt), float(dOmega_dt), float(dobl_dt)
+
+
+@dataclass
+class StellarTidalRates:
+    """
+    Evaluates stellar tidal torque and semi-major axis migration driven by host star rotation Omega_*.
+    (Hut 1981, Ogilvie & Lin 2007).
+    """
+    k2_over_Q_star: float = 1.0e-6  # Stellar tidal dissipation factor k2_* / Q_*
+    R_star: float = 6.957e8          # Solar radius [m]
+
+    def evaluate_stellar_rates(
+        self,
+        M_p: float,
+        M_star: float,
+        a: float,
+        Omega_star: float,          # Stellar rotation rate [rad/s]
+        stellar_obliquity: float = 0.0, # Angle psi_* between star spin and orbit normal [rad]
+    ) -> Tuple[float, float]:
+        """
+        Compute (da_dt_star, dOmega_star_dt).
+
+        Returns
+        -------
+        da_dt_star : float [m/s]
+            Semi-major axis migration rate from stellar tides.
+            (Negative if sub-synchronous n > Omega_*, causing inward orbital decay;
+             Positive if super-synchronous n < Omega_*, causing outward expansion).
+        dOmega_star_dt : float [rad/s^2]
+            Stellar rotation frequency rate of change.
+        """
+        if a <= 0 or M_p <= 0 or M_star <= 0:
+            return 0.0, 0.0
+
+        n = np.sqrt(G * M_star / (a**3))
+        cos_psi = np.cos(stellar_obliquity)
+
+        # Scale factor for stellar tides: scale = (k2_star / Q_star) * (M_p / M_star) * (R_star / a)^5 * n
+        scale_star = self.k2_over_Q_star * (M_p / M_star) * ((self.R_star / a)**5) * n
+
+        # 1. Semi-major axis rate from stellar tides da/dt |_star
+        # da/dt |_star = - 3 * scale_star * a * (1 - (Omega_star / n) * cos_psi)
+        da_dt_star = - 3.0 * scale_star * a * (1.0 - (Omega_star / max(n, 1e-15)) * cos_psi)
+
+        # 2. Stellar rotation frequency rate of change dOmega_star / dt
+        # Torque T_star = (3/2) * (k2_star / Q_star) * G * M_p^2 * R_star^5 / a^6 * (n * cos_psi - Omega_star)
+        I_star = 0.07 * M_star * (self.R_star**2)  # Solar moment of inertia coefficient ~ 0.07
+        T_star = 1.5 * self.k2_over_Q_star * G * (M_p**2) * (self.R_star**5) / (a**6) * (n * cos_psi - Omega_star)
+        dOmega_star_dt = T_star / max(I_star, 1e-10)
+
+        return float(da_dt_star), float(dOmega_star_dt)
