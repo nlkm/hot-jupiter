@@ -63,6 +63,17 @@ P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{
           \textit{Physics}: At temperatures above $1500\text{ K}$, alkali metals (like sodium and potassium) shed electrons, turning atmospheric gas into a conducting plasma. Fast neutral winds ($\sim \text{km/s}$) blow this plasma through the planet's magnetic field $\mathbf{B}$, generating electric currents ($\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$). Electrical resistance in the deep interior converts these currents into Joule heat ($P_{\mathrm{Ohmic}}$), inflating the envelope.
 \end{enumerate}
 
+\subsection{Importance of Initial Spin Axis Tilt (Obliquity) \& Asynchronous Rotation}
+Young giant planets formed via disk fragmentation or giant impacts do not start in synchronized circular orbits with aligned spin axes. Including initial spin axis tilt ($\varepsilon_0 > 0$) and asynchronous rotation ($\Omega_{\mathrm{rot}, 0} \neq n$) introduces key physical effects:
+1. **Obliquity-Driven Tidal Heating ($P_{\mathrm{obliquity}}$)**:
+   Even if an orbit is circular ($e=0$), a tilted spin vector ($\varepsilon_0 > 0$) forces the star's tidal force to continually pull across the planet's equatorial bulge at an angle. This generates an obliquity dissipation power term:
+   \begin{equation}
+   P_{\mathrm{obliquity}} \approx \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} n^2 \sin^2\varepsilon
+   \end{equation}
+   For initial tilts $\varepsilon_0 \sim 30^\circ - 60^\circ$, this deposits intense tidal power ($P_{\mathrm{obliquity}} \sim 10^{20} - 10^{21}\text{ W}$), significantly retarding radius contraction during the first $100\text{ Myr}$.
+2. **Spin-Orbit Coupling \& Moment of Inertia Conservation**:
+   As a planet cools and contracts, its radius $R_p(t)$ shrinks. By conservation of angular momentum ($\mathbf{S} = C_p M_p R_p^2 \mathbf{\Omega}_{\mathrm{rot}}$), shrinkage increases spin frequency unless tidal torques extract angular momentum ($-\frac{2\Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}$). The coupled equations of motion account for this spin-radius feedback.
+
 \subsection{Coupled Orbital Element \& Spin Vector Evolution}
 The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
 \begin{align}
