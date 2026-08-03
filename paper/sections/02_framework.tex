@@ -30,6 +30,16 @@ P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^
 P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
 \end{align}
 
+\subsection{Coupled Orbital Element \& Spin Vector Evolution}
+The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981, Eggleton et al. 1998, Leconte et al. 2010):
+\begin{align}
+\frac{da}{dt} &= -\frac{57}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a e^2 + 3 \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a \left( \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon - 1 \right) \\
+\frac{de}{dt} &= -\frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n e \left[ 1 - \frac{11}{18} \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon \right] \\
+\frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \left(\Omega_{\text{rot}} - n \cos\varepsilon\right) - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\
+\frac{d\varepsilon}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
+\end{align}
+where $n = \sqrt{G M_* / a^3}$ is the mean motion and $C_p = I_p / (M_p R_p^2) \approx 0.25$ is the moment-of-inertia coefficient.
+
 \subsection{Observational Selection Function}
 \begin{equation}
 W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}} = \left(\frac{R_* + R_p}{a}\right) \cdot \frac{1}{1 + \exp\left(-\frac{\mathrm{SNR} - 7.1}{1.5}\right)}

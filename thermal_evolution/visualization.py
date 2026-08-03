@@ -1,5 +1,5 @@
 """
-Visualization module for thermal evolution tracks and interior hydrostatic profiles.
+Visualization module for thermal evolution tracks, interior hydrostatic profiles, and coupled orbital/spin dynamics.
 Generates publication-quality vector graphics (PDF) for LaTeX documents.
 """
 
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from thermal_evolution.constants import R_JUP, L_SUN, GYR
 from thermal_evolution.structure import PlanetStructure
-from thermal_evolution.evolution import EvolutionResult
+from thermal_evolution.evolution import EvolutionResult, CoupledEvolutionResult
 
 
 def plot_evolution_track(
@@ -86,7 +86,7 @@ def plot_internal_profile(
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), sharex=True)
     fig.suptitle(f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)", fontsize=13, fontweight="bold")
 
-    # Panel 1: Mass Density (log scale spanning 6-8 orders of magnitude)
+    # Panel 1: Mass Density
     ax1 = axes[0, 0]
     rho_gcm3 = prof.rho / 1000.0  # g/cm^3
     ax1.plot(r_norm, rho_gcm3, "k-", lw=2)
@@ -97,7 +97,7 @@ def plot_internal_profile(
         ax1.legend(loc="best")
     ax1.grid(True, alpha=0.3, which="both")
 
-    # Panel 2: Pressure (log scale spanning 7-12 orders of magnitude)
+    # Panel 2: Pressure
     ax2 = axes[0, 1]
     P_mbar = prof.P / 1e11  # Mbar
     ax2.plot(r_norm, P_mbar, "r-", lw=2)
@@ -105,7 +105,7 @@ def plot_internal_profile(
     ax2.set_yscale("log")
     ax2.grid(True, alpha=0.3, which="both")
 
-    # Panel 3: Temperature (semi-log scale spanning 2-3 orders of magnitude)
+    # Panel 3: Temperature
     ax3 = axes[1, 0]
     ax3.plot(r_norm, prof.T, "b-", lw=2)
     ax3.set_xlabel(r"Radius $r$ [$R_{\mathrm{Jup}}$]")
@@ -119,6 +119,78 @@ def plot_internal_profile(
     ax4.set_xlabel(r"Radius $r$ [$R_{\mathrm{Jup}}$]")
     ax4.set_ylabel(r"Adiabatic Gradient $\nabla_{\mathrm{ad}}$")
     ax4.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    if savepath:
+        fig.savefig(savepath, bbox_inches="tight")
+        if savepath.endswith(".pdf"):
+            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+    return fig
+
+
+def plot_coupled_orbital_spin_evolution(
+    result: CoupledEvolutionResult,
+    title: str = "Coupled Thermal, Orbital Element & Spin Vector Evolution",
+    savepath: Optional[str] = None,
+) -> plt.Figure:
+    """
+    Plot 6-panel coupled evolution track:
+    1. Planet Radius R_p [R_Jup]
+    2. Semi-major axis a [AU]
+    3. Eccentricity e
+    4. Rotation Period P_rot [hrs]
+    5. Obliquity epsilon [deg]
+    6. Tidal Dissipation Power P_tidal [W]
+    """
+    fig, axes = plt.subplots(3, 2, figsize=(11, 9), sharex=True)
+    fig.suptitle(title, fontsize=13, fontweight="bold")
+
+    t_gyr = result.t_gyr
+
+    # Panel 1: Planet Radius vs Time
+    ax1 = axes[0, 0]
+    ax1.plot(t_gyr, result.R_p_jup, "b-", lw=2)
+    ax1.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+    ax1.set_xscale("log")
+    ax1.grid(True, alpha=0.3)
+
+    # Panel 2: Semi-Major Axis vs Time
+    ax2 = axes[0, 1]
+    ax2.plot(t_gyr, result.a_au, "r-", lw=2)
+    ax2.set_ylabel(r"Semi-Major Axis $a$ [AU]")
+    ax2.set_xscale("log")
+    ax2.grid(True, alpha=0.3)
+
+    # Panel 3: Orbital Eccentricity vs Time
+    ax3 = axes[1, 0]
+    ax3.plot(t_gyr, result.e, "g-", lw=2)
+    ax3.set_ylabel(r"Eccentricity $e$")
+    ax3.set_xscale("log")
+    ax3.grid(True, alpha=0.3)
+
+    # Panel 4: Rotation Period vs Time
+    ax4 = axes[1, 1]
+    ax4.plot(t_gyr, result.P_rot_hrs, "m-", lw=2)
+    ax4.set_ylabel(r"Rotation Period $P_{\mathrm{rot}}$ [hrs]")
+    ax4.set_xscale("log")
+    ax4.grid(True, alpha=0.3)
+
+    # Panel 5: Obliquity Angle vs Time
+    ax5 = axes[2, 0]
+    ax5.plot(t_gyr, result.obliquity_deg, "c-", lw=2)
+    ax5.set_xlabel("Age [Gyr]")
+    ax5.set_ylabel(r"Obliquity $\varepsilon$ [deg]")
+    ax5.set_xscale("log")
+    ax5.grid(True, alpha=0.3)
+
+    # Panel 6: Tidal Heating Power vs Time
+    ax6 = axes[2, 1]
+    ax6.plot(t_gyr, result.P_tidal, "k-", lw=2)
+    ax6.set_xlabel("Age [Gyr]")
+    ax6.set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
+    ax6.set_xscale("log")
+    ax6.set_yscale("log")
+    ax6.grid(True, alpha=0.3, which="both")
 
     plt.tight_layout()
     if savepath:

@@ -41,6 +41,8 @@ MBAR = 1.0e11
 GPa = 1.0e9
 
 # Time units (s)
+HOUR = 3600.0
+DAY = 86400.0
 YEAR = 3.15576e7
 MYR = 1.0e6 * YEAR
 GYR = 1.0e9 * YEAR
