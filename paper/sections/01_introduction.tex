@@ -6,10 +6,19 @@ Since the discovery of transiting Hot Jupiters (e.g., HD 209458b, WASP-12b, WASP
 \subsection{Proposed Inflation Mechanisms in Literature}
 Several physical mechanisms have been proposed to explain deep interior heating:
 \begin{enumerate}
-    \item \textbf{Tidal Dissipation (Bodenheimer et al. 2001; Jackson et al. 2008; Miller et al. 2009)}: Damping of orbital eccentricity ($e$) deposits tidal friction power into the convective envelope.
+    \item \textbf{Tidal Dissipation (Bodenheimer et al. 2001; Jackson et al. 2008; Miller et al. 2009; Leconte et al. 2010)}: Damping of orbital eccentricity ($e$) and asynchronous spin ($\Omega_{\mathrm{rot}}$) deposits tidal friction power into the convective envelope.
     \item \textbf{Ohmic Dissipation (Batygin \& Stevenson 2010; Menou 2012)}: Thermally ionized alkali metals in hot atmospheres ($T_{\text{eq}} > 1400\text{ K}$) move through planetary magnetic fields via zonal winds, generating electric currents that dissipate Joule heat into the deep interior.
     \item \textbf{Heavy-Element Core Scaling (Thorngren et al. 2016; Thorngren \& Fortney 2018)}: Host star metallicity $[\mathrm{Fe/H}]$ dictates core mass $M_c$, introducing systematic structural density variations.
     \item \textbf{Observational Transit Selection Effects (Demory \& Seager 2011; Kipping 2014)}: Transit probability ($P_{\text{geo}} \propto R_p / a$) and transit depth ($\delta \propto R_p^2$) strongly oversample larger inflated planets in transit surveys.
+\end{enumerate}
+
+\subsection{Broad Model Applicability Across Planetary Regimes}
+To demonstrate that our numerical framework functions accurately across a diverse range of planetary environments, we validate it under four distinct physical regimes:
+\begin{enumerate}
+    \item \textbf{Solar System Cold Giant Baseline (Jupiter Benchmark)}: Evolving a non-irradiated to weakly irradiated planet ($a = 5.204\text{ AU}$, $M_p = 1.00\,M_{\mathrm{Jup}}$, $M_c = 12.0\,M_\oplus$). The model reproduces Jupiter's present-day radius ($R_p = 1.000\,R_{\mathrm{Jup}}$) and effective temperature ($T_{\mathrm{eff}} = 124.4\text{ K}$) at $4.56\text{ Gyr}$, with smooth un-truncated hydrostatic profiles from core to surface ($r/R_p \in [0.000, 1.000]$).
+    \item \textbf{Irradiated Hot Jupiters with Interior Dissipation}: Coupled thermal evolution under high insolation ($F_{\text{inc}} \sim 10^5 - 10^6\text{ W/m}^2$) combined with Ohmic dissipation $P_{\mathrm{Ohmic}}(T_{\text{eq}})$, accurately matching inflated radii ($R_p \sim 1.3 - 1.8\,R_{\mathrm{Jup}}$).
+    \item \textbf{Single-Planet Coupled Orbital \& 3D Spin Vector Evolution}: Simultaneous integration of thermal contraction and tidal orbital-spin dynamics ($a, e, I, \Omega_{\mathrm{rot}}, \varepsilon$), demonstrating semi-major axis decay ($da/dt$), eccentricity circularization ($de/dt$), spin-orbit synchronization ($P_{\mathrm{rot}} \to P_{\mathrm{orb}}$), and obliquity damping ($\varepsilon \to 0$).
+    \item \textbf{Multi-Planet Systems with Laplace-Lagrange Secular Perturbations}: Multi-planet system evolution ($N_p \ge 2$) incorporating inter-planet gravitational perturbations ($A_{ij}$). Secular eccentricity oscillations ($de_i/dt|_{\mathrm{secular}}$) sustain ongoing tidal dissipation ($P_{\mathrm{tidal}, i}$) over gigayears, preventing premature circularization.
 \end{enumerate}
 
 \subsection{Novelty \& Distinction from Existing Studies}
@@ -19,14 +28,4 @@ Prior studies in giant planet evolution generally fall into two categories:
     \item \textbf{Empirical Parametric Regressions} (e.g., Demory \& Seager 2011; Thorngren \& Fortney 2018): Statistical fits of deposited power fractions without dynamically integrating 1D hydrostatic differential equations forward over gigayears.
 \end{itemize}
 
-\textbf{What is New in This Study}:
-Our work bridges this gap by introducing a **6-Stage Incremental Hierarchy (Stages 0 $\to$ 5)** that systematically evaluates the marginal statistical contribution of each physical mechanism:
-\begin{enumerate}
-    \item \textbf{Stage 0 (Non-irradiated Base)}: Standard cooling ($F_{\text{inc}} = 0, P_{\text{extra}} = 0$).
-    \item \textbf{Stage 1 (Stellar Irradiation)}: Guillot (2010) irradiated atmospheric boundary.
-    \item \textbf{Stage 2 (Irradiation + Metallicity Core Mass)}: Thorngren et al. (2016) core scaling $M_c([\mathrm{Fe/H}], M_p)$.
-    \item \textbf{Stage 3 (Irradiation + Core Mass + Tidal Heating)}: Eccentricity damping power $P_{\mathrm{tidal}}$.
-    \item \textbf{Stage 4 (Full Physical Model)}: Tidal heating + Ohmic dissipation $P_{\mathrm{Ohmic}}(T_{\text{eq}})$.
-    \item \textbf{Stage 5 (Full Model + Transit Selection)}: Transit probability $W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}}(\text{SNR})$.
-\end{enumerate}
-By computing two-sample Kolmogorov-Smirnov (KS) tests against NASA Exoplanet Archive observations at each stage, we quantify the step-by-step statistical progression toward demographic alignment.
+Our work bridges this gap by introducing a \textbf{6-Stage Incremental Hierarchy (Stages 0 $\to$ 5)} that systematically evaluates the marginal statistical contribution of each physical mechanism across demographic populations.

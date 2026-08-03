@@ -1,46 +1,64 @@
 \section{Physical \& Mathematical Framework}
 
 \subsection{1D Hydrostatic Interior Structure}
-Assuming spherical symmetry and instantaneous convective mixing along an envelope adiabat $S_{\mathrm{env}}$:
+Assuming spherical symmetry and instantaneous convective mixing along an envelope adiabat $S_{\mathrm{env}}$, the 1D hydrostatic equilibrium equations governing radial radius $r$, pressure $P$, and temperature $T$ with respect to enclosed mass $m$ are:
 \begin{equation}
 \frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}, \quad \frac{dP}{dm} = -\frac{G m}{4\pi r^4}, \quad \frac{dT}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
 \end{equation}
+where $G = 6.6743 \times 10^{-11}\text{ m}^3\text{ kg}^{-1}\text{ s}^{-2}$ is the gravitational constant, $\rho$ is mass density [$\text{kg/m}^3$], and $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$ is the dimensionless adiabatic temperature gradient. A step-by-step derivation from first principles is provided in Appendix~\ref{sec:derivation_a1}.
 
-\subsection{Equations of State (EOS)}
-\begin{itemize}
-    \item \textbf{Central Core ($0 \le m \le M_c$)}: Solved via a 3rd-order Birch-Murnaghan isothermal EOS for high-pressure rock/ice mixtures.
-    \item \textbf{Envelope ($M_c < m \le M_p$)}: Modeled via SCVH/CMS tabular data or non-ideal degenerate gas law.
-\end{itemize}
+\subsection{Jupiter Core Modeling \& EOS Calibration}
+Giant planet heavy-element cores ($0 \le m \le M_c$) consist of dense rock/ice mixtures ($SiO_2, MgO, Fe, H_2O$) under ultra-high pressures ($P_c \approx 10 - 40\text{ Mbar}$).
+1. **3rd-Order Birch-Murnaghan Core EOS**:
+   The core density $\rho_{\text{core}}(P)$ is evaluated using the 3rd-order isothermal Birch-Murnaghan equation of state:
+   \begin{equation}
+   P(\rho) = \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{7}{3}} - \left(\frac{\rho}{\rho_0}\right)^{\frac{5}{3}} \right] \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{2}{3}} - 1 \right] \right\}
+   \end{equation}
+   where $\rho_0 = 5000\text{ kg/m}^3$ ($5.0\text{ g/cm}^3$) is the uncompressed zero-pressure reference density, $K_0 = 200\text{ GPa}$ ($2.0 \times 10^{11}\text{ Pa}$) is the zero-pressure isothermal bulk modulus, and $K_0' = 4.0$ is the pressure derivative of the bulk modulus. A complete strain energy derivation is given in Appendix~\ref{sec:derivation_a2}.
+2. **Juno Gravimetric Calibration**:
+   For Jupiter ($M_p = 1.00\,M_{\mathrm{Jup}}, M_c = 12.0\,M_\oplus$), central core pressure reaches $P_c \approx 40\text{ Mbar}$, compressing core density to $\rho_{\text{core}} \approx 20 - 25\text{ g/cm}^3$. This reproduces the $J_2, J_4, J_6$ gravitational harmonic constraints from NASA's Juno spacecraft (Wahl et al. 2017; Nettelmann et al. 2012).
+
+\subsection{Hydrogen-Helium Envelope EOS \& SCVH Calibration}
+In the outer envelope ($M_c < m \le M_p$), the total pressure $P(\rho, T)$ combines thermal gas pressure and non-relativistic electron degeneracy pressure:
+\begin{equation}
+P(\rho, T) = \rho R_{\mathrm{spec}} T + K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
+\end{equation}
+where $R_{\mathrm{spec}} = k_B / (\mu m_p) = 3615\text{ J/(kg K)}$ is the specific gas constant for hydrogen mass fraction $X=0.75$ and helium mass fraction $Y=0.25$, $\mu = 1 / (X + Y/4) = 1.23$ is the mean molecular weight, and $\mu_e = 1 / X = 1.33$ is the electron molecular weight.
+- **Calibration Work**: The non-ideal electron degeneracy parameter $K_{\mathrm{DEG}} = 1.08 \times 10^6 \, \text{Pa}\cdot\text{m}^5\cdot\text{kg}^{-5/3}$ is calibrated against Saumon, Chabrier \& van Horn (SCVH95) / CMS19 liquid metallic hydrogen tables. This matches Jupiter's mean density ($\bar{\rho} = 1.326\text{ g/cm}^3$) and reproduces Jupiter's empirical present-day radius ($R_p = 1.000\,R_{\mathrm{Jup}}$). The theoretical derivation of $K_{\mathrm{DEG}}$ from Fermi-Dirac statistics is given in Appendix~\ref{sec:derivation_a3}.
 
 \subsection{Atmospheric Boundary Conditions}
-Coupled to Guillot (2010) semi-analytical irradiated atmosphere profile:
+Coupled to the Guillot (2010) semi-analytical irradiated atmosphere profile:
 \begin{equation}
 T^4(\tau) = \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
 \end{equation}
+where $\tau = \kappa_{\mathrm{th}} P / g$ is thermal optical depth, $T_{\mathrm{int}}$ is intrinsic effective temperature ($L_{\mathrm{int}} = 4\pi R_p^2 \sigma_{\mathrm{SB}} T_{\mathrm{int}}^4$), $T_{\mathrm{irr}} = [(1-A_b) F_{\mathrm{inc}} / (4 \sigma_{\mathrm{SB}})]^{1/4}$ is irradiation temperature, $F_{\mathrm{inc}}$ is incident stellar flux [$\text{W/m}^2$], $A_b$ is Bond albedo, $\gamma = \kappa_{\mathrm{vis}} / \kappa_{\mathrm{th}} \approx 0.1$ is the opacity ratio, and $\sigma_{\mathrm{SB}} = 5.6704 \times 10^{-8}\text{ W m}^{-2}\text{ K}^{-4}$ is the Stefan-Boltzmann constant. Derived in Appendix~\ref{sec:derivation_a4}.
 
-\subsection{Core Mass \& Metallicity Dependence}
-Heavy-element core mass $M_c$ scales with host star metallicity $[\mathrm{Fe/H}]$ (Thorngren et al. 2016):
+\subsection{Heavy-Element Core Mass Scaling}
+Core mass $M_c$ scales with host star metallicity $[\mathrm{Fe/H}]$ and planet mass $M_p$ (Thorngren et al. 2016):
 \begin{equation}
 M_c([\mathrm{Fe/H}], M_p) \approx 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
 \end{equation}
+where $[\mathrm{Fe/H}] \equiv \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_* - \log_{10}(N_{\mathrm{Fe}}/N_{\mathrm{H}})_\odot$ and $M_\oplus = 5.972 \times 10^{24}\text{ kg}$.
 
 \subsection{Interior Energy Injection (Tidal \& Ohmic)}
 \begin{align}
 P_{\mathrm{tidal}} &= \frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5 e^2}{a^6} \\
 P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2 (300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
 \end{align}
+where $M_*$ is stellar mass, $a$ is semi-major axis, $e$ is eccentricity, $k_2/Q \approx 10^{-5}$ is the tidal dissipation quality factor, $T_{\mathrm{eq}} = (F_{\mathrm{inc}}(1-A_b)/(4\sigma_{\mathrm{SB}}))^{1/4}$ is equilibrium temperature, and $\epsilon_0 \approx 0.03$ is the peak Ohmic conversion efficiency.
 
 \subsection{Coupled Orbital Element \& Spin Vector Evolution}
-The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981, Eggleton et al. 1998, Leconte et al. 2010):
+The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
 \begin{align}
 \frac{da}{dt} &= -\frac{57}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a e^2 + 3 \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a \left( \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon - 1 \right) \\
 \frac{de}{dt} &= -\frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n e \left[ 1 - \frac{11}{18} \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon \right] \\
 \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \left(\Omega_{\text{rot}} - n \cos\varepsilon\right) - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\
 \frac{d\varepsilon}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
 \end{align}
-where $n = \sqrt{G M_* / a^3}$ is the mean motion and $C_p = I_p / (M_p R_p^2) \approx 0.25$ is the moment-of-inertia coefficient.
+where $n \equiv \sqrt{G M_* / a^3}$ is mean motion [$\text{rad/s}$], $\Omega_{\mathrm{rot}}$ is spin frequency [$\text{rad/s}$], $\varepsilon$ is spin obliquity [$\text{rad}$], and $C_p \equiv I_p / (M_p R_p^2) \approx 0.25$ is the dimensionless moment of inertia. Derived in Appendix~\ref{sec:derivation_a5}.
 
 \subsection{Observational Selection Function}
 \begin{equation}
 W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}} = \left(\frac{R_* + R_p}{a}\right) \cdot \frac{1}{1 + \exp\left(-\frac{\mathrm{SNR} - 7.1}{1.5}\right)}
 \end{equation}
+where $R_*$ is stellar radius and $\mathrm{SNR} \propto (R_p / R_*)^2 \sqrt{N_{\text{transit}}}$.
