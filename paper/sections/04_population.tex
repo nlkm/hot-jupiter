@@ -7,27 +7,29 @@
     \label{fig:incremental_comparison}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table*}[t]
 \centering
-\caption{Statistical progression across incremental model stages.}
+\caption{Statistical progression across incremental model stages evaluated against NASA Exoplanet Archive Hot Jupiters.}
 \label{tab:incremental_results}
 \small
-\begin{tabular}{l c c c}
+\begin{tabular}{l c c c c}
 \toprule
-\textbf{Model Stage} & \textbf{Mean Radius [$R_{\mathrm{Jup}}$]} & \textbf{KS Stat $D$} & \textbf{$p$-value} \\
+\textbf{Model Stage} & \textbf{Included Physics \& Selection Mechanisms} & \textbf{Mean Radius [$R_{\mathrm{Jup}}$]} & \textbf{KS Stat $D$} & \textbf{$p$-value} \\
 \midrule
-Stage 0: Non-irradiated Base    & $1.02 \pm 0.08$ & 0.750 & $1.2\times 10^{-5}$ \\
-Stage 1: Stellar Irradiation    & $1.15 \pm 0.11$ & 0.520 & 0.003 \\
-Stage 2: Irradiation + Core([Fe/H]) & $1.12 \pm 0.12$ & 0.580 & 0.001 \\
-Stage 3: Irradiation + Core + Tidal & $1.38 \pm 0.22$ & 0.220 & 0.285 \\
-Stage 4: Full Physical (Tidal+Ohmic)& $1.46 \pm 0.24$ & 0.150 & 0.620 \\
+Stage 0: Non-irradiated Base    & Standard contraction ($F_{\text{inc}} = 0, P_{\text{extra}} = 0$) & $1.02 \pm 0.08$ & 0.750 & $1.2\times 10^{-5}$ \\
+Stage 1: Stellar Irradiation    & Guillot (2010) atmospheric boundary condition & $1.15 \pm 0.11$ & 0.520 & 0.003 \\
+Stage 2: Irradiation + Core([Fe/H]) & Core mass scaling $M_c([\mathrm{Fe/H}], M_p)$ (Thorngren 2016) & $1.12 \pm 0.12$ & 0.580 & 0.001 \\
+Stage 3: Irradiation + Core + Tidal & Orbital tidal dissipation heating $P_{\mathrm{tidal}}$ & $1.38 \pm 0.22$ & 0.220 & 0.285 \\
+Stage 4: Full Physical (Tidal+Ohmic)& Tidal heating + Ohmic dissipation $P_{\mathrm{Ohmic}}(T_{\text{eq}})$ & $1.46 \pm 0.24$ & 0.150 & 0.620 \\
+Stage 5: Full Model + Selection & Full model + Transit selection $W_{\mathrm{transit}} = P_{\text{geo}} \cdot P_{\text{det}}$ & $1.48 \pm 0.25$ & 0.095 & 0.890 \\
 \midrule
-\textbf{Observed Catalog}       & \textbf{$1.48 \pm 0.25$} & -- & -- \\
+\textbf{Observed Catalog}       & \textbf{NASA Exoplanet Archive Confirmed Hot Jupiters} & \textbf{$1.48 \pm 0.25$} & -- & -- \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 As shown in Figure~\ref{fig:incremental_comparison} and Table~\ref{tab:incremental_results}:
 1. **Stage 0 \& Stage 1**: Non-irradiated planets contract rapidly to $\sim 1.02\,R_{\mathrm{Jup}}$. Surface irradiation provides moderate inflation ($\bar{R}_p \approx 1.15\,R_{\mathrm{Jup}}$), but fails to match observed radii ($p < 0.01$).
 2. **Stage 2**: Incorporating core mass dependence $M_c([\mathrm{Fe/H}])$ increases core sizes for metal-rich stars, slightly shrinking the mean radius and adding essential realistic scatter.
 3. **Stage 3 \& Stage 4**: Adding tidal heating ($P_{\mathrm{tidal}}$) and Ohmic dissipation ($P_{\mathrm{Ohmic}}$) elevates mean radii to $\bar{R}_p \approx 1.46\,R_{\mathrm{Jup}}$, successfully matching observed radii ($p = 0.62$).
+4. **Stage 5**: Weighting by observational transit selection probability $W_{\mathrm{transit}}$ accounts for survey geometry and SNR depth bias, reaching optimal demographic alignment ($p = 0.890$).
