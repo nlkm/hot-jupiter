@@ -158,3 +158,22 @@ The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{
    \begin{equation}
    \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
    \end{equation}
+
+\subsection{Derivation A8: Roche Lobe Overflow (RLOF) Mass-Loss Rate}
+\label{sec:derivation_a8}
+The volume-equivalent Roche lobe radius $R_{\mathrm{Roche}}$ in a binary mass system ($M_p, M_*$) is derived by evaluating the effective potential $\Phi_{\mathrm{eff}}(\mathbf{r}) = -G M_p/r_1 - G M_*/r_2 - \frac{1}{2} n^2 r_{\perp}^2$ at the inner Lagrange saddle point $L_1$:
+1. **Eggleton (1983) Fit**:
+   Solving $\nabla \Phi_{\mathrm{eff}} = 0$ for mass ratio $q \equiv M_p / M_* \ll 1$ yields:
+   \begin{equation}
+   \frac{R_{\mathrm{Roche}}}{a} = \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}
+   \end{equation}
+2. **Hydrodynamic Nozzle Mass Loss**:
+   When $R_p \ge R_{\mathrm{Roche}}$, atmospheric pressure forces gas through the sonic surface near $L_1$ at sound speed $c_s \approx \sqrt{k_B T_{\mathrm{eq}} / \mu}$:
+   \begin{equation}
+   \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} = -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right]
+   \end{equation}
+3. **Orbital Back-Reaction**:
+   Equating orbital angular momentum $L_{\mathrm{orb}} = M_p M_* \sqrt{G a / (M_p + M_*)} / (M_p + M_*)$ and mass loss carrying momentum fraction $\beta$ yields:
+   \begin{equation}
+   \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} = -2 a \left(\frac{1}{M_p} \frac{dM_p}{dt}\right) (1 - \beta)
+   \end{equation}
