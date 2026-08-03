@@ -39,14 +39,14 @@ Initializes a close-in Hot Jupiter ($M_p = 1.00\,M_{\mathrm{Jup}}, a_0 = 0.04\te
 
 \subsection{Scenario 3: Multi-Planet System Secular Eccentricity Oscillations}
 \subsubsection{Simulation Walkthrough}
-Simulates a 3-planet system (\texttt{Kepler-TE-1}) containing an inner Hot Jupiter $b$ ($1.0\,M_{\mathrm{Jup}}, a = 0.04\text{ AU}$), a warm Saturn $c$ ($0.3\,M_{\mathrm{Jup}}, a = 0.12\text{ AU}$), and a cold giant $d$ ($1.5\,M_{\mathrm{Jup}}, a = 0.50\text{ AU}$).
+Simulates a 3-planet system (\texttt{Kepler-TE-1}) containing an inner Hot Jupiter $b$ ($1.0\,M_{\mathrm{Jup}}, a = 0.04\text{ AU}, e_0 = 0.15$), a warm Saturn $c$ ($0.3\,M_{\mathrm{Jup}}, a = 0.12\text{ AU}, e_0 = 0.08$), and a cold giant $d$ ($1.5\,M_{\mathrm{Jup}}, a = 0.50\text{ AU}, e_0 = 0.04$). The simulation simultaneously integrates tidal circularization damping ($de_b/dt|_{\text{tide}}$) and Laplace-Lagrange secular perturbation exchange ($de_i/dt|_{\text{secular}} = \sum A_{ij} e_j$).
 - **Phase 1 ($1 - 100\text{ Myr}$)**: Tidal friction attempts to circularize planet $b$'s orbit.
-- **Phase 2 ($100\text{ Myr} - 4.56\text{ Gyr}$)**: Long-term Laplace-Lagrange secular perturbations from outer planets $c$ and $d$ ($de_b/dt|_{\mathrm{secular}} = \sum A_{bj} e_j$) continuously pump eccentricity back into planet $b$. This forced eccentricity ($e_b \approx 0.02 - 0.05$) prevents permanent circularization, sustaining continuous tidal dissipation ($P_{\mathrm{tidal}} > 10^{18}\text{ W}$) and keeping planet $b$ inflated for 4.56 Gyr.
+- **Phase 2 ($100\text{ Myr} - 4.56\text{ Gyr}$)**: Secular perturbations from planets $c$ and $d$ continuously pump eccentricity back into planet $b$, establishing a forced eccentricity floor ($e_b \approx 0.02 - 0.05$). This sustained eccentricity drives continuous tidal dissipation ($P_{\mathrm{tidal},b} > 10^{18}\text{ W}$), retarding envelope contraction and maintaining inner planet inflation ($R_{p,b} \to 1.38\,R_{\mathrm{Jup}}$) compared to un-heated cooling models ($R_p \to 1.02\,R_{\mathrm{Jup}}$).
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/multi_planet_system_evolution.pdf}
-    \caption{Scenario 3: Multi-planet system evolutionary tracks (\texttt{Kepler-TE-1}) showing coupled thermal evolution, orbital decay, and Laplace-Lagrange secular eccentricity exchange.}
+    \caption{Scenario 3: 3-Panel multi-planet evolution (\texttt{Kepler-TE-1}) showing simultaneous tidal circularization and Laplace-Lagrange secular eccentricity exchange (top), sustained tidal power $P_{\mathrm{tidal},b}$ (middle), and inner planet radius inflation $R_{p,b}(t)$ vs un-heated contraction (bottom).}
     \label{fig:multi_planet}
 \end{figure}
 
