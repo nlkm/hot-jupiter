@@ -1,5 +1,5 @@
 """
-Orbital element and spin vector evolution module.
+Orbital element, spin vector, and multi-planet system evolution module.
 """
 
 from thermal_evolution.orbit.orbital_elements import (
@@ -7,5 +7,17 @@ from thermal_evolution.orbit.orbital_elements import (
     SpinVectorState,
     TidalOrbitalSpinRates,
 )
+from thermal_evolution.orbit.multi_planet import (
+    PlanetSystemMember,
+    MultiPlanetSystem,
+    MultiPlanetEvolutionResult,
+)
 
-__all__ = ["OrbitalState", "SpinVectorState", "TidalOrbitalSpinRates"]
+__all__ = [
+    "OrbitalState",
+    "SpinVectorState",
+    "TidalOrbitalSpinRates",
+    "PlanetSystemMember",
+    "MultiPlanetSystem",
+    "MultiPlanetEvolutionResult",
+]

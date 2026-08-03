@@ -3,7 +3,7 @@ Visualization module for thermal evolution tracks, interior hydrostatic profiles
 Generates publication-quality vector graphics (PDF) for LaTeX documents.
 """
 
-from typing import Optional
+from typing import Optional, Any
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -191,6 +191,63 @@ def plot_coupled_orbital_spin_evolution(
     ax6.set_xscale("log")
     ax6.set_yscale("log")
     ax6.grid(True, alpha=0.3, which="both")
+
+    plt.tight_layout()
+    if savepath:
+        fig.savefig(savepath, bbox_inches="tight")
+        if savepath.endswith(".pdf"):
+            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+    return fig
+
+
+def plot_multi_planet_system_evolution(
+    result: Any,  # MultiPlanetEvolutionResult
+    title: str = "Multi-Planet System Coupled Evolutionary Tracks",
+    savepath: Optional[str] = None,
+) -> plt.Figure:
+    """
+    Plot 4-panel comparison for all planets in a multi-planet system:
+    1. Planet Radius R_p [R_Jup] vs Time
+    2. Semi-Major Axis a [AU] vs Time
+    3. Orbital Eccentricity e vs Time
+    4. Effective Temperature T_eff [K] vs Time
+    """
+    fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
+    fig.suptitle(title, fontsize=13, fontweight="bold")
+
+    t_gyr = result.t_gyr
+    colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"]
+
+    for idx, name in enumerate(result.planet_names):
+        c = colors[idx % len(colors)]
+
+        # Panel 1: Radius vs Time
+        axes[0, 0].plot(t_gyr, result.R_p_jup[name], color=c, lw=2, label=f"Planet {name}")
+        axes[0, 0].set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+        axes[0, 0].set_xscale("log")
+        axes[0, 0].grid(True, alpha=0.3)
+        axes[0, 0].legend(loc="best")
+
+        # Panel 2: Semi-Major Axis vs Time
+        axes[0, 1].plot(t_gyr, result.a_au[name], color=c, lw=2, label=f"Planet {name}")
+        axes[0, 1].set_ylabel(r"Semi-Major Axis $a$ [AU]")
+        axes[0, 1].set_xscale("log")
+        axes[0, 1].set_yscale("log")
+        axes[0, 1].grid(True, alpha=0.3, which="both")
+
+        # Panel 3: Eccentricity vs Time
+        axes[1, 0].plot(t_gyr, result.e[name], color=c, lw=2, label=f"Planet {name}")
+        axes[1, 0].set_xlabel("Age [Gyr]")
+        axes[1, 0].set_ylabel(r"Eccentricity $e$")
+        axes[1, 0].set_xscale("log")
+        axes[1, 0].grid(True, alpha=0.3)
+
+        # Panel 4: Effective Temperature vs Time
+        axes[1, 1].plot(t_gyr, result.T_eff[name], color=c, lw=2, label=f"Planet {name}")
+        axes[1, 1].set_xlabel("Age [Gyr]")
+        axes[1, 1].set_ylabel(r"Effective Temp $T_{\mathrm{eff}}$ [K]")
+        axes[1, 1].set_xscale("log")
+        axes[1, 1].grid(True, alpha=0.3)
 
     plt.tight_layout()
     if savepath:
