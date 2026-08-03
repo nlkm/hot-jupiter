@@ -44,14 +44,13 @@ public:
         if (r_roche <= 0 || R_p <= 0 || M_p <= 0) return {0.0, 0.0};
 
         double filling_factor = R_p / r_roche;
-        double dM_dt_rlof = 0.0;
 
-        if (filling_factor >= 0.95) {
-            double overflow_excess = std::max(0.0, filling_factor - 1.0);
-            dM_dt_rlof = - M_dot_0 * std::exp(eta_exponent * overflow_excess);
-            double max_dM_dt = - 0.10 * M_p / (1.0e9 * YEAR);
-            dM_dt_rlof = std::max(dM_dt_rlof, max_dM_dt);
-        }
+        // Smooth sigmoid activation for continuous RLOF onset (eliminates step discontinuities)
+        double smooth_onset = 1.0 / (1.0 + std::exp(-40.0 * (filling_factor - 0.95)));
+        double overflow_excess = std::max(0.0, filling_factor - 0.95);
+        double dM_dt_rlof = - M_dot_0 * smooth_onset * std::exp(eta_exponent * overflow_excess);
+        double max_dM_dt = - 0.10 * M_p / (1.0e9 * YEAR);
+        dM_dt_rlof = std::max(dM_dt_rlof, max_dM_dt);
 
         double dM_dt_xuv = compute_photoevaporative_mdot(F_XUV, R_p, M_p);
         double dM_dt_total = dM_dt_rlof + dM_dt_xuv;

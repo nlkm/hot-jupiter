@@ -10,7 +10,7 @@ using namespace thermal_evolution;
 
 int main() {
     std::cout << "==========================================================================" << std::endl;
-    std::cout << " C++ PHOTOEVAPORATION & RLOF COUPLED MASS LOSS BENCHMARK                  " << std::endl;
+    std::cout << " C++ PHOTOEVAPORATION & RLOF COUPLED HIGH-RESOLUTION BENCHMARK           " << std::endl;
     std::cout << "==========================================================================" << std::endl;
 
     RocheLobeMassLoss mass_loss_solver;
@@ -22,13 +22,14 @@ int main() {
     std::ofstream csv("outputs/photoevaporation_mass_loss.csv");
     csv << "t_gyr,M_p_Mjup,M_dot_rlof_kg_s,M_dot_xuv_kg_s,M_dot_total_kg_s,filling_factor\n";
 
-    double dt = 4.56e6 * YEAR;
-    int steps = 1000;
+    // High resolution: 10,000 timesteps for smooth trajectory rendering
+    int steps = 10000;
+    double dt = (4.56 * GYR) / steps;
 
     for (int i = 0; i < steps; ++i) {
         double t_gyr = (i * dt) / GYR;
 
-        // Radius evolution with early thermal expansion
+        // Smooth radius evolution with early thermal expansion
         double R_p = (1.55 - 0.25 * std::exp(-t_gyr / 1.0)) * R_JUP;
 
         // Time-decaying stellar XUV flux: F_XUV(t) = F_0 * (t / 10 Myr)^-1.5
@@ -53,6 +54,6 @@ int main() {
     }
 
     csv.close();
-    std::cout << "Photoevaporation & RLOF coupling benchmark written to outputs/photoevaporation_mass_loss.csv" << std::endl;
+    std::cout << "High-resolution Photoevaporation & RLOF data written to outputs/photoevaporation_mass_loss.csv" << std::endl;
     return 0;
 }
