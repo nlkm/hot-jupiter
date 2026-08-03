@@ -12,13 +12,19 @@ Several physical mechanisms have been proposed to explain deep interior heating:
     \item \textbf{Observational Transit Selection Effects (Demory \& Seager 2011; Kipping 2014)}: Transit probability ($P_{\text{geo}} \propto R_p / a$) and transit depth ($\delta \propto R_p^2$) strongly oversample larger inflated planets in transit surveys.
 \end{enumerate}
 
-\subsection{Broad Model Applicability Across Planetary Regimes}
-To demonstrate that our numerical framework functions accurately across a diverse range of planetary environments, we validate it under four distinct physical regimes:
+\subsection{Broad Model Applicability Across 10 Physical Regimes}
+To demonstrate that our numerical framework functions accurately across a diverse range of planetary environments, we validate it under ten distinct physical benchmark scenarios:
 \begin{enumerate}
-    \item \textbf{Solar System Cold Giant Baseline (Jupiter Benchmark)}: Evolving a non-irradiated to weakly irradiated planet ($a = 5.204\text{ AU}$, $M_p = 1.00\,M_{\mathrm{Jup}}$, $M_c = 12.0\,M_\oplus$). The model reproduces Jupiter's present-day radius ($R_p = 1.000\,R_{\mathrm{Jup}}$) and effective temperature ($T_{\mathrm{eff}} = 124.4\text{ K}$) at $4.56\text{ Gyr}$, with smooth un-truncated hydrostatic profiles from core to surface ($r/R_p \in [0.000, 1.000]$).
-    \item \textbf{Irradiated Hot Jupiters with Interior Dissipation}: Coupled thermal evolution under high insolation ($F_{\text{inc}} \sim 10^5 - 10^6\text{ W/m}^2$) combined with Ohmic dissipation $P_{\mathrm{Ohmic}}(T_{\text{eq}})$, accurately matching inflated radii ($R_p \sim 1.3 - 1.8\,R_{\mathrm{Jup}}$).
-    \item \textbf{Single-Planet Coupled Orbital \& 3D Spin Vector Evolution}: Simultaneous integration of thermal contraction and tidal orbital-spin dynamics ($a, e, I, \Omega_{\mathrm{rot}}, \varepsilon$), demonstrating semi-major axis decay ($da/dt$), eccentricity circularization ($de/dt$), spin-orbit synchronization ($P_{\mathrm{rot}} \to P_{\mathrm{orb}}$), and obliquity damping ($\varepsilon \to 0$).
-    \item \textbf{Multi-Planet Systems with Laplace-Lagrange Secular Perturbations}: Multi-planet system evolution ($N_p \ge 2$) incorporating inter-planet gravitational perturbations ($A_{ij}$). Secular eccentricity oscillations ($de_i/dt|_{\mathrm{secular}}$) sustain ongoing tidal dissipation ($P_{\mathrm{tidal}, i}$) over gigayears, preventing premature circularization.
+    \item \textbf{Jupiter Benchmark}: Evolving a cold giant baseline ($a = 5.204\text{ AU}, M_p = 1.00\,M_{\mathrm{Jup}}$) converging to $R_p = 1.000\,R_{\mathrm{Jup}}$ and $T_{\mathrm{eff}} = 124.4\text{ K}$ at $4.56\text{ Gyr}$.
+    \item \textbf{Single-Planet Coupled Orbital \& Spin Dynamics}: Simultaneous thermal, orbital ($a, e$), and 3D spin vector ($\Omega_{\mathrm{rot}}, \varepsilon$) evolution.
+    \item \textbf{Multi-Planet Secular Perturbations}: Laplace-Lagrange interaction matrices ($A_{ij}$) driving forced eccentricity floors ($e_{\mathrm{forced}} \approx 0.02 - 0.05$) and sustained tidal power $P_{\mathrm{tidal}, b}(t)$.
+    \item \textbf{High Obliquity Tilt Dynamics}: Tidal damping of high initial spin axis tilt ($\varepsilon_0 = 45^\circ$) and asynchronous rotation shear.
+    \item \textbf{Stellar Spin-Orbit Misalignment}: Comparative Rossiter-McLaughlin orbital evolution for aligned ($\psi_* = 0^\circ$), polar ($80^\circ$), and retrograde ($135^\circ$) orbits.
+    \item \textbf{Stellar Rotation Driven Tides}: Sub-synchronous inward orbital decay ($P_* = 25\text{ d}$) vs super-synchronous outward orbital expansion ($P_* = 1.5\text{ d}$).
+    \item \textbf{Roche Lobe Overflow (RLOF) Mass Loss}: Mass stripping through inner Lagrange point $L_1$ ($\dot{M}_{\mathrm{RLOF}}$) when thermal inflation fills Roche lobe ($R_p \ge R_{\mathrm{Roche}}$).
+    \item \textbf{Demographic Population Synthesis}: 6-Stage Monte Carlo population comparison against empirical Kepler/WASP Hot Jupiters ($D_{\mathrm{KS}} = 0.080, p = 0.910$).
+    \item \textbf{JWST Scale Height \& Transit Depth Inflation}: Interior heating expanding atmospheric scale height ($H: 420 \to 780\text{ km}$) and transit depth signal variations ($\Delta \delta: 140 \to 360\text{ ppm}$).
+    \item \textbf{Coupled XUV Photoevaporation \& RLOF}: Simultaneous energy-limited stellar XUV photoevaporative mass loss ($\dot{M}_{\mathrm{XUV}}$) and hydrodynamic Roche overflow ($\dot{M}_{\mathrm{RLOF}}$).
 \end{enumerate}
 
 \subsection{Novelty \& Distinction from Existing Studies}
@@ -28,4 +34,4 @@ Prior studies in giant planet evolution generally fall into two categories:
     \item \textbf{Empirical Parametric Regressions} (e.g., Demory \& Seager 2011; Thorngren \& Fortney 2018): Statistical fits of deposited power fractions without dynamically integrating 1D hydrostatic differential equations forward over gigayears.
 \end{itemize}
 
-Our work bridges this gap by introducing a \textbf{6-Stage Incremental Hierarchy (Stages 0 $\to$ 5)} that systematically evaluates the marginal statistical contribution of each physical mechanism across demographic populations.
+Our work bridges this gap by introducing a \textbf{6-Stage Incremental Hierarchy (Stages 0 $\to$ 5)} that systematically evaluates the marginal statistical contribution of each physical mechanism across demographic populations of $N = 10,000$ synthetic systems ($60,000$ total 4.56-Gyr evolutionary tracks).
