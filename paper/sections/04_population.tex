@@ -1,15 +1,46 @@
 \section{Incremental Population Synthesis Results}
 
+To evaluate the cumulative physical and observational impact of each mechanism on exoplanet radius demographics, we performed a large-scale Monte Carlo population synthesis study. A total of $N = 10,000$ synthetic planetary systems were generated and integrated forward across $6$ incremental physical model stages (yielding $60,000$ total 4.56-Gyr evolutionary tracks).
+
+\subsection{Synthetic Monte Carlo Population Sampling}
+The initial conditions for the $10,000$ synthetic systems were drawn from empirical exoplanet distribution functions:
+\begin{enumerate}
+    \item \textbf{Host Star Properties}:
+    \begin{itemize}
+        \item \textbf{Stellar Mass ($M_*$)}: Sampled from a Kroupa IMF in the range $M_* \in [0.8, 1.4]\,M_\odot$.
+        \item \textbf{Stellar Metallicity ($[\mathrm{Fe/H}]$)}: Sampled from a Gaussian distribution centered at solar metallicity $[\mathrm{Fe/H}] = 0.0$ with standard deviation $\sigma = 0.2\text{ dex}$.
+        \item \textbf{Stellar Rotation Period ($P_*$)}: Sampled from a log-normal distribution centered at $P_* = 12\text{ days}$ ($P_* \in [1.0, 30.0]\text{ d}$).
+        \item \textbf{Stellar Spin-Orbit Misalignment ($\psi_*$)}: Sampled from an isotropic mixture model ($\psi_* \in [0^\circ, 180^\circ]$).
+    \end{itemize}
+    
+    \item \textbf{Planetary Initial Properties}:
+    \begin{itemize}
+        \item \textbf{Total Mass ($M_p$)}: Sampled from a log-uniform distribution $M_p \in [0.3, 3.0]\,M_{\mathrm{Jup}}$.
+        \item \textbf{Heavy-Element Core Mass ($M_c$)}: Computed via the Thorngren et al. (2016) scaling law $M_c = 15 (M_p/M_{\mathrm{Jup}})^{0.6} 10^{0.5[\mathrm{Fe/H}]}\,M_\oplus$ with intrinsic log-normal scatter $\sigma_{\ln M_c} = 0.25$.
+        \item \textbf{Initial Envelope Entropy ($S_{\mathrm{env}, 0}$)}: Uniformly sampled $S_{\mathrm{env}, 0} \in [1.25, 1.45] \times 10^5\text{ J/(kg K)}$ at $t = 1\text{ Myr}$.
+        \item \textbf{Initial Spin Period ($P_{\mathrm{rot}, 0}$) \& Obliquity ($\varepsilon_0$)}: $P_{\mathrm{rot}, 0} \in [4, 15]\text{ hours}$, $\varepsilon_0 \in [0^\circ, 60^\circ]$.
+    \end{itemize}
+
+    \item \textbf{Orbital Element Architectures}:
+    \begin{itemize}
+        \item \textbf{Semi-Major Axis ($a$)}: Log-uniform distribution $a \in [0.015, 0.10]\text{ AU}$.
+        \item \textbf{Initial Eccentricity ($e_0$)}: Rayleigh distribution with scale parameter $\sigma_e = 0.12$ truncated at $e_{\max} = 0.45$.
+        \item \textbf{Multi-Planet Secular Perturbations}: A fraction ($25\%$) of the population is embedded in secular multi-planet architectures ($N_p \ge 2$) where Laplace-Lagrange interaction matrices ($A_{ij}$) maintain forced eccentricity floors $e_{\mathrm{forced}} \sim 0.01 - 0.08$.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Statistical Progression Across 6 Model Stages}
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/hot_jupiter_incremental_ks_comparison.pdf}
-    \caption{Probability density histogram (left) and Cumulative Distribution Function (right) tracking radius distribution progression across incremental stages (Stage 0 to Stage 4) against observed catalog.}
+    \caption{Probability density histogram (left) and Cumulative Distribution Function (right) tracking radius distribution progression across incremental stages (Stage 0 to Stage 5) against the observed Kepler/WASP Hot Jupiter catalog.}
     \label{fig:incremental_comparison}
 \end{figure}
 
 \begin{sidewaystable*}[p]
 \centering
-\caption{Statistical progression across incremental model stages evaluated against NASA Exoplanet Archive Hot Jupiters.}
+\caption{Statistical progression across incremental model stages ($N = 10,000$ evolutions per stage) evaluated against NASA Exoplanet Archive Hot Jupiters.}
 \label{tab:incremental_results}
 \small
 \begin{tabular}{l p{8.5cm} c c c}
