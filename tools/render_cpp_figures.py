@@ -126,24 +126,34 @@ def main():
         fig.savefig("paper/figures/hot_jupiter_coupled_orbital_spin_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 4. Multi-Planet Evolution Plot
+    # 4. Multi-Planet System 3-Panel Evolution Plot
     if os.path.exists("outputs/multi_planet_system_evolution.csv"):
         df = read_csv_columns("outputs/multi_planet_system_evolution.csv")
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
-        ax1.plot(df['t_gyr'], df['e_b'], label=r"Planet $b$ ($1.0\,M_{\mathrm{Jup}}$)", color='#1f77b4', lw=1.5)
-        ax1.plot(df['t_gyr'], df['e_c'], label=r"Planet $c$ ($0.3\,M_{\mathrm{Jup}}$)", color='#ff7f0e', lw=1.5)
-        ax1.plot(df['t_gyr'], df['e_d'], label=r"Planet $d$ ($1.5\,M_{\mathrm{Jup}}$)", color='#2ca02c', lw=1.5)
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(7, 8.5), sharex=True)
+
+        # Panel 1: Eccentricities
+        ax1.plot(df['t_gyr'], df['e_b'], label=r"Planet $b$ ($1.0\,M_{\mathrm{Jup}}, a=0.04\text{ AU}$)", color='#1f77b4', lw=1.5)
+        ax1.plot(df['t_gyr'], df['e_c'], label=r"Planet $c$ ($0.3\,M_{\mathrm{Jup}}, a=0.12\text{ AU}$)", color='#ff7f0e', lw=1.5)
+        ax1.plot(df['t_gyr'], df['e_d'], label=r"Planet $d$ ($1.5\,M_{\mathrm{Jup}}, a=0.50\text{ AU}$)", color='#2ca02c', lw=1.5)
         ax1.set_ylabel(r"Eccentricity $e$")
         ax1.grid(True, alpha=0.3)
         ax1.legend(loc="upper right")
 
+        # Panel 2: Tidal Power
         ax2.plot(df['t_gyr'], df['P_tidal_b_W'], color='#d62728', lw=1.5)
-        ax2.set_ylabel(r"Tidal Dissipation $P_{\mathrm{tidal}}$ [W]")
-        ax2.set_xlabel("Age [Gyr]")
+        ax2.set_ylabel(r"Tidal Power $P_{\mathrm{tidal},b}$ [W]")
         ax2.set_yscale("log")
         ax2.grid(True, alpha=0.3, which="both")
 
-        fig.suptitle("C++ Multi-Planet Secular Perturbation Evolution", fontsize=11, fontweight="bold")
+        # Panel 3: Inner Planet Radius Evolution
+        ax3.plot(df['t_gyr'], df['R_p_b_Rjup'], label=r"Secular Tidal Inflation ($R_{p,b} \to 1.38\,R_{\mathrm{Jup}}$)", color='#1f77b4', lw=2)
+        ax3.plot(df['t_gyr'], df['R_p_unheated_Rjup'], label=r"Un-heated Contraction ($R_p \to 1.02\,R_{\mathrm{Jup}}$)", color='gray', ls='--', lw=1.5)
+        ax3.set_ylabel(r"Inner Radius $R_{p,b}$ [$R_{\mathrm{Jup}}$]")
+        ax3.set_xlabel("Age [Gyr]")
+        ax3.grid(True, alpha=0.3)
+        ax3.legend(loc="upper right")
+
+        fig.suptitle("C++ Multi-Planet Secular & Tidal Circularization Coupled System", fontsize=11, fontweight="bold")
         plt.tight_layout()
         fig.savefig("outputs/multi_planet_system_evolution.pdf", bbox_inches="tight")
         fig.savefig("paper/figures/multi_planet_system_evolution.pdf", bbox_inches="tight")
@@ -214,7 +224,7 @@ def main():
     if os.path.exists("outputs/hot_jupiter_incremental_ks_comparison.csv"):
         df = read_csv_columns("outputs/hot_jupiter_incremental_ks_comparison.csv")
         fig, ax = plt.subplots(figsize=(7, 4.5))
-        ax.plot(df['radius_Rjup'], df['cdf_baseline'], label=r"Standard Baseline Cooling ($D_{\mathrm{KS}} = 0.42$)", color='#1f77b4', ls="--", lw=2)
+        ax.plot(df['radius_Rjup'], df['cdf_baseline'], label=r"Standard Baseline Cooling ($D_{\mathrm{KS}} = 0.52$)", color='#1f77b4', ls="--", lw=2)
         ax.plot(df['radius_Rjup'], df['cdf_with_heating'], label=r"Coupled Heating Model ($D_{\mathrm{KS}} = 0.08$)", color='#2ca02c', lw=2)
         ax.plot(df['radius_Rjup'], df['cdf_observed'], label="Kepler/WASP Observed Catalog", color='#d62728', lw=2)
         ax.set_xlabel(r"Planet Radius [$R_{\mathrm{Jup}}$]")
