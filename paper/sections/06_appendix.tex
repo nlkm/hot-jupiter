@@ -27,7 +27,7 @@ Consider a spherically symmetric fluid shell of mass element $dm = 4\pi r^2 \rho
 3. **Adiabatic Temperature Gradient**:
    For an isentropic convective envelope, the temperature gradient is governed by the adiabatic index $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$:
    \begin{equation}
-   \frac{dT}{dm} = \left(\frac{\partial T}{\partial P}\right)_S \frac{dP}{dm} = \nabla_{\mathrm{ad}} \frac{T}{P} \left(-\frac{G m}{4\pi r^4}\right) = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
+   \frac{dT}{dm} = \left(\frac{\partial T}{\partial P}\right)_S \frac{dP}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
    \end{equation}
 
 \subsection{Derivation A2: Birch-Murnaghan 3rd-Order Isothermal EOS}
@@ -53,20 +53,23 @@ Differentiating $F(f) = \frac{9}{2} V_0 K_0 f^2 + \frac{9}{2} V_0 K_0 (K_0' - 4)
 \left(\frac{\partial F}{\partial f}\right)_T = 9 V_0 K_0 f \left[ 1 + \frac{3}{2} (K_0' - 4) f \right]
 \end{equation}
 Multiplying yields the 3rd-order Birch-Murnaghan equation of state:
-\begin{equation}
-P(\rho) = \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{7/3} - \left(\frac{\rho}{\rho_0}\right)^{5/3} \right] \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right] \right\}
-\end{equation}
+\begin{align}
+P(\rho) &= \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{7}{3}} - \left(\frac{\rho}{\rho_0}\right)^{\frac{5}{3}} \right] \nonumber \\
+&\quad \times \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{2}{3}} - 1 \right] \right\}
+\end{align}
 
 \subsection{Derivation A3: Non-Relativistic Electron Degeneracy Pressure $K_{\mathrm{DEG}}$}
 \label{sec:derivation_a3}
 In a fully pressure-ionized electron gas, Pauli's exclusion principle restricts electrons to 2 spin states per phase space cell $h^3$. At zero temperature, electrons fill all momentum states up to Fermi momentum $p_F$:
-\begin{equation}
-n_e = \frac{N_e}{V} = \frac{2}{h^3} \int_0^{p_F} 4\pi p^2 dp = \frac{8\pi p_F^3}{3 h^3} \implies p_F = \hbar (3\pi^2 n_e)^{1/3}
-\end{equation}
+\begin{align}
+n_e &= \frac{N_e}{V} = \frac{2}{h^3} \int_0^{p_F} 4\pi p^2 dp = \frac{8\pi p_F^3}{3 h^3} \nonumber \\
+&\implies p_F = \hbar (3\pi^2 n_e)^{1/3}
+\end{align}
 The total kinetic energy density $u_{\mathrm{deg}}$ of non-relativistic electrons ($E = p^2 / 2m_e$) is:
-\begin{equation}
-u_{\mathrm{deg}} = \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{4\pi p_F^5}{5 m_e h^3} = \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
-\end{equation}
+\begin{align}
+u_{\mathrm{deg}} &= \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{4\pi p_F^5}{5 m_e h^3} \nonumber \\
+&= \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
+\end{align}
 Degeneracy pressure $P_{\mathrm{deg}}$ is related to energy density by $P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}}$:
 \begin{equation}
 P_{\mathrm{deg}} = \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e} n_e^{5/3}
@@ -83,16 +86,18 @@ The double-gray radiative transfer equation for an irradiated atmosphere in Eddi
 \frac{d K_{\text{th}}}{d\tau} = \frac{1}{3} \frac{d J_{\text{th}}}{d\tau} = \frac{F_{\text{int}}}{4\pi} + \frac{F_{\text{irr}}}{4\pi} E_2(\gamma \tau)
 \end{equation}
 Integrating twice over optical depth $\tau$ with boundary condition $J(0) = 2 K(0)$ yields the two-channel thermal temperature profile $T^4(\tau) = \frac{4\pi}{a c} J_{\text{th}}(\tau)$:
-\begin{equation}
-T^4(\tau) = \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
-\end{equation}
+\begin{align}
+T^4(\tau) &= \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) \nonumber \\
+&\quad + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
+\end{align}
 
 \subsection{Derivation A5: Hut (1981) Equilibrium Tidal Dissipation Rates}
 \label{sec:derivation_a5}
 Equilibrium tidal theory expands the tidal potential $V_{\text{tide}}$ in spherical harmonics $Y_{lm}$ (Kaula 1964). Energy dissipation rate $\dot{E}_{\text{tide}}$ and angular momentum dissipation rate $\dot{h}_{\text{tide}}$ are proportional to the phase lag $\Delta t = (k_2/Q) / (2 n)$:
-\begin{equation}
-\dot{E}_{\text{tide}} = -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
-\end{equation}
+\begin{align}
+\dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 \nonumber \\
+&\quad - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
+\end{align}
 Relating orbital energy $E = -G M_p M_* / (2a)$ to semi-major axis $a$:
 \begin{equation}
 \dot{E} = \frac{G M_p M_*}{2 a^2} \frac{da}{dt} \implies \frac{da}{dt} = \frac{2 a^2}{G M_p M_*} \dot{E}_{\text{tide}}
