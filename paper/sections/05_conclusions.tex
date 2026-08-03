@@ -15,14 +15,23 @@ Our main physical and statistical conclusions are summarized as follows:
     In isolated single-planet systems, tidal circularization rapidly damps orbital eccentricity ($e \to 0$) within $\sim 100 - 500\text{ Myr}$, turning off tidal dissipation. In multi-planet architectures ($N_p \ge 2$), Laplace-Lagrange secular interactions ($A_{ij}$) continuously pump angular momentum back into the inner Hot Jupiter, establishing a forced eccentricity floor ($e_{\mathrm{forced}} \approx 0.02 - 0.05$). This secular coupling maintains ongoing tidal dissipation ($P_{\mathrm{tidal}} > 10^{18}\text{ W}$) for $t = 4.56\text{ Gyr}$, explaining long-lived inflated planets in multi-body systems.
 
     \item \textbf{Stellar Rotation Tides \& Roche Lobe Mass Stripping}:
-    Host star rotation frequency $\Omega_* = 2\pi/P_*$ dictates orbital migration direction. Sub-synchronous stars ($P_* = 25\text{ d}, n > \Omega_*$) produce a lagging stellar tidal bulge ($\Delta\phi_* < 0$) that drives inward orbital decay ($a: 0.030 \to 0.005\text{ AU}$). As planets migrate inward, thermal inflation causes envelope radius to exceed the Roche threshold ($R_p \ge R_{\mathrm{Roche}}$), triggering hydrodynamic mass loss through the inner Lagrange point $L_1$ ($\dot{M}_{\mathrm{RLOF}}$) and orbital angular momentum back-reaction. Conversely, super-synchronous stars ($P_* = 1.5\text{ d}$) drive outward orbital expansion.
+    Host star rotation frequency $\Omega_* = 2\pi/P_*$ dictates orbital migration direction. Sub-synchronous stars ($P_* = 25\text{ d}, n > \Omega_*$) produce a lagging stellar tidal bulge ($\Delta\phi_* < 0$) that drives inward orbital decay ($a: 0.030 \to 0.005\text{ AU}$). As planets migrate inward, thermal inflation causes envelope radius to exceed the Roche threshold ($R_p \ge R_{\mathrm{Roche}}$), triggering hydrodynamic mass loss through the inner Lagrange point $L_1$ ($\dot{M}_{\mathrm{RLOF}}$) and orbital angular momentum back-reaction. Conversely, super-synchronous stars ($P_* = 1.5\text{ d}$) drive outward expansion.
 
     \item \textbf{Observational Transit Selection Geometry}:
-    Photometric transit surveys strongly over-sample larger, short-period planets due to geometric alignment probability ($P_{\mathrm{geo}} \propto R_p/a$) and signal-to-noise ratio depth scaling ($\mathrm{SNR} \propto R_p^2$). Weighting the $N = 10,000$ synthetic population by the observational selection function $W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\mathrm{det}}(\mathrm{SNR})$ (Stage 5) aligns the model with confirmed Kepler/WASP observations ($\bar{R}_p = 1.48 \pm 0.25\,R_{\mathrm{Jup}}$, $D_{\mathrm{KS}} = 0.080$, $p = 0.910$).
+    Photometric transit surveys strongly over-sample larger, short-period planets due to geometric alignment probability ($P_{\mathrm{geo}} \propto R_p/a$) and signal-to-noise ratio depth scaling ($\mathrm{SNR} \propto R_p^2$). Weighting the $N = 10,000$ synthetic population by the observational selection function $W_{\mathrm{transit}} = P_{\mathrm{geo}} \cdot P_{\text{det}}(\mathrm{SNR})$ (Stage 5) brings the model into optimal demographic alignment with confirmed Kepler/WASP observations ($\bar{R}_p = 1.48 \pm 0.25\,R_{\mathrm{Jup}}$, $D_{\mathrm{KS}} = 0.080$, $p = 0.910$).
 
     \item \textbf{First-Principles C++ / Bazel 8 Reproducibility}:
     All evolution models and population synthesis tools are implemented in high-performance C++ built with Bazel 8 Bzlmod rules (\texttt{//:unit\_tests}, passing 8/8 physical tests). Every equation in the manuscript is accompanied by a self-contained, first-principles undergraduate derivation and 2D vector graphic diagram in Appendix A.
 \end{enumerate}
+
+\subsection{Future Work \& Next Steps}
+Several promising avenues remain for future investigation:
+\begin{itemize}
+    \item \textbf{3D Atmospheric Circulation \& Zonal Superrotation}: Coupling 3D General Circulation Model (GCM) wind profiles $\mathbf{v}(\theta, \phi)$ into the Ohmic dissipation solver to model advective day-to-night temperature offsets and magnetic drag.
+    \item \textbf{Double-Diffusive Composition Gradients}: Extending the 1D hydrostatic integrator to simulate semi-convection and compositional transport ($\nabla_\mu > 0$), evaluating how heavy-element core erosion traps primordial heat.
+    \item \textbf{Photoevaporative Mass Loss}: Coupling Roche lobe overflow with stellar XUV photoevaporation ($\dot{M}_{\mathrm{XUV}}$) to explore the boundary between inflated Hot Jupiters and evaporated ultra-short-period sub-Neptunes.
+    \item \textbf{JWST \& ESA Ariel Population Validation}: Applying the population synthesis suite to predict atmospheric scale height inflation ($H = k_B T / \mu g$) and transmission spectrum transit depth variations ($\Delta \delta$) for upcoming JWST and Ariel spectroscopic surveys.
+\end{itemize}
 
 \section*{Code \& Reproducibility}
 All C++ source files, Bazel 8 build targets, unit tests, and rendering scripts are open-source and accessible in the repository at \url{https://github.com/thermal_evolution}.
