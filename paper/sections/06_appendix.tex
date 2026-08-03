@@ -103,3 +103,58 @@ Relating orbital energy $E = -G M_p M_* / (2a)$ to semi-major axis $a$:
 \dot{E} = \frac{G M_p M_*}{2 a^2} \frac{da}{dt} \implies \frac{da}{dt} = \frac{2 a^2}{G M_p M_*} \dot{E}_{\text{tide}}
 \end{equation}
 Substituting $\dot{E}_{\text{tide}}$ yields the semi-major axis decay equation ($da/dt$) and eccentricity damping equation ($de/dt$).
+
+\subsection{Derivation A6: Laplace-Lagrange Secular N-Body Perturbations}
+\label{sec:derivation_a6}
+For a multi-planet system containing $N$ planets orbiting host star $M_*$, the gravitational disturbing function $R_i$ for planet $i$ due to planet $j$ is expanded in powers of eccentricities $e$ and inclinations $I$ (Murray \& Dermott 1999):
+\begin{equation}
+R_i = n_i a_i^2 \sum_{j \neq i} \left[ \frac{1}{2} A_{ii} e_i^2 + A_{ij} e_i e_j \cos(\varpi_i - \varpi_j) \right]
+\end{equation}
+where $\varpi \equiv \Omega + \omega$ is the longitude of periastron.
+1. **Lagrange Planetary Equations**:
+   The time rate of change of eccentricity $e_i$ and longitude of periastron $\varpi_i$ are:
+   \begin{equation}
+   \frac{de_i}{dt} = -\frac{1}{n_i a_i^2 e_i} \frac{\partial R_i}{\partial \varpi_i}, \quad \frac{d\varpi_i}{dt} = \frac{1}{n_i a_i^2 e_i} \frac{\partial R_i}{\partial e_i}
+   \end{equation}
+2. **Poincaré Canonical Variables**:
+   Defining Cartesian eccentricity variables $h_i \equiv e_i \sin\varpi_i$ and $k_i \equiv e_i \cos\varpi_i$, the linearized equations of motion become:
+   \begin{equation}
+   \frac{dh_i}{dt} = \sum_{j=1}^N A_{ij} k_j, \quad \frac{dk_i}{dt} = -\sum_{j=1}^N A_{ij} h_i
+   \end{equation}
+3. **Laplace Coefficient Precession Matrix**:
+   Differentiating $R_i$ with respect to $e_i$ and $\varpi_i$ yields the Laplace-Lagrange secular matrix elements $A_{ij}$:
+   \begin{align}
+   A_{ii} &= +\frac{n_i}{4} \sum_{j \neq i} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(1)}(\alpha_{ij}) \\
+   A_{ij} &= -\frac{n_i}{4} \frac{M_j}{M_*} \alpha_{ij} \bar{\alpha}_{ij} b_{3/2}^{(2)}(\alpha_{ij})
+   \end{align}
+   where $\alpha_{ij} \equiv \min(a_i, a_j) / \max(a_i, a_j)$, $\bar{\alpha}_{ij} = \alpha_{ij}$ for $a_i < a_j$ and $1$ for $a_i > a_j$, and $b_{3/2}^{(s)}(\alpha)$ are Laplace coefficients:
+   \begin{equation}
+   b_{3/2}^{(s)}(\alpha) \equiv \frac{1}{\pi} \int_0^{2\pi} \frac{\cos(s\psi)}{(1 - 2\alpha \cos\psi + \alpha^2)^{3/2}} d\psi
+   \end{equation}
+
+\subsection{Derivation A7: Coupled Orbital \& 3D Spin Vector Dynamics}
+\label{sec:derivation_a7}
+The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{\text{orb}} + \mathbf{S}_{\text{spin}}$ is conserved:
+\begin{align}
+\mathbf{L}_{\text{orb}} &= \frac{M_p M_*}{M_p + M_*} \sqrt{G(M_p + M_*) a (1-e^2)} \, \hat{\mathbf{k}} \\
+\mathbf{S}_{\text{spin}} &= C_p M_p R_p^2 \mathbf{\Omega}_{\mathrm{rot}}
+\end{align}
+1. **Spin Rate Derivation ($d\Omega_{\mathrm{rot}}/dt$)**:
+   The spin vector rate of change receives torque $\mathbf{T}_{\text{tide}}$ and moment of inertia changes from thermal contraction:
+   \begin{equation}
+   \frac{d\mathbf{S}_{\text{spin}}}{dt} = I_p \frac{d\mathbf{\Omega}_{\mathrm{rot}}}{dt} + \mathbf{\Omega}_{\mathrm{rot}} \frac{dI_p}{dt} = \mathbf{T}_{\text{tide}}
+   \end{equation}
+   Substituting $I_p = C_p M_p R_p^2$ and $dI_p/dt = 2 C_p M_p R_p (dR_p/dt)$:
+   \begin{equation}
+   \frac{d\Omega_{\mathrm{rot}}}{dt} = \frac{T_{\text{tide}, z}}{C_p M_p R_p^2} - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
+   \end{equation}
+   Substituting tidal torque $T_{\text{tide}, z} = -\frac{3}{2} (k_2/Q) (G M_*^2 R_p^5 / a^6) (\Omega_{\mathrm{rot}} - n \cos\varepsilon)$ gives:
+   \begin{align}
+   \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\text{rot}} - n \cos\varepsilon) \nonumber \\
+   &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt}
+   \end{align}
+2. **Obliquity Rate Derivation ($d\varepsilon/dt$)**:
+   The perpendicular component of tidal torque $\mathbf{T}_{\text{tide}, \perp}$ damps the tilt angle $\varepsilon \equiv \arccos(\hat{\mathbf{S}} \cdot \hat{\mathbf{L}})$:
+   \begin{equation}
+   \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
+   \end{equation}
