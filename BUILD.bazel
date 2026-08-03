@@ -1,0 +1,48 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "thermal_evolution_lib",
+    srcs = [
+        "cpp/src/interior.cpp",
+    ],
+    hdrs = [
+        "cpp/include/atmosphere.hpp",
+        "cpp/include/constants.hpp",
+        "cpp/include/eos.hpp",
+        "cpp/include/heating.hpp",
+        "cpp/include/interior.hpp",
+        "cpp/include/mass_loss.hpp",
+        "cpp/include/multi_planet.hpp",
+        "cpp/include/orbital.hpp",
+    ],
+    includes = ["cpp/include"],
+    copts = ["-std=c++17", "-O3"],
+)
+
+cc_binary(
+    name = "jupiter_cooling",
+    srcs = ["cpp/examples/jupiter_cooling.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "coupled_orbital_spin",
+    srcs = ["cpp/examples/coupled_orbital_spin.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "eccentric_rlof",
+    srcs = ["cpp/examples/eccentric_rlof_scenario.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "unit_tests",
+    srcs = ["cpp/tests/unit_tests.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
