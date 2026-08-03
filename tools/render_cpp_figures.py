@@ -24,7 +24,79 @@ def main():
 
     print("Rendering publication-quality vector PDF figures from C++ simulation data...")
 
-    # 1. Coupled Orbital & Spin Evolution Plot
+    # 1. Jupiter Cooling Track Plot
+    if os.path.exists("outputs/jupiter_cooling_track.csv"):
+        df = read_csv_columns("outputs/jupiter_cooling_track.csv")
+        fig, axes = plt.subplots(2, 2, figsize=(8, 7), sharex=True)
+
+        axes[0, 0].plot(df['t_gyr'], df['R_p_Rjup'], color='#1f77b4', lw=2)
+        axes[0, 0].axhline(1.000, color='#d62728', ls='--', lw=1.2, label='Observed (1.000 R_Jup)')
+        axes[0, 0].set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+        axes[0, 0].set_ylim(0.8, 2.2)
+        axes[0, 0].grid(True, alpha=0.3)
+        axes[0, 0].legend(loc="upper right")
+
+        axes[0, 1].plot(df['t_gyr'], df['T_eff_K'], color='#ff7f0e', lw=2)
+        axes[0, 1].axhline(124.4, color='#d62728', ls='--', lw=1.2, label='Observed (124.4 K)')
+        axes[0, 1].set_ylabel(r"Effective Temp $T_{\mathrm{eff}}$ [K]")
+        axes[0, 1].grid(True, alpha=0.3)
+        axes[0, 1].legend(loc="upper right")
+
+        axes[1, 0].plot(df['t_gyr'], df['T_int_K'], color='#2ca02c', lw=2)
+        axes[1, 0].axhline(99.6, color='#d62728', ls='--', lw=1.2, label='Observed (99.6 K)')
+        axes[1, 0].set_xlabel("Age [Gyr]")
+        axes[1, 0].set_ylabel(r"Intrinsic Temp $T_{\mathrm{int}}$ [K]")
+        axes[1, 0].grid(True, alpha=0.3)
+        axes[1, 0].legend(loc="upper right")
+
+        axes[1, 1].plot(df['t_gyr'], df['L_int_Lsun'], color='#d62728', lw=2)
+        axes[1, 1].set_xlabel("Age [Gyr]")
+        axes[1, 1].set_ylabel(r"Intrinsic Luminosity $L_{\mathrm{int}}$ [$L_\odot$]")
+        axes[1, 1].set_yscale("log")
+        axes[1, 1].grid(True, alpha=0.3, which="both")
+
+        fig.suptitle("Jupiter 1D Thermal Cooling Track (1 Myr to 4.56 Gyr)", fontsize=11, fontweight="bold")
+        plt.tight_layout()
+        fig.savefig("outputs/jupiter_cooling_track.pdf", bbox_inches="tight")
+        fig.savefig("paper/figures/jupiter_cooling_track.pdf", bbox_inches="tight")
+        plt.close(fig)
+
+    # 2. Jupiter Internal Profile Plot
+    if os.path.exists("outputs/jupiter_internal_profile.csv"):
+        df = read_csv_columns("outputs/jupiter_internal_profile.csv")
+        fig, axes = plt.subplots(2, 2, figsize=(8, 7), sharex=True)
+
+        axes[0, 0].plot(df['r_ratio'], df['rho_gcm3'], color='#1f77b4', lw=2)
+        axes[0, 0].set_ylabel(r"Density $\rho$ [g/cm$^3$]")
+        axes[0, 0].set_xlim(0.0, 1.0)
+        axes[0, 0].grid(True, alpha=0.3)
+
+        axes[0, 1].plot(df['r_ratio'], df['P_bar'], color='#ff7f0e', lw=2)
+        axes[0, 1].set_ylabel(r"Pressure $P$ [bar]")
+        axes[0, 1].set_yscale("log")
+        axes[0, 1].set_xlim(0.0, 1.0)
+        axes[0, 1].grid(True, alpha=0.3, which="both")
+
+        axes[1, 0].plot(df['r_ratio'], df['T_K'], color='#2ca02c', lw=2)
+        axes[1, 0].set_xlabel(r"Normalized Radius $r / R_p$")
+        axes[1, 0].set_ylabel(r"Temperature $T$ [K]")
+        axes[1, 0].set_yscale("log")
+        axes[1, 0].set_xlim(0.0, 1.0)
+        axes[1, 0].grid(True, alpha=0.3, which="both")
+
+        axes[1, 1].plot(df['r_ratio'], df['nabla_ad'], color='#d62728', lw=2)
+        axes[1, 1].set_xlabel(r"Normalized Radius $r / R_p$")
+        axes[1, 1].set_ylabel(r"Adiabatic Gradient $\nabla_{\mathrm{ad}}$")
+        axes[1, 1].set_xlim(0.0, 1.0)
+        axes[1, 1].grid(True, alpha=0.3)
+
+        fig.suptitle("Jupiter Present-Day Hydrostatic Interior Profile (4.56 Gyr)", fontsize=11, fontweight="bold")
+        plt.tight_layout()
+        fig.savefig("outputs/jupiter_internal_profile.pdf", bbox_inches="tight")
+        fig.savefig("paper/figures/jupiter_internal_profile.pdf", bbox_inches="tight")
+        plt.close(fig)
+
+    # 3. Coupled Orbital & Spin Evolution Plot
     if os.path.exists("outputs/hot_jupiter_coupled_orbital_spin_evolution.csv"):
         df = read_csv_columns("outputs/hot_jupiter_coupled_orbital_spin_evolution.csv")
         fig, axes = plt.subplots(2, 2, figsize=(8, 7), sharex=True)
@@ -54,7 +126,7 @@ def main():
         fig.savefig("paper/figures/hot_jupiter_coupled_orbital_spin_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 2. Multi-Planet Evolution Plot
+    # 4. Multi-Planet Evolution Plot
     if os.path.exists("outputs/multi_planet_system_evolution.csv"):
         df = read_csv_columns("outputs/multi_planet_system_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -77,7 +149,7 @@ def main():
         fig.savefig("paper/figures/multi_planet_system_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 3. Obliquity Plot
+    # 5. Obliquity Plot
     if os.path.exists("outputs/obliquity_tilted_spin_evolution.csv"):
         df = read_csv_columns("outputs/obliquity_tilted_spin_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -98,7 +170,7 @@ def main():
         fig.savefig("paper/figures/obliquity_tilted_spin_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 4. Stellar Misaligned Orbit Plot
+    # 6. Stellar Misaligned Orbit Plot
     if os.path.exists("outputs/stellar_misaligned_orbit_evolution.csv"):
         df = read_csv_columns("outputs/stellar_misaligned_orbit_evolution.csv")
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
@@ -121,7 +193,7 @@ def main():
         fig.savefig("paper/figures/stellar_misaligned_orbit_evolution.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 5. Stellar Rotation Migration Plot
+    # 7. Stellar Rotation Migration Plot
     if os.path.exists("outputs/stellar_rotation_tidal_migration.csv"):
         df = read_csv_columns("outputs/stellar_rotation_tidal_migration.csv")
         fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -138,7 +210,7 @@ def main():
         fig.savefig("paper/figures/stellar_rotation_tidal_migration.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 6. Hot Jupiter KS Comparison Plot
+    # 8. Hot Jupiter KS Comparison Plot
     if os.path.exists("outputs/hot_jupiter_incremental_ks_comparison.csv"):
         df = read_csv_columns("outputs/hot_jupiter_incremental_ks_comparison.csv")
         fig, ax = plt.subplots(figsize=(7, 4.5))
