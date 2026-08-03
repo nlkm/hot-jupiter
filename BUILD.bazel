@@ -19,6 +19,13 @@ cc_library(
     copts = ["-std=c++17", "-O3"],
 )
 
+cc_test(
+    name = "unit_tests",
+    srcs = ["cpp/tests/unit_tests.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
 cc_binary(
     name = "jupiter_cooling",
     srcs = ["cpp/examples/jupiter_cooling.cpp"],
@@ -34,15 +41,43 @@ cc_binary(
 )
 
 cc_binary(
+    name = "multi_planet_benchmark",
+    srcs = ["cpp/examples/multi_planet_benchmark.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "obliquity_tilted_spin_scenario",
+    srcs = ["cpp/examples/obliquity_tilted_spin_scenario.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "stellar_misaligned_orbit_scenario",
+    srcs = ["cpp/examples/stellar_misaligned_orbit_scenario.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
+    name = "stellar_rotation_tides_scenario",
+    srcs = ["cpp/examples/stellar_rotation_tides_scenario.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_binary(
     name = "eccentric_rlof",
     srcs = ["cpp/examples/eccentric_rlof_scenario.cpp"],
     copts = ["-std=c++17", "-O3"],
     deps = [":thermal_evolution_lib"],
 )
 
-cc_test(
-    name = "unit_tests",
-    srcs = ["cpp/tests/unit_tests.cpp"],
+cc_binary(
+    name = "hot_jupiter_population_study",
+    srcs = ["cpp/examples/hot_jupiter_population_study.cpp"],
     copts = ["-std=c++17", "-O3"],
     deps = [":thermal_evolution_lib"],
 )
