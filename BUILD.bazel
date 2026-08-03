@@ -19,6 +19,63 @@ cc_library(
     copts = ["-std=c++17", "-O3"],
 )
 
+# Adjacent Module Unit Tests
+cc_test(
+    name = "constants_test",
+    srcs = ["cpp/include/constants_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "eos_test",
+    srcs = ["cpp/include/eos_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "interior_test",
+    srcs = ["cpp/src/interior_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "atmosphere_test",
+    srcs = ["cpp/include/atmosphere_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "heating_test",
+    srcs = ["cpp/include/heating_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "orbital_test",
+    srcs = ["cpp/include/orbital_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "mass_loss_test",
+    srcs = ["cpp/include/mass_loss_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
+cc_test(
+    name = "multi_planet_test",
+    srcs = ["cpp/include/multi_planet_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
+
 cc_test(
     name = "unit_tests",
     srcs = ["cpp/tests/unit_tests.cpp"],
@@ -26,6 +83,7 @@ cc_test(
     deps = [":thermal_evolution_lib"],
 )
 
+# Simulation Executables
 cc_binary(
     name = "jupiter_cooling",
     srcs = ["cpp/examples/jupiter_cooling.cpp"],
