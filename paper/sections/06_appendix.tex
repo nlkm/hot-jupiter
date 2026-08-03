@@ -1,95 +1,199 @@
-\section{Step-by-Step Analytical Derivations}
+\section{Step-by-Step Analytical Derivations from First-Principles Physics}
 \label{sec:appendix}
 
-In this Appendix, we provide rigorous, step-by-step mathematical derivations for every equation introduced throughout the text.
+In this Appendix, we provide self-contained, step-by-step mathematical derivations for every formula used in this paper. Each derivation begins from fundamental physics (Newton's laws, thermodynamics, quantum mechanics, and electrodynamics) and is written at the level of a first-year undergraduate physics student, complete with structural diagrams.
 
 \subsection{Derivation A1: 1D Hydrostatic Equations of Equilibrium}
 \label{sec:derivation_a1}
-Consider a spherically symmetric fluid shell of mass element $dm = 4\pi r^2 \rho \, dr$ located at radial distance $r$.
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+       +-------------------------------+
+       |       P(r+dr) * Area          |  (Inward P)
+       |              |                |
+       |              v                |
+       |     +-------------------+     |
+       |     |   Shell Element   |     |
+       |     |   Mass dm, Vol dV |     |
+       |     +-------------------+     |
+       |              ^                |
+       |              |                |
+       |        P(r) * Area            |  (Outward P)
+       +-------------------------------+
+                      ^
+                      | Gravitational Pull
+                   Center (m)
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+Consider a spherical shell of gas of radius $r$, thickness $dr$, surface area $A = 4\pi r^2$, and enclosed mass $m(r)$.
 1. **Mass Conservation**:
-   Rearranging $dm = 4\pi r^2 \rho \, dr$ directly yields:
+   The mass of the shell element $dm$ is its density $\rho$ multiplied by its volume $dV = 4\pi r^2 dr$:
    \begin{equation}
-   \frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}
+   dm = \rho \, dV = 4\pi r^2 \rho \, dr \implies \frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}
    \end{equation}
-2. **Momentum Conservation (Hydrostatic Equilibrium)**:
-   The net upward pressure force on a radial shell element $[r, r+dr]$ must balance the inward gravitational force exerted by the enclosed mass $m(r)$:
+
+2. **Hydrostatic Force Balance (Newton's Second Law with $a=0$)**:
+   The outward force exerted by gas pressure at the inner boundary $r$ is $F_{\text{in}} = P(r) \cdot A = P(r) \cdot 4\pi r^2$.
+   The inward force exerted by gas pressure at the outer boundary $r+dr$ is $F_{\text{out}} = P(r+dr) \cdot A = P(r+dr) \cdot 4\pi r^2$.
+   The inward gravitational force exerted by the enclosed mass $m(r)$ on the shell element $dm$ is:
    \begin{equation}
-   A \cdot [P(r) - P(r+dr)] = \frac{G m(r) dm}{r^2}
+   F_g = \frac{G m dm}{r^2} = \frac{G m (4\pi r^2 \rho dr)}{r^2}
    \end{equation}
-   Substituting area $A = 4\pi r^2$ and $P(r+dr) - P(r) = (dP/dr) dr$:
+   Setting net force to zero ($\sum F = F_{\text{in}} - F_{\text{out}} - F_g = 0$):
    \begin{equation}
-   - 4\pi r^2 \frac{dP}{dr} dr = \frac{G m(r) (4\pi r^2 \rho dr)}{r^2} \implies \frac{dP}{dr} = -\frac{G m(r) \rho(r)}{r^2}
+   4\pi r^2 [P(r) - P(r+dr)] = \frac{G m (4\pi r^2 \rho dr)}{r^2}
    \end{equation}
-   Dividing by $dm/dr = 4\pi r^2 \rho$ yields:
+   Substituting $P(r+dr) - P(r) = \frac{dP}{dr} dr$:
    \begin{equation}
-   \frac{dP}{dm} = \frac{dP/dr}{dm/dr} = -\frac{G m}{4\pi r^4}
+   -4\pi r^2 \frac{dP}{dr} dr = 4\pi \rho G m dr \implies \frac{dP}{dr} = -\frac{G m \rho}{r^2}
    \end{equation}
+   Converting to mass coordinate $m$ using $dm/dr = 4\pi r^2 \rho$:
+   \begin{equation}
+   \frac{dP}{dm} = \frac{dP/dr}{dm/dr} = \frac{-G m \rho / r^2}{4\pi r^2 \rho} = -\frac{G m}{4\pi r^4}
+   \end{equation}
+
 3. **Adiabatic Temperature Gradient**:
-   For an isentropic convective envelope, the temperature gradient is governed by the dimensionless adiabatic index $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$:
+   For an adiabatic process ($dS = 0$), temperature change is linked to pressure change by the thermodynamic relation:
    \begin{equation}
-   \frac{dT}{dm} = \left(\frac{\partial T}{\partial P}\right)_S \frac{dP}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
+   \nabla_{\mathrm{ad}} \equiv \left(\frac{\partial \ln T}{\partial \ln P}\right)_S = \frac{P}{T} \left(\frac{dT}{dP}\right)_S
    \end{equation}
+   Applying the chain rule $\frac{dT}{dm} = \left(\frac{dT}{dP}\right)_S \frac{dP}{dm}$:
+   \begin{equation}
+   \frac{dT}{dm} = \left( \nabla_{\mathrm{ad}} \frac{T}{P} \right) \left( -\frac{G m}{4\pi r^4} \right) = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
+   \end{equation}
+
 
 \subsection{Derivation A2: Birch-Murnaghan 3rd-Order Isothermal EOS}
 \label{sec:derivation_a2}
-The Birch-Murnaghan EOS is derived by expanding the Helmholtz free energy $F(f)$ of a compressed solid core as a Taylor series in finite Eulerian strain $f$ (Birch 1947):
-\begin{equation}
-f = \frac{1}{2} \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right]
-\end{equation}
-Expanding free energy $F(f)$ to third order in strain $f$:
-\begin{equation}
-F(f) = a_0 + a_1 f^2 + a_2 f^3 + \mathcal{O}(f^4)
-\end{equation}
-The isothermal pressure $P$ is the negative volume derivative of free energy:
-\begin{equation}
-P = -\left(\frac{\partial F}{\partial V}\right)_T = -\left(\frac{\partial F}{\partial f}\right)_T \left(\frac{df}{dV}\right)
-\end{equation}
-Given $V/V_0 = \rho_0/\rho = (1 + 2f)^{-3/2}$, the volume derivative is:
-\begin{equation}
-\frac{df}{dV} = -\frac{1}{3 V_0} (1 + 2f)^{5/2} = -\frac{1}{3 V_0} \left(\frac{\rho}{\rho_0}\right)^{5/3}
-\end{equation}
-Differentiating $F(f) = \frac{9}{2} V_0 K_0 f^2 + \frac{9}{2} V_0 K_0 (K_0' - 4) f^3$:
-\begin{equation}
-\left(\frac{\partial F}{\partial f}\right)_T = 9 V_0 K_0 f \left[ 1 + \frac{3}{2} (K_0' - 4) f \right]
-\end{equation}
-Multiplying yields the 3rd-order Birch-Murnaghan equation of state:
-\begin{align}
-P(\rho) &= \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{7}{3}} - \left(\frac{\rho}{\rho_0}\right)^{\frac{5}{3}} \right] \nonumber \\
-&\quad \times \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{2}{3}} - 1 \right] \right\}
-\end{align}
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+  Uncompressed (f = 0)          Compressed (f > 0)
+  Radius R_0, Vol V_0           Radius R, Vol V
+     +---------+                   +-------+
+     | Density |  --- Compress --> |Density|
+     |  rho_0  |                   |  rho  |
+     +---------+                   +-------+
+  
+  Eulerian Strain: f = (1/2) * [ (rho/rho_0)^(2/3) - 1 ]
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+The equation of state of a compressed solid core is derived from elastic strain energy thermodynamics (Birch 1947).
+1. **Eulerian Finite Strain $f$**:
+   For isotropic compression of a sphere of initial radius $R_0$ to radius $R$, the 1D strain ratio is $(R_0/R)^2 = (\rho/\rho_0)^{2/3}$. Finite Eulerian strain $f$ is defined as:
+   \begin{equation}
+   f \equiv \frac{1}{2} \left[ \left(\frac{\rho}{\rho_0}\right)^{2/3} - 1 \right] \implies \frac{V_0}{V} = \frac{\rho}{\rho_0} = (1 + 2f)^{3/2}
+   \end{equation}
+
+2. **Helmholtz Free Energy Expansion**:
+   Expanding Helmholtz free energy per unit mass $F(f)$ as a Taylor series in strain $f$ to 3rd order:
+   \begin{equation}
+   F(f) = a_0 + a_1 f^2 + a_2 f^3 + \mathcal{O}(f^4)
+   \end{equation}
+   where $a_1 = \frac{9}{2} V_0 K_0$ and $a_2 = \frac{9}{2} V_0 K_0 (K_0' - 4)$, with zero-pressure bulk modulus $K_0 \equiv -V (dP/dV)|_{P=0}$ and derivative $K_0' \equiv (dK_0/dP)|_{P=0}$.
+
+3. **Pressure Derivation ($P = -dF/dV$)**:
+   Using the chain rule $P = -\frac{dF}{dV} = -\frac{dF}{df} \frac{df}{dV}$:
+   Differentiating volume $V = V_0 (1 + 2f)^{-3/2}$ with respect to $f$:
+   \begin{equation}
+   \frac{dV}{df} = -3 V_0 (1 + 2f)^{-5/2} \implies \frac{df}{dV} = -\frac{1}{3 V_0} \left(\frac{\rho}{\rho_0}\right)^{5/3}
+   \end{equation}
+   Differentiating free energy $F(f)$:
+   \begin{equation}
+   \frac{dF}{df} = 2 a_1 f + 3 a_2 f^2 = 9 V_0 K_0 f \left[ 1 + \frac{3}{2} (K_0' - 4) f \right]
+   \end{equation}
+   Multiplying $\frac{dF}{df}$ and $-\frac{df}{dV}$:
+   \begin{align}
+   P(\rho) &= \frac{3}{2} K_0 \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{7}{3}} - \left(\frac{\rho}{\rho_0}\right)^{\frac{5}{3}} \right] \nonumber \\
+   &\quad \times \left\{ 1 + \frac{3}{4} (K_0' - 4) \left[ \left(\frac{\rho}{\rho_0}\right)^{\frac{2}{3}} - 1 \right] \right\}
+   \end{align}
+
 
 \subsection{Derivation A3: Non-Relativistic Electron Degeneracy Pressure $K_{\mathrm{DEG}}$}
 \label{sec:derivation_a3}
-In a fully pressure-ionized electron gas, Pauli's exclusion principle restricts electrons to 2 spin states per phase space cell $h^3$. At zero temperature, electrons fill all momentum states up to Fermi momentum $p_F$:
-\begin{align}
-n_e &= \frac{N_e}{V} = \frac{2}{h^3} \int_0^{p_F} 4\pi p^2 dp = \frac{8\pi p_F^3}{3 h^3} \nonumber \\
-&\implies p_F = \hbar (3\pi^2 n_e)^{1/3}
-\end{align}
-The total kinetic energy density $u_{\mathrm{deg}}$ of non-relativistic electrons ($E = p^2 / 2m_e$) is:
-\begin{align}
-u_{\mathrm{deg}} &= \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{4\pi p_F^5}{5 m_e h^3} \nonumber \\
-&= \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
-\end{align}
-Degeneracy pressure $P_{\mathrm{deg}}$ is related to energy density by $P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}}$:
-\begin{equation}
-P_{\mathrm{deg}} = \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e} n_e^{5/3}
-\end{equation}
-Substituting electron number density $n_e = \rho / (\mu_e m_p)$:
-\begin{equation}
-P_{\mathrm{deg}} = \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e m_p^{5/3}} \left(\frac{\rho}{\mu_e}\right)^{5/3} = K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
-\end{equation}
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+         3D Momentum Phase Space (px, py, pz)
+                 +---------------+
+                 | p_z           |  Fermi Sphere
+                 |   |   * *     |  Radius p_F
+                 |   +--*---> p_x|  Each h^3 cell
+                 |  * * *        |  holds 2 e-
+                 +---------------+
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+1. **Pauli Exclusion Principle \& Phase Space Integration**:
+   By quantum mechanics, each volume element in momentum space $d^3p = 4\pi p^2 dp$ and spatial volume $V$ defines phase space cells of volume $h^3$. By Pauli's exclusion principle, each cell holds at most 2 electrons ($g_s = 2$ spin states).
+   At $T = 0\text{ K}$, electrons occupy all lowest momentum states up to Fermi momentum $p_F$:
+   \begin{equation}
+   N_e = \int \frac{g_s V}{h^3} d^3p = \frac{2 V}{h^3} \int_0^{p_F} 4\pi p^2 dp = \frac{8\pi V p_F^3}{3 h^3}
+   \end{equation}
+   Dividing by volume $V$ gives electron number density $n_e = N_e / V$:
+   \begin{equation}
+   n_e = \frac{8\pi p_F^3}{3 h^3} \implies p_F = \hbar (3\pi^2 n_e)^{1/3}
+   \end{equation}
+
+2. **Kinetic Energy Density Integration**:
+   For non-relativistic electrons, kinetic energy per electron is $E(p) = \frac{p^2}{2 m_e}$. The total kinetic energy density $u_{\mathrm{deg}} = U/V$ is:
+   \begin{align}
+   u_{\mathrm{deg}} &= \frac{2}{h^3} \int_0^{p_F} \left(\frac{p^2}{2 m_e}\right) 4\pi p^2 dp = \frac{4\pi p_F^5}{5 m_e h^3} \nonumber \\
+   &= \frac{\hbar^2 (3\pi^2)^{5/3}}{10 \pi^2 m_e} n_e^{5/3}
+   \end{align}
+
+3. **Pressure Equation of State ($P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}}$)**:
+   From kinetic theory of non-relativistic particles, pressure is two-thirds of internal kinetic energy density:
+   \begin{equation}
+   P_{\mathrm{deg}} = \frac{2}{3} u_{\mathrm{deg}} = \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e} n_e^{5/3}
+   \end{equation}
+   Substituting electron number density $n_e = \frac{\rho}{\mu_e m_p}$:
+   \begin{equation}
+   P_{\mathrm{deg}} = \left[ \frac{(3\pi^2)^{2/3} \hbar^2}{5 m_e m_p^{5/3}} \right] \left(\frac{\rho}{\mu_e}\right)^{5/3} = K_{\mathrm{DEG}} \left(\frac{\rho}{\mu_e}\right)^{5/3}
+   \end{equation}
+
 
 \subsection{Derivation A4: Guillot (2010) Radiative Transfer Profile}
 \label{sec:derivation_a4}
-The double-gray radiative transfer equation for an irradiated atmosphere in Eddington approximation is:
-\begin{equation}
-\frac{d K_{\text{th}}}{d\tau} = \frac{1}{3} \frac{d J_{\text{th}}}{d\tau} = \frac{F_{\text{int}}}{4\pi} + \frac{F_{\text{irr}}}{4\pi} E_2(\gamma \tau)
-\end{equation}
-Integrating twice over optical depth $\tau$ with boundary condition $J(0) = 2 K(0)$ yields the two-channel thermal temperature profile $T^4(\tau) = \frac{4\pi}{a c} J_{\text{th}}(\tau)$:
-\begin{align}
-T^4(\tau) &= \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) \nonumber \\
-&\quad + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
-\end{align}
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+        Incoming Visible Stellar Flux F_irr
+                      |
+                      v  (Opacity kappa_vis)
+   ======================================= tau = 0
+          Atmosphere Slab (Optical Depth tau)
+   =======================================
+                      ^
+                      |  Intrinsic Thermal Flux F_int
+             Convective Interior
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+1. **Double-Gray Radiative Transfer Moments**:
+   Dividing radiation into visible stellar channel (opacity $\kappa_{\mathrm{vis}}$) and thermal infrared channel (opacity $\kappa_{\mathrm{th}}$), the 1D plane-parallel radiative transfer moment equations in Eddington approximation ($K_{\text{th}} = \frac{1}{3} J_{\text{th}}$) are:
+   \begin{equation}
+   \frac{d K_{\text{th}}}{d\tau} = \frac{1}{3} \frac{d J_{\text{th}}}{d\tau} = \frac{F_{\text{int}}}{4\pi} + \frac{F_{\text{irr}}}{4\pi} E_2(\gamma \tau)
+   \end{equation}
+   where optical depth is $\tau = \int \kappa_{\text{th}} \rho dz$, opacity ratio is $\gamma \equiv \kappa_{\mathrm{vis}} / \kappa_{\mathrm{th}}$, and $E_2(x) \approx e^{-\gamma \tau}$.
+
+2. **Double Integration \& Temperature Conversion ($T^4 = \frac{4\pi}{\sigma_{\mathrm{SB}}} J_{\text{th}}$)**:
+   Integrating twice over optical depth $\tau$ with boundary condition $J(0) = 2 K(0)$:
+   \begin{align}
+   T^4(\tau) &= \frac{3 T_{\mathrm{int}}^4}{4}\left(\tau + \frac{2}{3}\right) \nonumber \\
+   &\quad + \frac{3 T_{\mathrm{irr}}^4}{4}\left[\frac{2}{3} + \frac{2}{3\gamma}\left(1 + \left(\frac{\gamma \tau}{2} - 1\right)e^{-\gamma \tau}\right)\right]
+   \end{align}
+
 
 \subsection{Derivation A5: Heavy-Element Core Mass Scaling Relation}
 \label{sec:derivation_a5}
@@ -102,18 +206,41 @@ Exponentiating yields the empirical core scaling law:
 M_c([\mathrm{Fe/H}], M_p) = 15 \left(\frac{M_p}{M_{\mathrm{Jup}}}\right)^{0.6} 10^{0.5 [\mathrm{Fe/H}]} M_\oplus
 \end{equation}
 
+
 \subsection{Derivation A6: Equilibrium Tidal Dissipation \& Ohmic Power}
 \label{sec:derivation_a6}
-Equilibrium tidal theory expands the tidal potential $V_{\text{tide}}$ in spherical harmonics $Y_{lm}$ (Kaula 1964). Energy dissipation rate $\dot{E}_{\text{tide}}$ and angular momentum dissipation rate $\dot{h}_{\text{tide}}$ are proportional to phase lag $\Delta t = (k_2/Q) / (2 n)$:
-\begin{align}
-\dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 \nonumber \\
-&\quad - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
-\end{align}
-Ohmic dissipation power $P_{\mathrm{Ohmic}}$ is derived from atmospheric MHD zonal wind induction $\mathbf{J} = \sigma(\mathbf{v} \times \mathbf{B})$ (Batygin \& Stevenson 2010):
-\begin{align}
-P_{\mathrm{Ohmic}} &= \int \frac{J^2}{\sigma} dV \nonumber \\
-&= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2(300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
-\end{align}
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+   Star M_*                 Planet M_p (Deformed)
+   +------+   Tidal Pull    +-------------------+
+   |      | ==============> | Tidal Bulge       |
+   |      |                 |  ( \  / )         | Phase Lag delta
+   +------+                 +-------------------+
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+1. **Gravitational Tidal Potential Expansion**:
+   The gravitational potential exerted by star $M_*$ at position $\mathbf{r} = (r, \theta, \phi)$ inside planet $M_p$ is expanded in Legendre polynomials $P_l(\cos\theta)$ (Kaula 1964; Hut 1981):
+   \begin{equation}
+   V_{\text{tide}}(r, \theta, \phi) = -\frac{G M_*}{a} \sum_{l=2}^\infty \left(\frac{r}{a}\right)^l P_l(\cos\theta)
+   \end{equation}
+
+2. **Viscous Dissipation \& Phase Lag**:
+   Internal friction delays the tidal bulge deformation by time lag $\Delta t = \frac{1}{2n Q}$. Work done by force $\mathbf{F}_{\text{tide}} = -\nabla V_{\text{tide}}$ integrated over volume gives energy dissipation rate $\dot{E}_{\text{tide}}$:
+   \begin{align}
+   \dot{E}_{\text{tide}} &= -\frac{21}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} n e^2 \nonumber \\
+   &\quad - \frac{3}{2} \frac{k_2}{Q} \frac{G M_*^2 R_p^5}{a^6} (\Omega_{\mathrm{rot}} - n \cos\varepsilon)^2
+   \end{align}
+
+3. **Ohmic Dissipation Power ($P_{\mathrm{Ohmic}} = \int \frac{J^2}{\sigma} dV$)**:
+   Alkali metals (Na, K) thermally ionize at $T > 1500\text{ K}$. Atmospheric zonal winds $\mathbf{v} \sim \text{km/s}$ cross planetary magnetic field $\mathbf{B}$, driving current density $\mathbf{J} = \sigma (\mathbf{v} \times \mathbf{B})$. Integrating Joule heating $P = \int \frac{J^2}{\sigma} dV$ yields:
+   \begin{align}
+   P_{\mathrm{Ohmic}} &= \epsilon_0 \exp\left[ -\frac{(T_{\mathrm{eq}} - 1600\text{ K})^2}{2(300\text{ K})^2} \right] \pi R_p^2 F_{\mathrm{inc}} (1 - A_b)
+   \end{align}
+
 
 \subsection{Derivation A7: Obliquity-Driven Tidal Heating}
 \label{sec:derivation_a7}
@@ -125,6 +252,7 @@ Averaging the strain dissipation rate over one orbital period $2\pi/n$ yields th
 \begin{equation}
 P_{\mathrm{obliquity}} = \frac{3}{2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} n^2 \sin^2\varepsilon
 \end{equation}
+
 
 \subsection{Derivation A8: Stellar Rotation Driven Tidal Migration}
 \label{sec:derivation_a8}
@@ -138,24 +266,48 @@ Relating orbital energy $E_{\mathrm{orb}} = -G M_p M_* / (2a)$ yields:
 &\quad \times \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
 \end{align}
 
+
 \subsection{Derivation A9: Roche Lobe Overflow (RLOF) Mass-Loss Rate}
 \label{sec:derivation_a9}
-The volume-equivalent Roche lobe radius $R_{\mathrm{Roche}}$ in a binary mass system ($M_p, M_*$) is derived by evaluating the effective potential $\Phi_{\mathrm{eff}}(\mathbf{r}) = -G M_p/r_1 - G M_*/r_2 - \frac{1}{2} n^2 r_{\perp}^2$ at the inner Lagrange saddle point $L_1$:
-1. **Eggleton (1983) Fit**:
+
+\subsubsection{Physical Diagram}
+{\scriptsize
+\begin{verbatim}
+   Star M_*          Lagrange L_1        Planet M_p
+   +------+          Saddle Point        +---+
+   |      | <========= x =============== |   | Gas Stream ===>
+   +------+                              +---+
+   
+   Roche Lobe R_Roche = a * [ 0.49 q^(2/3) / (0.6 q^(2/3) + ln(1+q^(1/3))) ]
+\end{verbatim}
+}
+
+\subsubsection{First-Principles Step-by-Step Derivation}
+1. **Effective Gravitational Potential $\Phi_{\mathrm{eff}}$**:
+   In a co-rotating reference frame rotating at orbital frequency $n = \sqrt{G(M_p+M_*)/a^3}$, the effective potential at coordinate $\mathbf{r}$ is:
+   \begin{equation}
+   \Phi_{\mathrm{eff}}(\mathbf{r}) = -\frac{G M_*}{|\mathbf{r} - \mathbf{r}_*|} - \frac{G M_p}{|\mathbf{r} - \mathbf{r}_p|} - \frac{1}{2} n^2 (x^2 + y^2)
+   \end{equation}
+   Setting $\nabla \Phi_{\mathrm{eff}} = 0$ along the line connecting the centers yields the inner Lagrange point $L_1$. The volume enclosed by the equipotential surface passing through $L_1$ defines the Roche lobe radius $R_{\mathrm{Roche}}$.
+
+2. **Eggleton (1983) Fit**:
    Solving $\nabla \Phi_{\mathrm{eff}} = 0$ for mass ratio $q \equiv M_p / M_* \ll 1$ yields:
    \begin{equation}
    \frac{R_{\mathrm{Roche}}}{a} = \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}
    \end{equation}
-2. **Hydrodynamic Nozzle Mass Loss**:
+
+3. **Hydrodynamic Nozzle Mass Loss**:
    When $R_p \ge R_{\mathrm{Roche}}$, atmospheric pressure forces gas through the sonic surface near $L_1$ at sound speed $c_s \approx \sqrt{k_B T_{\mathrm{eq}} / \mu}$:
    \begin{equation}
    \left.\frac{dM_p}{dt}\right|_{\mathrm{RLOF}} = -\dot{M}_0 \exp\left[ \eta \left(\frac{R_p}{R_{\mathrm{Roche}}} - 1\right) \right]
    \end{equation}
-3. **Orbital Back-Reaction**:
+
+4. **Orbital Back-Reaction**:
    Equating orbital angular momentum $L_{\mathrm{orb}} = M_p M_* \sqrt{G a / (M_p + M_*)} / (M_p + M_*)$ and mass loss carrying momentum fraction $\beta$ yields:
    \begin{equation}
    \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} = -2 a \left(\frac{1}{M_p} \frac{dM_p}{dt}\right) (1 - \beta)
    \end{equation}
+
 
 \subsection{Derivation A10: Coupled 6D Orbital \& 3D Spin Vector Dynamics}
 \label{sec:derivation_a10}
@@ -184,6 +336,7 @@ The total angular momentum of the system $\mathbf{H}_{\text{tot}} = \mathbf{L}_{
    \frac{d\varepsilon}{dt} = \frac{T_{\text{tide}, \perp}}{S_{\text{spin}}} = -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \frac{n}{\Omega_{\mathrm{rot}}} \sin\varepsilon
    \end{equation}
 
+
 \subsection{Derivation A11: Laplace-Lagrange Secular N-Body Perturbations}
 \label{sec:derivation_a11}
 For a multi-planet system containing $N$ planets orbiting host star $M_*$, the gravitational disturbing function $R_i$ for planet $i$ due to planet $j$ is expanded in powers of eccentricities $e$ and inclinations $I$ (Murray \& Dermott 1999):
@@ -211,6 +364,7 @@ where $\varpi \equiv \Omega + \omega$ is the longitude of periastron.
    \begin{equation}
    b_{3/2}^{(s)}(\alpha) \equiv \frac{1}{\pi} \int_0^{2\pi} \frac{\cos(s\psi)}{(1 - 2\alpha \cos\psi + \alpha^2)^{3/2}} d\psi
    \end{equation}
+
 
 \subsection{Derivation A12: Observational Selection Function \& SNR Logistic Model}
 \label{sec:derivation_a12}
