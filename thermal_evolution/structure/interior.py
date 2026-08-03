@@ -85,7 +85,7 @@ class InteriorSolver:
             dm3, dP3, dT3, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm2, P + 0.5 * dr * dP2, T + 0.5 * dr * dT2)
             dm4, dP4, dT4, _, _ = derivatives(r + dr, m + dr * dm3, P + dr * dP3, T + dr * dT3)
 
-            m_arr[i + 1] = max(0.0, m + (dr / 6.0) * (dm1 + 2 * dm2 + 2 * dm3 + dm4))
+            m_arr[i + 1] = m + (dr / 6.0) * (dm1 + 2 * dm2 + 2 * dm3 + dm4)
             P_arr[i + 1] = max(P_surf, P + (dr / 6.0) * (dP1 + 2 * dP2 + 2 * dP3 + dP4))
             T_arr[i + 1] = max(T_surf, T + (dr / 6.0) * (dT1 + 2 * dT2 + 2 * dT3 + dT4))
 
