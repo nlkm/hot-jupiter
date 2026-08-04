@@ -267,27 +267,32 @@ def main():
         fig.savefig("paper/figures/photoevaporation_mass_loss.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 11. Core Mass vs Metallicity Correlation Plot
+    # 11. Core Mass Ratio (Mc / Mp) vs Metallicity Correlation Plot
     if os.path.exists("outputs/estimated_core_masses_342_planets.csv"):
         df = read_csv_columns("outputs/estimated_core_masses_342_planets.csv")
         fig, ax = plt.subplots(figsize=(7, 5))
         
-        ax.scatter(df['Fe_H'], df['M_c_est_Mearth'], alpha=0.6, color='#1f77b4', edgecolors='none', s=35, label=r'Inverted Core Mass $M_c$ ($N=342$)')
+        # Heavy-element mass ratio Z_p = M_c / M_p (converting M_c in M_earth and M_p in M_jup, 1 M_jup = 317.8 M_earth)
+        mc_earth = df['M_c_est_Mearth']
+        mp_jup = df['M_p_Mjup']
+        ratio_Zp = [mc / (mp * 317.8) for mc, mp in zip(mc_earth, mp_jup)]
         
-        # Smooth sorted 1D grid for Thorngren et al. theoretical line
+        ax.scatter(df['Fe_H'], ratio_Zp, alpha=0.6, color='#1f77b4', edgecolors='none', s=35, label=r'Inverted Heavy-Element Ratio $Z_p = M_c / M_p$ ($N=342$)')
+        
+        # Thorngren et al. (2016) theoretical curve for M_p = 1.0 M_Jup
         min_feh, max_feh = min(df['Fe_H']), max(df['Fe_H'])
         feh_grid = [min_feh + i * (max_feh - min_feh) / 200.0 for i in range(201)]
-        mc_thorngren_grid = [15.0 * (10.0 ** (0.50 * x)) for x in feh_grid]
+        ratio_thorngren_grid = [(15.0 / 317.8) * (10.0 ** (0.50 * x)) for x in feh_grid]
         
-        ax.plot(feh_grid, mc_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren et al. (2016) Fit: $M_c \propto 10^{0.50 [\mathrm{Fe/H}]}$')
+        ax.plot(feh_grid, ratio_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren et al. (2016) Trend ($M_p=1.0\,M_{\mathrm{J}}$): $Z_p \propto 10^{0.50 [\mathrm{Fe/H}]}$')
         
         ax.set_xlabel(r"Host Star Metallicity $[\mathrm{Fe/H}]$ [dex]")
-        ax.set_ylabel(r"Estimated Heavy-Element Core Mass $M_c$ [$M_\oplus$]")
+        ax.set_ylabel(r"Heavy-Element Core Mass Ratio $Z_p = M_c / M_p$")
         ax.set_yscale("log")
         ax.grid(True, alpha=0.3, which="both")
         ax.legend(loc="upper left")
         
-        fig.suptitle("Core Mass Inversion vs Host Star Metallicity Correlation ($N = 342$)", fontsize=11, fontweight="bold")
+        fig.suptitle("Planetary Heavy-Element Mass Fraction $M_c / M_p$ vs Metallicity ($N = 342$)", fontsize=11, fontweight="bold")
         plt.tight_layout()
         fig.savefig("outputs/core_mass_metallicity_correlation.pdf", bbox_inches="tight")
         fig.savefig("paper/figures/core_mass_metallicity_correlation.pdf", bbox_inches="tight")
