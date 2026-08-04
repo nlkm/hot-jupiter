@@ -267,32 +267,42 @@ def main():
         fig.savefig("paper/figures/photoevaporation_mass_loss.pdf", bbox_inches="tight")
         plt.close(fig)
 
-    # 11. Core Mass Ratio (Mc / Mp) vs Metallicity Correlation Plot
+    # 11. Dual-Panel Core Mass & Mass Ratio vs Metallicity Correlation Plot
     if os.path.exists("outputs/estimated_core_masses_342_planets.csv"):
         df = read_csv_columns("outputs/estimated_core_masses_342_planets.csv")
-        fig, ax = plt.subplots(figsize=(7, 5))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.8))
         
-        # Heavy-element mass ratio Z_p = M_c / M_p (converting M_c in M_earth and M_p in M_jup, 1 M_jup = 317.8 M_earth)
         mc_earth = df['M_c_est_Mearth']
         mp_jup = df['M_p_Mjup']
         ratio_Zp = [mc / (mp * 317.8) for mc, mp in zip(mc_earth, mp_jup)]
         
-        ax.scatter(df['Fe_H'], ratio_Zp, alpha=0.6, color='#1f77b4', edgecolors='none', s=35, label=r'Inverted Heavy-Element Ratio $Z_p = M_c / M_p$ ($N=342$)')
-        
-        # Thorngren et al. (2016) theoretical curve for M_p = 1.0 M_Jup
+        # Grid for smooth theoretical curves
         min_feh, max_feh = min(df['Fe_H']), max(df['Fe_H'])
         feh_grid = [min_feh + i * (max_feh - min_feh) / 200.0 for i in range(201)]
+        
+        # Left Panel: Heavy-Element Core Mass M_c [M_earth]
+        ax1.scatter(df['Fe_H'], mc_earth, alpha=0.6, color='#1f77b4', edgecolors='none', s=30, label=r'Inverted $M_c$ ($N=342$)')
+        mc_thorngren_grid = [15.0 * (10.0 ** (0.50 * x)) for x in feh_grid]
+        ax1.plot(feh_grid, mc_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren (2016): $M_c \propto 10^{0.50 [\mathrm{Fe/H}]}$')
+        ax1.set_xlabel(r"Host Star Metallicity $[\mathrm{Fe/H}]$ [dex]")
+        ax1.set_ylabel(r"Heavy-Element Core Mass $M_c$ [$M_\oplus$]")
+        ax1.set_yscale("log")
+        ax1.grid(True, alpha=0.3, which="both")
+        ax1.legend(loc="upper left", fontsize=8.5)
+        ax1.set_title("(a) Heavy-Element Mass $M_c$ [$M_\oplus$]", fontsize=10)
+
+        # Right Panel: Heavy-Element Mass Ratio Z_p = M_c / M_p
+        ax2.scatter(df['Fe_H'], ratio_Zp, alpha=0.6, color='#2ca02c', edgecolors='none', s=30, label=r'Inverted Ratio $Z_p = M_c / M_p$ ($N=342$)')
         ratio_thorngren_grid = [(15.0 / 317.8) * (10.0 ** (0.50 * x)) for x in feh_grid]
+        ax2.plot(feh_grid, ratio_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren (2016): $Z_p \propto 10^{0.50 [\mathrm{Fe/H}]}$')
+        ax2.set_xlabel(r"Host Star Metallicity $[\mathrm{Fe/H}]$ [dex]")
+        ax2.set_ylabel(r"Heavy-Element Core Mass Ratio $Z_p = M_c / M_p$")
+        ax2.set_yscale("log")
+        ax2.grid(True, alpha=0.3, which="both")
+        ax2.legend(loc="upper left", fontsize=8.5)
+        ax2.set_title(r"(b) Heavy-Element Ratio $Z_p = M_c / M_p$", fontsize=10)
         
-        ax.plot(feh_grid, ratio_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren et al. (2016) Trend ($M_p=1.0\,M_{\mathrm{J}}$): $Z_p \propto 10^{0.50 [\mathrm{Fe/H}]}$')
-        
-        ax.set_xlabel(r"Host Star Metallicity $[\mathrm{Fe/H}]$ [dex]")
-        ax.set_ylabel(r"Heavy-Element Core Mass Ratio $Z_p = M_c / M_p$")
-        ax.set_yscale("log")
-        ax.grid(True, alpha=0.3, which="both")
-        ax.legend(loc="upper left")
-        
-        fig.suptitle("Planetary Heavy-Element Mass Fraction $M_c / M_p$ vs Metallicity ($N = 342$)", fontsize=11, fontweight="bold")
+        fig.suptitle("Inverted Heavy-Element Core Mass and Mass Ratio vs Metallicity ($N = 342$)", fontsize=11, fontweight="bold")
         plt.tight_layout()
         fig.savefig("outputs/core_mass_metallicity_correlation.pdf", bbox_inches="tight")
         fig.savefig("paper/figures/core_mass_metallicity_correlation.pdf", bbox_inches="tight")
