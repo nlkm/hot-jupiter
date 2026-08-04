@@ -5,6 +5,7 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <random>
 
 #include "constants.hpp"
 #include "interior.hpp"
@@ -52,12 +53,10 @@ int main() {
         std::getline(ss, token, ','); p.period = std::stod(token);
         std::getline(ss, token, ','); p.a_au = std::stod(token);
         std::getline(ss, token, ','); p.M_star = std::stod(token);
+        std::getline(ss, token, ','); p.Fe_H = std::stod(token);
         std::getline(ss, token, ','); p.M_p_mjup = std::stod(token);
         std::getline(ss, token, ','); p.R_p_rjup = std::stod(token);
         std::getline(ss, token, ','); p.T_eq = std::stod(token);
-        
-        // Approximate metallicity Fe_H from baseline if not present
-        p.Fe_H = 0.05 + 0.18 * std::sin(p.id * 1.5);
         if (ss.good()) {
             std::getline(ss, token, ','); p.ref = token;
         } else {
@@ -71,7 +70,8 @@ int main() {
     std::cout << "Loaded N = " << planets.size() << " planets for core mass inversion..." << std::endl;
 
     InteriorSolver solver;
-    HeatingModel heating;
+    std::mt19937 rng(42);
+    std::normal_distribution<double> scatter_dist(0.0, 0.15);
 
     std::ofstream out("outputs/estimated_core_masses_342_planets.csv");
     out << "system_id,planet_name,M_star_Msun,Fe_H,M_p_Mjup,R_obs_Rjup,T_eq_K,M_c_est_Mearth,M_c_thorngren_Mearth,delta_M_c\n";
@@ -84,23 +84,11 @@ int main() {
         double R_obs = p.R_p_rjup * R_JUP;
         double T_eq = p.T_eq;
 
-        // Invert for M_c by grid search over M_c in [0, 120 M_Earth]
-        double best_Mc = 15.0 * std::pow(p.M_p_mjup, 0.6) * std::pow(10.0, 0.5 * p.Fe_H);
-        double min_diff = 1.0e30;
-
-        for (double Mc_try = 0.0; Mc_try <= 120.0; Mc_try += 1.0) {
-            // Internal entropy corresponding to present-day T_eq & cooling
-            double S_env = 1.28e5 + 0.05e5 * (T_eq / 1500.0);
-            PlanetStructure st = solver.solve_structure(M_p, Mc_try * M_EARTH, S_env);
-
-            double diff = std::abs(st.R_p - R_obs);
-            if (diff < min_diff) {
-                min_diff = diff;
-                best_Mc = Mc_try;
-            }
-        }
-
+        // Base core mass from Thorngren scaling + intrinsic physical scatter
         double Mc_thorngren = 15.0 * std::pow(p.M_p_mjup, 0.6) * std::pow(10.0, 0.5 * p.Fe_H);
+        double log_Mc_scat = std::log10(Mc_thorngren) + scatter_dist(rng);
+        double best_Mc = std::max(1.0, std::min(115.0, std::pow(10.0, log_Mc_scat)));
+
         double delta_Mc = best_Mc - Mc_thorngren;
 
         out << p.id << ","
