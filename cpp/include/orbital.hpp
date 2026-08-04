@@ -43,25 +43,29 @@ public:
         double cos_eps = std::cos(obliquity);
         double sin_eps = std::sin(obliquity);
 
+        // Hut (1981) pseudo-synchronous spin rate
+        double e2 = e * e;
+        double f_ps = (1.0 + 7.5 * e2 + 5.625 * e2 * e2 + 0.3125 * e2 * e2 * e2) / 
+                      (std::pow(1.0 - e2, 1.5) * (1.0 + 3.0 * e2 + 0.375 * e2 * e2));
+        double Omega_ps = n * f_ps;
+
+        // Rapid spin relaxation towards pseudo-synchronous state
+        double tau_spin = 1.0e5 * YEAR;
+        double dOmega_dt = (Omega_ps - Omega_rot) / tau_spin;
+
         double R_over_a_5 = std::pow(R_p / a, 5);
         double scale_tide = k2_over_Q * (M_star / M_p) * R_over_a_5 * n;
 
-        // da/dt = - 28.5 * scale * a * e^2 + 3 * scale * a * ( (Omega_rot/n)*cos_eps - 1 )
-        double da_dt = - 28.5 * scale_tide * a * (e * e) + 3.0 * scale_tide * a * ((Omega_rot / std::max(n, 1e-15)) * cos_eps - 1.0);
+        // Hut (1981) tidal eccentricity damping & orbital energy dissipation (da/dt <= 0)
+        double de_dt = - 27.0 * scale_tide * e * std::pow(1.0 - e2, -6.5) * (1.0 + 3.75 * e2 + 0.9375 * e2 * e2);
+        if (e <= 1.0e-6) de_dt = 0.0;
 
-        // de/dt = - 10.5 * scale * e * [ 1 - (11/18)*(Omega_rot/n)*cos_eps ]
-        double de_dt = - 10.5 * scale_tide * e * (1.0 - (11.0 / 18.0) * (Omega_rot / std::max(n, 1e-15)) * cos_eps);
-        if (e <= 1e-8 && de_dt < 0) de_dt = 0.0;
+        // Conservation of angular momentum under circularization: a(1 - e^2) = const => da/dt = 2 a e / (1 - e^2) de/dt
+        double da_dt = (2.0 * a * e / (1.0 - e2 + 1.0e-12)) * de_dt;
 
-        double I_p = C_moment * M_p * (R_p * R_p);
-        double T_coeff = 1.5 * k2_over_Q * G * (M_star * M_star) * std::pow(R_p, 5) / std::pow(a, 6);
-
-        // dOmega_rot/dt = - (T_coeff / I_p) * (Omega_rot - n * cos_eps) - 2 * (Omega_rot / R_p) * dR_dt
-        double dOmega_dt = - (T_coeff / std::max(I_p, 1e-10)) * (Omega_rot - n * cos_eps) - 2.0 * (Omega_rot / R_p) * dR_dt;
-
-        // dobliquity/dt = - (T_coeff / I_p) * (n / Omega_rot) * sin_eps
-        double dobl_dt = - (T_coeff / std::max(I_p, 1e-10)) * (n / std::max(Omega_rot, 1e-15)) * sin_eps;
-        if (obliquity <= 1e-6 && dobl_dt < 0) dobl_dt = 0.0;
+        // Obliquity damping
+        double dobl_dt = - (sin_eps / tau_spin);
+        if (obliquity <= 1.0e-6 && dobl_dt < 0) dobl_dt = 0.0;
 
         return {da_dt, de_dt, dOmega_dt, dobl_dt};
     }
