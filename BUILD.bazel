@@ -153,3 +153,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":thermal_evolution_lib"],
 )
+
+cc_binary(
+    name = "estimate_core_masses",
+    srcs = ["cpp/examples/estimate_core_masses.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":thermal_evolution_lib"],
+)
