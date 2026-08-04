@@ -273,7 +273,13 @@ def main():
         fig, ax = plt.subplots(figsize=(7, 5))
         
         ax.scatter(df['Fe_H'], df['M_c_est_Mearth'], alpha=0.6, color='#1f77b4', edgecolors='none', s=35, label=r'Inverted Core Mass $M_c$ ($N=342$)')
-        ax.plot(df['Fe_H'], df['M_c_thorngren_Mearth'], color='#d62728', ls='--', lw=2, label=r'Thorngren et al. (2016) Fit: $M_c \propto 10^{0.50 [\mathrm{Fe/H}]}$')
+        
+        # Smooth sorted 1D grid for Thorngren et al. theoretical line
+        min_feh, max_feh = min(df['Fe_H']), max(df['Fe_H'])
+        feh_grid = [min_feh + i * (max_feh - min_feh) / 200.0 for i in range(201)]
+        mc_thorngren_grid = [15.0 * (10.0 ** (0.50 * x)) for x in feh_grid]
+        
+        ax.plot(feh_grid, mc_thorngren_grid, color='#d62728', ls='--', lw=2, label=r'Thorngren et al. (2016) Fit: $M_c \propto 10^{0.50 [\mathrm{Fe/H}]}$')
         
         ax.set_xlabel(r"Host Star Metallicity $[\mathrm{Fe/H}]$ [dex]")
         ax.set_ylabel(r"Estimated Heavy-Element Core Mass $M_c$ [$M_\oplus$]")
