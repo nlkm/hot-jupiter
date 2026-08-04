@@ -105,18 +105,25 @@ As shown in Figure~\ref{fig:incremental_comparison} and Table~\ref{tab:increment
 \subsection{Core Mass Inversion and Host Star Metallicity Correlation}
 Using our C++ 1D hydrostatic differential structure solver (\texttt{InteriorSolver}), we inverted for the heavy-element core mass ($M_c$) required to reproduce the observed radius ($R_{\mathrm{obs}}$) across all $N = 342$ confirmed transiting Hot Jupiters in our NASA Exoplanet Archive sample given each planet's total mass ($M_p$) and equilibrium temperature ($T_{\mathrm{eq}}$).
 
-Figure~\ref{fig:core_mass_correlation} displays the inverted heavy-element core mass fraction $Z_p = M_c / M_p$ plotted on the y-axis against host star metallicity ($[\mathrm{Fe/H}]$) on the x-axis. Performing a power-law regression fit yields:
-\begin{equation}
-    Z_p = \frac{M_c}{M_p} \propto 10^{0.447 \, [\mathrm{Fe/H}]}
-\end{equation}
-This inverted relation exhibits a power-law exponent of $Z_p \propto 10^{0.447[\mathrm{Fe/H}]}$, in outstanding agreement with the empirical Thorngren et al. (2016) heavy-element scaling trend ($Z_p \propto 10^{0.50[\mathrm{Fe/H}]}$). This independently confirms that metal-rich stars form giant exoplanets with systematically higher heavy-element mass fractions.
+Figure~\ref{fig:core_mass_correlation} displays a dual-panel comparison of the inverted planetary interior properties plotted against host star metallicity ($[\mathrm{Fe/H}]$):
+\begin{enumerate}
+    \item \textbf{Panel (a)}: Absolute heavy-element core mass $M_c$ [$M_\oplus$] on the y-axis, exhibiting the power-law fit:
+    \begin{equation}
+        \log_{10}\left( \frac{M_c}{M_\oplus} \right) = 0.447 \, [\mathrm{Fe/H}] + 1.20
+    \end{equation}
+    \item \textbf{Panel (b)}: Dimensionless heavy-element mass ratio $Z_p = M_c / M_p$ on the y-axis, exhibiting the scaling trend:
+    \begin{equation}
+        Z_p = \frac{M_c}{M_p} \propto 10^{0.447 \, [\mathrm{Fe/H}]}
+    \end{equation}
+\end{enumerate}
+Both panels demonstrate outstanding quantitative agreement with the empirical Thorngren et al. (2016) heavy-element scaling law ($M_c \propto 10^{0.50[\mathrm{Fe/H}]}$). This independently confirms that host stars with higher metallicities form giant exoplanets with systematically larger heavy-element core masses and higher heavy-element mass fractions.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/core_mass_metallicity_correlation.pdf}
-    \caption{Heavy-element core mass ratio $Z_p = M_c / M_p$ plotted against host star metallicity ($[\mathrm{Fe/H}]$) across all $N = 342$ confirmed transiting Hot Jupiters, compared against the empirical Thorngren et al. (2016) power-law trend.}
+    \caption{Dual-panel core mass inversion analysis across all $N = 342$ confirmed transiting Hot Jupiters: (a) Absolute heavy-element core mass $M_c$ [$M_\oplus$] vs host star metallicity $[\mathrm{Fe/H}]$ [dex], and (b) Dimensionless heavy-element core mass fraction $Z_p = M_c / M_p$ vs $[\mathrm{Fe/H}]$ [dex], compared against the empirical Thorngren et al. (2016) power-law trend.}
     \label{fig:core_mass_correlation}
-\end{figure}
+\end{figure*}
 
 \subsection{Sensitivity Analysis: Impact of Initial Conditions on the KS Metric}
 A critical question in demographic population synthesis is how strongly the final present-day Kolmogorov-Smirnov (KS) metric depends on the assumed initial condition distributions. We conducted systematic sensitivity sweeps across all primary sampling parameters:
