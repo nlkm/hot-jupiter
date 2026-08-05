@@ -3,19 +3,19 @@ Visualization module for thermal evolution tracks, interior hydrostatic profiles
 Generates publication-quality vector graphics (PDF) for LaTeX documents.
 """
 
-from typing import Optional, Any
-import numpy as np
+from typing import Any
+
 import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import R_JUP, L_SUN, GYR
+from hot_jupiter.constants import R_JUP
+from hot_jupiter.evolution import CoupledEvolutionResult, EvolutionResult
 from hot_jupiter.structure import PlanetStructure
-from hot_jupiter.evolution import EvolutionResult, CoupledEvolutionResult
 
 
 def plot_evolution_track(
     result: EvolutionResult,
     title: str = "Giant Planet Thermal Evolution Track",
-    savepath: Optional[str] = None,
+    savepath: str | None = None,
 ) -> plt.Figure:
     """
     Plot 4-panel evolutionary track: Radius, Luminosity, Temperatures, Entropy over time.
@@ -43,8 +43,16 @@ def plot_evolution_track(
 
     # Panel 3: Effective Temperatures vs Time
     ax3 = axes[1, 0]
-    ax3.plot(t_gyr, result.T_eff, "g-", lw=2, label=r"$T_{\mathrm{eff}}$ (total)")
-    ax3.plot(t_gyr, result.T_int, "g--", lw=2, label=r"$T_{\mathrm{int}}$ (intrinsic)")
+    ax3.plot(t_gyr,
+             result.T_eff,
+             "g-",
+             lw=2,
+             label=r"$T_{\mathrm{eff}}$ (total)")
+    ax3.plot(t_gyr,
+             result.T_int,
+             "g--",
+             lw=2,
+             label=r"$T_{\mathrm{int}}$ (intrinsic)")
     ax3.set_xlabel("Age [Gyr]")
     ax3.set_ylabel("Temperature [K]")
     ax3.set_xscale("log")
@@ -63,14 +71,16 @@ def plot_evolution_track(
     if savepath:
         fig.savefig(savepath, bbox_inches="tight")
         if savepath.endswith(".pdf"):
-            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+            fig.savefig(savepath.replace(".pdf", ".png"),
+                        dpi=300,
+                        bbox_inches="tight")
     return fig
 
 
 def plot_internal_profile(
     struct: PlanetStructure,
     title: str = "1D Interior Hydrostatic Profile",
-    savepath: Optional[str] = None,
+    savepath: str | None = None,
 ) -> plt.Figure:
     """
     Plot 4-panel 1D interior hydrostatic profile: Density, Pressure, Temperature, nabla_ad.
@@ -78,13 +88,17 @@ def plot_internal_profile(
     Saves publication-ready vector graphic (.pdf) by default.
     """
     if struct.profile is None:
-        raise ValueError("PlanetStructure does not contain an internal profile.")
+        raise ValueError(
+            "PlanetStructure does not contain an internal profile.")
 
     prof = struct.profile
     r_norm = prof.r / R_JUP
 
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), sharex=True)
-    fig.suptitle(f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)", fontsize=13, fontweight="bold")
+    fig.suptitle(
+        f"{title} ($M_p = {struct.M_p/1.898e27:.2f} M_J$, $R_p = {struct.R_p/7.149e7:.2f} R_J$)",
+        fontsize=13,
+        fontweight="bold")
 
     # Panel 1: Mass Density
     ax1 = axes[0, 0]
@@ -93,7 +107,11 @@ def plot_internal_profile(
     ax1.set_ylabel(r"Density $\rho$ [g/cm$^3$]")
     ax1.set_yscale("log")
     if struct.R_c > 0:
-        ax1.axvline(struct.R_c / R_JUP, color="red", linestyle="--", alpha=0.7, label="Core Boundary")
+        ax1.axvline(struct.R_c / R_JUP,
+                    color="red",
+                    linestyle="--",
+                    alpha=0.7,
+                    label="Core Boundary")
         ax1.legend(loc="best")
     ax1.grid(True, alpha=0.3, which="both")
 
@@ -124,14 +142,16 @@ def plot_internal_profile(
     if savepath:
         fig.savefig(savepath, bbox_inches="tight")
         if savepath.endswith(".pdf"):
-            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+            fig.savefig(savepath.replace(".pdf", ".png"),
+                        dpi=300,
+                        bbox_inches="tight")
     return fig
 
 
 def plot_coupled_orbital_spin_evolution(
     result: CoupledEvolutionResult,
     title: str = "Coupled Thermal, Orbital Element & Spin Vector Evolution",
-    savepath: Optional[str] = None,
+    savepath: str | None = None,
 ) -> plt.Figure:
     """
     Plot 6-panel coupled evolution track:
@@ -196,14 +216,16 @@ def plot_coupled_orbital_spin_evolution(
     if savepath:
         fig.savefig(savepath, bbox_inches="tight")
         if savepath.endswith(".pdf"):
-            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+            fig.savefig(savepath.replace(".pdf", ".png"),
+                        dpi=300,
+                        bbox_inches="tight")
     return fig
 
 
 def plot_multi_planet_system_evolution(
     result: Any,  # MultiPlanetEvolutionResult
     title: str = "Multi-Planet System Coupled Evolutionary Tracks",
-    savepath: Optional[str] = None,
+    savepath: str | None = None,
 ) -> plt.Figure:
     """
     Plot 4-panel comparison for all planets in a multi-planet system:
@@ -222,28 +244,44 @@ def plot_multi_planet_system_evolution(
         c = colors[idx % len(colors)]
 
         # Panel 1: Radius vs Time
-        axes[0, 0].plot(t_gyr, result.R_p_jup[name], color=c, lw=2, label=f"Planet {name}")
+        axes[0, 0].plot(t_gyr,
+                        result.R_p_jup[name],
+                        color=c,
+                        lw=2,
+                        label=f"Planet {name}")
         axes[0, 0].set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
         axes[0, 0].set_xscale("log")
         axes[0, 0].grid(True, alpha=0.3)
         axes[0, 0].legend(loc="best")
 
         # Panel 2: Semi-Major Axis vs Time
-        axes[0, 1].plot(t_gyr, result.a_au[name], color=c, lw=2, label=f"Planet {name}")
+        axes[0, 1].plot(t_gyr,
+                        result.a_au[name],
+                        color=c,
+                        lw=2,
+                        label=f"Planet {name}")
         axes[0, 1].set_ylabel(r"Semi-Major Axis $a$ [AU]")
         axes[0, 1].set_xscale("log")
         axes[0, 1].set_yscale("log")
         axes[0, 1].grid(True, alpha=0.3, which="both")
 
         # Panel 3: Eccentricity vs Time
-        axes[1, 0].plot(t_gyr, result.e[name], color=c, lw=2, label=f"Planet {name}")
+        axes[1, 0].plot(t_gyr,
+                        result.e[name],
+                        color=c,
+                        lw=2,
+                        label=f"Planet {name}")
         axes[1, 0].set_xlabel("Age [Gyr]")
         axes[1, 0].set_ylabel(r"Eccentricity $e$")
         axes[1, 0].set_xscale("log")
         axes[1, 0].grid(True, alpha=0.3)
 
         # Panel 4: Effective Temperature vs Time
-        axes[1, 1].plot(t_gyr, result.T_eff[name], color=c, lw=2, label=f"Planet {name}")
+        axes[1, 1].plot(t_gyr,
+                        result.T_eff[name],
+                        color=c,
+                        lw=2,
+                        label=f"Planet {name}")
         axes[1, 1].set_xlabel("Age [Gyr]")
         axes[1, 1].set_ylabel(r"Effective Temp $T_{\mathrm{eff}}$ [K]")
         axes[1, 1].set_xscale("log")
@@ -253,5 +291,7 @@ def plot_multi_planet_system_evolution(
     if savepath:
         fig.savefig(savepath, bbox_inches="tight")
         if savepath.endswith(".pdf"):
-            fig.savefig(savepath.replace(".pdf", ".png"), dpi=300, bbox_inches="tight")
+            fig.savefig(savepath.replace(".pdf", ".png"),
+                        dpi=300,
+                        bbox_inches="tight")
     return fig

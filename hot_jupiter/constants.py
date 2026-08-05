@@ -29,11 +29,11 @@ AU = 1.495978707e11
 SIGMA_SB = 5.670374419e-8
 
 # Thermodynamic constants
-K_B = 1.380649e-23       # Boltzmann constant (J K^-1)
-M_H = 1.6735575e-27      # Mass of Hydrogen atom (kg)
-M_HE = 6.646476e-27      # Mass of Helium atom (kg)
-N_A = 6.02214076e23      # Avogadro constant (mol^-1)
-R_GAS = K_B * N_A        # Universal Gas Constant (J mol^-1 K^-1)
+K_B = 1.380649e-23  # Boltzmann constant (J K^-1)
+M_H = 1.6735575e-27  # Mass of Hydrogen atom (kg)
+M_HE = 6.646476e-27  # Mass of Helium atom (kg)
+N_A = 6.02214076e23  # Avogadro constant (mol^-1)
+R_GAS = K_B * N_A  # Universal Gas Constant (J mol^-1 K^-1)
 
 # Pressure units (Pa)
 BAR = 1.0e5

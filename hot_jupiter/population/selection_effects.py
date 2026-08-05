@@ -3,7 +3,8 @@ Observational transit selection probability and survey detection completeness mo
 """
 
 import numpy as np
-from hot_jupiter.constants import R_SUN, AU, YEAR
+
+from hot_jupiter.constants import AU, R_SUN
 
 
 def geometric_transit_probability(
@@ -31,7 +32,7 @@ def transit_detection_completeness(
     a: float | np.ndarray,
     P_orb_days: float | np.ndarray,
     sigma_phot: float = 500e-6,  # 500 ppm photometric noise per cadence
-    T_obs_yr: float = 3.0,        # 3 year survey duration
+    T_obs_yr: float = 3.0,  # 3 year survey duration
     snr_threshold: float = 7.1,
 ) -> float | np.ndarray:
     """

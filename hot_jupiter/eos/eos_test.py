@@ -2,25 +2,25 @@
 Unit tests for hot_jupiter.eos module.
 """
 
-import pytest
 import numpy as np
+import pytest
 
-from hot_jupiter.constants import BAR, MBAR, GPa
+from hot_jupiter.constants import BAR, GPa
 from hot_jupiter.eos import (
-    BaseEOS,
     AnalyticalHHeEOS,
-    TabularEOS,
-    ConstantDensityCoreEOS,
+    BaseEOS,
     BirchMurnaghanCoreEOS,
+    ConstantDensityCoreEOS,
+    TabularEOS,
 )
 
 
 def test_analytical_eos_basic():
     eos = AnalyticalHHeEOS()
-    
+
     P = 1.0 * BAR
     T = 1000.0
-    
+
     rho = eos.density(P, T)
     assert rho > 0.0
     assert 0.01 < rho < 10.0  # Atmospheric range
@@ -38,10 +38,10 @@ def test_analytical_eos_basic():
 def test_tabular_eos_abstract_interface():
     # Test tabular EOS using synthetic grid
     tab_eos: BaseEOS = TabularEOS.create_synthetic_grid(n_P=100, n_T=100)
-    
+
     P = 10.0 * BAR
     T = 1000.0
-    
+
     rho = tab_eos.density(P, T)
     assert rho > 0.0
 
@@ -69,8 +69,8 @@ def test_interchangeable_eos():
 
     # State from (P, S) API
     S_target = analytical.specific_entropy(P, T_target)
-    T1, rho1, nad1 = analytical.get_state_from_PS(P, S_target)
-    T2, rho2, nad2 = tabular.get_state_from_PS(P, S_target)
+    T1, rho1, _nad1 = analytical.get_state_from_PS(P, S_target)
+    T2, rho2, _nad2 = tabular.get_state_from_PS(P, S_target)
 
     assert pytest.approx(T1, rel=0.15) == T2
     assert pytest.approx(rho1, rel=0.20) == rho2

@@ -3,30 +3,29 @@ Curated Hot Jupiter Exoplanet Catalog and NASA Exoplanet Archive loader using SQ
 """
 
 from dataclasses import dataclass
-from typing import List, Optional
-import numpy as np
 
-from hot_jupiter.constants import M_JUP, R_JUP, M_EARTH, R_EARTH, M_SUN, R_SUN, AU, GYR
-from hot_jupiter.database import get_db_connection, seed_database_if_empty, DEFAULT_DB_PATH
+from hot_jupiter.constants import AU, M_JUP, M_SUN, R_JUP, R_SUN
+from hot_jupiter.database import DEFAULT_DB_PATH, get_db_connection, seed_database_if_empty
 
 
 @dataclass
 class ExoplanetSystem:
     """Individual exoplanet system parameters."""
     name: str
-    M_p: float           # Planet mass [kg]
-    R_p_obs: float       # Observed planet radius [m]
-    R_p_err: float       # Radius error [m]
-    a: float             # Semi-major axis [m]
-    P_orb_days: float    # Orbital period [days]
+    M_p: float  # Planet mass [kg]
+    R_p_obs: float  # Observed planet radius [m]
+    R_p_err: float  # Radius error [m]
+    a: float  # Semi-major axis [m]
+    P_orb_days: float  # Orbital period [days]
     eccentricity: float  # Orbital eccentricity
-    M_star: float        # Host star mass [kg]
-    R_star: float        # Host star radius [m]
-    fe_h: float          # Host star metallicity [Fe/H]
-    age_gyr: float       # Estimated system age [Gyr]
+    M_star: float  # Host star mass [kg]
+    R_star: float  # Host star radius [m]
+    fe_h: float  # Host star metallicity [Fe/H]
+    age_gyr: float  # Estimated system age [Gyr]
 
 
-def get_curated_hot_jupiter_catalog(db_path: str = DEFAULT_DB_PATH) -> List[ExoplanetSystem]:
+def get_curated_hot_jupiter_catalog(
+        db_path: str = DEFAULT_DB_PATH) -> list[ExoplanetSystem]:
     """
     Return a curated dataset of well-characterized Hot Jupiters dynamically queried from SQLite database.
     """

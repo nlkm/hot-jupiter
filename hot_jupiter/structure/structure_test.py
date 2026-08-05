@@ -2,11 +2,10 @@
 Unit tests for 1D hydrostatic interior structure solver.
 """
 
-import pytest
 import numpy as np
 
-from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR
-from hot_jupiter.eos import AnalyticalHHeEOS, TabularEOS, BirchMurnaghanCoreEOS
+from hot_jupiter.constants import BAR, M_EARTH, M_JUP, R_JUP
+from hot_jupiter.eos import AnalyticalHHeEOS, TabularEOS
 from hot_jupiter.structure import InteriorSolver, PlanetStructure
 
 
@@ -16,7 +15,8 @@ def test_jupiter_structure_analytical():
 
     M_p = 1.0 * M_JUP
     M_c = 10.0 * M_EARTH
-    S_env = eos.specific_entropy(1.0 * BAR, 165.0)  # Present-day Jupiter entropy
+    S_env = eos.specific_entropy(1.0 * BAR,
+                                 165.0)  # Present-day Jupiter entropy
 
     struct = solver.solve_structure(M_p=M_p, M_c=M_c, S_env=S_env)
 

@@ -3,14 +3,13 @@
 Uses smooth inward radial RK4 integration and total radius (R_p) shooting.
 """
 
-from typing import Tuple, Optional
 import numpy as np
 from scipy.optimize import brentq
 
-from hot_jupiter.constants import G, BAR, M_JUP, M_EARTH, R_JUP
+from hot_jupiter.constants import BAR, R_JUP, G
 from hot_jupiter.eos.base import BaseEOS
 from hot_jupiter.eos.core_eos import BaseCoreEOS, BirchMurnaghanCoreEOS
-from hot_jupiter.structure.planet_state import PlanetStructure, InternalProfile
+from hot_jupiter.structure.planet_state import InternalProfile, PlanetStructure
 
 
 class InteriorSolver:
@@ -19,9 +18,12 @@ class InteriorSolver:
     Integrates inward from r = R_p to r = 0 with shooting on planet radius R_p.
     """
 
-    def __init__(self, envelope_eos: BaseEOS, core_eos: Optional[BaseCoreEOS] = None):
+    def __init__(self,
+                 envelope_eos: BaseEOS,
+                 core_eos: BaseCoreEOS | None = None):
         self.envelope_eos = envelope_eos
-        self.core_eos = core_eos if core_eos is not None else BirchMurnaghanCoreEOS()
+        self.core_eos = core_eos if core_eos is not None else BirchMurnaghanCoreEOS(
+        )
 
     def _integrate_inward(
         self,
@@ -33,11 +35,13 @@ class InteriorSolver:
         X: float = 0.75,
         Y: float = 0.25,
         num_pts: int = 250,
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
+               np.ndarray]:
         """
         Integrate hydrostatic equilibrium inward from r = R_p down to r ~ 0.
         """
-        T_surf = float(self.envelope_eos.temperature_from_PS(P_surf, S_env, X, Y))
+        T_surf = float(
+            self.envelope_eos.temperature_from_PS(P_surf, S_env, X, Y))
         r_grid = np.linspace(R_p_try, 1e4, num_pts)  # r from R_p down to 10 km
 
         m_arr = np.zeros(num_pts)
@@ -49,7 +53,8 @@ class InteriorSolver:
         m_arr[0] = M_p
         P_arr[0] = P_surf
         T_arr[0] = T_surf
-        _, rho_arr[0], nad_arr[0] = self.envelope_eos.get_state_from_PS(P_surf, S_env, X, Y)
+        _, rho_arr[0], nad_arr[0] = self.envelope_eos.get_state_from_PS(
+            P_surf, S_env, X, Y)
 
         for i in range(num_pts - 1):
             r = r_grid[i]
@@ -68,10 +73,11 @@ class InteriorSolver:
                     rho = float(self.core_eos.density(P_s))
                     nad = 0.0
                 else:
-                    _, rho, nad = self.envelope_eos.get_state_from_PS(P_s, S_env, X, Y)
+                    _, rho, nad = self.envelope_eos.get_state_from_PS(
+                        P_s, S_env, X, Y)
 
                 dm = 4.0 * np.pi * r_s**2 * rho
-                dP = - (G * m_s * rho) / (r_s**2)
+                dP = -(G * m_s * rho) / (r_s**2)
                 dT = nad * (T_s / P_s) * dP if m_s > M_c else 0.0
 
                 return dm, dP, dT, rho, nad
@@ -81,22 +87,36 @@ class InteriorSolver:
             rho_arr[i] = rho1
             nad_arr[i] = nad1
 
-            dm2, dP2, dT2, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm1, P + 0.5 * dr * dP1, T + 0.5 * dr * dT1)
-            dm3, dP3, dT3, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm2, P + 0.5 * dr * dP2, T + 0.5 * dr * dT2)
-            dm4, dP4, dT4, _, _ = derivatives(r + dr, m + dr * dm3, P + dr * dP3, T + dr * dT3)
+            dm2, dP2, dT2, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm1,
+                                              P + 0.5 * dr * dP1,
+                                              T + 0.5 * dr * dT1)
+            dm3, dP3, dT3, _, _ = derivatives(r + 0.5 * dr, m + 0.5 * dr * dm2,
+                                              P + 0.5 * dr * dP2,
+                                              T + 0.5 * dr * dT2)
+            dm4, dP4, dT4, _, _ = derivatives(r + dr, m + dr * dm3,
+                                              P + dr * dP3, T + dr * dT3)
 
             m_arr[i + 1] = m + (dr / 6.0) * (dm1 + 2 * dm2 + 2 * dm3 + dm4)
-            P_arr[i + 1] = max(P_surf, P + (dr / 6.0) * (dP1 + 2 * dP2 + 2 * dP3 + dP4))
-            T_arr[i + 1] = max(T_surf, T + (dr / 6.0) * (dT1 + 2 * dT2 + 2 * dT3 + dT4))
+            P_arr[i + 1] = max(P_surf,
+                               P + (dr / 6.0) * (dP1 + 2 * dP2 + 2 * dP3 + dP4))
+            T_arr[i + 1] = max(T_surf,
+                               T + (dr / 6.0) * (dT1 + 2 * dT2 + 2 * dT3 + dT4))
 
         if m_arr[-1] <= M_c:
             rho_arr[-1] = float(self.core_eos.density(P_arr[-1]))
             nad_arr[-1] = 0.0
         else:
-            _, rho_arr[-1], nad_arr[-1] = self.envelope_eos.get_state_from_PS(P_arr[-1], S_env, X, Y)
+            _, rho_arr[-1], nad_arr[-1] = self.envelope_eos.get_state_from_PS(
+                P_arr[-1], S_env, X, Y)
 
         # Reverse arrays so they go from center r ~ 0 to surface r = R_p
-        return r_grid[::-1], m_arr[::-1], P_arr[::-1], rho_arr[::-1], T_arr[::-1], nad_arr[::-1]
+        return r_grid[::
+                      -1], m_arr[::
+                                 -1], P_arr[::
+                                            -1], rho_arr[::
+                                                         -1], T_arr[::
+                                                                    -1], nad_arr[::
+                                                                                 -1]
 
     def _mass_residual(
         self,
@@ -110,9 +130,14 @@ class InteriorSolver:
         num_pts: int = 150,
     ) -> float:
         """Residual: m(r=0) - 0.0."""
-        r_arr, m_arr, _, _, _, _ = self._integrate_inward(
-            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts
-        )
+        _r_arr, m_arr, _, _, _, _ = self._integrate_inward(R_p_try,
+                                                           M_p,
+                                                           M_c,
+                                                           S_env,
+                                                           P_surf,
+                                                           X,
+                                                           Y,
+                                                           num_pts=num_pts)
         return float(m_arr[0] - 0.0)
 
     def solve_structure(
@@ -132,14 +157,42 @@ class InteriorSolver:
         R_min = 0.4 * R_JUP
         R_max = 2.5 * R_JUP
 
-        f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
-        f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
+        f_min = self._mass_residual(R_min,
+                                    M_p,
+                                    M_c,
+                                    S_env,
+                                    P_surf,
+                                    X,
+                                    Y,
+                                    num_pts=num_pts)
+        f_max = self._mass_residual(R_max,
+                                    M_p,
+                                    M_c,
+                                    S_env,
+                                    P_surf,
+                                    X,
+                                    Y,
+                                    num_pts=num_pts)
 
         if f_min * f_max > 0:
             R_min = 0.1 * R_JUP
             R_max = 3.5 * R_JUP
-            f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
-            f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
+            f_min = self._mass_residual(R_min,
+                                        M_p,
+                                        M_c,
+                                        S_env,
+                                        P_surf,
+                                        X,
+                                        Y,
+                                        num_pts=num_pts)
+            f_max = self._mass_residual(R_max,
+                                        M_p,
+                                        M_c,
+                                        S_env,
+                                        P_surf,
+                                        X,
+                                        Y,
+                                        num_pts=num_pts)
 
         try:
             R_p_sol = brentq(
@@ -153,8 +206,7 @@ class InteriorSolver:
             R_p_sol = R_min if abs(f_min) < abs(f_max) else R_max
 
         r_full, m_full, P_full, rho_full, T_full, nad_full = self._integrate_inward(
-            R_p_sol, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts
-        )
+            R_p_sol, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
 
         R_p = float(r_full[-1])
         P_c = float(P_full[0])
@@ -178,12 +230,14 @@ class InteriorSolver:
             if m_full[i] <= M_c:
                 u_full[i] = 1000.0 * T_full[i]
             else:
-                u_full[i] = float(self.envelope_eos.internal_energy(P_full[i], T_full[i], X, Y))
+                u_full[i] = float(
+                    self.envelope_eos.internal_energy(P_full[i], T_full[i], X,
+                                                      Y))
         E_int = float(np.trapezoid(u_full, m_full))
 
         r_safe = np.maximum(r_full, 1e3)
         m_pos = np.maximum(m_full, 0.0)
-        dU_dm = - (G * m_pos) / r_safe
+        dU_dm = -(G * m_pos) / r_safe
         U_grav = float(np.trapezoid(dU_dm, m_full))
 
         profile = InternalProfile(

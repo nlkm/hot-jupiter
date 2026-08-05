@@ -17,12 +17,12 @@ from hot_jupiter.population.simulator import (
 
 __all__ = [
     "ExoplanetSystem",
-    "get_curated_hot_jupiter_catalog",
-    "estimate_heavy_element_mass",
-    "geometric_transit_probability",
-    "transit_detection_completeness",
-    "transit_selection_weight",
     "IncrementalModelStats",
     "IncrementalPopulationResult",
     "PopulationSimulator",
+    "estimate_heavy_element_mass",
+    "geometric_transit_probability",
+    "get_curated_hot_jupiter_catalog",
+    "transit_detection_completeness",
+    "transit_selection_weight",
 ]

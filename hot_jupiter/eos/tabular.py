@@ -3,14 +3,12 @@ Tabular Equation of State for Hydrogen-Helium gas mixtures.
 Interpolates 2D thermodynamic tables (e.g. SCVH95, CMS19, or custom grids).
 """
 
-import os
-from typing import Union, Tuple, Optional
 import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import brentq
 
-from hot_jupiter.eos.base import BaseEOS
 from hot_jupiter.eos.analytical import AnalyticalHHeEOS
+from hot_jupiter.eos.base import BaseEOS
 
 
 class TabularEOS(BaseEOS):
@@ -25,7 +23,7 @@ class TabularEOS(BaseEOS):
         log10_rho_table: np.ndarray,
         S_table: np.ndarray,
         nabla_ad_table: np.ndarray,
-        u_table: Optional[np.ndarray] = None,
+        u_table: np.ndarray | None = None,
         X: float = 0.75,
         Y: float = 0.25,
     ):
@@ -77,11 +75,11 @@ class TabularEOS(BaseEOS):
 
     def density(
         self,
-        P: Union[float, np.ndarray],
-        T: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        T: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Union[float, np.ndarray]:
+    ) -> float | np.ndarray:
         is_scalar = np.isscalar(P) and np.isscalar(T)
         lP = np.log10(np.atleast_1d(P))
         lT = np.log10(np.atleast_1d(T))
@@ -94,11 +92,11 @@ class TabularEOS(BaseEOS):
 
     def specific_entropy(
         self,
-        P: Union[float, np.ndarray],
-        T: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        T: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Union[float, np.ndarray]:
+    ) -> float | np.ndarray:
         is_scalar = np.isscalar(P) and np.isscalar(T)
         lP = np.log10(np.atleast_1d(P))
         lT = np.log10(np.atleast_1d(T))
@@ -110,11 +108,11 @@ class TabularEOS(BaseEOS):
 
     def nabla_ad(
         self,
-        P: Union[float, np.ndarray],
-        T: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        T: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Union[float, np.ndarray]:
+    ) -> float | np.ndarray:
         is_scalar = np.isscalar(P) and np.isscalar(T)
         lP = np.log10(np.atleast_1d(P))
         lT = np.log10(np.atleast_1d(T))
@@ -126,11 +124,11 @@ class TabularEOS(BaseEOS):
 
     def get_state_from_PS(
         self,
-        P: Union[float, np.ndarray],
-        S: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        S: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray], Union[float, np.ndarray]]:
+    ) -> tuple[float | np.ndarray, float | np.ndarray, float | np.ndarray]:
         """
         Given P [Pa] and envelope specific entropy S [J/kg/K], return (T [K], rho [kg/m^3], nabla_ad).
         """
@@ -144,11 +142,11 @@ class TabularEOS(BaseEOS):
 
     def internal_energy(
         self,
-        P: Union[float, np.ndarray],
-        T: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        T: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Union[float, np.ndarray]:
+    ) -> float | np.ndarray:
         if self._interp_u is None:
             # Fallback estimation u ~ P / (rho * (gamma - 1))
             rho = self.density(P, T, X, Y)
@@ -165,11 +163,11 @@ class TabularEOS(BaseEOS):
 
     def temperature_from_PS(
         self,
-        P: Union[float, np.ndarray],
-        S: Union[float, np.ndarray],
+        P: float | np.ndarray,
+        S: float | np.ndarray,
         X: float = 0.75,
         Y: float = 0.25,
-    ) -> Union[float, np.ndarray]:
+    ) -> float | np.ndarray:
         """Invert S(P, T) table to find T given P and S."""
         is_scalar = np.isscalar(P) and np.isscalar(S)
         P_arr = np.atleast_1d(P)
@@ -184,9 +182,9 @@ class TabularEOS(BaseEOS):
             p_val = P_arr[i]
             s_val = S_arr[i]
 
-            def residual(log_T):
+            def residual(log_T, pv=p_val, sv=s_val):
                 t_guess = np.exp(log_T)
-                return self.specific_entropy(p_val, t_guess, X, Y) - s_val
+                return self.specific_entropy(pv, t_guess, X, Y) - sv
 
             try:
                 log_T_sol = brentq(residual, np.log(T_min), np.log(T_max))
@@ -207,10 +205,10 @@ class TabularEOS(BaseEOS):
     @classmethod
     def create_synthetic_grid(
         cls,
-        log_P_min: float = 2.0,     # 10^2 Pa (1 mbar)
-        log_P_max: float = 13.0,    # 10^13 Pa (100 Mbar)
-        log_T_min: float = 2.0,     # 100 K
-        log_T_max: float = 6.0,     # 1,000,000 K
+        log_P_min: float = 2.0,  # 10^2 Pa (1 mbar)
+        log_P_max: float = 13.0,  # 10^13 Pa (100 Mbar)
+        log_T_min: float = 2.0,  # 100 K
+        log_T_max: float = 6.0,  # 1,000,000 K
         n_P: int = 40,
         n_T: int = 40,
         X: float = 0.75,
@@ -229,7 +227,7 @@ class TabularEOS(BaseEOS):
         analytical = AnalyticalHHeEOS()
 
         PP, TT = np.meshgrid(10.0**log10_P, 10.0**log10_T, indexing="ij")
-        
+
         rho_table = analytical.density(PP, TT, X=X, Y=Y)
         S_table = analytical.specific_entropy(PP, TT, X=X, Y=Y)
         nad_table = analytical.nabla_ad(PP, TT, X=X, Y=Y)

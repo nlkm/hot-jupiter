@@ -4,6 +4,7 @@ Ref: Thorngren et al. (2016), ApJ, 831, 64.
 """
 
 import numpy as np
+
 from hot_jupiter.constants import M_EARTH, M_JUP
 
 

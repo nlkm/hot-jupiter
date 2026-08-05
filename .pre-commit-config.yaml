@@ -1,0 +1,20 @@
+repos:
+  - repo: local
+    hooks:
+      - id: yapf
+        name: Google Python Style Formatter (yapf)
+        entry: yapf --in-place --style=google
+        language: python
+        types: [python]
+
+      - id: ruff
+        name: Python Linter (ruff)
+        entry: ruff check --fix --line-length=100
+        language: python
+        types: [python]
+
+      - id: cpplint
+        name: Google C++ Style Linter (cpplint)
+        entry: cpplint --linelength=100 --filter=-build/header_guard,-build/include_subdir,-readability/casting
+        language: python
+        types_or: [c++, c, header]

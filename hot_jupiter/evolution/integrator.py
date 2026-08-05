@@ -4,46 +4,47 @@ Solves coupled dS/dt, da/dt, de/dt, dOmega_rot/dt over gigayear timescales.
 """
 
 from dataclasses import dataclass
-from typing import Optional, Tuple, Dict, Any
+from typing import Any
+
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from hot_jupiter.constants import YEAR, GYR, R_JUP, L_SUN, SIGMA_SB, M_SUN, AU, HOUR
-from hot_jupiter.structure import InteriorSolver, PlanetStructure
-from hot_jupiter.atmosphere import BaseAtmosphere, GuillotAtmosphere
+from hot_jupiter.atmosphere import BaseAtmosphere
+from hot_jupiter.constants import AU, GYR, HOUR, L_SUN, M_SUN, R_JUP, SIGMA_SB, YEAR
 from hot_jupiter.heating import BaseHeatingSource, ZeroHeating
 from hot_jupiter.orbit import OrbitalState, SpinVectorState, TidalOrbitalSpinRates
+from hot_jupiter.structure import InteriorSolver, PlanetStructure
 
 
 @dataclass
 class EvolutionResult:
     """Output container for a planet thermal cooling trajectory."""
-    t: np.ndarray          # Time array [s]
-    t_gyr: np.ndarray      # Time array [Gyr]
-    S: np.ndarray          # Specific entropy array [J / (kg K)]
-    R_p: np.ndarray        # Total planet radius [m]
-    R_p_jup: np.ndarray    # Planet radius in Jupiter radii [R_Jup]
-    L_int: np.ndarray      # Intrinsic luminosity [W]
+    t: np.ndarray  # Time array [s]
+    t_gyr: np.ndarray  # Time array [Gyr]
+    S: np.ndarray  # Specific entropy array [J / (kg K)]
+    R_p: np.ndarray  # Total planet radius [m]
+    R_p_jup: np.ndarray  # Planet radius in Jupiter radii [R_Jup]
+    L_int: np.ndarray  # Intrinsic luminosity [W]
     L_int_sun: np.ndarray  # Intrinsic luminosity in solar units [L_sun]
-    T_eff: np.ndarray      # Total effective temperature [K]
-    T_int: np.ndarray      # Intrinsic effective temperature [K]
-    P_tidal: np.ndarray    # Injected tidal heating power [W]
+    T_eff: np.ndarray  # Total effective temperature [K]
+    T_int: np.ndarray  # Intrinsic effective temperature [K]
+    P_tidal: np.ndarray  # Injected tidal heating power [W]
 
 
 @dataclass
 class CoupledEvolutionResult(EvolutionResult):
     """Output container for coupled thermal-orbital-spin evolution trajectories."""
-    a: np.ndarray              # Semi-major axis [m]
-    a_au: np.ndarray           # Semi-major axis [AU]
-    e: np.ndarray              # Orbital eccentricity
-    inc: np.ndarray            # Orbital inclination [rad]
-    Omega_rot: np.ndarray      # Spin angular frequency [rad/s]
-    P_rot_hrs: np.ndarray      # Rotation period [hours]
-    obliquity: np.ndarray      # Spin obliquity [rad]
+    a: np.ndarray  # Semi-major axis [m]
+    a_au: np.ndarray  # Semi-major axis [AU]
+    e: np.ndarray  # Orbital eccentricity
+    inc: np.ndarray  # Orbital inclination [rad]
+    Omega_rot: np.ndarray  # Spin angular frequency [rad/s]
+    P_rot_hrs: np.ndarray  # Rotation period [hours]
+    obliquity: np.ndarray  # Spin obliquity [rad]
     obliquity_deg: np.ndarray  # Spin obliquity [deg]
-    spin_x: np.ndarray         # 3D Cartesian spin vector X
-    spin_y: np.ndarray         # 3D Cartesian spin vector Y
-    spin_z: np.ndarray         # 3D Cartesian spin vector Z
+    spin_x: np.ndarray  # 3D Cartesian spin vector X
+    spin_y: np.ndarray  # 3D Cartesian spin vector Y
+    spin_z: np.ndarray  # 3D Cartesian spin vector Z
 
 
 class ThermalEvolutionIntegrator:
@@ -55,11 +56,12 @@ class ThermalEvolutionIntegrator:
         self,
         interior_solver: InteriorSolver,
         atmosphere_model: BaseAtmosphere,
-        heating_source: Optional[BaseHeatingSource] = None,
+        heating_source: BaseHeatingSource | None = None,
     ):
         self.interior_solver = interior_solver
         self.atmosphere_model = atmosphere_model
-        self.heating_source = heating_source if heating_source is not None else ZeroHeating()
+        self.heating_source = heating_source if heating_source is not None else ZeroHeating(
+        )
 
     def _entropy_derivative(
         self,
@@ -69,21 +71,27 @@ class ThermalEvolutionIntegrator:
         M_c: float,
         F_inc: float,
         A_b: float,
-        orbit_params: Optional[dict],
-    ) -> Tuple[float, PlanetStructure, float, float, float]:
+        orbit_params: dict | None,
+    ) -> tuple[float, PlanetStructure, float, float, float]:
         """Compute dS/dt and intermediate structural quantities."""
-        struct = self.interior_solver.solve_structure(M_p=M_p, M_c=M_c, S_env=S_env)
+        struct = self.interior_solver.solve_structure(M_p=M_p,
+                                                      M_c=M_c,
+                                                      S_env=S_env)
 
-        atmos = self.atmosphere_model.evaluate_atmosphere(
-            M_p=M_p, R_p=struct.R_p, S_env=S_env, F_inc=F_inc, A_b=A_b
-        )
+        atmos = self.atmosphere_model.evaluate_atmosphere(M_p=M_p,
+                                                          R_p=struct.R_p,
+                                                          S_env=S_env,
+                                                          F_inc=F_inc,
+                                                          A_b=A_b)
 
-        p_tidal = self.heating_source.evaluate_power(
-            t=t, R_p=struct.R_p, M_p=M_p, S_env=S_env, orbit_params=orbit_params
-        )
+        p_tidal = self.heating_source.evaluate_power(t=t,
+                                                     R_p=struct.R_p,
+                                                     M_p=M_p,
+                                                     S_env=S_env,
+                                                     orbit_params=orbit_params)
 
         int_T_dm = max(struct.int_T_dm, 1e-10)
-        dS_dt = - (atmos.L_int - p_tidal) / int_T_dm
+        dS_dt = -(atmos.L_int - p_tidal) / int_T_dm
 
         return dS_dt, struct, atmos.L_int, atmos.T_int, p_tidal
 
@@ -92,10 +100,10 @@ class ThermalEvolutionIntegrator:
         M_p: float,
         M_c: float,
         S_initial: float,
-        t_span: Tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
+        t_span: tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
         F_inc: float = 0.0,
         A_b: float = 0.1,
-        orbit_params: Optional[dict] = None,
+        orbit_params: dict | None = None,
         num_eval: int = 100,
         method: str = "RK23",
     ) -> EvolutionResult:
@@ -151,10 +159,12 @@ class ThermalEvolutionIntegrator:
             L_int_out[i] = L_int
             T_int_out[i] = T_int
             P_tidal_out[i] = P_t
-            
+
             F_abs = (1.0 - A_b) * F_inc / 4.0
             T_irr = (F_abs / SIGMA_SB)**0.25 if F_abs > 0 else 0.0
-            T_eff_out[i] = (T_int**4 + (T_irr / np.sqrt(2.0))**4)**0.25 if T_irr > 0 else T_int
+            T_eff_out[i] = (
+                T_int**4 +
+                (T_irr / np.sqrt(2.0))**4)**0.25 if T_irr > 0 else T_int
 
         return EvolutionResult(
             t=t_out,
@@ -178,7 +188,7 @@ class ThermalEvolutionIntegrator:
         spin_state_initial: SpinVectorState,
         M_star: float = 1.0 * M_SUN,
         k2_over_Q: float = 1.0e-5,
-        t_span: Tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
+        t_span: tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
         F_inc_base: float = 0.0,
         A_b: float = 0.1,
         num_eval: int = 100,
@@ -208,12 +218,13 @@ class ThermalEvolutionIntegrator:
             S_curr = float(max(1e4, y_val[0]))
             a_curr = float(max(0.001 * AU, y_val[1]))
             e_curr = float(np.clip(y_val[2], 0.0, 0.99))
-            inc_curr = float(y_val[3])
             Omega_curr = float(max(1e-10, y_val[4]))
             obl_curr = float(np.clip(y_val[5], 0.0, np.pi))
 
             # Incident flux scales with 1/a^2
-            F_inc_curr = F_inc_base * (a_init / a_curr)**2 if F_inc_base > 0 and a_curr > 0 else F_inc_base
+            F_inc_curr = F_inc_base * (
+                a_init /
+                a_curr)**2 if F_inc_base > 0 and a_curr > 0 else F_inc_base
 
             orbit_dict = {
                 "a": a_curr,
@@ -278,7 +289,9 @@ class ThermalEvolutionIntegrator:
 
         for i in range(N):
             a_curr = a_out[i]
-            F_inc_curr = F_inc_base * (a_init / a_curr)**2 if F_inc_base > 0 and a_curr > 0 else F_inc_base
+            F_inc_curr = F_inc_base * (
+                a_init /
+                a_curr)**2 if F_inc_base > 0 and a_curr > 0 else F_inc_base
             orbit_dict = {
                 "a": a_curr,
                 "eccentricity": e_out[i],
@@ -305,7 +318,8 @@ class ThermalEvolutionIntegrator:
             T_irr = (F_abs / SIGMA_SB)**0.25 if F_abs > 0 else 0.0
             T_eff_out[i] = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int
 
-            spin_st = SpinVectorState(Omega_rot=Omega_out[i], obliquity=obl_out[i])
+            spin_st = SpinVectorState(Omega_rot=Omega_out[i],
+                                      obliquity=obl_out[i])
             sp_vec = spin_st.spin_vector
             spin_x[i] = sp_vec[0]
             spin_y[i] = sp_vec[1]
@@ -340,7 +354,7 @@ class ThermalEvolutionIntegrator:
     def evolve_multi_planet_system(
         self,
         system: Any,  # MultiPlanetSystem
-        t_span: Tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
+        t_span: tuple[float, float] = (1e6 * YEAR, 4.5e9 * YEAR),
         num_eval: int = 100,
         method: str = "RK23",
     ) -> Any:  # MultiPlanetEvolutionResult
@@ -368,7 +382,9 @@ class ThermalEvolutionIntegrator:
                 p.spin_state.obliquity,
             ])
 
-        rates_evaluators = [TidalOrbitalSpinRates(k2_over_Q=p.k2_over_Q) for p in system.planets]
+        rates_evaluators = [
+            TidalOrbitalSpinRates(k2_over_Q=p.k2_over_Q) for p in system.planets
+        ]
 
         def ode_func(t_val, y_val):
             dydt = np.zeros(5 * N)
@@ -390,8 +406,17 @@ class ThermalEvolutionIntegrator:
                 e_vec[i] = e_i
 
                 # Incident flux at semi-major axis a_i
-                F_inc_i = (L_SUN / (4.0 * np.pi * (a_i**2))) * (1.0 / np.sqrt(max(1e-4, 1.0 - e_i**2)))
-                orbit_dict = {"a": a_i, "eccentricity": e_i, "M_star": system.M_star, "Omega_rot": Omega_i, "obliquity": obl_i}
+                F_inc_i = (L_SUN /
+                           (4.0 * np.pi *
+                            (a_i**2))) * (1.0 /
+                                          np.sqrt(max(1e-4, 1.0 - e_i**2)))
+                orbit_dict = {
+                    "a": a_i,
+                    "eccentricity": e_i,
+                    "M_star": system.M_star,
+                    "Omega_rot": Omega_i,
+                    "obliquity": obl_i
+                }
 
                 p = system.planets[i]
                 dS_dt, struct, _, _, _ = self._entropy_derivative(
@@ -419,18 +444,20 @@ class ThermalEvolutionIntegrator:
                 Omega_i = y_val[idx + 3]
                 obl_i = y_val[idx + 4]
 
-                da_dt, de_tide, dOmega_dt, dobl_dt = rates_evaluators[i].evaluate_rates(
-                    M_p=p.M_p,
-                    R_p=R_vec[i],
-                    M_star=system.M_star,
-                    a=a_i,
-                    e=e_i,
-                    Omega_rot=Omega_i,
-                    obliquity=obl_i,
-                )
+                da_dt, de_tide, dOmega_dt, dobl_dt = rates_evaluators[
+                    i].evaluate_rates(
+                        M_p=p.M_p,
+                        R_p=R_vec[i],
+                        M_star=system.M_star,
+                        a=a_i,
+                        e=e_i,
+                        Omega_rot=Omega_i,
+                        obliquity=obl_i,
+                    )
 
                 # Secular eccentricity derivative de_i/dt |_secular
-                de_secular = sum(A_matrix[i, j] * e_vec[j] for j in range(N) if j != i)
+                de_secular = sum(
+                    A_matrix[i, j] * e_vec[j] for j in range(N) if j != i)
                 de_total = de_tide + de_secular
                 if e_i <= 1e-8 and de_total < 0:
                     de_total = 0.0
@@ -482,23 +509,39 @@ class ThermalEvolutionIntegrator:
             for k in range(M):
                 a_k = a_arr[k]
                 e_k = e_arr[k]
-                F_inc_k = (L_SUN / (4.0 * np.pi * (a_k**2))) * (1.0 / np.sqrt(max(1e-4, 1.0 - e_k**2)))
-                orbit_dict = {"a": a_k, "eccentricity": e_k, "M_star": system.M_star, "Omega_rot": Omega_arr[k], "obliquity": obl_arr[k]}
+                F_inc_k = (L_SUN /
+                           (4.0 * np.pi *
+                            (a_k**2))) * (1.0 /
+                                          np.sqrt(max(1e-4, 1.0 - e_k**2)))
+                orbit_dict = {
+                    "a": a_k,
+                    "eccentricity": e_k,
+                    "M_star": system.M_star,
+                    "Omega_rot": Omega_arr[k],
+                    "obliquity": obl_arr[k]
+                }
 
                 _, struct, _, T_int, P_t = self._entropy_derivative(
-                    t=t_out[k], S_env=S_arr[k], M_p=p.M_p, M_c=p.M_c, F_inc=F_inc_k, A_b=p.A_b, orbit_params=orbit_dict
-                )
+                    t=t_out[k],
+                    S_env=S_arr[k],
+                    M_p=p.M_p,
+                    M_c=p.M_c,
+                    F_inc=F_inc_k,
+                    A_b=p.A_b,
+                    orbit_params=orbit_dict)
                 R_p_arr[k] = struct.R_p
                 P_t_arr[k] = P_t
                 F_abs = (1.0 - p.A_b) * F_inc_k / 4.0
                 T_irr = (F_abs / SIGMA_SB)**0.25 if F_abs > 0 else 0.0
-                T_eff_arr[k] = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int
+                T_eff_arr[k] = (T_int**4 +
+                                T_irr**4)**0.25 if T_irr > 0 else T_int
 
             S_dict[name] = S_arr
             R_p_jup_dict[name] = R_p_arr / R_JUP
             a_au_dict[name] = a_arr / AU
             e_dict[name] = e_arr
-            P_rot_hrs_dict[name] = (2.0 * np.pi / np.maximum(Omega_arr, 1e-15)) / HOUR
+            P_rot_hrs_dict[name] = (2.0 * np.pi /
+                                    np.maximum(Omega_arr, 1e-15)) / HOUR
             obliquity_deg_dict[name] = np.degrees(obl_arr)
             T_eff_dict[name] = T_eff_arr
             P_tidal_dict[name] = P_t_arr

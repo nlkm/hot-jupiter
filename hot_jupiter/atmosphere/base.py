@@ -5,16 +5,14 @@ Abstract interface for atmospheric boundary models.
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
-from hot_jupiter.constants import SIGMA_SB
-
 
 class AtmosphereResult(NamedTuple):
     """Output from atmospheric boundary solver."""
-    T_int: float       # Intrinsic effective temperature [K]
-    T_eff: float       # Total effective temperature [K] (including stellar irradiation)
-    L_int: float       # Net outgoing intrinsic power [W]
-    P_rcb: float       # Pressure at Radiative-Convective Boundary [Pa]
-    T_rcb: float       # Temperature at Radiative-Convective Boundary [K]
+    T_int: float  # Intrinsic effective temperature [K]
+    T_eff: float  # Total effective temperature [K] (including stellar irradiation)
+    L_int: float  # Net outgoing intrinsic power [W]
+    P_rcb: float  # Pressure at Radiative-Convective Boundary [Pa]
+    T_rcb: float  # Temperature at Radiative-Convective Boundary [K]
 
 
 class BaseAtmosphere(ABC):
@@ -51,4 +49,3 @@ class BaseAtmosphere(ABC):
         -------
         AtmosphereResult namedtuple.
         """
-        pass

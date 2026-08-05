@@ -4,9 +4,10 @@ Implements Eggleton (1983), Paczyński (1971), Rappaport et al. (2013), Jackson 
 """
 
 from dataclasses import dataclass
-from typing import Tuple
+
 import numpy as np
-from hot_jupiter.constants import G, M_EARTH, M_JUP, M_SUN, AU, YEAR
+
+from hot_jupiter.constants import YEAR
 
 
 @dataclass
@@ -14,9 +15,9 @@ class RocheLobeMassLoss:
     """
     Evaluates Roche Lobe Radius and Hydrodynamic Mass-Loss Rates during Roche Lobe Overflow (RLOF).
     """
-    eta_exponent: float = 4.0          # Hydrodynamic scaling exponent
-    M_dot_0: float = 1.0e11            # Onset mass loss rate [kg/s] (~1.5 M_earth / Gyr)
-    momentum_fraction_beta: float = 0.5 # Fraction of orbital angular momentum retained
+    eta_exponent: float = 4.0  # Hydrodynamic scaling exponent
+    M_dot_0: float = 1.0e11  # Onset mass loss rate [kg/s] (~1.5 M_earth / Gyr)
+    momentum_fraction_beta: float = 0.5  # Fraction of orbital angular momentum retained
 
     @staticmethod
     def roche_lobe_radius(a: float, M_p: float, M_star: float) -> float:
@@ -47,7 +48,8 @@ class RocheLobeMassLoss:
         r_roche_ratio = 0.49 * q_23 / (0.6 * q_23 + np.log(1.0 + q_13))
         return float(a * r_roche_ratio)
 
-    def roche_lobe_filling_factor(self, R_p: float, a: float, M_p: float, M_star: float) -> float:
+    def roche_lobe_filling_factor(self, R_p: float, a: float, M_p: float,
+                                  M_star: float) -> float:
         """
         Compute Roche lobe filling factor mu_Roche = R_p / R_Roche.
         """
@@ -60,7 +62,7 @@ class RocheLobeMassLoss:
         a: float,
         M_p: float,
         M_star: float,
-    ) -> Tuple[float, float]:
+    ) -> tuple[float, float]:
         """
         Evaluate (dM_p_dt_rlof, da_dt_rlof).
 
@@ -83,13 +85,14 @@ class RocheLobeMassLoss:
 
         # Hydrodynamic RLOF mass-loss rate: dM/dt = - M_dot_0 * exp( eta * (R_p / R_Roche - 1) )
         overflow_excess = max(0.0, filling_factor - 1.0)
-        dM_dt = - self.M_dot_0 * np.exp(self.eta_exponent * overflow_excess)
+        dM_dt = -self.M_dot_0 * np.exp(self.eta_exponent * overflow_excess)
 
         # Cap maximum mass loss rate to 10% of planet mass per Gyr to ensure numerical stability
-        max_dM_dt = - 0.10 * M_p / (1.0e9 * YEAR)
+        max_dM_dt = -0.10 * M_p / (1.0e9 * YEAR)
         dM_dt = max(dM_dt, max_dM_dt)
 
         # Orbital back-reaction da/dt |_RLOF = - 2 * a * (dM/dt / M_p) * (1 - beta)
-        da_dt_rlof = - 2.0 * a * (dM_dt / M_p) * (1.0 - self.momentum_fraction_beta)
+        da_dt_rlof = -2.0 * a * (dM_dt / M_p) * (1.0 -
+                                                 self.momentum_fraction_beta)
 
         return float(dM_dt), float(da_dt_rlof)

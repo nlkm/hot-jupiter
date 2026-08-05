@@ -2,7 +2,6 @@
 Heavy Element Core Equations of State (Rock/Ice mix).
 """
 
-from typing import Union
 import numpy as np
 from scipy.optimize import brentq
 
@@ -12,7 +11,7 @@ from hot_jupiter.constants import GPa
 class BaseCoreEOS:
     """Abstract interface for heavy element core EOS."""
 
-    def density(self, P: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+    def density(self, P: float | np.ndarray) -> float | np.ndarray:
         """Mass density rho [kg/m^3] given pressure P [Pa]."""
         raise NotImplementedError
 
@@ -29,7 +28,7 @@ class ConstantDensityCoreEOS(BaseCoreEOS):
         """
         self.rho_core = rho_core
 
-    def density(self, P: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+    def density(self, P: float | np.ndarray) -> float | np.ndarray:
         if np.isscalar(P):
             return self.rho_core
         return np.full_like(P, self.rho_core, dtype=float)
@@ -43,28 +42,25 @@ class BirchMurnaghanCoreEOS(BaseCoreEOS):
     """
 
     def __init__(
-        self,
-        rho_0: float = 5500.0,       # Zero-pressure density (kg/m^3)
-        K_0: float = 200.0 * GPa,    # Bulk modulus (Pa)
-        Kp_0: float = 4.0,           # Pressure derivative K'_0
+            self,
+            rho_0: float = 5500.0,  # Zero-pressure density (kg/m^3)
+            K_0: float = 200.0 * GPa,  # Bulk modulus (Pa)
+            Kp_0: float = 4.0,  # Pressure derivative K'_0
     ):
         self.rho_0 = rho_0
         self.K_0 = K_0
         self.Kp_0 = Kp_0
 
-    def pressure_from_density(self, rho: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+    def pressure_from_density(self,
+                              rho: float | np.ndarray) -> float | np.ndarray:
         """Compute P [Pa] for given density rho [kg/m^3]."""
         eta = rho / self.rho_0
         eta_23 = eta**(2.0 / 3.0)
-        p = (
-            1.5
-            * self.K_0
-            * (eta**(7.0 / 3.0) - eta**(5.0 / 3.0))
-            * (1.0 + 0.75 * (self.Kp_0 - 4.0) * (eta_23 - 1.0))
-        )
+        p = (1.5 * self.K_0 * (eta**(7.0 / 3.0) - eta**(5.0 / 3.0)) *
+             (1.0 + 0.75 * (self.Kp_0 - 4.0) * (eta_23 - 1.0)))
         return p
 
-    def density(self, P: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+    def density(self, P: float | np.ndarray) -> float | np.ndarray:
         """Invert P(rho) to find density rho [kg/m^3] for given pressure P [Pa]."""
         is_scalar = np.isscalar(P)
         P_arr = np.atleast_1d(P)
@@ -75,8 +71,8 @@ class BirchMurnaghanCoreEOS(BaseCoreEOS):
                 rho_out[i] = self.rho_0
                 continue
 
-            def residual(rho_guess):
-                return self.pressure_from_density(rho_guess) - p_val
+            def residual(rho_guess, pv=p_val):
+                return self.pressure_from_density(rho_guess) - pv
 
             try:
                 # Core density search range: rho_0 to 10 * rho_0

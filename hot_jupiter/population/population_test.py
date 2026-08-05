@@ -2,16 +2,13 @@
 Unit tests for population synthesis, core mass scaling, and selection effects.
 """
 
-import pytest
-import numpy as np
-
-from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, R_SUN, AU
+from hot_jupiter.constants import AU, M_JUP, R_JUP, R_SUN
 from hot_jupiter.population import (
-    estimate_heavy_element_mass,
-    transit_selection_weight,
-    get_curated_hot_jupiter_catalog,
-    PopulationSimulator,
     IncrementalPopulationResult,
+    PopulationSimulator,
+    estimate_heavy_element_mass,
+    get_curated_hot_jupiter_catalog,
+    transit_selection_weight,
 )
 
 
@@ -26,17 +23,24 @@ def test_core_mass_scaling():
 
 
 def test_transit_selection_weight():
-    w = transit_selection_weight(R_p=1.2 * R_JUP, R_star=1.0 * R_SUN, a=0.05 * AU)
+    w = transit_selection_weight(R_p=1.2 * R_JUP,
+                                 R_star=1.0 * R_SUN,
+                                 a=0.05 * AU)
     assert 0.0 < w <= 1.0
 
     # Larger radius planet should have higher detection weight
-    w_small = transit_selection_weight(R_p=0.5 * R_JUP, R_star=1.0 * R_SUN, a=0.05 * AU)
-    w_large = transit_selection_weight(R_p=1.5 * R_JUP, R_star=1.0 * R_SUN, a=0.05 * AU)
+    w_small = transit_selection_weight(R_p=0.5 * R_JUP,
+                                       R_star=1.0 * R_SUN,
+                                       a=0.05 * AU)
+    w_large = transit_selection_weight(R_p=1.5 * R_JUP,
+                                       R_star=1.0 * R_SUN,
+                                       a=0.05 * AU)
     assert w_large > w_small
 
 
 def test_population_simulator():
-    catalog = get_curated_hot_jupiter_catalog()[:3]  # Fast mini run over 3 systems
+    catalog = get_curated_hot_jupiter_catalog(
+    )[:3]  # Fast mini run over 3 systems
     sim = PopulationSimulator(catalog=catalog)
     res = sim.run_incremental_simulation()
 
@@ -44,4 +48,5 @@ def test_population_simulator():
     assert len(res.catalog_names) == 3
     assert len(res.R_obs_jup) == 3
     assert "Stage 0: Non-irradiated Base" in res.stage_results
-    assert 0.0 <= res.stage_results["Stage 0: Non-irradiated Base"].ks_stat <= 1.0
+    assert 0.0 <= res.stage_results[
+        "Stage 0: Non-irradiated Base"].ks_stat <= 1.0

@@ -2,9 +2,8 @@
 Unit tests for Python ctypes C++ bindings (hot_jupiter/bindings.py).
 """
 
-import pytest
-from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR
-from hot_jupiter.bindings import solve_structure_cpp, evaluate_density_cpp
+from hot_jupiter.bindings import evaluate_density_cpp, solve_structure_cpp
+from hot_jupiter.constants import BAR, M_EARTH, M_JUP, R_JUP
 
 
 def test_cpp_bindings_solve_structure():

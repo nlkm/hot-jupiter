@@ -5,11 +5,10 @@ Ref: Guillot, T. (2010), A&A, 520, A27.
 
 import numpy as np
 from scipy.optimize import brentq
-from typing import Optional
 
-from hot_jupiter.constants import G, SIGMA_SB, BAR
+from hot_jupiter.atmosphere.base import AtmosphereResult, BaseAtmosphere
+from hot_jupiter.constants import SIGMA_SB, G
 from hot_jupiter.eos.base import BaseEOS
-from hot_jupiter.atmosphere.base import BaseAtmosphere, AtmosphereResult
 
 
 class GuillotAtmosphere(BaseAtmosphere):
@@ -18,10 +17,11 @@ class GuillotAtmosphere(BaseAtmosphere):
     """
 
     def __init__(
-        self,
-        envelope_eos: BaseEOS,
-        kappa_th: float = 1e-2,  # Thermal opacity [m^2/kg] (0.1 cm^2/g)
-        gamma: float = 0.1,      # Ratio of visible to thermal opacity kappa_v / kappa_th
+            self,
+            envelope_eos: BaseEOS,
+            kappa_th: float = 1e-2,  # Thermal opacity [m^2/kg] (0.1 cm^2/g)
+            gamma:
+        float = 0.1,  # Ratio of visible to thermal opacity kappa_v / kappa_th
     ):
         self.envelope_eos = envelope_eos
         self.kappa_th = kappa_th
@@ -37,15 +37,14 @@ class GuillotAtmosphere(BaseAtmosphere):
         Guillot (2010) T(tau) temperature profile equation (Eq. 29).
         """
         tau_arr = np.asarray(tau, dtype=float)
-        
+
         # Term 1: Intrinsic flux term
         term_int = (3.0 / 4.0) * (T_int**4) * (tau_arr + 2.0 / 3.0)
 
         # Term 2: Irradiated stellar flux term
         g_tau = self.gamma * tau_arr
         bracket = (2.0 / 3.0) + (2.0 / (3.0 * self.gamma)) * (
-            1.0 + (g_tau / 2.0 - 1.0) * np.exp(-g_tau)
-        )
+            1.0 + (g_tau / 2.0 - 1.0) * np.exp(-g_tau))
         term_irr = (3.0 / 4.0) * (T_irr**4) * bracket
 
         T4 = np.maximum(1.0, term_int + term_irr)
@@ -89,7 +88,9 @@ class GuillotAtmosphere(BaseAtmosphere):
         except ValueError:
             # Minimize absolute residual if boundary bracket is violated
             from scipy.optimize import minimize_scalar
-            res_opt = minimize_scalar(lambda t: abs(residual(t)), bounds=(5.0, 3000.0), method="bounded")
+            res_opt = minimize_scalar(lambda t: abs(residual(t)),
+                                      bounds=(5.0, 3000.0),
+                                      method="bounded")
             T_int = float(res_opt.x)
 
         T_eff = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int

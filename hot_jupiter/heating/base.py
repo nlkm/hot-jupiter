@@ -3,10 +3,10 @@ Abstract interface for extra energy injection sources (tidal dissipation, radiog
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional, List
+
 import numpy as np
 
-from hot_jupiter.constants import M_EARTH, YEAR, GYR
+from hot_jupiter.constants import GYR, M_EARTH
 
 
 class BaseHeatingSource(ABC):
@@ -19,12 +19,11 @@ class BaseHeatingSource(ABC):
         R_p: float,
         M_p: float,
         S_env: float,
-        orbit_params: Optional[dict] = None,
+        orbit_params: dict | None = None,
     ) -> float:
         """
         Return power injected into interior [W] at time t [s].
         """
-        pass
 
 
 class ZeroHeating(BaseHeatingSource):
@@ -36,7 +35,7 @@ class ZeroHeating(BaseHeatingSource):
         R_p: float,
         M_p: float,
         S_env: float,
-        orbit_params: Optional[dict] = None,
+        orbit_params: dict | None = None,
     ) -> float:
         return 0.0
 
@@ -53,7 +52,7 @@ class ConstantHeating(BaseHeatingSource):
         R_p: float,
         M_p: float,
         S_env: float,
-        orbit_params: Optional[dict] = None,
+        orbit_params: dict | None = None,
     ) -> float:
         return self.P_0
 
@@ -64,7 +63,10 @@ class RadiogenicHeating(BaseHeatingSource):
     P_radio(t) = P_0 * (M_c / M_Earth) * exp(-t / tau_decay)
     """
 
-    def __init__(self, M_c: float = 10.0 * M_EARTH, P_spec: float = 1.0e-11, tau_decay_gyr: float = 3.0):
+    def __init__(self,
+                 M_c: float = 10.0 * M_EARTH,
+                 P_spec: float = 1.0e-11,
+                 tau_decay_gyr: float = 3.0):
         self.M_c = M_c
         self.P_spec = P_spec  # W / kg of core material
         self.tau_decay = tau_decay_gyr * GYR
@@ -75,6 +77,6 @@ class RadiogenicHeating(BaseHeatingSource):
         R_p: float,
         M_p: float,
         S_env: float,
-        orbit_params: Optional[dict] = None,
+        orbit_params: dict | None = None,
     ) -> float:
         return self.P_spec * self.M_c * np.exp(-t / self.tau_decay)

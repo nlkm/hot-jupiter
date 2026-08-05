@@ -6,8 +6,6 @@ delegate to the C++ core with zero duplication.
 
 import ctypes
 import os
-from dataclasses import dataclass
-from typing import Optional
 
 
 class C_PlanetStructureResult(ctypes.Structure):
@@ -23,7 +21,7 @@ class C_PlanetStructureResult(ctypes.Structure):
     ]
 
 
-def _find_lib() -> Optional[str]:
+def _find_lib() -> str | None:
     package_dir = os.path.dirname(os.path.abspath(__file__))
     workspace_root = os.path.abspath(os.path.join(package_dir, ".."))
 
@@ -50,26 +48,35 @@ if _lib_path:
             ctypes.POINTER(C_PlanetStructureResult)
         ]
         _cpp_lib.solve_planet_structure_c.restype = None
-        
+
         _cpp_lib.evaluate_saumon_chabrier_density_c.argtypes = [
             ctypes.c_double, ctypes.c_double, ctypes.c_double
         ]
         _cpp_lib.evaluate_saumon_chabrier_density_c.restype = ctypes.c_double
-    except Exception as e:
+    except Exception:  # noqa: BLE001
         _cpp_lib = None
 
 
-def solve_structure_cpp(M_p_kg: float, M_c_kg: float, S_env: float, P_surf: float = 1e5) -> C_PlanetStructureResult:
+def solve_structure_cpp(M_p_kg: float,
+                        M_c_kg: float,
+                        S_env: float,
+                        P_surf: float = 1e5) -> C_PlanetStructureResult:
     """Solve 1D hydrostatic planet structure delegating directly to compiled C++ engine."""
     if _cpp_lib is None:
-        raise RuntimeError("Compiled C++ library (libhot_jupiter_cpp.so) not found. Run 'bazel build //:libhot_jupiter_cpp.so'.")
+        raise RuntimeError(
+            "Compiled C++ library (libhot_jupiter_cpp.so) not found. Run 'bazel build //:libhot_jupiter_cpp.so'."
+        )
     res = C_PlanetStructureResult()
-    _cpp_lib.solve_planet_structure_c(M_p_kg, M_c_kg, S_env, P_surf, ctypes.byref(res))
+    _cpp_lib.solve_planet_structure_c(M_p_kg, M_c_kg, S_env, P_surf,
+                                      ctypes.byref(res))
     return res
 
 
-def evaluate_density_cpp(P_pascal: float, T_kelvin: float, X: float = 0.75) -> float:
+def evaluate_density_cpp(P_pascal: float,
+                         T_kelvin: float,
+                         X: float = 0.75) -> float:
     """Evaluate EoS density delegating directly to compiled C++ engine."""
     if _cpp_lib is None:
-        raise RuntimeError("Compiled C++ library (libhot_jupiter_cpp.so) not found.")
+        raise RuntimeError(
+            "Compiled C++ library (libhot_jupiter_cpp.so) not found.")
     return _cpp_lib.evaluate_saumon_chabrier_density_c(P_pascal, T_kelvin, X)
