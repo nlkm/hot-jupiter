@@ -38,11 +38,10 @@ def test_transit_selection_weight():
 def test_population_simulator():
     catalog = get_curated_hot_jupiter_catalog()[:3]  # Fast mini run over 3 systems
     sim = PopulationSimulator(catalog=catalog)
-    res = sim.run_simulation()
+    res = sim.run_incremental_simulation()
 
     assert isinstance(res, IncrementalPopulationResult)
     assert len(res.catalog_names) == 3
     assert len(res.R_obs_jup) == 3
     assert "Stage 0: Non-irradiated Base" in res.stage_results
     assert 0.0 <= res.stage_results["Stage 0: Non-irradiated Base"].ks_stat <= 1.0
-

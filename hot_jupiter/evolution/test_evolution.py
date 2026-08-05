@@ -51,7 +51,7 @@ def test_hot_jupiter_cooling_track():
 
     M_p = 1.0 * M_JUP
     M_c = 10.0 * M_EARTH
-    S_initial = eos.specific_entropy(1.0 * BAR, 500.0)  # Hot young planet
+    S_initial = eos.specific_entropy(1.0 * BAR, 2500.0)  # Hot young planet
 
     # Short 10 Myr evolution run
     t_span = (1.0e6 * YEAR, 1.0e7 * YEAR)
