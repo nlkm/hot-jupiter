@@ -75,7 +75,10 @@ Young giant planets formed via disk fragmentation or planet-planet scattering fr
 2. **Stellar Obliquity $\psi_*$ \& Stellar Tidal Migration**:
    In misaligned ($\psi_* > 30^\circ$) or retrograde ($\psi_* > 90^\circ$) orbits (e.g., WASP-17b, HAT-P-7b), relative motion between the planet's orbital velocity vector $\mathbf{v}_{\text{orb}}$ and stellar rotation $\mathbf{\Omega}_*$ enhances tidal velocity shear ($\mathbf{v}_{\text{rel}} = \mathbf{v}_{\text{orb}} - \mathbf{\Omega}_* \times \mathbf{r}$). This drives orbital semi-major axis migration ($da/dt|_{\text{star}}$):
    \begin{equation}
-   \left.\frac{da}{dt}\right|_{\text{star}} = -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
+   \begin{aligned}
+   \left.\frac{da}{dt}\right|_{\text{star}} &= -3 \left(\frac{k_{2, *}}{Q_*}\right) \left(\frac{M_p}{M_*}\right) \left(\frac{R_*}{a}\right)^5 n a \\
+   &\quad \times \left(1 - \frac{\Omega_*}{n} \cos\psi_*\right)
+   \end{aligned}
    \end{equation}
    Derived in Appendix~\ref{sec:derivation_a8}.
 
@@ -91,7 +94,8 @@ where $\dot{M}_0 \sim 10^{11}\text{ kg/s}$ is the characteristic nozzle flow esc
 The 6D coupled dynamical-thermal state vector $\mathbf{y}(t) = [S_{\mathrm{env}}, a, e, I, \Omega_{\mathrm{rot}}, \varepsilon]^T$ evolves under equilibrium tidal dissipation (Hut 1981; Eggleton et al. 1998; Leconte et al. 2010):
 \begin{align}
 \frac{da}{dt} &= -\frac{57}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a e^2 \nonumber \\
-&\quad + 3 \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a \left( \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon - 1 \right) + \left.\frac{da}{dt}\right|_{\text{star}} + \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} \\
+&\quad + 3 \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n a \left( \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon - 1 \right) \nonumber \\
+&\quad + \left.\frac{da}{dt}\right|_{\text{star}} + \left.\frac{da}{dt}\right|_{\mathrm{RLOF}} \\
 \frac{de}{dt} &= -\frac{21}{2} \left(\frac{k_2}{Q}\right) \frac{M_*}{M_p} \left(\frac{R_p}{a}\right)^5 n e \left[ 1 - \frac{11}{18} \frac{\Omega_{\mathrm{rot}}}{n} \cos\varepsilon \right] \\
 \frac{d\Omega_{\mathrm{rot}}}{dt} &= -\frac{3}{2 C_p M_p R_p^2} \left(\frac{k_2}{Q}\right) \frac{G M_*^2 R_p^5}{a^6} \left(\Omega_{\text{rot}} - n \cos\varepsilon\right) \nonumber \\
 &\quad - \frac{2 \Omega_{\mathrm{rot}}}{R_p} \frac{dR_p}{dt} \\

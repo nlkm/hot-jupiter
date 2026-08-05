@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 20:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 21:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -490,18 +490,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
  []
 
 [2] [3]
-Overfull \hbox (10.03772pt too wide) detected at line 79
-[][][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 3 [] [] [][] \
-OML/cmm/m/it/10 na []
- []
-
-
-Overfull \hbox (19.07729pt too wide) detected at line 87
-[]
- []
-
-
-Overfull \hbox (79.6507pt too wide) detected at line 99
+Overfull \hbox (19.07729pt too wide) detected at line 90
 []
  []
 
@@ -509,13 +498,13 @@ Overfull \hbox (79.6507pt too wide) detected at line 99
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (4.67348pt too wide) detected at line 105
+Overfull \hbox (4.67348pt too wide) detected at line 109
 [][][]\OML/cmm/m/it/10 W[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 P[] \OMS/cmsy/m/n
 /10 ^^A \OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = [] \OMS/cmsy/m/n/10 ^^A []
  []
 
 ) (./sections/03_benchmarks.tex
-Underfull \hbox (badness 10000) in paragraph at lines 105--1
+Underfull \hbox (badness 10000) in paragraph at lines 109--1
 \OT1/cmr/m/n/10 where $\OML/cmm/m/it/10 R[]$ \OT1/cmr/m/n/10 is stel-lar ra-diu
 s and $[] \OMS/cmsy/m/n/10 /
  []
@@ -565,11 +554,8 @@ File: figures/multi_planet_system_evolution.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/multi_planet_system_evolution.pdf  used on inp
 ut line 48.
 (pdftex.def)             Requested size: 239.55144pt x 239.4481pt.
-
-Underfull \vbox (badness 5681) has occurred while \output is active []
-
- [5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.p
-df> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
+[5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.pd
+f> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
 <figures/obliquity_tilted_spin_evolution.pdf, id=619, 499.02199pt x 428.23755pt
 >
 File: figures/obliquity_tilted_spin_evolution.pdf Graphic file (type pdf)
@@ -914,10 +900,10 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 895C21149B52935A7A81C3CEABFE7E76;18553.
  ) 
 Here is how much of TeX's memory you used:
- 10991 strings out of 476182
- 172267 string characters out of 5795596
+ 10993 strings out of 476182
+ 172325 string characters out of 5795596
  2106975 words of memory out of 5000000
- 32639 multiletter control sequences out of 15000+600000
+ 32641 multiletter control sequences out of 15000+600000
  570348 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,17n,79p,1496b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -947,7 +933,7 @@ y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (21 pages, 914305 bytes).
+Output written on paper.pdf (21 pages, 914346 bytes).
 PDF statistics:
  2266 PDF objects out of 2487 (max. 8388607)
  882 compressed objects within 9 object streams
