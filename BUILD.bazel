@@ -30,6 +30,13 @@ cc_binary(
 
 # Adjacent Module Unit Tests
 cc_test(
+    name = "c_api_test",
+    srcs = ["cpp/src/c_api_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_test(
     name = "constants_test",
     srcs = ["cpp/include/constants_test.cpp"],
     copts = ["-std=c++17", "-O3"],

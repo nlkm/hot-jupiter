@@ -19,7 +19,7 @@ void solve_planet_structure_c(
     out_result->S_env = sys.S_env;
     out_result->T_center = sys.T_c;
     out_result->P_center = sys.P_c;
-    out_result->rho_center = sys.rho.empty() ? 0.0 : sys.rho[0];
+    out_result->rho_center = sys.rho.empty() ? 0.0 : sys.rho.back();
     out_result->num_layers = sys.r.size();
 }
 
