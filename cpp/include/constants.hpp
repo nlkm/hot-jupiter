@@ -1,7 +1,7 @@
-#ifndef THERMAL_EVOLUTION_CONSTANTS_HPP
-#define THERMAL_EVOLUTION_CONSTANTS_HPP
+#ifndef HOT_JUPITER_CONSTANTS_HPP
+#define HOT_JUPITER_CONSTANTS_HPP
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 // Gravitational Constant [m^3 kg^-1 s^-2]
 constexpr double G = 6.67430e-11;
@@ -33,6 +33,6 @@ constexpr double MASS_E = 9.1093837015e-31;// Electron mass [kg]
 constexpr double MASS_P = 1.67262192369e-27;// Proton mass [kg]
 constexpr double SIGMA_SB = 5.670374419e-8;// Stefan-Boltzmann constant [W m^-2 K^-4]
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_CONSTANTS_HPP
+#endif // HOT_JUPITER_CONSTANTS_HPP

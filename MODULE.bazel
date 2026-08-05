@@ -1,5 +1,5 @@
 module(
-    name = "thermal_evolution",
+    name = "hot_jupiter",
     version = "1.0.0",
 )
 

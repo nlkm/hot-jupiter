@@ -2,7 +2,7 @@
 #include <cassert>
 #include "orbital.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Orbital & Spin Rates..." << std::endl;

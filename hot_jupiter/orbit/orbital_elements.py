@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Tuple, Optional
 import numpy as np
 
-from thermal_evolution.constants import G, M_SUN, AU, DAY, HOUR
+from hot_jupiter.constants import G, M_SUN, AU, DAY, HOUR
 
 
 @dataclass

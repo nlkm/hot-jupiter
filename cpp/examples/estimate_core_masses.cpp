@@ -12,7 +12,7 @@
 #include "heating.hpp"
 #include "atmosphere.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 struct PlanetData {
     int id;

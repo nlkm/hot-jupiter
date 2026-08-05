@@ -12,7 +12,7 @@
 #include "orbital.hpp"
 #include "multi_planet.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "==========================================================================" << std::endl;

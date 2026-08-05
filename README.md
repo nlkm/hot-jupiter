@@ -33,13 +33,13 @@ A modular numerical physics library for modeling the interior hydrostatic struct
 ## 🚀 Quickstart Example
 
 ```python
-from thermal_evolution.constants import M_JUP, M_EARTH, BAR, YEAR
-from thermal_evolution.eos import TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import ZeroHeating
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.visualization import plot_evolution_track
+from hot_jupiter.constants import M_JUP, M_EARTH, BAR, YEAR
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import ZeroHeating
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.visualization import plot_evolution_track
 
 # 1. Initialize EOS, Hydrostatic Solver, and Atmosphere
 eos = TabularEOS.create_synthetic_grid(n_P=100, n_T=100)

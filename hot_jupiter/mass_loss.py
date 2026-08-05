@@ -6,7 +6,7 @@ Implements Eggleton (1983), Paczyński (1971), Rappaport et al. (2013), Jackson 
 from dataclasses import dataclass
 from typing import Tuple
 import numpy as np
-from thermal_evolution.constants import G, M_EARTH, M_JUP, M_SUN, AU, YEAR
+from hot_jupiter.constants import G, M_EARTH, M_JUP, M_SUN, AU, YEAR
 
 
 @dataclass

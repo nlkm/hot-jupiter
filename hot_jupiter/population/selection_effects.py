@@ -3,7 +3,7 @@ Observational transit selection probability and survey detection completeness mo
 """
 
 import numpy as np
-from thermal_evolution.constants import R_SUN, AU, YEAR
+from hot_jupiter.constants import R_SUN, AU, YEAR
 
 
 def geometric_transit_probability(

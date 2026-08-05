@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(thermal_evolution LANGUAGES CXX)
+project(hot_jupiter LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -Wall -Wextra")
 include_directories(cpp/include)
 
 # Shared Library
-add_library(thermal_evolution_cpp SHARED
+add_library(hot_jupiter_cpp SHARED
     cpp/src/interior.cpp
 )
 

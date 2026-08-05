@@ -1,12 +1,12 @@
-#ifndef THERMAL_EVOLUTION_ATMOSPHERE_HPP
-#define THERMAL_EVOLUTION_ATMOSPHERE_HPP
+#ifndef HOT_JUPITER_ATMOSPHERE_HPP
+#define HOT_JUPITER_ATMOSPHERE_HPP
 
 #include <cmath>
 #include <algorithm>
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 class TimeVaryingStellarLuminosity {
 public:
@@ -59,6 +59,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_ATMOSPHERE_HPP
+#endif // HOT_JUPITER_ATMOSPHERE_HPP

@@ -9,8 +9,8 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import brentq
 
-from thermal_evolution.eos.base import BaseEOS
-from thermal_evolution.eos.analytical import AnalyticalHHeEOS
+from hot_jupiter.eos.base import BaseEOS
+from hot_jupiter.eos.analytical import AnalyticalHHeEOS
 
 
 class TabularEOS(BaseEOS):

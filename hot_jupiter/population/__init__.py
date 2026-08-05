@@ -2,14 +2,14 @@
 Population synthesis sub-package.
 """
 
-from thermal_evolution.population.catalog import ExoplanetSystem, get_curated_hot_jupiter_catalog
-from thermal_evolution.population.core_scaling import estimate_heavy_element_mass
-from thermal_evolution.population.selection_effects import (
+from hot_jupiter.population.catalog import ExoplanetSystem, get_curated_hot_jupiter_catalog
+from hot_jupiter.population.core_scaling import estimate_heavy_element_mass
+from hot_jupiter.population.selection_effects import (
     geometric_transit_probability,
     transit_detection_completeness,
     transit_selection_weight,
 )
-from thermal_evolution.population.simulator import (
+from hot_jupiter.population.simulator import (
     IncrementalModelStats,
     IncrementalPopulationResult,
     PopulationSimulator,

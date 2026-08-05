@@ -8,8 +8,8 @@ from dataclasses import dataclass, field
 from typing import List, Tuple, Dict, Optional
 import numpy as np
 
-from thermal_evolution.constants import G, M_SUN, AU, M_JUP, M_EARTH, YEAR, GYR, DAY, HOUR
-from thermal_evolution.orbit.orbital_elements import OrbitalState, SpinVectorState, TidalOrbitalSpinRates
+from hot_jupiter.constants import G, M_SUN, AU, M_JUP, M_EARTH, YEAR, GYR, DAY, HOUR
+from hot_jupiter.orbit.orbital_elements import OrbitalState, SpinVectorState, TidalOrbitalSpinRates
 
 
 @dataclass

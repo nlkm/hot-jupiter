@@ -5,13 +5,13 @@ Unit tests for population synthesis, core mass scaling, and selection effects.
 import pytest
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, M_EARTH, R_JUP, R_SUN, AU
-from thermal_evolution.population import (
+from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, R_SUN, AU
+from hot_jupiter.population import (
     estimate_heavy_element_mass,
     transit_selection_weight,
     get_curated_hot_jupiter_catalog,
     PopulationSimulator,
-    PopulationSimulationResult,
+    IncrementalPopulationResult,
 )
 
 
@@ -40,10 +40,9 @@ def test_population_simulator():
     sim = PopulationSimulator(catalog=catalog)
     res = sim.run_simulation()
 
-    assert isinstance(res, PopulationSimulationResult)
+    assert isinstance(res, IncrementalPopulationResult)
     assert len(res.catalog_names) == 3
     assert len(res.R_obs_jup) == 3
-    assert len(res.R_model_no_tidal_jup) == 3
-    assert len(res.R_model_tidal_jup) == 3
-    assert 0.0 <= res.ks_stat_no_tidal <= 1.0
-    assert 0.0 <= res.p_val_no_tidal <= 1.0
+    assert "Stage 0: Non-irradiated Base" in res.stage_results
+    assert 0.0 <= res.stage_results["Stage 0: Non-irradiated Base"].ks_stat <= 1.0
+

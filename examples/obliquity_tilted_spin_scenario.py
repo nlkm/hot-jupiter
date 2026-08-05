@@ -7,14 +7,14 @@ and fast initial rotation (P_rot = 6 hours) on tidal dissipation power and radiu
 import os
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, HOUR, DAY
-from thermal_evolution.eos import TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import TidalEccentricityHeating
-from thermal_evolution.orbit import OrbitalState, SpinVectorState
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.visualization import plot_coupled_orbital_spin_evolution
+from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, HOUR, DAY
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.orbit import OrbitalState, SpinVectorState
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.visualization import plot_coupled_orbital_spin_evolution
 
 
 def run_obliquity_scenario():

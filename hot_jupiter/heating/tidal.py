@@ -6,8 +6,8 @@ Includes eccentricity damping and spin-orbit asynchronous dissipation.
 from typing import Optional
 import numpy as np
 
-from thermal_evolution.constants import G, M_SUN, AU
-from thermal_evolution.heating.base import BaseHeatingSource
+from hot_jupiter.constants import G, M_SUN, AU
+from hot_jupiter.heating.base import BaseHeatingSource
 
 
 class TidalEccentricityHeating(BaseHeatingSource):

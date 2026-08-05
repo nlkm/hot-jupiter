@@ -8,20 +8,20 @@ import numpy as np
 from scipy.stats import ks_2samp
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, R_JUP, L_SUN, YEAR, GYR, BAR, M_EARTH
-from thermal_evolution.eos import BaseEOS, TabularEOS, AnalyticalHHeEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import (
+from hot_jupiter.constants import M_JUP, R_JUP, L_SUN, YEAR, GYR, BAR, M_EARTH
+from hot_jupiter.eos import BaseEOS, TabularEOS, AnalyticalHHeEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import (
     BaseHeatingSource,
     ZeroHeating,
     TidalEccentricityHeating,
     OhmicDissipationHeating,
 )
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.population.catalog import ExoplanetSystem, get_curated_hot_jupiter_catalog
-from thermal_evolution.population.core_scaling import estimate_heavy_element_mass
-from thermal_evolution.population.selection_effects import transit_selection_weight
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.population.catalog import ExoplanetSystem, get_curated_hot_jupiter_catalog
+from hot_jupiter.population.core_scaling import estimate_heavy_element_mass
+from hot_jupiter.population.selection_effects import transit_selection_weight
 
 
 class CompositeHeating(BaseHeatingSource):

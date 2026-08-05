@@ -7,8 +7,8 @@ from typing import Union
 import numpy as np
 from scipy.optimize import brentq
 
-from thermal_evolution.constants import K_B, M_H, M_HE, N_A
-from thermal_evolution.eos.base import BaseEOS
+from hot_jupiter.constants import K_B, M_H, M_HE, N_A
+from hot_jupiter.eos.base import BaseEOS
 
 # Physical constants for analytical EOS
 HBAR = 1.054571817e-34    # Reduced Planck constant (J s)

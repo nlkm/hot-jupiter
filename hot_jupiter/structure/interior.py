@@ -7,10 +7,10 @@ from typing import Tuple, Optional
 import numpy as np
 from scipy.optimize import brentq
 
-from thermal_evolution.constants import G, BAR, M_JUP, M_EARTH, R_JUP
-from thermal_evolution.eos.base import BaseEOS
-from thermal_evolution.eos.core_eos import BaseCoreEOS, BirchMurnaghanCoreEOS
-from thermal_evolution.structure.planet_state import PlanetStructure, InternalProfile
+from hot_jupiter.constants import G, BAR, M_JUP, M_EARTH, R_JUP
+from hot_jupiter.eos.base import BaseEOS
+from hot_jupiter.eos.core_eos import BaseCoreEOS, BirchMurnaghanCoreEOS
+from hot_jupiter.structure.planet_state import PlanetStructure, InternalProfile
 
 
 class InteriorSolver:
@@ -107,10 +107,11 @@ class InteriorSolver:
         P_surf: float,
         X: float,
         Y: float,
+        num_pts: int = 150,
     ) -> float:
         """Residual: m(r=0) - 0.0."""
         r_arr, m_arr, _, _, _, _ = self._integrate_inward(
-            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=50
+            R_p_try, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts
         )
         return float(m_arr[0] - 0.0)
 
@@ -122,7 +123,7 @@ class InteriorSolver:
         P_surf: float = 1.0 * BAR,
         X: float = 0.75,
         Y: float = 0.25,
-        num_pts: int = 300,
+        num_pts: int = 150,
     ) -> PlanetStructure:
         """
         Solve 1D hydrostatic equilibrium for a planet given (M_p, M_c, S_env).
@@ -131,21 +132,21 @@ class InteriorSolver:
         R_min = 0.4 * R_JUP
         R_max = 2.5 * R_JUP
 
-        f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y)
-        f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y)
+        f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
+        f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
 
         if f_min * f_max > 0:
             R_min = 0.1 * R_JUP
             R_max = 3.5 * R_JUP
-            f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y)
-            f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y)
+            f_min = self._mass_residual(R_min, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
+            f_max = self._mass_residual(R_max, M_p, M_c, S_env, P_surf, X, Y, num_pts=num_pts)
 
         try:
             R_p_sol = brentq(
                 self._mass_residual,
                 R_min,
                 R_max,
-                args=(M_p, M_c, S_env, P_surf, X, Y),
+                args=(M_p, M_c, S_env, P_surf, X, Y, num_pts),
                 xtol=1e-4 * R_JUP,
             )
         except ValueError:
@@ -181,7 +182,8 @@ class InteriorSolver:
         E_int = float(np.trapezoid(u_full, m_full))
 
         r_safe = np.maximum(r_full, 1e3)
-        dU_dm = - (G * m_full) / r_safe
+        m_pos = np.maximum(m_full, 0.0)
+        dU_dm = - (G * m_pos) / r_safe
         U_grav = float(np.trapezoid(dU_dm, m_full))
 
         profile = InternalProfile(

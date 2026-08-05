@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf) {
     auto [T_surf, rho_surf, nad_surf] = envelope_eos.get_state_from_PS(P_surf, S_env);
@@ -129,4 +129,4 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
     return st;
 }
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter

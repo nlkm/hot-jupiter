@@ -1,1 +1,1 @@
-workspace(name = "thermal_evolution")
+workspace(name = "hot_jupiter")

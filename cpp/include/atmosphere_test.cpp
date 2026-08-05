@@ -2,7 +2,7 @@
 #include <cassert>
 #include "atmosphere.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Atmosphere & JWST Scale Height..." << std::endl;

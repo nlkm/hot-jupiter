@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  3 AUG 2026 07:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 06:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -332,34 +332,53 @@ Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
 \rot@float@box=\box53
 \rot@mess@toks=\toks26
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 16.
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
+\LTleft=\skip56
+\LTright=\skip57
+\LTpre=\skip58
+\LTpost=\skip59
+\LTchunksize=\count293
+\LTcapwidth=\dimen177
+\LT@head=\box54
+\LT@firsthead=\box55
+\LT@foot=\box56
+\LT@lastfoot=\box57
+\LT@gbox=\box58
+\LT@cols=\count294
+\LT@rows=\count295
+\c@LT@tables=\count296
+\c@LT@chunks=\count297
+\LT@p@ftn=\toks27
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 17.
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count293
-\l__pdf_internal_box=\box54
+\l__color_backend_stack_int=\count298
+\l__pdf_internal_box=\box59
 )
 (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -397,17 +416,17 @@ LaTeX Font Info:    ... okay on input line 28.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count294
-\scratchdimen=\dimen177
-\scratchbox=\box55
-\nofMPsegments=\count295
-\nofMParguments=\count296
-\everyMPshowfont=\toks27
-\MPscratchCnt=\count297
-\MPscratchDim=\dimen178
-\MPnumerator=\count298
-\makeMPintoPDFobject=\count299
-\everyMPtoPDFconversion=\toks28
+\scratchcounter=\count299
+\scratchdimen=\dimen178
+\scratchbox=\box60
+\nofMPsegments=\count300
+\nofMParguments=\count301
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count302
+\MPscratchDim=\dimen179
+\MPnumerator=\count303
+\makeMPintoPDFobject=\count304
+\everyMPtoPDFconversion=\toks29
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -426,17 +445,17 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: pdftex.def on input line 149.
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx))
-Package hyperref Info: Link coloring ON on input line 28.
+Package hyperref Info: Link coloring ON on input line 29.
  (./paper.out) (./paper.out)
 \@outlinefile=\write3
 \openout3 = `paper.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
 
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -448,31 +467,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
  []
 
 
-Underfull \hbox (badness 3209) in paragraph at lines 18--19
-\OT1/cmr/bx/n/10 Bench-mark)\OT1/cmr/m/n/10 : Evolv-ing a non-irradiated to
- []
-
-
-Underfull \hbox (badness 1931) in paragraph at lines 18--19
-\OT1/cmr/m/n/10 with smooth un-truncated hy-dro-static pro-files
+Underfull \hbox (badness 7451) in paragraph at lines 12--13
+[]\OT1/cmr/bx/n/10 Observational Tran-sit Se-lec-tion Ef-fects
  []
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 21--22
-[]\OT1/cmr/bx/n/10 Multi-Planet Sys-tems with Laplace-
+Underfull \hbox (badness 10000) in paragraph at lines 23--24
+[]\OT1/cmr/bx/n/10 Stellar Ro-ta-tion Driven Tides\OT1/cmr/m/n/10 : Sub-
  []
 
 
-Underfull \hbox (badness 5578) in paragraph at lines 21--22
-\OT1/cmr/m/n/10 ec-cen-tric-ity os-cil-la-tions ($\OML/cmm/m/it/10 de[]=dt\OMS/
-cmsy/m/n/10 j[]$\OT1/cmr/m/n/10 ) sus-tain
- []
-
-
-Underfull \hbox (badness 4940) in paragraph at lines 27--28
+Underfull \hbox (badness 4940) in paragraph at lines 33--34
 []\OT1/cmr/bx/n/10 Single-Planet 1D Evolvers \OT1/cmr/m/n/10 (e.g., MESA,
  []
 
@@ -482,23 +490,66 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
  []
 
 
-Underfull \vbox (badness 2478) has occurred while \output is active []
+LaTeX Warning: Reference `sec:derivation_a1' on page 2 undefined on input line 
+8.
 
- [2]
+
+LaTeX Warning: Reference `sec:derivation_a2' on page 2 undefined on input line 
+18.
+
+[2]
+
+LaTeX Warning: Reference `sec:derivation_a3' on page 3 undefined on input line 
+28.
+
+
+LaTeX Warning: Reference `sec:derivation_a4' on page 3 undefined on input line 
+36.
+
+
+LaTeX Warning: Reference `sec:derivation_a5' on page 3 undefined on input line 
+43.
+
+
+LaTeX Warning: Reference `sec:derivation_a6' on page 3 undefined on input line 
+52.
+
+[3]
+
+LaTeX Warning: Reference `sec:derivation_a7' on page 4 undefined on input line 
+74.
+
+
 Overfull \hbox (10.03772pt too wide) detected at line 79
 [][][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 3 [] [] [][] \
 OML/cmm/m/it/10 na []
  []
 
 
+LaTeX Warning: Reference `sec:derivation_a8' on page 4 undefined on input line 
+80.
+
+
 Overfull \hbox (19.07729pt too wide) detected at line 87
 []
  []
 
-[3]
+
+LaTeX Warning: Reference `sec:derivation_a9' on page 4 undefined on input line 
+88.
+
+
 Overfull \hbox (79.6507pt too wide) detected at line 99
 []
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Warning: Reference `sec:derivation_a10' on page 4 undefined on input line
+ 100.
 
 
 Overfull \hbox (4.67348pt too wide) detected at line 105
@@ -517,52 +568,70 @@ Underfull \hbox (badness 2012) in paragraph at lines 1--1
 \OT1/cmr/bx/n/14.4 u-la-tion Sce-nar-ios & Bench-
  []
 
-<figures/jupiter_cooling_track.pdf, id=309, 714.63863pt x 499.70454pt>
+[4]
+<figures/jupiter_cooling_track.pdf, id=268, 571.24997pt x 499.06215pt>
 File: figures/jupiter_cooling_track.pdf Graphic file (type pdf)
 <use figures/jupiter_cooling_track.pdf>
 Package pdftex.def Info: figures/jupiter_cooling_track.pdf  used on input line 
 14.
-(pdftex.def)             Requested size: 239.55144pt x 167.50308pt.
-<figures/jupiter_internal_profile.pdf, id=310, 716.43422pt x 498.86375pt>
+(pdftex.def)             Requested size: 239.55144pt x 209.28484pt.
+<figures/jupiter_internal_profile.pdf, id=269, 571.63863pt x 498.86375pt>
 File: figures/jupiter_internal_profile.pdf Graphic file (type pdf)
 <use figures/jupiter_internal_profile.pdf>
 Package pdftex.def Info: figures/jupiter_internal_profile.pdf  used on input li
 ne 21.
-(pdftex.def)             Requested size: 239.55144pt x 166.80258pt.
-[4 <./figures/jupiter_cooling_track.pdf>]
-<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=425, 570.529pt x 49
-9.06215pt>
+(pdftex.def)             Requested size: 239.55144pt x 209.057pt.
+<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=270, 499.15184pt x 
+428.23755pt>
 File: figures/hot_jupiter_coupled_orbital_spin_evolution.pdf Graphic file (type
  pdf)
 <use figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>
 Package pdftex.def Info: figures/hot_jupiter_coupled_orbital_spin_evolution.pdf
   used on input line 35.
-(pdftex.def)             Requested size: 239.55144pt x 209.54375pt.
-<figures/multi_planet_system_evolution.pdf, id=426, 499.15184pt x 428.23755pt>
+(pdftex.def)             Requested size: 239.55144pt x 205.51901pt.
+
+Underfull \hbox (badness 3260) in paragraph at lines 42--45
+\OT1/cmr/m/n/10 Simulates a 3-planet sys-tem (\OT1/cmtt/m/n/10 Kepler-TE-1\OT1/
+cmr/m/n/10 ) con-
+ []
+
+
+Underfull \hbox (badness 3668) in paragraph at lines 42--45
+\OT1/cmr/m/n/10 tain-ing an in-ner Hot Jupiter $\OML/cmm/m/it/10 b$ \OT1/cmr/m/
+n/10 ($1\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 0 \OML/cmm/m/it/10 M[]; a \OT1/cmr/m/
+n/10 =
+ []
+
+<figures/multi_planet_system_evolution.pdf, id=271, 499.27293pt x 499.06215pt>
 File: figures/multi_planet_system_evolution.pdf Graphic file (type pdf)
 <use figures/multi_planet_system_evolution.pdf>
 Package pdftex.def Info: figures/multi_planet_system_evolution.pdf  used on inp
 ut line 48.
-(pdftex.def)             Requested size: 239.55144pt x 205.51901pt.
-<figures/obliquity_tilted_spin_evolution.pdf, id=427, 498.8236pt x 428.23755pt>
+(pdftex.def)             Requested size: 239.55144pt x 239.4481pt.
 
+Underfull \vbox (badness 5681) has occurred while \output is active []
+
+ [5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.p
+df> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
+<figures/obliquity_tilted_spin_evolution.pdf, id=569, 499.02199pt x 428.23755pt
+>
 File: figures/obliquity_tilted_spin_evolution.pdf Graphic file (type pdf)
 <use figures/obliquity_tilted_spin_evolution.pdf>
 Package pdftex.def Info: figures/obliquity_tilted_spin_evolution.pdf  used on i
 nput line 62.
-(pdftex.def)             Requested size: 239.55144pt x 205.65623pt.
+(pdftex.def)             Requested size: 239.55144pt x 205.57129pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 67--67
 \OT1/cmr/bx/n/12 align-ment (Rossiter-McLaughlin
  []
 
-<figures/stellar_misaligned_orbit_evolution.pdf, id=428, 499.94547pt x 428.2375
-5pt>
+<figures/stellar_misaligned_orbit_evolution.pdf, id=570, 499.03079pt x 357.4129
+6pt>
 File: figures/stellar_misaligned_orbit_evolution.pdf Graphic file (type pdf)
 <use figures/stellar_misaligned_orbit_evolution.pdf>
 Package pdftex.def Info: figures/stellar_misaligned_orbit_evolution.pdf  used o
 n input line 74.
-(pdftex.def)             Requested size: 239.55144pt x 205.19229pt.
+(pdftex.def)             Requested size: 239.55144pt x 171.57263pt.
 
 Underfull \hbox (badness 1902) in paragraph at lines 81--84
 \OT1/cmr/m/n/10 
@@ -570,182 +639,238 @@ Underfull \hbox (badness 1902) in paragraph at lines 81--84
 gra-
  []
 
-[5 <./figures/jupiter_internal_profile.pdf> <./figures/hot_jupiter_coupled_orbi
-tal_spin_evolution.pdf> <./figures/multi_planet_system_evolution.pdf>]
-<figures/stellar_rotation_tidal_migration.pdf, id=708, 499.15184pt x 317.66641p
+
+Underfull \vbox (badness 1163) has occurred while \output is active []
+
+ [6 <./figures/multi_planet_system_evolution.pdf> <./figures/obliquity_tilted_s
+pin_evolution.pdf> <./figures/stellar_misaligned_orbit_evolution.pdf>]
+<figures/stellar_rotation_tidal_migration.pdf, id=848, 499.15184pt x 357.41296p
 t>
 File: figures/stellar_rotation_tidal_migration.pdf Graphic file (type pdf)
 <use figures/stellar_rotation_tidal_migration.pdf>
 Package pdftex.def Info: figures/stellar_rotation_tidal_migration.pdf  used on 
 input line 87.
-(pdftex.def)             Requested size: 239.55144pt x 152.4539pt.
+(pdftex.def)             Requested size: 239.55144pt x 171.52899pt.
 
 Underfull \hbox (badness 1137) in paragraph at lines 94--97
 \OT1/cmr/m/n/10 Simulates an ultra-short-period Hot Jupiter ($\OML/cmm/m/it/10 
 a \OT1/cmr/m/n/10 =
  []
 
-<figures/roche_lobe_overflow_mass_loss.pdf, id=709, 787.1508pt x 569.88672pt>
+<figures/roche_lobe_overflow_mass_loss.pdf, id=849, 787.1508pt x 569.88672pt>
 File: figures/roche_lobe_overflow_mass_loss.pdf Graphic file (type pdf)
 <use figures/roche_lobe_overflow_mass_loss.pdf>
 Package pdftex.def Info: figures/roche_lobe_overflow_mass_loss.pdf  used on inp
 ut line 100.
 (pdftex.def)             Requested size: 239.55144pt x 173.42822pt.
 
-Underfull \hbox (badness 1824) in paragraph at lines 105--105
-\OT1/cmr/bx/n/12 Pop-u-la-tion Study & KS Met-ric
+Underfull \hbox (badness 1264) in paragraph at lines 107--109
+\OT1/cmr/m/n/10 3\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 0 \OML/cmm/m/it/10 M[]$\OT1/
+cmr/m/n/10 ), and core masses. - **Walk-through**:
  []
 
-[6 <./figures/obliquity_tilted_spin_evolution.pdf> <./figures/stellar_misaligne
-d_orbit_evolution.pdf> <./figures/stellar_rotation_tidal_migration.pdf>]
-<figures/hot_jupiter_incremental_ks_comparison.pdf, id=989, 498.39027pt x 317.4
-68pt>
+<figures/hot_jupiter_incremental_ks_comparison.pdf, id=850, 642.75839pt x 321.8
+0226pt>
 File: figures/hot_jupiter_incremental_ks_comparison.pdf Graphic file (type pdf)
 
 <use figures/hot_jupiter_incremental_ks_comparison.pdf>
 Package pdftex.def Info: figures/hot_jupiter_incremental_ks_comparison.pdf  use
 d on input line 112.
-(pdftex.def)             Requested size: 239.55144pt x 152.5912pt.
+(pdftex.def)             Requested size: 239.55144pt x 119.93408pt.
+
+Underfull \hbox (badness 2173) in paragraph at lines 117--117
+\OT1/cmr/bx/n/12 Spec-trum Scale Height In-fla-tion
+ []
+
+<figures/jwst_transmission_scale_height.pdf, id=851, 498.85889pt x 428.23755pt>
+
+File: figures/jwst_transmission_scale_height.pdf Graphic file (type pdf)
+<use figures/jwst_transmission_scale_height.pdf>
+Package pdftex.def Info: figures/jwst_transmission_scale_height.pdf  used on in
+put line 124.
+(pdftex.def)             Requested size: 239.55144pt x 205.64316pt.
+
+Underfull \hbox (badness 2073) in paragraph at lines 129--129
+[]\OT1/cmr/bx/n/12 Scenario 10: Cou-pled Energy-
+ []
+
+
+Underfull \hbox (badness 2376) in paragraph at lines 131--133
+\OT1/cmr/m/n/10 Integrates si-mul-ta-ne-ous hy-dro-dy-namic Roche lobe
+ []
+
+
+Underfull \hbox (badness 1137) in paragraph at lines 131--133
+\OT1/cmr/m/n/10 - **Walk-through**: Dur-ing early evo-lu-tion ($\OML/cmm/m/it/1
+0 t <
+ []
+
+
+Underfull \vbox (badness 2119) has occurred while \output is active []
+
+ [7 <./figures/stellar_rotation_tidal_migration.pdf> <./figures/roche_lobe_over
+flow_mass_loss.pdf> <./figures/hot_jupiter_incremental_ks_comparison.pdf>]
+<figures/photoevaporation_mass_loss.pdf, id=1147, 497.82863pt x 428.23755pt>
+File: figures/photoevaporation_mass_loss.pdf Graphic file (type pdf)
+<use figures/photoevaporation_mass_loss.pdf>
+Package pdftex.def Info: figures/photoevaporation_mass_loss.pdf  used on input 
+line 136.
+(pdftex.def)             Requested size: 239.55144pt x 206.0679pt.
 )
 (./sections/04_population.tex
+Underfull \hbox (badness 1681) in paragraph at lines 26--28
+[]\OT1/cmr/bx/n/10 Initial Ec-cen-tric-ity ($\OML/cmm/m/it/10 e[]$\OT1/cmr/bx/n
+/10 )\OT1/cmr/m/n/10 : Sam-pled from a
+ []
+
+
+Underfull \hbox (badness 1320) in paragraph at lines 29--31
+\OT1/cmr/m/n/10 Lagrange sec-u-lar per-tur-ba-tions ($\OML/cmm/m/it/10 A[]$\OT1
+/cmr/m/n/10 ) main-tain
+ []
+
+[8 <./figures/jwst_transmission_scale_height.pdf> <./figures/photoevaporation_m
+ass_loss.pdf>]
+Underfull \hbox (badness 6526) in paragraph at lines 34--35
+\OT1/cmr/m/n/10 Smirnov (KS) met-ric com-par-i-son, we com-piled
+ []
+
+
+Underfull \hbox (badness 1400) in paragraph at lines 34--35
+\OT1/cmr/m/n/10 mea-sured plan-e-tary mass ($\OML/cmm/m/it/10 M[] > \OT1/cmr/m/
+n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 1 \OML/cmm/m/it/10 M[]$\OT1/cmr/m/n/10 
+), and
+ []
+
+
+Overfull \hbox (27.51291pt too wide) in paragraph at lines 34--35
+\OT1/cmtt/m/n/10 outputs/nasa[]exoplanet[]archive[]hot[]jupiters[]342.csv\OT1/c
+mr/m/n/10 ). 
+ []
+
+
+Overfull \hbox (52.40132pt too wide) in paragraph at lines 41--67
+ [][] 
+ []
+
+
+Underfull \hbox (badness 3428) in paragraph at lines 69--69
+[]\OT1/cmr/bx/n/12 Statistical Pro-gres-sion Across 6
+ []
+
 File: figures/hot_jupiter_incremental_ks_comparison.pdf Graphic file (type pdf)
 
 <use figures/hot_jupiter_incremental_ks_comparison.pdf>
 Package pdftex.def Info: figures/hot_jupiter_incremental_ks_comparison.pdf  use
-d on input line 5.
-(pdftex.def)             Requested size: 239.55144pt x 152.5912pt.
-) (./sections/05_conclusions.tex)
-(./sections/06_appendix.tex
-Underfull \hbox (badness 10000) in paragraph at lines 1--1
-[]\OT1/cmr/bx/n/14.4 Step-by-Step An-a-lyt-i-cal
+d on input line 73.
+(pdftex.def)             Requested size: 239.55144pt x 119.93408pt.
+
+Underfull \vbox (badness 5475) has occurred while \output is active []
+
+
+Underfull \hbox (badness 2285) in paragraph at lines 119--120
+\OT1/cmr/m/n/10 Both pan-els demon-strate out-stand-ing quan-ti-ta-tive
+ []
+
+<figures/core_mass_metallicity_correlation.pdf, id=1375, 788.70422pt x 344.2517
+9pt>
+File: figures/core_mass_metallicity_correlation.pdf Graphic file (type pdf)
+<use figures/core_mass_metallicity_correlation.pdf>
+Package pdftex.def Info: figures/core_mass_metallicity_correlation.pdf  used on
+ input line 123.
+(pdftex.def)             Requested size: 489.10287pt x 213.48642pt.
+[9] [10 <./figures/core_mass_metallicity_correlation.pdf>] [11]
+Underfull \hbox (badness 3930) in paragraph at lines 138--140
+[]\OT1/cmr/bx/n/10 Multi-Planet Sec-u-lar Ec-cen-tric-ity Floor
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1--1
-\OT1/cmr/bx/n/14.4 Deriva-tions from First-
+Underfull \hbox (badness 1033) in paragraph at lines 141--143
+\OT1/cmr/m/n/10 neighborhood metal-lic-ity dis-per-sion ($\OML/cmm/m/it/10 ^^[[
+] \OT1/cmr/m/n/10 =
+ []
+
+) (./sections/05_conclusions.tex
+Underfull \hbox (badness 3019) in paragraph at lines 3--4
+\OT1/cmr/m/n/10 In this work, we pre-sented a mod-u-lar phys-i-cal
  []
 
 
-Underfull \hbox (badness 1270) in paragraph at lines 6--6
-[]\OT1/cmr/bx/n/12 Derivation A1: 1D Hy-dro-static
- []
-
-[7 <./figures/roche_lobe_overflow_mass_loss.pdf> <./figures/hot_jupiter_increme
-ntal_ks_comparison.pdf>] [8]
-Underfull \hbox (badness 1365) in paragraph at lines 118--118
-[]\OT1/cmr/bx/n/12 Derivation A3: Non-Relativistic
+Underfull \hbox (badness 1354) in paragraph at lines 23--25
+[]\OT1/cmr/bx/n/10 First-Principles C++ / Bazel 8 Re-pro-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 118--118
-\OT1/cmr/bx/n/12 Elec-tron De-gen-er-acy Pres-sure
+Underfull \hbox (badness 1158) in paragraph at lines 23--25
+\OT1/cmr/m/n/10 tion syn-the-sis tools are im-ple-mented in high-
  []
+
+[12]
+Underfull \hbox (badness 3601) in paragraph at lines 31--32
+[]\OT1/cmr/bx/n/10 Double-Diffusive Com-po-si-tion Gra-di-ents\OT1/cmr/m/n/10 :
+
+ []
+
+) (./sections/06_appendix.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `subscript' on input line 1.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 118.
+(hyperref)                removing `math shift' on input line 1.
+
+
+Overfull \hbox (49.8718pt too wide) detected at line 6
+[][][]\OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = +[] [] []\OML/cmm/m/it/10 [][]b[]
+\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  A[] \
+OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[][]\OML/cmm/m/it/10 [][]b[]\OT1/cmr/m/n/
+10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )
+ []
+
+
+Underfull \hbox (badness 1142) in paragraph at lines 11--12
+\OT1/cmr/m/n/10 Geometric prob-a-bil-ity $\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 
+= []$ and Ke-pler
+ []
+
+[13
+
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 18.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 118.
+(hyperref)                removing `math shift' on input line 18.
 
-[9]
-Underfull \hbox (badness 3449) in paragraph at lines 198--198
-[]\OT1/cmr/bx/n/12 Derivation A5: Heavy-Element
- []
+(./sections/table_342_planets.tex [14
 
 
-Overfull \hbox (2.17029pt too wide) in paragraph at lines 221--221
-[]   \OT1/cmtt/m/n/7 |      |                 |  ( \  / )         | Phase Lag d
-elta[] 
- []
-
-
-Underfull \hbox (badness 5533) in paragraph at lines 238--240
-[]\OT1/cmr/m/n/10 3. **Ohmic Dis-si-pa-tion Power ($\OML/cmm/m/it/10 P[] \OT1/c
-mr/m/n/10 =
- []
-
-[10]
-Overfull \hbox (43.07704pt too wide) in paragraph at lines 282--282
-[]   \OT1/cmtt/m/n/7 Roche Lobe R_Roche = a * [ 0.49 q^(2/3) / (0.6 q^(2/3) + l
-n(1+q^(1/3))) ][] 
- []
-
-
-Underfull \hbox (badness 1394) in paragraph at lines 299--301
-\OT1/cmr/m/n/10 the sonic sur-face near $\OML/cmm/m/it/10 L[]$ \OT1/cmr/m/n/10 
-at sound speed $\OML/cmm/m/it/10 c[] \OMS/cmsy/m/n/10 ^^Y
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 305--307
-[]\OT1/cmr/m/n/10 4. **Or-bital Back-Reaction**: Equat-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 305--307
-\OT1/cmr/m/n/10 ing or-bital an-gu-lar mo-men-tum $\OML/cmm/m/it/10 L[] \OT1/cm
-r/m/n/10 =
- []
-
-
-Underfull \hbox (badness 1430) in paragraph at lines 305--307
-\OML/cmm/m/it/10 M[]M[][]=\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 M[] \OT1/cmr/m/n/10
- + \OML/cmm/m/it/10 M[]\OT1/cmr/m/n/10 )$ and mass loss
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 323--325
-\OT1/cmr/m/n/10 Substituting $\OML/cmm/m/it/10 I[] \OT1/cmr/m/n/10 = \OML/cmm/m
-/it/10 C[]M[]R[]$ \OT1/cmr/m/n/10 and $\OML/cmm/m/it/10 dI[]=dt \OT1/cmr/m/n/10
- =
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 327--329
-\OT1/cmr/m/n/10 Substituting tidal torque $\OML/cmm/m/it/10 T[] \OT1/cmr/m/n/10
- =
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 340--340
-[]\OT1/cmr/bx/n/12 Derivation A11: Laplace-
- []
-
-[11]
-Underfull \hbox (badness 1755) in paragraph at lines 369--369
-[]\OT1/cmr/bx/n/12 Derivation A12: Ob-ser-va-tional
- []
-
-)
-Underfull \hbox (badness 2753) in paragraph at lines 64--65
-\OT1/cmr/m/n/10 Element Masses of Gi-ant Ex-o-plan-ets. \OT1/cmr/m/it/10 ApJL\O
-T1/cmr/m/n/10 ,
- []
-
-[12] [13
-
-] (./paper.aux)
+] [15] [16] [17] [18]) [19]) (./paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 5B6E05E183DAA7BA75DFF5AA5865E007;17773.
+(rerunfilecheck)             Checksum: DC42F7A286C54D32028CA167C12C685F;14928.
  ) 
 Here is how much of TeX's memory you used:
- 10851 strings out of 476182
- 168112 string characters out of 5795596
- 1966975 words of memory out of 5000000
- 32492 multiletter control sequences out of 15000+600000
- 570516 words of font info for 84 fonts, out of 8000000 for 9000
+ 10901 strings out of 476182
+ 169492 string characters out of 5795596
+ 2106975 words of memory out of 5000000
+ 32580 multiletter control sequences out of 15000+600000
+ 570348 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,17n,79p,1243b,642s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,17n,79p,1496b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/neil/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
@@ -756,25 +881,24 @@ t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-i10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (13 pages, 650286 bytes).
+ts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on paper.pdf (19 pages, 776685 bytes).
 PDF statistics:
- 1461 PDF objects out of 1728 (max. 8388607)
- 695 compressed objects within 7 object streams
- 187 named destinations out of 1000 (max. 500000)
- 534 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1693 PDF objects out of 1728 (max. 8388607)
+ 668 compressed objects within 7 object streams
+ 144 named destinations out of 1000 (max. 500000)
+ 453 words of extra memory for PDF output out of 10000 (max. 10000000)
 

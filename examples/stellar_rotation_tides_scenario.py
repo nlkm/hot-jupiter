@@ -8,8 +8,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR
-from thermal_evolution.orbit import StellarTidalRates
+from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR
+from hot_jupiter.orbit import StellarTidalRates
 
 
 def run_stellar_rotation_benchmark():

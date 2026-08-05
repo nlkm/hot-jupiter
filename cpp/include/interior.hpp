@@ -1,5 +1,5 @@
-#ifndef THERMAL_EVOLUTION_INTERIOR_HPP
-#define THERMAL_EVOLUTION_INTERIOR_HPP
+#ifndef HOT_JUPITER_INTERIOR_HPP
+#define HOT_JUPITER_INTERIOR_HPP
 
 #include <vector>
 #include <tuple>
@@ -8,7 +8,7 @@
 #include "constants.hpp"
 #include "eos.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 struct PlanetStructure {
     double M_p;
@@ -38,6 +38,6 @@ private:
     double mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf);
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_INTERIOR_HPP
+#endif // HOT_JUPITER_INTERIOR_HPP

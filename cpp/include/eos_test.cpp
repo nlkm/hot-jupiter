@@ -2,7 +2,7 @@
 #include <cassert>
 #include "eos.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Equation of State (H/He & Core)..." << std::endl;

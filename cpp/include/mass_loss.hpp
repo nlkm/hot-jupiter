@@ -1,5 +1,5 @@
-#ifndef THERMAL_EVOLUTION_MASS_LOSS_HPP
-#define THERMAL_EVOLUTION_MASS_LOSS_HPP
+#ifndef HOT_JUPITER_MASS_LOSS_HPP
+#define HOT_JUPITER_MASS_LOSS_HPP
 
 #include <cmath>
 #include <tuple>
@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 class RocheLobeMassLoss {
 public:
@@ -60,6 +60,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_MASS_LOSS_HPP
+#endif // HOT_JUPITER_MASS_LOSS_HPP

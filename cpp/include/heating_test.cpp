@@ -2,7 +2,7 @@
 #include <cassert>
 #include "heating.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Heating Model (Tidal & Ohmic)..." << std::endl;

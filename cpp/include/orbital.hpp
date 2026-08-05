@@ -1,5 +1,5 @@
-#ifndef THERMAL_EVOLUTION_ORBITAL_HPP
-#define THERMAL_EVOLUTION_ORBITAL_HPP
+#ifndef HOT_JUPITER_ORBITAL_HPP
+#define HOT_JUPITER_ORBITAL_HPP
 
 #include <cmath>
 #include <tuple>
@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 struct OrbitalState {
     double a;            // Semi-major axis [m]
@@ -93,6 +93,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_ORBITAL_HPP
+#endif // HOT_JUPITER_ORBITAL_HPP

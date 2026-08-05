@@ -7,9 +7,9 @@ import numpy as np
 from scipy.optimize import brentq
 from typing import Optional
 
-from thermal_evolution.constants import G, SIGMA_SB, BAR
-from thermal_evolution.eos.base import BaseEOS
-from thermal_evolution.atmosphere.base import BaseAtmosphere, AtmosphereResult
+from hot_jupiter.constants import G, SIGMA_SB, BAR
+from hot_jupiter.eos.base import BaseEOS
+from hot_jupiter.atmosphere.base import BaseAtmosphere, AtmosphereResult
 
 
 class GuillotAtmosphere(BaseAtmosphere):

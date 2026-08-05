@@ -8,11 +8,11 @@ from typing import Optional, Tuple, Dict, Any
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from thermal_evolution.constants import YEAR, GYR, R_JUP, L_SUN, SIGMA_SB, M_SUN, AU, HOUR
-from thermal_evolution.structure import InteriorSolver, PlanetStructure
-from thermal_evolution.atmosphere import BaseAtmosphere, GuillotAtmosphere
-from thermal_evolution.heating import BaseHeatingSource, ZeroHeating
-from thermal_evolution.orbit import OrbitalState, SpinVectorState, TidalOrbitalSpinRates
+from hot_jupiter.constants import YEAR, GYR, R_JUP, L_SUN, SIGMA_SB, M_SUN, AU, HOUR
+from hot_jupiter.structure import InteriorSolver, PlanetStructure
+from hot_jupiter.atmosphere import BaseAtmosphere, GuillotAtmosphere
+from hot_jupiter.heating import BaseHeatingSource, ZeroHeating
+from hot_jupiter.orbit import OrbitalState, SpinVectorState, TidalOrbitalSpinRates
 
 
 @dataclass
@@ -348,7 +348,7 @@ class ThermalEvolutionIntegrator:
         Integrate full multi-planet system containing N planets simultaneously.
         Includes coupled 1D thermal contraction, tidal dissipation, and planet-planet secular perturbations.
         """
-        from thermal_evolution.orbit.multi_planet import MultiPlanetEvolutionResult, TidalOrbitalSpinRates
+        from hot_jupiter.orbit.multi_planet import MultiPlanetEvolutionResult, TidalOrbitalSpinRates
 
         N = len(system.planets)
         if N == 0:

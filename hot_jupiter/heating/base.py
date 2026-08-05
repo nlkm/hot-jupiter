@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, List
 import numpy as np
 
-from thermal_evolution.constants import M_EARTH, YEAR, GYR
+from hot_jupiter.constants import M_EARTH, YEAR, GYR
 
 
 class BaseHeatingSource(ABC):

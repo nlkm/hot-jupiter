@@ -6,8 +6,8 @@ Ref: Batygin & Stevenson (2010), Thorngren & Fortney (2018).
 from typing import Optional
 import numpy as np
 
-from thermal_evolution.constants import SIGMA_SB
-from thermal_evolution.heating.base import BaseHeatingSource
+from hot_jupiter.constants import SIGMA_SB
+from hot_jupiter.heating.base import BaseHeatingSource
 
 
 class OhmicDissipationHeating(BaseHeatingSource):

@@ -1,5 +1,5 @@
-#ifndef THERMAL_EVOLUTION_MULTI_PLANET_HPP
-#define THERMAL_EVOLUTION_MULTI_PLANET_HPP
+#ifndef HOT_JUPITER_MULTI_PLANET_HPP
+#define HOT_JUPITER_MULTI_PLANET_HPP
 
 #include <vector>
 #include <cmath>
@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 struct PlanetSystemMember {
     double M_p;
@@ -81,6 +81,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_MULTI_PLANET_HPP
+#endif // HOT_JUPITER_MULTI_PLANET_HPP

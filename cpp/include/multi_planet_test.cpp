@@ -2,7 +2,7 @@
 #include <cassert>
 #include "multi_planet.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Multi-Planet Secular Dynamics..." << std::endl;

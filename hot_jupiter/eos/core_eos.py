@@ -6,7 +6,7 @@ from typing import Union
 import numpy as np
 from scipy.optimize import brentq
 
-from thermal_evolution.constants import GPa
+from hot_jupiter.constants import GPa
 
 
 class BaseCoreEOS:

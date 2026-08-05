@@ -9,7 +9,7 @@
 #include "interior.hpp"
 #include "atmosphere.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "==========================================================" << std::endl;

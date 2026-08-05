@@ -2,7 +2,7 @@
 #include <cassert>
 #include "mass_loss.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] Mass Loss (RLOF & Photoevaporation)..." << std::endl;

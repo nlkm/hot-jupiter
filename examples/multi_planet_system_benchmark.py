@@ -7,14 +7,14 @@ tidal dissipation, and Laplace-Lagrange secular planet-planet gravitational inte
 import os
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR
-from thermal_evolution.eos import TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import TidalEccentricityHeating
-from thermal_evolution.orbit import OrbitalState, SpinVectorState, PlanetSystemMember, MultiPlanetSystem
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.visualization import plot_multi_planet_system_evolution
+from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.orbit import OrbitalState, SpinVectorState, PlanetSystemMember, MultiPlanetSystem
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.visualization import plot_multi_planet_system_evolution
 
 
 def run_multi_planet_system_benchmark():

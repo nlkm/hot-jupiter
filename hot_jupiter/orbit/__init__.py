@@ -2,13 +2,13 @@
 Orbital element, spin vector, and multi-planet system evolution module.
 """
 
-from thermal_evolution.orbit.orbital_elements import (
+from hot_jupiter.orbit.orbital_elements import (
     OrbitalState,
     SpinVectorState,
     TidalOrbitalSpinRates,
     StellarTidalRates,
 )
-from thermal_evolution.orbit.multi_planet import (
+from hot_jupiter.orbit.multi_planet import (
     PlanetSystemMember,
     MultiPlanetSystem,
     MultiPlanetEvolutionResult,

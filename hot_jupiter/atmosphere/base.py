@@ -5,7 +5,7 @@ Abstract interface for atmospheric boundary models.
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
-from thermal_evolution.constants import SIGMA_SB
+from hot_jupiter.constants import SIGMA_SB
 
 
 class AtmosphereResult(NamedTuple):

@@ -1,12 +1,12 @@
 """
-Unit tests for thermal_evolution.eos module.
+Unit tests for hot_jupiter.eos module.
 """
 
 import pytest
 import numpy as np
 
-from thermal_evolution.constants import BAR, MBAR, GPa
-from thermal_evolution.eos import (
+from hot_jupiter.constants import BAR, MBAR, GPa
+from hot_jupiter.eos import (
     BaseEOS,
     AnalyticalHHeEOS,
     TabularEOS,

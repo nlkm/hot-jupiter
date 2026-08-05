@@ -8,13 +8,13 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR, R_SUN, R_JUP
-from thermal_evolution.eos import TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import TidalEccentricityHeating
-from thermal_evolution.orbit import OrbitalState, SpinVectorState
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR, R_SUN, R_JUP
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.orbit import OrbitalState, SpinVectorState
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
 
 
 def run_stellar_misaligned_scenario():

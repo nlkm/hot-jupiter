@@ -4,7 +4,7 @@ Ref: Thorngren et al. (2016), ApJ, 831, 64.
 """
 
 import numpy as np
-from thermal_evolution.constants import M_EARTH, M_JUP
+from hot_jupiter.constants import M_EARTH, M_JUP
 
 
 def estimate_heavy_element_mass(

@@ -11,13 +11,13 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, R_JUP, M_EARTH, BAR, YEAR, GYR, L_SUN, SIGMA_SB
-from thermal_evolution.eos import TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import RadiogenicHeating
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.visualization import plot_evolution_track, plot_internal_profile
+from hot_jupiter.constants import M_JUP, R_JUP, M_EARTH, BAR, YEAR, GYR, L_SUN, SIGMA_SB
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import RadiogenicHeating
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.visualization import plot_evolution_track, plot_internal_profile
 
 
 def main():

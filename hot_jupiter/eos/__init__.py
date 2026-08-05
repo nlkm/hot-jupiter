@@ -2,10 +2,10 @@
 Equation of State sub-package.
 """
 
-from thermal_evolution.eos.base import BaseEOS
-from thermal_evolution.eos.analytical import AnalyticalHHeEOS
-from thermal_evolution.eos.tabular import TabularEOS
-from thermal_evolution.eos.core_eos import (
+from hot_jupiter.eos.base import BaseEOS
+from hot_jupiter.eos.analytical import AnalyticalHHeEOS
+from hot_jupiter.eos.tabular import TabularEOS
+from hot_jupiter.eos.core_eos import (
     BaseCoreEOS,
     ConstantDensityCoreEOS,
     BirchMurnaghanCoreEOS,

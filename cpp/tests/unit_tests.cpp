@@ -12,7 +12,7 @@
 #include "mass_loss.hpp"
 #include "multi_planet.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 // 1. Fundamental Constants Test
 void test_constants() {

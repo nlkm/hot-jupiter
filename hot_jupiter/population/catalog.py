@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, R_JUP, M_EARTH, R_EARTH, M_SUN, R_SUN, AU, GYR
+from hot_jupiter.constants import M_JUP, R_JUP, M_EARTH, R_EARTH, M_SUN, R_SUN, AU, GYR
 
 
 @dataclass

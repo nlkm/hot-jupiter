@@ -5,12 +5,12 @@ Unit tests for atmosphere, heating, and thermal evolution time integrator.
 import pytest
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, GYR, AU, M_SUN
-from thermal_evolution.eos import AnalyticalHHeEOS, TabularEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere, AtmosphereResult
-from thermal_evolution.heating import TidalEccentricityHeating, ConstantHeating, ZeroHeating
-from thermal_evolution.evolution import ThermalEvolutionIntegrator, EvolutionResult
+from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, GYR, AU, M_SUN
+from hot_jupiter.eos import AnalyticalHHeEOS, TabularEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere, AtmosphereResult
+from hot_jupiter.heating import TidalEccentricityHeating, ConstantHeating, ZeroHeating
+from hot_jupiter.evolution import ThermalEvolutionIntegrator, EvolutionResult
 
 
 def test_guillot_atmosphere():
@@ -39,7 +39,7 @@ def test_tidal_heating():
     assert p_tidal > 0.0
 
 
-def test_thermal_evolution_cooling_track():
+def test_hot_jupiter_cooling_track():
     eos = AnalyticalHHeEOS()
     solver = InteriorSolver(envelope_eos=eos)
     atmos = GuillotAtmosphere(envelope_eos=eos)

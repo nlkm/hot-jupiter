@@ -2,7 +2,7 @@
 #include <cassert>
 #include "interior.hpp"
 
-using namespace thermal_evolution;
+using namespace hot_jupiter;
 
 int main() {
     std::cout << "[Unit Test] 1D Hydrostatic Interior Solver..." << std::endl;

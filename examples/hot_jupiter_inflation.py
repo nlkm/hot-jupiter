@@ -5,13 +5,13 @@ Benchmark Example: Hot Jupiter Irradiated Cooling & Tidal Heating Inflation.
 import os
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, AU, M_SUN
-from thermal_evolution.eos import AnalyticalHHeEOS
-from thermal_evolution.structure import InteriorSolver
-from thermal_evolution.atmosphere import GuillotAtmosphere
-from thermal_evolution.heating import TidalEccentricityHeating
-from thermal_evolution.evolution import ThermalEvolutionIntegrator
-from thermal_evolution.visualization import plot_evolution_track
+from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, AU, M_SUN
+from hot_jupiter.eos import AnalyticalHHeEOS
+from hot_jupiter.structure import InteriorSolver
+from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.visualization import plot_evolution_track
 
 
 def main():

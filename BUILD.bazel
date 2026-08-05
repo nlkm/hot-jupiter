@@ -1,7 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "thermal_evolution_lib",
+    name = "hot_jupiter_lib",
     srcs = [
         "cpp/src/interior.cpp",
     ],
@@ -24,63 +24,63 @@ cc_test(
     name = "constants_test",
     srcs = ["cpp/include/constants_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "eos_test",
     srcs = ["cpp/include/eos_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "interior_test",
     srcs = ["cpp/src/interior_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "atmosphere_test",
     srcs = ["cpp/include/atmosphere_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "heating_test",
     srcs = ["cpp/include/heating_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "orbital_test",
     srcs = ["cpp/include/orbital_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "mass_loss_test",
     srcs = ["cpp/include/mass_loss_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "multi_planet_test",
     srcs = ["cpp/include/multi_planet_test.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_test(
     name = "unit_tests",
     srcs = ["cpp/tests/unit_tests.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 # Simulation Executables
@@ -88,75 +88,75 @@ cc_binary(
     name = "jupiter_cooling",
     srcs = ["cpp/examples/jupiter_cooling.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "coupled_orbital_spin",
     srcs = ["cpp/examples/coupled_orbital_spin.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "multi_planet_benchmark",
     srcs = ["cpp/examples/multi_planet_benchmark.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "obliquity_tilted_spin_scenario",
     srcs = ["cpp/examples/obliquity_tilted_spin_scenario.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "stellar_misaligned_orbit_scenario",
     srcs = ["cpp/examples/stellar_misaligned_orbit_scenario.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "stellar_rotation_tides_scenario",
     srcs = ["cpp/examples/stellar_rotation_tides_scenario.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "eccentric_rlof",
     srcs = ["cpp/examples/eccentric_rlof_scenario.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "hot_jupiter_population_study",
     srcs = ["cpp/examples/hot_jupiter_population_study.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "jwst_transmission_inflation",
     srcs = ["cpp/examples/jwst_transmission_inflation.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "photoevaporation_rlof_coupling",
     srcs = ["cpp/examples/photoevaporation_rlof_coupling.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )
 
 cc_binary(
     name = "estimate_core_masses",
     srcs = ["cpp/examples/estimate_core_masses.cpp"],
     copts = ["-std=c++17", "-O3"],
-    deps = [":thermal_evolution_lib"],
+    deps = [":hot_jupiter_lib"],
 )

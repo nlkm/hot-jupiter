@@ -2,7 +2,7 @@
 Evolution sub-package.
 """
 
-from thermal_evolution.evolution.integrator import (
+from hot_jupiter.evolution.integrator import (
     EvolutionResult,
     CoupledEvolutionResult,
     ThermalEvolutionIntegrator,

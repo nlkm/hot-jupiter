@@ -7,9 +7,9 @@ from typing import Optional, Any
 import numpy as np
 import matplotlib.pyplot as plt
 
-from thermal_evolution.constants import R_JUP, L_SUN, GYR
-from thermal_evolution.structure import PlanetStructure
-from thermal_evolution.evolution import EvolutionResult, CoupledEvolutionResult
+from hot_jupiter.constants import R_JUP, L_SUN, GYR
+from hot_jupiter.structure import PlanetStructure
+from hot_jupiter.evolution import EvolutionResult, CoupledEvolutionResult
 
 
 def plot_evolution_track(

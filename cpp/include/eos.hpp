@@ -1,5 +1,5 @@
-#ifndef THERMAL_EVOLUTION_EOS_HPP
-#define THERMAL_EVOLUTION_EOS_HPP
+#ifndef HOT_JUPITER_EOS_HPP
+#define HOT_JUPITER_EOS_HPP
 
 #include <cmath>
 #include <tuple>
@@ -7,7 +7,7 @@
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 class HydrogenHeliumEOS {
 public:
@@ -67,6 +67,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_EOS_HPP
+#endif // HOT_JUPITER_EOS_HPP

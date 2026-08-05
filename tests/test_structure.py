@@ -5,9 +5,9 @@ Unit tests for 1D hydrostatic interior structure solver.
 import pytest
 import numpy as np
 
-from thermal_evolution.constants import M_JUP, M_EARTH, R_JUP, BAR
-from thermal_evolution.eos import AnalyticalHHeEOS, TabularEOS, BirchMurnaghanCoreEOS
-from thermal_evolution.structure import InteriorSolver, PlanetStructure
+from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR
+from hot_jupiter.eos import AnalyticalHHeEOS, TabularEOS, BirchMurnaghanCoreEOS
+from hot_jupiter.structure import InteriorSolver, PlanetStructure
 
 
 def test_jupiter_structure_analytical():

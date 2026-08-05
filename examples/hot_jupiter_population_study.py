@@ -5,7 +5,7 @@ End-to-End Incremental Population Study: Analyzing Radius Distribution Progressi
 import os
 import matplotlib.pyplot as plt
 
-from thermal_evolution.population import PopulationSimulator, get_curated_hot_jupiter_catalog
+from hot_jupiter.population import PopulationSimulator, get_curated_hot_jupiter_catalog
 
 
 def main():

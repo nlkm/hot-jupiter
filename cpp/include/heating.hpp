@@ -1,11 +1,11 @@
-#ifndef THERMAL_EVOLUTION_HEATING_HPP
-#define THERMAL_EVOLUTION_HEATING_HPP
+#ifndef HOT_JUPITER_HEATING_HPP
+#define HOT_JUPITER_HEATING_HPP
 
 #include <cmath>
 
 #include "constants.hpp"
 
-namespace thermal_evolution {
+namespace hot_jupiter {
 
 class HeatingModel {
 public:
@@ -37,6 +37,6 @@ public:
     }
 };
 
-} // namespace thermal_evolution
+} // namespace hot_jupiter
 
-#endif // THERMAL_EVOLUTION_HEATING_HPP
+#endif // HOT_JUPITER_HEATING_HPP
