@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 06:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 20:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -489,54 +489,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
 []\OT1/cmr/bx/n/14.4 Physical & Math-e-mat-i-cal
  []
 
-
-LaTeX Warning: Reference `sec:derivation_a1' on page 2 undefined on input line 
-8.
-
-
-LaTeX Warning: Reference `sec:derivation_a2' on page 2 undefined on input line 
-18.
-
-[2]
-
-LaTeX Warning: Reference `sec:derivation_a3' on page 3 undefined on input line 
-28.
-
-
-LaTeX Warning: Reference `sec:derivation_a4' on page 3 undefined on input line 
-36.
-
-
-LaTeX Warning: Reference `sec:derivation_a5' on page 3 undefined on input line 
-43.
-
-
-LaTeX Warning: Reference `sec:derivation_a6' on page 3 undefined on input line 
-52.
-
-[3]
-
-LaTeX Warning: Reference `sec:derivation_a7' on page 4 undefined on input line 
-74.
-
-
+[2] [3]
 Overfull \hbox (10.03772pt too wide) detected at line 79
 [][][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 3 [] [] [][] \
 OML/cmm/m/it/10 na []
  []
 
 
-LaTeX Warning: Reference `sec:derivation_a8' on page 4 undefined on input line 
-80.
-
-
 Overfull \hbox (19.07729pt too wide) detected at line 87
 []
  []
-
-
-LaTeX Warning: Reference `sec:derivation_a9' on page 4 undefined on input line 
-88.
 
 
 Overfull \hbox (79.6507pt too wide) detected at line 99
@@ -545,11 +507,6 @@ Overfull \hbox (79.6507pt too wide) detected at line 99
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-LaTeX Warning: Reference `sec:derivation_a10' on page 4 undefined on input line
- 100.
 
 
 Overfull \hbox (4.67348pt too wide) detected at line 105
@@ -569,19 +526,19 @@ Underfull \hbox (badness 2012) in paragraph at lines 1--1
  []
 
 [4]
-<figures/jupiter_cooling_track.pdf, id=268, 571.24997pt x 499.06215pt>
+<figures/jupiter_cooling_track.pdf, id=318, 571.24997pt x 499.06215pt>
 File: figures/jupiter_cooling_track.pdf Graphic file (type pdf)
 <use figures/jupiter_cooling_track.pdf>
 Package pdftex.def Info: figures/jupiter_cooling_track.pdf  used on input line 
 14.
 (pdftex.def)             Requested size: 239.55144pt x 209.28484pt.
-<figures/jupiter_internal_profile.pdf, id=269, 571.63863pt x 498.86375pt>
+<figures/jupiter_internal_profile.pdf, id=319, 571.63863pt x 498.86375pt>
 File: figures/jupiter_internal_profile.pdf Graphic file (type pdf)
 <use figures/jupiter_internal_profile.pdf>
 Package pdftex.def Info: figures/jupiter_internal_profile.pdf  used on input li
 ne 21.
 (pdftex.def)             Requested size: 239.55144pt x 209.057pt.
-<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=270, 499.15184pt x 
+<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=320, 499.15184pt x 
 428.23755pt>
 File: figures/hot_jupiter_coupled_orbital_spin_evolution.pdf Graphic file (type
  pdf)
@@ -602,7 +559,7 @@ n/10 ($1\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 0 \OML/cmm/m/it/10 M[]; a \OT1/cmr/m/
 n/10 =
  []
 
-<figures/multi_planet_system_evolution.pdf, id=271, 499.27293pt x 499.06215pt>
+<figures/multi_planet_system_evolution.pdf, id=321, 499.27293pt x 499.06215pt>
 File: figures/multi_planet_system_evolution.pdf Graphic file (type pdf)
 <use figures/multi_planet_system_evolution.pdf>
 Package pdftex.def Info: figures/multi_planet_system_evolution.pdf  used on inp
@@ -613,7 +570,7 @@ Underfull \vbox (badness 5681) has occurred while \output is active []
 
  [5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.p
 df> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
-<figures/obliquity_tilted_spin_evolution.pdf, id=569, 499.02199pt x 428.23755pt
+<figures/obliquity_tilted_spin_evolution.pdf, id=619, 499.02199pt x 428.23755pt
 >
 File: figures/obliquity_tilted_spin_evolution.pdf Graphic file (type pdf)
 <use figures/obliquity_tilted_spin_evolution.pdf>
@@ -625,7 +582,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 67--67
 \OT1/cmr/bx/n/12 align-ment (Rossiter-McLaughlin
  []
 
-<figures/stellar_misaligned_orbit_evolution.pdf, id=570, 499.03079pt x 357.4129
+<figures/stellar_misaligned_orbit_evolution.pdf, id=620, 499.03079pt x 357.4129
 6pt>
 File: figures/stellar_misaligned_orbit_evolution.pdf Graphic file (type pdf)
 <use figures/stellar_misaligned_orbit_evolution.pdf>
@@ -644,7 +601,7 @@ Underfull \vbox (badness 1163) has occurred while \output is active []
 
  [6 <./figures/multi_planet_system_evolution.pdf> <./figures/obliquity_tilted_s
 pin_evolution.pdf> <./figures/stellar_misaligned_orbit_evolution.pdf>]
-<figures/stellar_rotation_tidal_migration.pdf, id=848, 499.15184pt x 357.41296p
+<figures/stellar_rotation_tidal_migration.pdf, id=899, 499.15184pt x 357.41296p
 t>
 File: figures/stellar_rotation_tidal_migration.pdf Graphic file (type pdf)
 <use figures/stellar_rotation_tidal_migration.pdf>
@@ -657,7 +614,7 @@ Underfull \hbox (badness 1137) in paragraph at lines 94--97
 a \OT1/cmr/m/n/10 =
  []
 
-<figures/roche_lobe_overflow_mass_loss.pdf, id=849, 787.1508pt x 569.88672pt>
+<figures/roche_lobe_overflow_mass_loss.pdf, id=900, 787.1508pt x 569.88672pt>
 File: figures/roche_lobe_overflow_mass_loss.pdf Graphic file (type pdf)
 <use figures/roche_lobe_overflow_mass_loss.pdf>
 Package pdftex.def Info: figures/roche_lobe_overflow_mass_loss.pdf  used on inp
@@ -669,7 +626,7 @@ Underfull \hbox (badness 1264) in paragraph at lines 107--109
 cmr/m/n/10 ), and core masses. - **Walk-through**:
  []
 
-<figures/hot_jupiter_incremental_ks_comparison.pdf, id=850, 642.75839pt x 321.8
+<figures/hot_jupiter_incremental_ks_comparison.pdf, id=901, 642.75839pt x 321.8
 0226pt>
 File: figures/hot_jupiter_incremental_ks_comparison.pdf Graphic file (type pdf)
 
@@ -682,7 +639,7 @@ Underfull \hbox (badness 2173) in paragraph at lines 117--117
 \OT1/cmr/bx/n/12 Spec-trum Scale Height In-fla-tion
  []
 
-<figures/jwst_transmission_scale_height.pdf, id=851, 498.85889pt x 428.23755pt>
+<figures/jwst_transmission_scale_height.pdf, id=902, 498.85889pt x 428.23755pt>
 
 File: figures/jwst_transmission_scale_height.pdf Graphic file (type pdf)
 <use figures/jwst_transmission_scale_height.pdf>
@@ -710,7 +667,7 @@ Underfull \vbox (badness 2119) has occurred while \output is active []
 
  [7 <./figures/stellar_rotation_tidal_migration.pdf> <./figures/roche_lobe_over
 flow_mass_loss.pdf> <./figures/hot_jupiter_incremental_ks_comparison.pdf>]
-<figures/photoevaporation_mass_loss.pdf, id=1147, 497.82863pt x 428.23755pt>
+<figures/photoevaporation_mass_loss.pdf, id=1197, 497.82863pt x 428.23755pt>
 File: figures/photoevaporation_mass_loss.pdf Graphic file (type pdf)
 <use figures/photoevaporation_mass_loss.pdf>
 Package pdftex.def Info: figures/photoevaporation_mass_loss.pdf  used on input 
@@ -772,7 +729,7 @@ Underfull \hbox (badness 2285) in paragraph at lines 119--120
 \OT1/cmr/m/n/10 Both pan-els demon-strate out-stand-ing quan-ti-ta-tive
  []
 
-<figures/core_mass_metallicity_correlation.pdf, id=1375, 788.70422pt x 344.2517
+<figures/core_mass_metallicity_correlation.pdf, id=1425, 788.70422pt x 344.2517
 9pt>
 File: figures/core_mass_metallicity_correlation.pdf Graphic file (type pdf)
 <use figures/core_mass_metallicity_correlation.pdf>
@@ -812,62 +769,155 @@ Underfull \hbox (badness 3601) in paragraph at lines 31--32
  []
 
 ) (./sections/06_appendix.tex
+Underfull \hbox (badness 2005) in paragraph at lines 6--6
+[]\OT1/cmr/bx/n/12 Derivation A1: 1D Hy-dro-static
+ []
+
+
+Overfull \hbox (47.79729pt too wide) detected at line 11
+[][][]\OML/cmm/m/it/10 AP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 ) \
+OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 AP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r \OT1
+/cmr/m/n/10 + \OML/cmm/m/it/10 dr\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ [] \OT1
+/cmr/m/n/10 = 0  =[]\OMS/cmsy/m/n/10 )  [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^
+^@[]
+ []
+
+<figures/derivation_hydrostatic_geom.pdf, id=1568, 344.015pt x 354.6879pt>
+File: figures/derivation_hydrostatic_geom.pdf Graphic file (type pdf)
+<use figures/derivation_hydrostatic_geom.pdf>
+Package pdftex.def Info: figures/derivation_hydrostatic_geom.pdf  used on input
+ line 19.
+(pdftex.def)             Requested size: 203.62018pt x 209.94597pt.
+
+Underfull \hbox (badness 1845) in paragraph at lines 24--24
+[]\OT1/cmr/bx/n/12 Derivation A2: Isother-mal 3rd-
+ []
+
+<figures/derivation_core_strain_geom.pdf, id=1569, 925.4583pt x 250.74446pt>
+File: figures/derivation_core_strain_geom.pdf Graphic file (type pdf)
+<use figures/derivation_core_strain_geom.pdf>
+Package pdftex.def Info: figures/derivation_core_strain_geom.pdf  used on input
+ line 38.
+(pdftex.def)             Requested size: 203.62018pt x 55.16777pt.
+
+Underfull \hbox (badness 2443) in paragraph at lines 43--43
+[]\OT1/cmr/bx/n/12 Derivation A3: Non-Relativistic
+ []
+
+[13 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
+in_geom.pdf>]
+<figures/derivation_fermi_sphere_geom.pdf, id=1730, 381.41805pt x 317.98994pt>
+File: figures/derivation_fermi_sphere_geom.pdf Graphic file (type pdf)
+<use figures/derivation_fermi_sphere_geom.pdf>
+Package pdftex.def Info: figures/derivation_fermi_sphere_geom.pdf  used on inpu
+t line 53.
+(pdftex.def)             Requested size: 203.62018pt x 169.76144pt.
+
+Overfull \hbox (56.09918pt too wide) detected at line 63
+[][][]\OML/cmm/m/it/10 T[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^\\OT1/cmr/m/n/10 
+) = []\OML/cmm/m/it/10 T[] [] \OT1/cmr/m/n/10 + []\OML/cmm/m/it/10 T[] []
+ []
+
+<figures/derivation_radiative_slab_geom.pdf, id=1731, 1069.91725pt x 466.46594p
+t>
+File: figures/derivation_radiative_slab_geom.pdf Graphic file (type pdf)
+<use figures/derivation_radiative_slab_geom.pdf>
+Package pdftex.def Info: figures/derivation_radiative_slab_geom.pdf  used on in
+put line 68.
+(pdftex.def)             Requested size: 203.62018pt x 88.77179pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--73
+[]\OT1/cmr/bx/n/12 Derivation A5: Metallicity-
+ []
+
+<figures/derivation_tidal_bulge_geom.pdf, id=1732, 480.57503pt x 143.91177pt>
+File: figures/derivation_tidal_bulge_geom.pdf Graphic file (type pdf)
+<use figures/derivation_tidal_bulge_geom.pdf>
+Package pdftex.def Info: figures/derivation_tidal_bulge_geom.pdf  used on input
+ line 91.
+(pdftex.def)             Requested size: 203.62018pt x 60.97612pt.
+
+Overfull \hbox (13.03796pt too wide) detected at line 101
+[][][]\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ^^[[]\OT1/cmr/
+m/n/10 (\OT1/cmr/bx/n/10 v \OMS/cmsy/m/n/10 ^^B \OT1/cmr/bx/n/10 B\OT1/cmr/m/n/
+10 )[]\OML/cmm/m/it/10 dV \OMS/cmsy/m/n/10 ^^Y \OML/cmm/m/it/10 ^^O[] \OMS/cmsy
+/m/n/10 ^^A \OML/cmm/m/it/10 L[] \OMS/cmsy/m/n/10 ^^A H\OT1/cmr/m/n/10 (\OML/cm
+m/m/it/10 T[] \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 1200[])
+ []
+
+
+Underfull \hbox (badness 3179) in paragraph at lines 111--111
+[]\OT1/cmr/bx/n/12 Derivation A9: Hy-dro-dy-namic
+ []
+
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 1.
+(hyperref)                removing `math shift' on input line 111.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 1.
+(hyperref)                removing `subscript' on input line 111.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 1.
+(hyperref)                removing `math shift' on input line 111.
+
+[14 <./figures/derivation_fermi_sphere_geom.pdf> <./figures/derivation_radiativ
+e_slab_geom.pdf> <./figures/derivation_tidal_bulge_geom.pdf>]
+<figures/derivation_roche_lobe_geom.pdf, id=1992, 461.7307pt x 144.68498pt>
+File: figures/derivation_roche_lobe_geom.pdf Graphic file (type pdf)
+<use figures/derivation_roche_lobe_geom.pdf>
+Package pdftex.def Info: figures/derivation_roche_lobe_geom.pdf  used on input 
+line 121.
+(pdftex.def)             Requested size: 203.62018pt x 63.80508pt.
 
 
-Overfull \hbox (49.8718pt too wide) detected at line 6
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 134.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 134.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 134.
+
+
+Overfull \hbox (49.8718pt too wide) detected at line 139
 [][][]\OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = +[] [] []\OML/cmm/m/it/10 [][]b[]
 \OT1/cmr/m/n/10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  A[] \
 OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[][]\OML/cmm/m/it/10 [][]b[]\OT1/cmr/m/n/
 10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )
  []
 
+[15
 
-Underfull \hbox (badness 1142) in paragraph at lines 11--12
-\OT1/cmr/m/n/10 Geometric prob-a-bil-ity $\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 
-= []$ and Ke-pler
- []
-
-[13
-
-]
+ <./figures/derivation_roche_lobe_geom.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+(hyperref)                removing `math shift' on input line 150.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 18.
+(hyperref)                removing `math shift' on input line 150.
 
-(./sections/table_342_planets.tex [14
+(./sections/table_342_planets.tex [16
 
 
-] [15] [16] [17] [18]) [19]) (./paper.aux)
+] [17] [18] [19] [20]) [21]) (./paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: DC42F7A286C54D32028CA167C12C685F;14928.
+(rerunfilecheck)             Checksum: 895C21149B52935A7A81C3CEABFE7E76;18553.
  ) 
 Here is how much of TeX's memory you used:
- 10901 strings out of 476182
- 169492 string characters out of 5795596
+ 10991 strings out of 476182
+ 172267 string characters out of 5795596
  2106975 words of memory out of 5000000
- 32580 multiletter control sequences out of 15000+600000
+ 32639 multiletter control sequences out of 15000+600000
  570348 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,17n,79p,1496b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -887,18 +937,20 @@ b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on paper.pdf (19 pages, 776685 bytes).
+t/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on paper.pdf (21 pages, 914305 bytes).
 PDF statistics:
- 1693 PDF objects out of 1728 (max. 8388607)
- 668 compressed objects within 7 object streams
- 144 named destinations out of 1000 (max. 500000)
- 453 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2266 PDF objects out of 2487 (max. 8388607)
+ 882 compressed objects within 9 object streams
+ 175 named destinations out of 1000 (max. 500000)
+ 563 words of extra memory for PDF output out of 10000 (max. 10000000)
 
