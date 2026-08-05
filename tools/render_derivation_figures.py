@@ -51,9 +51,11 @@ def render_hydrostatic_diagram():
     plt.close(fig)
 
 def render_core_strain_diagram():
-    fig, ax = plt.subplots(figsize=(6.5, 3.5))
+    fig, ax = plt.subplots(figsize=(6.5, 3.2))
     ax.set_aspect('equal')
     ax.axis('off')
+    ax.set_xlim(-3.6, 3.6)
+    ax.set_ylim(-1.6, 1.6)
 
     # Uncompressed Core
     c1 = patches.Circle((-2.0, 0), 1.2, facecolor='#fdd0a2', edgecolor='#e6550d', lw=2.5)
@@ -74,15 +76,16 @@ def render_core_strain_diagram():
              ha='center', va='center', fontsize=8.5, fontweight='bold', color='white')
 
     ax.set_title(r"Derivation A2: Eulerian Finite Strain $f = \frac{1}{2}\left[\left(\frac{\rho}{\rho_0}\right)^{2/3} - 1\right]$", fontsize=11, fontweight='bold', pad=12)
-    plt.tight_layout()
     fig.savefig("outputs/derivation_core_strain_geom.pdf", bbox_inches='tight', dpi=300)
     fig.savefig("paper/figures/derivation_core_strain_geom.pdf", bbox_inches='tight', dpi=300)
     plt.close(fig)
 
 def render_fermi_sphere_diagram():
-    fig, ax = plt.subplots(figsize=(5.5, 4.5))
+    fig, ax = plt.subplots(figsize=(5.5, 4.2))
     ax.set_aspect('equal')
     ax.axis('off')
+    ax.set_xlim(-2.2, 3.2)
+    ax.set_ylim(-1.6, 2.8)
 
     # Axes
     ax.arrow(0, 0, 2.4, 0, head_width=0.08, head_length=0.08, fc='black', ec='black', lw=1.5)
@@ -110,14 +113,15 @@ def render_fermi_sphere_diagram():
             fontsize=8.5, fontweight='bold', bbox=dict(boxstyle='round,pad=0.3', facecolor='#fff7bc', edgecolor='#d95f0e', alpha=0.9))
 
     ax.set_title("Derivation A3: 3D Quantum Phase Space Fermi Sphere", fontsize=11, fontweight='bold', pad=12)
-    plt.tight_layout()
     fig.savefig("outputs/derivation_fermi_sphere_geom.pdf", bbox_inches='tight', dpi=300)
     fig.savefig("paper/figures/derivation_fermi_sphere_geom.pdf", bbox_inches='tight', dpi=300)
     plt.close(fig)
 
 def render_radiative_slab_diagram():
-    fig, ax = plt.subplots(figsize=(6, 4))
+    fig, ax = plt.subplots(figsize=(6.5, 3.8))
     ax.axis('off')
+    ax.set_xlim(-2.8, 4.8)
+    ax.set_ylim(-0.8, 2.8)
 
     # Atmosphere Slab
     slab = patches.Rectangle((-2.2, 0.4), 4.4, 1.2, facecolor='#e0e0e0', edgecolor='black', lw=2.0)
@@ -140,7 +144,6 @@ def render_radiative_slab_diagram():
     ax.text(2.4, 0.4, r"$\tau \gg 1$ (Deep Convective Interior)", fontsize=8.5, fontweight='bold', va='center')
 
     ax.set_title("Derivation A4: Guillot (2010) Radiative Transfer Slab", fontsize=11, fontweight='bold', pad=12)
-    plt.tight_layout()
     fig.savefig("outputs/derivation_radiative_slab_geom.pdf", bbox_inches='tight', dpi=300)
     fig.savefig("paper/figures/derivation_radiative_slab_geom.pdf", bbox_inches='tight', dpi=300)
     plt.close(fig)
