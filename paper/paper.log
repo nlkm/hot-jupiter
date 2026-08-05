@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 21:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 21:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -792,21 +792,15 @@ File: figures/derivation_fermi_sphere_geom.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/derivation_fermi_sphere_geom.pdf  used on inpu
 t line 53.
 (pdftex.def)             Requested size: 203.62018pt x 148.67503pt.
-
-Overfull \hbox (56.09918pt too wide) detected at line 63
-[][][]\OML/cmm/m/it/10 T[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^\\OT1/cmr/m/n/10 
-) = []\OML/cmm/m/it/10 T[] [] \OT1/cmr/m/n/10 + []\OML/cmm/m/it/10 T[] []
- []
-
 <figures/derivation_radiative_slab_geom.pdf, id=1580, 417.12154pt x 246.35175pt
 >
 File: figures/derivation_radiative_slab_geom.pdf Graphic file (type pdf)
 <use figures/derivation_radiative_slab_geom.pdf>
 Package pdftex.def Info: figures/derivation_radiative_slab_geom.pdf  used on in
-put line 68.
+put line 71.
 (pdftex.def)             Requested size: 203.62018pt x 120.25856pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
+Underfull \hbox (badness 10000) in paragraph at lines 76--76
 []\OT1/cmr/bx/n/12 Derivation A5: Metallicity-
  []
 
@@ -817,69 +811,52 @@ _radiative_slab_geom.pdf>]
 File: figures/derivation_tidal_bulge_geom.pdf Graphic file (type pdf)
 <use figures/derivation_tidal_bulge_geom.pdf>
 Package pdftex.def Info: figures/derivation_tidal_bulge_geom.pdf  used on input
- line 91.
+ line 94.
 (pdftex.def)             Requested size: 203.62018pt x 60.97612pt.
 
-Overfull \hbox (13.03796pt too wide) detected at line 101
-[][][]\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = [] \OML/cmm/m/it/10 ^^[[]\OT1/cmr/
-m/n/10 (\OT1/cmr/bx/n/10 v \OMS/cmsy/m/n/10 ^^B \OT1/cmr/bx/n/10 B\OT1/cmr/m/n/
-10 )[]\OML/cmm/m/it/10 dV \OMS/cmsy/m/n/10 ^^Y \OML/cmm/m/it/10 ^^O[] \OMS/cmsy
-/m/n/10 ^^A \OML/cmm/m/it/10 L[] \OMS/cmsy/m/n/10 ^^A H\OT1/cmr/m/n/10 (\OML/cm
-m/m/it/10 T[] \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 1200[])
- []
-
-
-Underfull \hbox (badness 3179) in paragraph at lines 111--111
+Underfull \hbox (badness 3179) in paragraph at lines 118--118
 []\OT1/cmr/bx/n/12 Derivation A9: Hy-dro-dy-namic
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 111.
+(hyperref)                removing `math shift' on input line 118.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 111.
+(hyperref)                removing `subscript' on input line 118.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 111.
+(hyperref)                removing `math shift' on input line 118.
 
 <figures/derivation_roche_lobe_geom.pdf, id=1904, 461.7307pt x 144.68498pt>
 File: figures/derivation_roche_lobe_geom.pdf Graphic file (type pdf)
 <use figures/derivation_roche_lobe_geom.pdf>
 Package pdftex.def Info: figures/derivation_roche_lobe_geom.pdf  used on input 
-line 121.
+line 128.
 (pdftex.def)             Requested size: 203.62018pt x 63.80508pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 134.
+(hyperref)                removing `math shift' on input line 141.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 134.
+(hyperref)                removing `subscript' on input line 141.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 134.
-
-
-Overfull \hbox (49.8718pt too wide) detected at line 139
-[][][]\OML/cmm/m/it/10 A[] \OT1/cmr/m/n/10 = +[] [] []\OML/cmm/m/it/10 [][]b[]
-\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ;  A[] \
-OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[][]\OML/cmm/m/it/10 [][]b[]\OT1/cmr/m/n/
-10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )
- []
+(hyperref)                removing `math shift' on input line 141.
 
 [15 <./figures/derivation_tidal_bulge_geom.pdf> <./figures/derivation_roche_lob
 e_geom.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 150.
+(hyperref)                removing `math shift' on input line 158.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 150.
+(hyperref)                removing `math shift' on input line 158.
 
 (./sections/table_342_planets.tex [16
 
@@ -893,9 +870,9 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 895C21149B52935A7A81C3CEABFE7E76;18553.
  ) 
 Here is how much of TeX's memory you used:
- 10992 strings out of 476182
- 172274 string characters out of 5795596
- 2106975 words of memory out of 5000000
+ 10994 strings out of 476182
+ 172300 string characters out of 5795596
+ 2105975 words of memory out of 5000000
  32640 multiletter control sequences out of 15000+600000
  570348 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -926,10 +903,10 @@ y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (21 pages, 915004 bytes).
+Output written on paper.pdf (21 pages, 915131 bytes).
 PDF statistics:
- 2268 PDF objects out of 2487 (max. 8388607)
- 882 compressed objects within 9 object streams
- 175 named destinations out of 1000 (max. 500000)
+ 2270 PDF objects out of 2487 (max. 8388607)
+ 884 compressed objects within 9 object streams
+ 177 named destinations out of 1000 (max. 500000)
  563 words of extra memory for PDF output out of 10000 (max. 10000000)
 
