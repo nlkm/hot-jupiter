@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 21:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  4 AUG 2026 21:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -692,11 +692,6 @@ mr/m/n/10 ).
  []
 
 
-Overfull \hbox (52.40132pt too wide) in paragraph at lines 41--67
- [][] 
- []
-
-
 Underfull \hbox (badness 3428) in paragraph at lines 69--69
 []\OT1/cmr/bx/n/12 Statistical Pro-gres-sion Across 6
  []
@@ -722,7 +717,7 @@ File: figures/core_mass_metallicity_correlation.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/core_mass_metallicity_correlation.pdf  used on
  input line 123.
 (pdftex.def)             Requested size: 489.10287pt x 213.48642pt.
-[9] [10 <./figures/core_mass_metallicity_correlation.pdf>] [11]
+[9] [10] [11]
 Underfull \hbox (badness 3930) in paragraph at lines 138--140
 []\OT1/cmr/bx/n/10 Multi-Planet Sec-u-lar Ec-cen-tric-ity Floor
  []
@@ -738,7 +733,7 @@ Underfull \hbox (badness 3019) in paragraph at lines 3--4
 \OT1/cmr/m/n/10 In this work, we pre-sented a mod-u-lar phys-i-cal
  []
 
-
+[12 <./figures/core_mass_metallicity_correlation.pdf>]
 Underfull \hbox (badness 1354) in paragraph at lines 23--25
 []\OT1/cmr/bx/n/10 First-Principles C++ / Bazel 8 Re-pro-
  []
@@ -748,7 +743,7 @@ Underfull \hbox (badness 1158) in paragraph at lines 23--25
 \OT1/cmr/m/n/10 tion syn-the-sis tools are im-ple-mented in high-
  []
 
-[12]
+
 Underfull \hbox (badness 3601) in paragraph at lines 31--32
 []\OT1/cmr/bx/n/10 Double-Diffusive Com-po-si-tion Gra-di-ents\OT1/cmr/m/n/10 :
 
@@ -768,7 +763,7 @@ OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 AP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r \OT1
 ^@[]
  []
 
-<figures/derivation_hydrostatic_geom.pdf, id=1568, 344.015pt x 354.6879pt>
+<figures/derivation_hydrostatic_geom.pdf, id=1563, 344.015pt x 354.6879pt>
 File: figures/derivation_hydrostatic_geom.pdf Graphic file (type pdf)
 <use figures/derivation_hydrostatic_geom.pdf>
 Package pdftex.def Info: figures/derivation_hydrostatic_geom.pdf  used on input
@@ -779,7 +774,8 @@ Underfull \hbox (badness 1845) in paragraph at lines 24--24
 []\OT1/cmr/bx/n/12 Derivation A2: Isother-mal 3rd-
  []
 
-<figures/derivation_core_strain_geom.pdf, id=1569, 925.4583pt x 250.74446pt>
+[13]
+<figures/derivation_core_strain_geom.pdf, id=1578, 925.4583pt x 250.74446pt>
 File: figures/derivation_core_strain_geom.pdf Graphic file (type pdf)
 <use figures/derivation_core_strain_geom.pdf>
 Package pdftex.def Info: figures/derivation_core_strain_geom.pdf  used on input
@@ -790,9 +786,7 @@ Underfull \hbox (badness 2443) in paragraph at lines 43--43
 []\OT1/cmr/bx/n/12 Derivation A3: Non-Relativistic
  []
 
-[13 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
-in_geom.pdf>]
-<figures/derivation_fermi_sphere_geom.pdf, id=1730, 381.41805pt x 317.98994pt>
+<figures/derivation_fermi_sphere_geom.pdf, id=1579, 381.41805pt x 317.98994pt>
 File: figures/derivation_fermi_sphere_geom.pdf Graphic file (type pdf)
 <use figures/derivation_fermi_sphere_geom.pdf>
 Package pdftex.def Info: figures/derivation_fermi_sphere_geom.pdf  used on inpu
@@ -804,7 +798,7 @@ Overfull \hbox (56.09918pt too wide) detected at line 63
 ) = []\OML/cmm/m/it/10 T[] [] \OT1/cmr/m/n/10 + []\OML/cmm/m/it/10 T[] []
  []
 
-<figures/derivation_radiative_slab_geom.pdf, id=1731, 1069.91725pt x 466.46594p
+<figures/derivation_radiative_slab_geom.pdf, id=1580, 1069.91725pt x 466.46594p
 t>
 File: figures/derivation_radiative_slab_geom.pdf Graphic file (type pdf)
 <use figures/derivation_radiative_slab_geom.pdf>
@@ -816,7 +810,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 73--73
 []\OT1/cmr/bx/n/12 Derivation A5: Metallicity-
  []
 
-<figures/derivation_tidal_bulge_geom.pdf, id=1732, 480.57503pt x 143.91177pt>
+[14 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
+in_geom.pdf> <./figures/derivation_fermi_sphere_geom.pdf> <./figures/derivation
+_radiative_slab_geom.pdf>]
+<figures/derivation_tidal_bulge_geom.pdf, id=1902, 480.57503pt x 143.91177pt>
 File: figures/derivation_tidal_bulge_geom.pdf Graphic file (type pdf)
 <use figures/derivation_tidal_bulge_geom.pdf>
 Package pdftex.def Info: figures/derivation_tidal_bulge_geom.pdf  used on input
@@ -848,15 +845,12 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 111.
 
-[14 <./figures/derivation_fermi_sphere_geom.pdf> <./figures/derivation_radiativ
-e_slab_geom.pdf> <./figures/derivation_tidal_bulge_geom.pdf>]
-<figures/derivation_roche_lobe_geom.pdf, id=1992, 461.7307pt x 144.68498pt>
+<figures/derivation_roche_lobe_geom.pdf, id=1903, 461.7307pt x 144.68498pt>
 File: figures/derivation_roche_lobe_geom.pdf Graphic file (type pdf)
 <use figures/derivation_roche_lobe_geom.pdf>
 Package pdftex.def Info: figures/derivation_roche_lobe_geom.pdf  used on input 
 line 121.
 (pdftex.def)             Requested size: 203.62018pt x 63.80508pt.
-
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 134.
@@ -877,9 +871,8 @@ OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[][]\OML/cmm/m/it/10 [][]b[]\OT1/cmr/m/n/
 10 (\OML/cmm/m/it/10 []\OT1/cmr/m/n/10 )
  []
 
-[15
-
- <./figures/derivation_roche_lobe_geom.pdf>]
+[15 <./figures/derivation_tidal_bulge_geom.pdf> <./figures/derivation_roche_lob
+e_geom.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 150.
@@ -900,10 +893,10 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 895C21149B52935A7A81C3CEABFE7E76;18553.
  ) 
 Here is how much of TeX's memory you used:
- 10993 strings out of 476182
- 172325 string characters out of 5795596
- 2106975 words of memory out of 5000000
- 32641 multiletter control sequences out of 15000+600000
+ 10992 strings out of 476182
+ 172274 string characters out of 5795596
+ 2105975 words of memory out of 5000000
+ 32640 multiletter control sequences out of 15000+600000
  570348 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,17n,79p,1496b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -933,7 +926,7 @@ y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (21 pages, 914346 bytes).
+Output written on paper.pdf (21 pages, 914471 bytes).
 PDF statistics:
  2266 PDF objects out of 2487 (max. 8388607)
  882 compressed objects within 9 object streams
