@@ -1,6 +1,26 @@
-build/
-bazel-*
-MODULE.bazel.lock
-.paper_build.lock
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+
+# Python Caches & Build Outputs
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+build/
+dist/
+*.egg-info/
+
+# Bazel Artifacts
+bazel-*
+MODULE.bazel.lock
+
+# Generated SQLite Databases
+*.db
+hot_jupiter/data/hot_jupiter.db
+
+# Lock Files & Temp Files
+.paper_build.lock
+.DS_Store
