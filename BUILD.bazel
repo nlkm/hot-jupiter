@@ -4,9 +4,11 @@ cc_library(
     name = "hot_jupiter_lib",
     srcs = [
         "cpp/src/interior.cpp",
+        "cpp/src/c_api.cpp",
     ],
     hdrs = [
         "cpp/include/atmosphere.hpp",
+        "cpp/include/c_api.h",
         "cpp/include/constants.hpp",
         "cpp/include/eos.hpp",
         "cpp/include/heating.hpp",
@@ -16,7 +18,14 @@ cc_library(
         "cpp/include/orbital.hpp",
     ],
     includes = ["cpp/include"],
-    copts = ["-std=c++17", "-O3"],
+    copts = ["-std=c++17", "-O3", "-fvisibility=default"],
+    alwayslink = True,
+)
+
+cc_binary(
+    name = "libhot_jupiter_cpp.so",
+    linkshared = True,
+    deps = [":hot_jupiter_lib"],
 )
 
 # Adjacent Module Unit Tests
