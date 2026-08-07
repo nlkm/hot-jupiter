@@ -248,12 +248,19 @@ def main():
     for i, mp_val in enumerate(m_grid):
         for j, a_val in enumerate(a_grid):
             m_crit_val = 0.50 * ((a_val / 0.018)**3.0)
+
+            # Compute physical initial Roche filling factor mu_0 at t = 1 Myr
+            r_p_init = 1.30 * ((mp_val / 1.0)**0.18) * R_JUP
+            r_roche_init = 0.462 * (
+                (mp_val * M_JUP / M_SUN)**(1.0 / 3.0)) * (a_val * AU)
+            mu_0 = r_p_init / r_roche_init
+
             if mp_val < m_crit_val:
-                val_code = 0  # Disruption / Engulfment (Red)
-            elif a_val <= 0.023:
-                val_code = 1  # Envelope Stripping Stagnation (Yellow)
+                val_code = 0  # Zone I: Disruption / Engulfment (Red)
+            elif mu_0 >= 1.0:
+                val_code = 1  # Zone II: Envelope Stripping Stagnation (Yellow)
             else:
-                val_code = 2  # Non-Overflow Cooling (Green)
+                val_code = 2  # Zone III: Non-Overflow Cooling (Green)
             matrix_outcome[i, j] = val_code
 
     # --- Render Figure 3: Pure 2D Survival Zone Map ---
