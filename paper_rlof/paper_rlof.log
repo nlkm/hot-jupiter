@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -531,12 +531,12 @@ Underfull \hbox (badness 4156) in paragraph at lines 95--96
 20) : For
  []
 
-<figures/fig2_bifurcation_map.png, id=120, 686.565pt x 505.89pt>
+<figures/fig2_bifurcation_map.png, id=120, 614.295pt x 469.755pt>
 File: figures/fig2_bifurcation_map.png Graphic file (type png)
 <use figures/fig2_bifurcation_map.png>
 Package pdftex.def Info: figures/fig2_bifurcation_map.png  used on input line 1
 00.
-(pdftex.def)             Requested size: 242.98503pt x 179.04027pt.
+(pdftex.def)             Requested size: 242.98503pt x 185.81282pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -550,4 +550,62 @@ Package pdftex.def Info: figures/fig3_obs_comparison.png  used on input line 12
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [2]
-Underfull \hbox 
+Underfull \hbox (badness 10000) in paragraph at lines 138--139
+\OT1/cmr/m/n/10 (+20) The the-o-ret-i-cal bound-ary $\OML/cmm/m/it/10 M[]\OT1/c
+mr/m/n/10 (+20) (\OML/cmm/m/it/10 a\OT1/cmr/m/n/10 (+20) ) \OMS/cmsy/m/n/10 ^^Y
+
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 138--139
+\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 50(\OML/cmm/m/it
+/10 a=\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 018[])[] \
+OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
+ []
+
+
+Underfull \vbox (badness 4608) has occurred while \output is active []
+
+ [3 <paper_rlof/figures/fig1_rlof_tracks.png>]
+Underfull \vbox (badness 2809) has occurred while \output is active []
+
+ [4 <paper_rlof/figures/fig2_bifurcation_map.png> <paper_rlof/figures/fig3_obs_
+comparison.png>] [5
+
+] (paper_rlof/paper_rlof.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-22>
+ ***********
+Package rerunfilecheck Info: File `paper_rlof.out' has not changed.
+(rerunfilecheck)             Checksum: D118D171F7B690051D7B401B55815934;2879.
+ ) 
+Here is how much of TeX's memory you used:
+ 12714 strings out of 476182
+ 195640 string characters out of 5795596
+ 1952975 words of memory out of 5000000
+ 34381 multiletter control sequences out of 15000+600000
+ 570774 words of font info for 138 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 75i,8n,79p,1682b,576s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/neil/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
+k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+ti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pf
+b>
+Output written on paper_rlof/paper_rlof.pdf (5 pages, 1188545 bytes).
+PDF statistics:
+ 237 PDF objects out of 1000 (max. 8388607)
+ 195 compressed objects within 2 object streams
+ 50 named destinations out of 1000 (max. 500000)
+ 29312 words of extra memory for PDF output out of 29859 (max. 10000000)
+
