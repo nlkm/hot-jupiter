@@ -18,11 +18,13 @@ plt.switch_backend('Agg')
 def compute_coupled_trajectory(M_p_0: float,
                                a_0: float,
                                e_0: float = 0.05,
-                               num_pts: int = 150):
+                               num_pts: int = 300):
     """
     Fast analytical-hydrostatic ODE integrator for coupled RLOF mass loss and tidal decay.
+    Uses logarithmically spaced time steps to resolve early rapid RLOF dynamics.
     """
-    t_arr = np.linspace(1.0e6, 3.0e9, num_pts)  # 1 Myr to 3 Gyr
+    t_arr = np.geomspace(1.0e6, 3.0e9,
+                         num_pts)  # Logarithmically spaced from 1 Myr to 3 Gyr
     M_p_arr = np.zeros(num_pts)
     a_arr = np.zeros(num_pts)
     R_p_arr = np.zeros(num_pts)
@@ -33,10 +35,13 @@ def compute_coupled_trajectory(M_p_0: float,
     a_curr = a_0
     e_curr = e_0
 
-    dt_yr = (3.0e9 - 1.0e6) / num_pts
-
     for idx in range(num_pts):
-        # 1. Radius scaling R_p = 1.2 * R_Jup * (M_p / M_Jup)^0.2 * exp(-0.05 * t_Gyr)
+        if idx == 0:
+            dt_yr = t_arr[0]
+        else:
+            dt_yr = t_arr[idx] - t_arr[idx - 1]
+
+        # 1. Radius scaling R_p = 1.25 * R_Jup * (M_p / M_Jup)^0.15 * exp(-0.08 * t_Gyr)
         t_gyr = t_arr[idx] / 1.0e9
         R_p_curr = max(
             0.2 * R_JUP,
@@ -107,87 +112,128 @@ def main():
     _fig, axes = plt.subplots(2, 2, figsize=(11, 8.5), dpi=300)
 
     # Plot A: Semi-major Axis a(t)
-    axes[0, 0].plot(res_disrupt["t"],
-                    res_disrupt["a"],
-                    'r-',
-                    lw=2.2,
-                    label='Runaway Disruption (0.6 M_J, 0.016 AU)')
-    axes[0, 0].plot(res_stagnate["t"],
-                    res_stagnate["a"],
-                    'b--',
-                    lw=2.2,
-                    label='Stagnated Survival (0.8 M_J, 0.019 AU)')
-    axes[0, 0].plot(res_cool["t"],
-                    res_cool["a"],
-                    'g-.',
-                    lw=2.2,
-                    label='Non-Overflow Cooling (1.0 M_J, 0.030 AU)')
-    axes[0, 0].set_ylabel('Semi-Major Axis $a$ [AU]', fontsize=11)
-    axes[0, 0].set_xlabel('Time $t$ [Myr]', fontsize=11)
-    axes[0, 0].grid(True, alpha=0.3)
-    axes[0, 0].legend(fontsize=9, loc='upper right')
+    axes[0, 0].plot(
+        res_disrupt["t"],
+        res_disrupt["a"],
+        'r-',
+        lw=2.5,
+        label=
+        'Runaway Disruption ($0.6\\,M_{\\mathrm{J}}, 0.016\\,\\mathrm{AU}$)')
+    axes[0, 0].plot(
+        res_stagnate["t"],
+        res_stagnate["a"],
+        'b--',
+        lw=2.5,
+        label=
+        'Stagnated Survival ($0.8\\,M_{\\mathrm{J}}, 0.019\\,\\mathrm{AU}$)')
+    axes[0, 0].plot(
+        res_cool["t"],
+        res_cool["a"],
+        'g-.',
+        lw=2.5,
+        label=
+        'Non-Overflow Cooling ($1.0\\,M_{\\mathrm{J}}, 0.030\\,\\mathrm{AU}$)')
+    axes[0, 0].set_xscale('log')
+    axes[0, 0].set_xlim(1.0, 3000.0)
+    axes[0, 0].set_ylabel('Semi-Major Axis $a$ [AU]',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[0, 0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[0, 0].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes[0, 0].legend(fontsize=8.5, loc='upper right')
 
     # Plot B: Planet Mass M_p(t)
-    axes[0, 1].plot(res_disrupt["t"], res_disrupt["M_p"], 'r-', lw=2.2)
-    axes[0, 1].plot(res_stagnate["t"], res_stagnate["M_p"], 'b--', lw=2.2)
-    axes[0, 1].plot(res_cool["t"], res_cool["M_p"], 'g-.', lw=2.2)
+    axes[0, 1].plot(res_disrupt["t"],
+                    res_disrupt["M_p"],
+                    'r-',
+                    lw=2.5,
+                    label='Runaway Disruption')
+    axes[0, 1].plot(res_stagnate["t"],
+                    res_stagnate["M_p"],
+                    'b--',
+                    lw=2.5,
+                    label='Stagnated Survival')
+    axes[0, 1].plot(res_cool["t"],
+                    res_cool["M_p"],
+                    'g-.',
+                    lw=2.5,
+                    label='Non-Overflow Cooling')
+    axes[0, 1].set_xscale('log')
+    axes[0, 1].set_xlim(1.0, 3000.0)
     axes[0, 1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
-                          fontsize=11)
-    axes[0, 1].set_xlabel('Time $t$ [Myr]', fontsize=11)
-    axes[0, 1].grid(True, alpha=0.3)
+                          fontsize=11,
+                          fontweight='bold')
+    axes[0, 1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[0, 1].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes[0, 1].legend(fontsize=8.5, loc='upper right')
 
     # Plot C: Planetary Radius R_p vs Roche Lobe Radius R_Roche
     axes[1, 0].plot(res_disrupt["t"],
                     res_disrupt["R_p"],
                     'r-',
-                    lw=2.0,
+                    lw=2.2,
                     label='$R_p$ (Runaway)')
     axes[1, 0].plot(res_disrupt["t"],
                     res_disrupt["R_roche"],
                     'r:',
-                    lw=1.8,
+                    lw=2.0,
                     label='$R_{\\mathrm{Roche}}$ (Runaway)')
     axes[1, 0].plot(res_stagnate["t"],
                     res_stagnate["R_p"],
                     'b--',
-                    lw=2.0,
+                    lw=2.2,
                     label='$R_p$ (Stagnated)')
     axes[1, 0].plot(res_stagnate["t"],
                     res_stagnate["R_roche"],
                     'b:',
-                    lw=1.8,
+                    lw=2.0,
                     label='$R_{\\mathrm{Roche}}$ (Stagnated)')
-    axes[1, 0].set_ylabel('Radius [$R_{\\mathrm{Jup}}$]', fontsize=11)
-    axes[1, 0].set_xlabel('Time $t$ [Myr]', fontsize=11)
-    axes[1, 0].grid(True, alpha=0.3)
-    axes[1, 0].legend(fontsize=8, loc='upper right')
+    axes[1, 0].set_xscale('log')
+    axes[1, 0].set_xlim(1.0, 3000.0)
+    axes[1, 0].set_ylabel('Radius [$R_{\\mathrm{Jup}}$]',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[1, 0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[1, 0].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes[1, 0].legend(fontsize=8.0, loc='upper right')
 
     # Plot D: Roche Lobe Filling Factor mu_Roche = R_p / R_Roche
     axes[1, 1].plot(res_disrupt["t"],
                     res_disrupt["filling_factor"],
                     'r-',
-                    lw=2.2,
-                    label='Runaway')
+                    lw=2.5,
+                    label='Runaway Disruption')
     axes[1, 1].plot(res_stagnate["t"],
                     res_stagnate["filling_factor"],
                     'b--',
-                    lw=2.2,
-                    label='Stagnated')
+                    lw=2.5,
+                    label='Stagnated Survival')
     axes[1, 1].plot(res_cool["t"],
                     res_cool["filling_factor"],
                     'g-.',
-                    lw=2.2,
-                    label='Cooling')
+                    lw=2.5,
+                    label='Non-Overflow Cooling')
     axes[1, 1].axhline(1.0,
                        color='black',
                        linestyle=':',
-                       lw=1.5,
-                       label='Roche Lobe Limit ($\\mu_{\\mathrm{Roche}}=1$)')
+                       lw=1.8,
+                       label='Roche Lobe Limit ($\\mu_{\\mathrm{Roche}}=1.0$)')
+    axes[1, 1].set_xscale('log')
+    axes[1, 1].set_xlim(1.0, 3000.0)
     axes[1, 1].set_ylabel(
         'Filling Factor $\\mu_{\\mathrm{Roche}} = R_p / R_{\\mathrm{Roche}}$',
-        fontsize=11)
-    axes[1, 1].set_xlabel('Time $t$ [Myr]', fontsize=11)
-    axes[1, 1].grid(True, alpha=0.3)
+        fontsize=11,
+        fontweight='bold')
+    axes[1, 1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                          fontsize=11,
+                          fontweight='bold')
+    axes[1, 1].grid(True, which="both", linestyle="--", alpha=0.35)
     axes[1, 1].legend(fontsize=8.5, loc='upper right')
 
     plt.tight_layout()
