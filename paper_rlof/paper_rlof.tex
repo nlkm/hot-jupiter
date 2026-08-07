@@ -24,7 +24,7 @@
 \maketitle
 
 \begin{abstract}
-Ultra-Short-Period (USP) gas giant exoplanets ($a \lesssim 0.035\text{ AU}$, $P_{\text{orb}} \lesssim 2\text{ days}$) experience extreme tidal gravitational forces and intense stellar irradiation, bringing them near their volume-equivalent Roche lobe limits. Previous theoretical works modeled Roche Lobe Overflow (RLOF) mass loss and tidal orbital decay independently. In this study, we construct a fully coupled 1D hydrostatic and orbital evolution model that simultaneously solves for planetary interior thermal cooling ($\dot{S}_{\text{env}}$), hydrodynamic envelope stripping ($\dot{M}_{\text{RLOF}}$), and tidal semi-major axis decay ($\dot{a}_{\text{tide}}$). We explore a 4D simulation matrix across planetary masses ($0.4\text{--}2.0\,M_{\text{Jup}}$) and orbital separations ($0.015\text{--}0.035\text{ AU}$). We discover a fundamental non-linear bifurcation in planetary fate: (1) \textit{Tidal Runaway Disruption}, where envelope stripping accelerates inward orbital migration, causing total planetary engulfment within $\lesssim 1\text{ Gyr}$, and (2) \textit{Self-Limiting Mass-Loss Stagnation}, where envelope removal contracts the planetary radius ($R_p$), causing the planet to slip back inside its Roche lobe ($\mu_{\text{Roche}} < 1$) and survive as a stable USP gas giant or remnant core. We compare our empirical survival boundaries against the observed sample of 362 transiting gas giants from our relational database (\texttt{hot\_jupiter.db}), accurately reproducing the scarcity of low-mass giants at $a \le 0.02\text{ AU}$ and providing quantitative predictions for PLATO and Ariel.
+Ultra-Short-Period (USP) gas giant exoplanets ($a \lesssim 0.035\text{ AU}$, $P_{\text{orb}} \lesssim 2\text{ days}$) experience extreme tidal gravitational forces and intense stellar irradiation, bringing them near their volume-equivalent Roche lobe limits. Previous theoretical works modeled Roche Lobe Overflow (RLOF) mass loss and tidal orbital decay independently. In this study, we construct a fully coupled 1D hydrostatic and orbital evolution model that simultaneously solves for planetary interior thermal cooling ($\dot{S}_{\text{env}}$), hydrodynamic envelope stripping ($\dot{M}_{\text{RLOF}}$), and tidal semi-major axis decay ($\dot{a}_{\text{tide}}$). We explore a 4D simulation matrix across planetary masses ($0.4\text{--}2.0\,M_{\text{Jup}}$) and orbital separations ($0.015\text{--}0.035\text{ AU}$). We discover a fundamental non-linear bifurcation in planetary fate: (1) \textit{Tidal Runaway Disruption}, where envelope stripping accelerates inward orbital migration, causing total planetary engulfment within $\lesssim 1\text{ Gyr}$, and (2) \textit{Self-Limiting Mass-Loss Stagnation}, where envelope removal contracts the planetary radius ($R_p$), causing the planet to slip back inside its Roche lobe ($\mu_{\text{Roche}} < 1$) and survive as a stable USP gas giant or remnant core. We compare our empirical survival boundaries against the observed sample of 362 transiting gas giants from our relational database (\texttt{hot\_jupiter.db}), accurately reproducing the scarcity of low-mass giants at $a \le 0.02\text{ AU}$ and providing quantitative predictions for PLATO and Ariel. Detailed mathematical derivations are provided in the Appendix.
 \end{abstract}
 
 \section{Introduction}
@@ -44,36 +44,36 @@ The planetary interior envelope is integrated from the core-envelope boundary to
 \begin{equation}
 \frac{dP}{dr} = -\frac{G M(r) \rho(r)}{r^2}, \quad \frac{dM}{dr} = 4\pi r^2 \rho(r)
 \end{equation}
-using the hydrogen-helium equation of state (EOS) \citep{Saumon1995, Chabrier2019}. The atmospheric boundary condition is governed by the double-gray radiative transfer profile \citep{Guillot2010}:
+using the hydrogen-helium equation of state (EOS) \citep{Saumon1995, Chabrier2019}. The outer boundary condition uses the double-gray radiative equilibrium atmospheric profile \citep{Guillot2010}:
 \begin{equation}
-T^4(\tau) = \frac{3 T_{\text{int}}^4}{4} \left( \tau + \frac{2}{3} \right) + \frac{3 T_{\text{irr}}^4}{4} \mu_0 \left[ \frac{2}{3} + \frac{1}{\gamma\sqrt{3}} + \left( \frac{\gamma}{\sqrt{3}} - \frac{1}{\gamma\sqrt{3}} \right) e^{-\gamma \tau \sqrt{3}} \right]
+T^4(\tau) = \frac{3 T_{\text{int}}^4}{4} \left( \tau + \frac{2}{3} \right) + T_{\text{irr}}^4 \, \mathcal{H}(\tau, \gamma)
+\label{eq:guillot_main}
 \end{equation}
-where $T_{\text{int}} = (L_{\text{int}} / 4\pi R_p^2 \sigma)^{1/4}$ is the intrinsic effective temperature.
+where $T_{\text{int}} = (L_{\text{int}} / 4\pi R_p^2 \sigma)^{1/4}$ is the intrinsic effective temperature and $\mathcal{H}(\tau, \gamma)$ encodes the irradiation attenuation. (See Appendix~\ref{app:double_gray} for the step-by-step atmospheric derivation.)
 
 \subsection{Hydrodynamic RLOF Mass Loss}
-The volume-equivalent Roche lobe radius is calculated using the standard formulation \citep{Eggleton1983}:
+The volume-equivalent Roche lobe radius is calculated using Eggleton's analytical formulation \citep{Eggleton1983}:
 \begin{equation}
-R_{\text{Roche}} = a \frac{0.49 q^{2/3}}{0.6 q^{2/3} + \ln(1 + q^{1/3})}, \quad q = \frac{M_p}{M_{\text{star}}}
+R_{\text{Roche}} = a \, r_L(q), \quad q \equiv \frac{M_p}{M_{\text{star}}}
 \end{equation}
+where $r_L(q)$ is the dimensionless Roche ratio. (See Appendix~\ref{app:roche} for the explicit expression.)
+
 When the Roche lobe filling factor $\mu_{\text{Roche}} \equiv R_p / R_{\text{Roche}} \ge 0.95$, hydrodynamic mass loss initiates:
 \begin{equation}
-\frac{dM_p}{dt} = -\dot{M}_0 \exp\left[ \eta \left( \frac{R_p}{R_{\text{Roche}}} - 1 \right) \right]
+\frac{dM_p}{dt} = -\dot{M}_0 \exp\left[ \eta \left( \mu_{\text{Roche}} - 1 \right) \right]
 \end{equation}
-where $\dot{M}_0 = 10^{11}\text{ kg s}^{-1}$ and $\eta = 4.0$. Mass loss transfers orbital angular momentum, contributing to orbital evolution:
+where $\dot{M}_0 = 10^{11}\text{ kg s}^{-1}$ and $\eta = 4.0$. Non-conservative mass loss transfers specific orbital angular momentum, driving an orbital rate:
 \begin{equation}
 \left. \frac{da}{dt} \right|_{\text{RLOF}} = - 2 a \left( \frac{\dot{M}_p}{M_p} \right) (1 - \beta)
 \end{equation}
-where $\beta = 0.5$ represents the fraction of specific angular momentum retained by the system.
+where $\beta = 0.5$ represents the specific angular momentum retention fraction.
 
 \subsection{Tidal Orbital Decay}
-Tidal dissipation in the planetary interior drives semi-major axis decay and eccentricity circularization \citep{Hut1981}:
+Tidal dissipation in the star and planetary interior drives orbital decay ($\dot{a}_{\text{tide}}$) and circularization ($\dot{e}_{\text{tide}}$) \citep{Hut1981}:
 \begin{equation}
-\left. \frac{da}{dt} \right|_{\text{tide}} = -\frac{9}{2} \left(\frac{G}{M_{\text{star}}}\right)^{1/2} \frac{k_{2,p}}{Q_p^\prime} M_{\text{star}} R_p^5 a^{-11/2} e^2
+\left. \frac{da}{dt} \right|_{\text{tide}} = -9 \left(\frac{k_{2,\star}}{Q_\star^\prime}\right) \sqrt{G M_\star} R_\star^5 \, \frac{M_p}{a^{11/2}}
 \end{equation}
-\begin{equation}
-\left. \frac{de}{dt} \right|_{\text{tide}} = -\frac{19}{8} \left(\frac{G}{M_{\text{star}}}\right)^{1/2} \frac{k_{2,p}}{Q_p^\prime} M_{\text{star}} R_p^5 a^{-13/2} e
-\end{equation}
-where $k_{2,p} = 0.38$ is the planetary Love number and $Q_p^\prime = 10^6$ is the modified tidal quality factor.
+(See Appendix~\ref{app:tides} for full equations including eccentricity circularization rates.)
 
 The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_p]$ is integrated using an adaptive RK45 solver across 5~Gyr.
 
@@ -87,7 +87,7 @@ The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/fig2_roche_filling.png}
-\caption{\textbf{Roche Lobe Radius Contraction and Filling Factor.} Time evolution of planetary radius $R_p(t)$ vs. Roche lobe radius $R_{\text{Roche}}(t)$ (left) and filling factor $\mu_{\text{Roche}}(t) = R_p / R_{\text{Roche}}$ (right). Overfilling ($\mu_{\text{Roche}} \ge 1.0$) initiates hydrodynamic envelope stripping.}
+\caption{\textbf{Roche Lobe Radius Contraction and Filling Factor.} Time evolution of filling factor $\mu_{\text{Roche}}(t) = R_p / R_{\text{Roche}}$. Overfilling ($\mu_{\text{Roche}} \ge 1.0$, red shaded region) initiates hydrodynamic mass loss, while sub-overflow ($\mu_{\text{Roche}} < 1.0$, green shaded region) represents stable cooling.}
 \label{fig:filling}
 \end{figure}
 
@@ -105,7 +105,7 @@ As shown in Figures~\ref{fig:tracks} and~\ref{fig:filling}, the coupled system e
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/fig3_bifurcation_map.png}
-\caption{\textbf{Survival Phase Space Diagram \& Trajectory Flow.} 2D phase diagram mapping final outcomes in initial $[a(0), M_p(0)]$ space into Zone I (Red: Engulfment), Zone II (Yellow: Envelope Stripping Stagnation), and Zone III (Green: Non-Overflow Cooling). The black dashed line denotes the analytical Roche limit $M_{\text{crit}}(a) \propto a^{3.0}$.}
+\caption{\textbf{Survival Phase Space Diagram \& Trajectory Flow.} 2D phase diagram mapping final outcomes in initial $[a(0), M_p(0)]$ space into Zone I (Red: Engulfment), Zone II (Yellow: Envelope Stripping Stagnation), and Zone III (Green: Non-Overflow Cooling). The black dashed line denotes the analytical Roche limit $M_{\text{crit}}(a) \propto a^{3.0}$, with a prominent text callout box and left-pointing arrow indicating the forbidden domain.}
 \label{fig:phase_map}
 \end{figure}
 
@@ -118,8 +118,9 @@ M_{\text{crit}}(a) \approx 0.50 \left( \frac{a}{0.018\text{ AU}} \right)^{3.0} M
 From a dynamical systems perspective, the circularized system $[\dot{a}, \dot{M}_p]^T$ forms an autonomous vector field. Differentiating the filling factor $\mu_{\text{Roche}} \equiv R_p / R_{\text{Roche}}$ yields the fundamental RLOF stability equation:
 \begin{equation}
 \frac{\mathrm{d} \mu_{\text{Roche}}}{\mathrm{d}t} = \mu_{\text{Roche}} \left[ \left(\zeta_{\text{ad}} - \frac{1}{3}\right) \left(\frac{\dot{M}_p}{M_p}\right) + \left|\frac{\dot{a}}{a}\right|_{\text{tide}} \right]
+\label{eq:stability_main}
 \end{equation}
-where $\zeta_{\text{ad}} \equiv (\partial \ln R_p / \partial \ln M_p)_{\text{ad}}$ is the interior mass-radius exponent.
+where $\zeta_{\text{ad}} \equiv (\partial \ln R_p / \partial \ln M_p)_{\text{ad}}$ is the interior mass-radius exponent. (See Appendix~\ref{app:stability} for the step-by-step linear stability derivation.)
 
 Since $\dot{M}_p \le 0$, the sign of $\zeta_{\text{RLOF}} = \zeta_{\text{ad}} - 1/3$ governs the feedback sign:
 \begin{itemize}
@@ -138,7 +139,7 @@ We benchmarked our theoretical disruption boundary against the empirical populat
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/fig4_obs_comparison.png}
-\caption{\textbf{Empirical Gas Giant Truncation Boundary.} Observed transiting exoplanet population (362 planets from \texttt{hot\_jupiter.db}) overlaid with the theoretical RLOF disruption boundary (red dashed curve). The shaded red region highlights the forbidden domain where gas giants cannot exist due to hydrodynamic RLOF envelope stripping ($t < 100\text{ Myr}$).}
+\caption{\textbf{Empirical Gas Giant Truncation Boundary.} Observed transiting exoplanet population from \texttt{hot\_jupiter.db} overlaid with the theoretical RLOF disruption boundary (red dashed curve), color-coded by planet composition (blue circles: Gas Giants $M_p \ge 0.1\,M_{\text{Jup}}$; orange diamonds: Solid Terrestrial Cores $M_p < 0.1\,M_{\text{Jup}}$).}
 \label{fig:obs}
 \end{figure}
 
@@ -180,10 +181,53 @@ In this study, we constructed the first fully coupled 1D hydrostatic and orbital
     \item \textbf{Origin of USP Cores}: Hydrodynamic envelope stripping naturally converts low-mass Hot Jupiters into bare rocky/water-rich cores, offering a unified formation pathway for USP sub-Neptunes.
 \end{enumerate}
 
-\section*{References}
+\appendix
+\section*{Appendix: Detailed Mathematical Derivations}
+
+\subsection{A. Double-Gray Atmospheric Radiative Transfer Derivation} \label{app:double_gray}
+Following \citet{Guillot2010}, the temperature-optical depth profile $T(\tau)$ of an irradiated planet under the two-stream double-gray approximation satisfies the Eddington radiative equilibrium equation:
+\begin{equation}
+T^4(\tau) = \frac{3 T_{\text{int}}^4}{4} \left( \tau + \frac{2}{3} \right) + \frac{3 T_{\text{irr}}^4}{4} \mu_0 \mathcal{H}(\tau, \gamma)
+\end{equation}
+where $\gamma \equiv \kappa_{\text{vis}} / \kappa_{\text{thermal}}$ is the ratio of visible incident stellar opacity to thermal infrared opacity. The explicit attenuation kernel $\mathcal{H}(\tau, \gamma)$ is derived by integrating the incoming stellar beam over the incident angle $\mu_0 = \cos \theta$:
+\begin{equation}
+\mathcal{H}(\tau, \gamma) = \frac{2}{3} + \frac{1}{\gamma\sqrt{3}} + \left( \frac{\gamma}{\sqrt{3}} - \frac{1}{\gamma\sqrt{3}} \right) e^{-\gamma \tau \sqrt{3}}
+\end{equation}
+For highly irradiated USP gas giants ($\gamma \approx 0.1\text{--}0.3$), stellar flux is deposited in a shallow atmospheric layer ($\tau \sim \gamma^{-1}$), inflating the photosphere $R_p$ by up to $20\text{--}30\%$.
+
+\subsection{B. Eggleton Volume-Equivalent Roche Lobe Radius} \label{app:roche}
+\citet{Eggleton1983} derived an empirical fit for the volume-equivalent Roche lobe radius $R_{\text{Roche}}$ accurate to better than $1\%$ across all mass ratios $q = M_p / M_{\text{star}}$:
+\begin{equation}
+R_{\text{Roche}} = a \, r_L(q) = a \, \frac{0.49 \, q^{2/3}}{0.6 \, q^{2/3} + \ln(1 + q^{1/3})}
+\end{equation}
+In the limit of small mass ratios ($q \ll 1$), performing a Taylor expansion around $q^{1/3} \to 0$ yields the familiar Paczyński power-law approximation:
+\begin{equation}
+R_{\text{Roche}} \approx 0.462 \left( \frac{M_p}{M_{\text{star}}} \right)^{1/3} a
+\end{equation}
+Equating $R_p \approx R_{\text{Roche}}$ yields the critical survival planet mass scaling $M_{\text{crit}}(a) \propto a^{3.0}$.
+
+\subsection{C. Hut Tidal Torque \& Dissipation Equations} \label{app:tides}
+Following \citet{Hut1981}, the full coupled evolution of semi-major axis $a$ and eccentricity $e$ under equilibrium tidal dissipation in the star ($\star$) and planet ($p$) is:
+\begin{align}
+\left. \frac{\dot{a}}{a} \right|_{\text{tide}} &= -6 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \left[ f_1(e) - \frac{\Omega_i}{n_{\text{orb}}} f_2(e) \right] \\
+\left. \frac{\dot{e}}{e} \right|_{\text{tide}} &= -27 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \left[ f_3(e) - \frac{11}{18} \frac{\Omega_i}{n_{\text{orb}}} f_4(e) \right]
+\end{align}
+where $n_{\text{orb}} = \sqrt{G(M_\star + M_p)/a^3}$ is the orbital mean motion, and $f_1, \dots, f_4$ are polynomial eccentricity functions ($f_1(0) = f_2(0) = 1$). For synchronous planets ($\Omega_p = n_{\text{orb}}$), planetary tides vanish, and stellar tidal dissipation ($\dot{a}_{\text{tide},\star} \propto a^{-11/2}$) dominates inward migration.
+
+\subsection{D. RLOF Linear Stability Derivation} \label{app:stability}
+Taking the logarithmic derivative of $\mu_{\text{Roche}} = R_p / R_{\text{Roche}}$ with respect to time:
+\begin{equation}
+\frac{\mathrm{d} \ln \mu_{\text{Roche}}}{\mathrm{d}t} = \frac{\dot{R}_p}{R_p} - \frac{\dot{R}_{\text{Roche}}}{R_{\text{Roche}}}
+\end{equation}
+Substituting $\dot{R}_p / R_p = \zeta_{\text{ad}} (\dot{M}_p / M_p)$ and $\dot{R}_{\text{Roche}} / R_{\text{Roche}} = \frac{1}{3}(\dot{M}_p / M_p) + (\dot{a}/a)$:
+\begin{equation}
+\frac{\mathrm{d} \mu_{\text{Roche}}}{\mathrm{d}t} = \mu_{\text{Roche}} \left[ \left(\zeta_{\text{ad}} - \frac{1}{3}\right) \left(\frac{\dot{M}_p}{M_p}\right) - \frac{\dot{a}}{a} \right]
+\end{equation}
+Defining $\zeta_{\text{RLOF}} \equiv \zeta_{\text{ad}} - 1/3$ and noting $\dot{a}_{\text{tide}} < 0$ gives Equation~(\ref{eq:stability_main}). For convective envelopes ($\zeta_{\text{ad}} < 1/3$), $\zeta_{\text{RLOF}} < 0$, making $\dot{\mu}_{\text{Roche}} > 0$ under mass loss ($\dot{M}_p < 0$), establishing positive-feedback instability.
+
 \begin{thebibliography}{99}
-\bibitem[Charbonneau et al.(2000)]{Charbonneau2000} Charbonneau, D., et al. 2000, \textit{ApJ}, 529, L45
 \bibitem[Chabrier et al.(2019)]{Chabrier2019} Chabrier, G., et al. 2019, \textit{ApJ}, 872, 51
+\bibitem[Charbonneau et al.(2000)]{Charbonneau2000} Charbonneau, D., et al. 2000, \textit{ApJ}, 529, L45
 \bibitem[Dawson \& Johnson(2018)]{Dawson2018} Dawson, R. I., \& Johnson, J. A. 2018, \textit{ARA\&A}, 56, 175
 \bibitem[Eggleton(1983)]{Eggleton1983} Eggleton, P. P. 1983, \textit{ApJ}, 268, 368
 \bibitem[Eggleton et al.(1998)]{Eggleton1998} Eggleton, P. P., et al. 1998, \textit{ApJ}, 499, 853
