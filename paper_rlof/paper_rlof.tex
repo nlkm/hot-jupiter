@@ -166,6 +166,38 @@ As shown in Figure~\ref{fig:cases}:
 \subsection{Statistical Robustness of the Truncation Boundary}
 The theoretical boundary $M_{\text{crit}}(a) \approx 0.50 (a / 0.018\text{ AU})^{3.0}\,M_{\text{Jup}}$ acts as an empirical filter. Out of 362 transiting exoplanets in \texttt{hot\_jupiter.db}, less than $0.5\%$ of gas giants lie to the left of this curve, confirming that coupled hydrostatic RLOF mass loss and tidal decay govern the survival landscape of ultra-short-period gas giants.
 
+\section{The Critical Core Mass Threshold $M_{\text{core, crit}}$ for USP Remnants} \label{sec:core_threshold}
+To answer whether Roche lobe overflowed Hot Jupiters survive as stable USP sub-Neptune / super-Earth remnants or suffer complete hydrodynamic destruction, we conducted a systematic simulation sweep over core masses $M_{\text{core}} \in [1.0, 25.0]\,M_{\text{Earth}}$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig6_core_mass_remnants.png}
+\caption{\textbf{Bifurcation in Core Survival.} Final remnant mass $M_{\text{remnant}}$ at $t = 5\text{ Gyr}$ as a function of initial core mass $M_{\text{core}}$ across orbital separations $a(0) \in [0.015, 0.026]\text{ AU}$. Cores below $M_{\text{core, crit}}$ undergo total hydrodynamic disruption ($M_{\text{remnant}} = 0$).}
+\label{fig:core_remnants}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig7_core_threshold_scaling.png}
+\caption{\textbf{Critical Survival Boundary for USP Remnants.} Minimum core mass threshold $M_{\text{core, crit}}(a)$ separating complete core disruption (red shaded region) from stable core survival (green shaded region).}
+\label{fig:core_scaling}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig8_heavy_element_enrichment.png}
+\caption{\textbf{Heavy-Element Enrichment Fingerprint.} Final bulk heavy-element fraction $Z_{\text{bulk}} \equiv M_{\text{core}} / M_{\text{total}}$ of surviving USP remnants, compared against the baseline of primordially accreted terrestrial planets ($Z \approx 0.30$).}
+\label{fig:heavy_elements}
+\end{figure}
+
+As demonstrated in Figures~\ref{fig:core_remnants} and~\ref{fig:core_scaling}, core survival exhibits a sharp non-linear threshold $M_{\text{core, crit}}(a)$:
+\begin{itemize}
+    \item \textbf{Case A ($M_{\text{core}} < M_{\text{core, crit}}$)}: For small core masses (e.g. $M_{\text{core}} \lesssim 2\text{--}4\,M_{\text{Earth}}$ at $a \le 0.018\text{ AU}$), the self-gravity of the core is insufficient to hold its outer heavy-element mantle under tidal decompression during RLOF. Tidal forces pull the core apart, driving total hydrodynamic disruption ($M_{\text{remnant}} = 0$).
+    \item \textbf{Case B ($M_{\text{core}} \ge M_{\text{core, crit}}$)}: For substantial core masses (e.g. $M_{\text{core}} \ge 5\text{--}8\,M_{\text{Earth}}$), the high density of the core keeps its uncompressed radius smaller than its Roche lobe ($R_{\text{core}} < R_{\text{Roche, core}}$). Once the extended gas envelope is stripped, the bare core contracts sharply ($\zeta_{\text{ad}} > 1/3$), self-terminating mass loss and surviving as a stable USP sub-Neptune or bare rocky core for $> 5\text{ Gyr}$.
+\end{itemize}
+
+Figure~\ref{fig:heavy_elements} presents a testable prediction for JWST, PLATO, and Ariel: surviving USP remnants formed via Hot Jupiter RLOF envelope stripping possess exceptionally high bulk heavy-element fractions ($Z_{\text{bulk}} \ge 0.70$), providing a spectroscopic diagnostic to distinguish stripped cores from primordially accreted terrestrial planets.
+
 \section{Astrophysical Implications}
 Our findings have major implications for upcoming space-based transit surveys:
 \begin{itemize}
