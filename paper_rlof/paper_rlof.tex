@@ -114,6 +114,19 @@ Figure~\ref{fig:phase_map} presents the 2D phase diagram mapping the critical bo
 M_{\text{crit}}(a) \approx 0.50 \left( \frac{a}{0.018\text{ AU}} \right)^{3.0} M_{\text{Jup}}
 \end{equation}
 
+\section{Dynamical Systems Analysis \& Stability Criteria} \label{sec:dynamical_systems}
+From a dynamical systems perspective, the circularized system $[\dot{a}, \dot{M}_p]^T$ forms an autonomous vector field. Differentiating the filling factor $\mu_{\text{Roche}} \equiv R_p / R_{\text{Roche}}$ yields the fundamental RLOF stability equation:
+\begin{equation}
+\frac{\mathrm{d} \mu_{\text{Roche}}}{\mathrm{d}t} = \mu_{\text{Roche}} \left[ \left(\zeta_{\text{ad}} - \frac{1}{3}\right) \left(\frac{\dot{M}_p}{M_p}\right) + \left|\frac{\dot{a}}{a}\right|_{\text{tide}} \right]
+\end{equation}
+where $\zeta_{\text{ad}} \equiv (\partial \ln R_p / \partial \ln M_p)_{\text{ad}}$ is the interior mass-radius exponent.
+
+Since $\dot{M}_p \le 0$, the sign of $\zeta_{\text{RLOF}} = \zeta_{\text{ad}} - 1/3$ governs the feedback sign:
+\begin{itemize}
+    \item \textbf{Convective Envelopes ($\zeta_{\text{ad}} < 1/3$)}: Mass loss forces $\dot{\mu}_{\text{Roche}} > 0$. Shrinking $M_p$ contracts the Roche lobe faster than the planet can contract, triggering a positive feedback runaway ($\zeta_{\text{RLOF}} < 0$).
+    \item \textbf{Radiative Core / Envelope ($\zeta_{\text{ad}} > 1/3$)}: Mass loss forces $\dot{\mu}_{\text{Roche}} < 0$. Rapid envelope stripping contracts the radiative core ($R_p \propto M_p^{0.6}$), driving $\mu_{\text{Roche}}$ back below 1.0 ($\zeta_{\text{RLOF}} > 0$) and creating a stable self-limiting fixed point.
+\end{itemize}
+
 \section{Replication of WASP-12b Orbital Decay} \label{sec:wasp12b}
 To benchmark our coupled tidal-RLOF integrator against recent observational preprints, we performed a replication study of the ultra-short-period hot Jupiter WASP-12b ($a = 0.0229\text{ AU}$, $M_p = 1.47\,M_{\text{Jup}}$). Recent high-precision transit timing observations measure a steady orbital period decay rate of $\dot{P} = -29.4 \pm 4.0\text{ ms yr}^{-1}$.
 
