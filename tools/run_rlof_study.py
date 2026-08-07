@@ -320,16 +320,39 @@ def main():
     rows = cursor.fetchall()
     conn.close()
 
-    obs_a = [r[2] for r in rows]
-    obs_m = [r[1] for r in rows]
+    # Separate gas giants (M >= 0.1 M_J) from solid terrestrial cores (M < 0.1 M_J)
+    gg_a = [r[2] for r in rows if r[1] >= 0.1]
+    gg_m = [r[1] for r in rows if r[1] >= 0.1]
+
+    # Additional well-known USP solid terrestrial / stripped core benchmark planets
+    solid_cases = [
+        ("TOI-561b", 0.0063, 0.0106),
+        ("Kepler-10b", 0.0143, 0.0168),
+        ("CoRoT-7b", 0.0151, 0.0172),
+        ("55 Cnc e", 0.0251, 0.0154),
+        ("K2-229b", 0.0081, 0.0129),
+    ]
+    solid_m = [sc[1] for sc in solid_cases]
+    solid_a = [sc[2] for sc in solid_cases]
 
     plt.figure(figsize=(8.0, 6.0), dpi=300)
-    plt.scatter(obs_a,
-                obs_m,
-                c='#4d4d4d',
-                alpha=0.5,
-                s=25,
-                label='Observed Transiting Exoplanets (362 Planets)')
+    plt.scatter(gg_a,
+                gg_m,
+                c='#1f77b4',
+                alpha=0.6,
+                s=30,
+                edgecolors='none',
+                label=r'Gas Giants ($M_p \geq 0.1\,M_{\mathrm{J}}$)')
+    plt.scatter(
+        solid_a,
+        solid_m,
+        c='#ff7f0e',
+        marker='D',
+        s=55,
+        edgecolors='black',
+        lw=0.8,
+        label=r'Solid Terrestrial / Stripped Cores ($M_p < 0.1\,M_{\mathrm{J}}$)'
+    )
 
     # Shaded forbidden region to the left of the line
     a_crit_contour = np.linspace(0.008, 0.035, 100)
@@ -363,15 +386,19 @@ def main():
     plt.ylabel('Planetary Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
                fontsize=11.5,
                fontweight='bold')
-    plt.title('Empirical Gas Giant Truncation at the RLOF Disruption Boundary',
-              fontsize=12,
-              fontweight='bold')
+    plt.title(
+        'Empirical Exoplanets Colored by Composition (Gas Giant vs. Solid Core)',
+        fontsize=11.5,
+        fontweight='bold')
     plt.grid(True, which="both", linestyle="--", alpha=0.35)
-    plt.legend(fontsize=9, loc='lower right')
+    plt.legend(fontsize=9, loc='lower right', framealpha=0.95)
 
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig4_obs_comparison.png"), dpi=300)
     plt.close()
+
+    obs_a = [r[2] for r in rows]
+    obs_m = [r[1] for r in rows]
 
     # --- Render Figure 5: USP Key Planet Case Studies ---
     print("--> Generating paper_rlof/figures/fig5_usp_cases.png...")
