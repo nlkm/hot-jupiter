@@ -289,6 +289,28 @@ def main():
         lw=2.8,
         label=r'Roche Limit Boundary $M_{\mathrm{crit}}(a) \propto a^{3.0}$')
 
+    # 4. Clean Callout Box cleanly placed inside the FORBIDDEN LEFT Region
+    plt.text(0.015,
+             1.5,
+             "FORBIDDEN REGION FOR GAS GIANTS\n(Hydrodynamic RLOF Stripping)",
+             fontsize=9.0,
+             fontweight='bold',
+             color='darkred',
+             ha='center',
+             bbox=dict(boxstyle='round,pad=0.4',
+                       facecolor='#ffe6e6',
+                       edgecolor='red',
+                       alpha=0.92))
+
+    # 5. Explicit Arrow pointing LEFT to show the forbidden side
+    plt.annotate(r'$\leftarrow$ FORBIDDEN SIDE',
+                 xy=(0.013, 0.8),
+                 xytext=(0.021, 0.8),
+                 fontsize=10.0,
+                 fontweight='bold',
+                 color='darkred',
+                 arrowprops=dict(arrowstyle='->', color='darkred', lw=2.2))
+
     plt.xlim(0.012, 0.038)
     plt.ylim(0.3, 2.2)
     plt.xlabel('Initial Semi-Major Axis $a(0)$ [AU]',
