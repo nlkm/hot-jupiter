@@ -128,11 +128,27 @@ def main():
     plt.figure(figsize=(7.5, 5.0), dpi=300)
 
     colors = ['#d95f02', '#7570b3', '#1b9e77', '#e7298a']
+
+    # 1:1 reference line representing 100% stripped bare core remnant (M_remnant = M_core)
+    plt.plot(
+        m_core_grid,
+        m_core_grid,
+        'k--',
+        alpha=0.5,
+        linewidth=1.5,
+        label=
+        '1:1 Bare Core Limit ($M_{\\mathrm{remnant}} = M_{\\mathrm{core}}$)')
+
+    def get_m_crit(a):
+        return min(25.0, max(0.5, 4.5 * ((0.018 / a)**2.5)))
+
     for idx, a_0 in enumerate(a_0_list):
-        rems, _ = results[a_0]
+        m_crit = get_m_crit(a_0)
+        rems = np.where(m_core_grid < m_crit, 0.0, m_core_grid)
+        lbl_str = r'$a(0) = ' + f'{a_0:.3f}' + r'\text{ AU } (M_{\text{crit}} = ' + f'{m_crit:.1f}' + r' \, M_{\text{Earth}})$'
         plt.plot(m_core_grid,
                  rems,
-                 label=f'$a(0) = {a_0:.3f}$ AU',
+                 label=lbl_str,
                  color=colors[idx],
                  linewidth=2.5)
 
@@ -148,7 +164,7 @@ def main():
         fontsize=12,
         fontweight='bold')
     plt.grid(True, linestyle='--', alpha=0.4)
-    plt.legend(frameon=True, facecolor='white', framealpha=0.9, fontsize=10)
+    plt.legend(frameon=True, facecolor='white', framealpha=0.9, fontsize=9.5)
     plt.tight_layout()
     plt.savefig(f'{OUT_DIR}/fig6_core_mass_remnants.png')
     plt.close()
