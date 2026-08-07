@@ -7,11 +7,15 @@ import os
 import sys
 
 # Add project root to sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                "..")))
 
-from hot_jupiter.database import get_db_connection, seed_database_if_empty, DEFAULT_DB_PATH
+from hot_jupiter.database import DEFAULT_DB_PATH, get_db_connection, seed_database_if_empty
 
-def populate_from_csv(csv_path: str = "outputs/nasa_exoplanet_archive_hot_jupiters_342.csv", db_path: str = DEFAULT_DB_PATH):
+
+def populate_from_csv(
+        csv_path: str = "outputs/nasa_exoplanet_archive_hot_jupiters_342.csv",
+        db_path: str = DEFAULT_DB_PATH):
     seed_database_if_empty(db_path)
     conn = get_db_connection(db_path)
     cursor = conn.cursor()
@@ -33,7 +37,8 @@ def populate_from_csv(csv_path: str = "outputs/nasa_exoplanet_archive_hot_jupite
             teq = float(row["T_eq_K"])
             ref = row.get("reference", "").strip()
 
-            cursor.execute("""
+            cursor.execute(
+                """
             INSERT INTO exoplanets (
                 name, period_days, semi_major_axis_au, mass_jup, radius_jup, radius_err_jup,
                 eccentricity, star_mass_sun, star_radius_sun, metallicity_fe_h, teq_k, age_gyr, reference
@@ -47,13 +52,17 @@ def populate_from_csv(csv_path: str = "outputs/nasa_exoplanet_archive_hot_jupite
                 metallicity_fe_h=excluded.metallicity_fe_h,
                 teq_k=excluded.teq_k,
                 reference=excluded.reference;
-            """, (name, porb, a_au, m_p, r_p, 0.05, 0.0, m_star, 1.0, fe_h, teq, 4.56, ref))
+            """, (name, porb, a_au, m_p, r_p, 0.05, 0.0, m_star, 1.0, fe_h, teq,
+                  4.56, ref))
 
     conn.commit()
     cursor.execute("SELECT COUNT(*) FROM exoplanets;")
     total = cursor.fetchone()[0]
     conn.close()
-    print(f"Successfully populated SQLite database '{db_path}' with total {total} exoplanets.")
+    print(
+        f"Successfully populated SQLite database '{db_path}' with total {total} exoplanets."
+    )
+
 
 if __name__ == "__main__":
     populate_from_csv()

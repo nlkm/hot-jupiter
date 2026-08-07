@@ -19,6 +19,9 @@ dev = [
     "pytest"
 ]
 
+[tool.ruff.lint]
+ignore = ["E501", "C408"]
+
 [tool.pytest.ini_options]
 testpaths = ["hot_jupiter"]
 python_files = ["test_*.py", "*_test.py"]
