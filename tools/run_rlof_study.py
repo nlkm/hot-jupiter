@@ -178,74 +178,62 @@ def main():
     plt.savefig(os.path.join(fig_dir, "fig1_rlof_tracks.png"), dpi=300)
     plt.close()
 
-    # --- Render Figure 2: Roche Lobe Radii & Filling Factor ---
+    # --- Render Figure 2: Ultra-Simple Roche Lobe Filling Factor ---
     print("--> Generating paper_rlof/figures/fig2_roche_filling.png...")
-    _fig2, axes2 = plt.subplots(1, 2, figsize=(11, 4.5), dpi=300)
+    plt.figure(figsize=(7.5, 5.0), dpi=300)
 
-    # Plot A: Radius Rp vs R_Roche
-    axes2[0].plot(res_disrupt["t"],
-                  res_disrupt["R_p"],
-                  'r-',
-                  lw=2.2,
-                  label=r'$R_p$ (Disruption)')
-    axes2[0].plot(res_disrupt["t"],
-                  res_disrupt["R_roche"],
-                  'r:',
-                  lw=2.0,
-                  label=r'$R_{\mathrm{Roche}}$ (Disruption)')
-    axes2[0].plot(res_stagnate["t"],
-                  res_stagnate["R_p"],
-                  'b--',
-                  lw=2.2,
-                  label=r'$R_p$ (Stagnated)')
-    axes2[0].plot(res_stagnate["t"],
-                  res_stagnate["R_roche"],
-                  'b:',
-                  lw=2.0,
-                  label=r'$R_{\mathrm{Roche}}$ (Stagnated)')
-    axes2[0].set_xscale('log')
-    axes2[0].set_xlim(1.0, 3000.0)
-    axes2[0].set_ylabel('Radius [$R_{\\mathrm{Jup}}$]',
-                        fontsize=11,
-                        fontweight='bold')
-    axes2[0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                        fontsize=11,
-                        fontweight='bold')
-    axes2[0].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes2[0].legend(fontsize=8.0, loc='upper right')
+    # 1. Shaded Region for Sub-Overflow vs Overfilled
+    plt.axhspan(0.0,
+                1.0,
+                color='#e6ffe6',
+                alpha=0.6,
+                label=r'Sub-Overflow Domain ($\mu_{\mathrm{Roche}} < 1.0$)')
+    plt.axhspan(1.0,
+                1.4,
+                color='#ffe6e6',
+                alpha=0.6,
+                label=r'Overfilled Domain ($\mu_{\mathrm{Roche}} \geq 1.0$)')
 
-    # Plot B: Filling Factor mu_Roche
-    axes2[1].plot(res_disrupt["t"],
-                  res_disrupt["filling_factor"],
-                  'r-',
-                  lw=2.5,
-                  label='Runaway Disruption')
-    axes2[1].plot(res_stagnate["t"],
-                  res_stagnate["filling_factor"],
-                  'b--',
-                  lw=2.5,
-                  label='Stagnated Survival')
-    axes2[1].plot(res_cool["t"],
-                  res_cool["filling_factor"],
-                  'g-.',
-                  lw=2.5,
-                  label='Non-Overflow Cooling')
-    axes2[1].axhline(1.0,
-                     color='black',
-                     linestyle=':',
-                     lw=1.8,
-                     label=r'Roche Lobe Threshold ($\mu_{\mathrm{Roche}}=1.0$)')
-    axes2[1].set_xscale('log')
-    axes2[1].set_xlim(1.0, 3000.0)
-    axes2[1].set_ylabel(
-        r'Filling Factor $\mu_{\mathrm{Roche}} = R_p / R_{\mathrm{Roche}}$',
-        fontsize=11,
+    # 2. Horizontal Limit Line at mu = 1.0
+    plt.axhline(1.0,
+                color='darkred',
+                linestyle='--',
+                lw=2.0,
+                label=r'Roche Overflow Limit ($\mu_{\mathrm{Roche}}=1.0$)')
+
+    # 3. 3 Trajectory Curves
+    plt.plot(res_disrupt["t"],
+             res_disrupt["filling_factor"],
+             'r-',
+             lw=2.8,
+             label=r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}$)')
+    plt.plot(res_stagnate["t"],
+             res_stagnate["filling_factor"],
+             'b--',
+             lw=2.8,
+             label=r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}$)')
+    plt.plot(res_cool["t"],
+             res_cool["filling_factor"],
+             'g-.',
+             lw=2.8,
+             label=r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}$)')
+
+    plt.xscale('log')
+    plt.xlim(1.0, 3000.0)
+    plt.ylim(0.2, 1.35)
+    plt.ylabel(
+        r'Roche Lobe Filling Factor $\mu_{\mathrm{Roche}} = R_p / R_{\mathrm{Roche}}$',
+        fontsize=11.5,
         fontweight='bold')
-    axes2[1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                        fontsize=11,
-                        fontweight='bold')
-    axes2[1].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes2[1].legend(fontsize=8.5, loc='upper right')
+    plt.xlabel('System Age $t$ [Myr] (Log Scale)',
+               fontsize=11.5,
+               fontweight='bold')
+    plt.title(
+        r'Time Evolution of Roche Lobe Overflow ($\mu_{\mathrm{Roche}} \geq 1.0$)',
+        fontsize=12,
+        fontweight='bold')
+    plt.grid(True, which="both", linestyle=":", alpha=0.45)
+    plt.legend(fontsize=8.5, loc='upper right', framealpha=0.95)
 
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig2_roche_filling.png"), dpi=300)

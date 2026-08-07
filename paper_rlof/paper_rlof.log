@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -511,18 +511,15 @@ File: figures/fig1_rlof_tracks.png Graphic file (type png)
 <use figures/fig1_rlof_tracks.png>
 Package pdftex.def Info: figures/fig1_rlof_tracks.png  used on input line 82.
 (pdftex.def)             Requested size: 242.98503pt x 99.40132pt.
-<figures/fig2_roche_filling.png, id=119, 794.97pt x 325.215pt>
+<figures/fig2_roche_filling.png, id=119, 542.025pt x 361.35pt>
 File: figures/fig2_roche_filling.png Graphic file (type png)
 <use figures/fig2_roche_filling.png>
 Package pdftex.def Info: figures/fig2_roche_filling.png  used on input line 89.
 
-(pdftex.def)             Requested size: 242.98503pt x 99.40132pt.
+(pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: Reference `fig:filling' on page 2 undefined on input line 98.
 
 
 Underfull \hbox (badness 4156) in paragraph at lines 102--103
@@ -530,7 +527,7 @@ Underfull \hbox (badness 4156) in paragraph at lines 102--103
 20) : For
  []
 
-<figures/fig3_bifurcation_map.png, id=121, 578.16pt x 433.62pt>
+<figures/fig3_bifurcation_map.png, id=122, 578.16pt x 433.62pt>
 File: figures/fig3_bifurcation_map.png Graphic file (type png)
 <use figures/fig3_bifurcation_map.png>
 Package pdftex.def Info: figures/fig3_bifurcation_map.png  used on input line 1
@@ -539,12 +536,9 @@ Package pdftex.def Info: figures/fig3_bifurcation_map.png  used on input line 1
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Underfull \vbox (badness 1147) has occurred while \output is active []
-
- [2 <paper_rlof/figures/fig1_rlof_tracks.png> <paper_rlof/figures/fig2_roche_fi
-lling.png>]
-<figures/fig4_obs_comparison.png, id=140, 578.16pt x 433.62pt>
+[2 <paper_rlof/figures/fig1_rlof_tracks.png> <paper_rlof/figures/fig2_roche_fil
+ling.png>]
+<figures/fig4_obs_comparison.png, id=142, 578.16pt x 433.62pt>
 File: figures/fig4_obs_comparison.png Graphic file (type png)
 <use figures/fig4_obs_comparison.png>
 Package pdftex.def Info: figures/fig4_obs_comparison.png  used on input line 12
@@ -552,4 +546,34 @@ Package pdftex.def Info: figures/fig4_obs_comparison.png  used on input line 12
 (pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
 
 
-LaTeX Warning: `h' float specifier cha
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/fig5_usp_cases.png, id=143, 578.16pt x 433.62pt>
+File: figures/fig5_usp_cases.png Graphic file (type png)
+<use figures/fig5_usp_cases.png>
+Package pdftex.def Info: figures/fig5_usp_cases.png  used on input line 134.
+(pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \vbox (badness 7486) has occurred while \output is active []
+
+ [3 <paper_rlof/figures/fig3_bifurcation_map.png> <paper_rlof/figures/fig4_obs_
+comparison.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 153--154
+\OT1/cmr/m/n/10 (+20) The the-o-ret-i-cal bound-ary $\OML/cmm/m/it/10 M[]\OT1/c
+mr/m/n/10 (+20) (\OML/cmm/m/it/10 a\OT1/cmr/m/n/10 (+20) ) \OMS/cmsy/m/n/10 ^^Y
+
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 153--154
+\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 50(\OML/cmm/m/it
+/10 a=\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 018[])[] \
+OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
+ []
+
+[4 <paper_rlof/figures/fig5_usp_cases.png
+!pdfTeX error: pdflatex: libpng: internal error
+ ==> Fatal error occurred, no output PDF file produced!
