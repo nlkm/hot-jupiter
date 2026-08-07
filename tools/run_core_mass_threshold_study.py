@@ -14,7 +14,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, R_EARTH, R_JUP, R_SUN, G
+from hot_jupiter.constants import M_EARTH
+from hot_jupiter.evolution.rlof_engine import CoupledRLOFIntegrator
 
 # Non-interactive backend
 plt.switch_backend('Agg')
@@ -23,85 +24,18 @@ OUT_DIR = 'paper_rlof/figures'
 os.makedirs(OUT_DIR, exist_ok=True)
 
 
-def simulate_core_survival(m_core_earth: float,
-                           m_env_init_jup: float,
-                           a_0_au: float,
-                           num_pts: int = 400):
+def simulate_core_survival(m_core_earth: float, m_env_init_jup: float,
+                           a_0_au: float):
     """
-    Simulates coupled RLOF envelope stripping and tidal orbital decay
-    for a planet with explicit core mass M_core.
+    Simulates coupled RLOF envelope stripping and tidal orbital decay using CoupledRLOFIntegrator.
     Returns final remnant mass (M_Earth) and bulk heavy element fraction Z_bulk.
     """
-    m_core_kg = m_core_earth * M_EARTH
-    m_env_kg = m_env_init_jup * M_JUP
-    m_total_kg = m_core_kg + m_env_kg
-
-    a_curr = a_0_au * AU
-    t_arr = np.geomspace(1.0e6, 5.0e9, num_pts)  # 1 Myr to 5 Gyr
-
-    k2_star = 0.03
-    Q_star_prime = 1.5e5
-
-    for idx in range(num_pts):
-        if idx == 0:
-            dt_yr = t_arr[0]
-        else:
-            dt_yr = t_arr[idx] - t_arr[idx - 1]
-        dt_sec = dt_yr * 3.154e7
-        t_gyr = t_arr[idx] / 1.0e9
-
-        # Core radius equation of state: R_core ~ 1.0 * R_Earth * (M_core / M_Earth)^0.27
-        r_core = 1.0 * R_EARTH * ((m_core_earth / 1.0)**0.27)
-
-        # Envelope radius equation of state with cooling & inflation
-        if m_env_kg > 0.1 * M_EARTH:
-            r_env = 1.25 * R_JUP * ((
-                (m_env_kg / M_JUP))**0.15) * np.exp(-0.08 * t_gyr)
-            r_p_curr = max(r_core, r_env)
-        else:
-            r_p_curr = r_core
-
-        # Roche Lobe Radius R_Roche = a * 0.49 * q^(2/3) / (0.6 * q^(2/3) + ln(1 + q^(1/3)))
-        q = m_total_kg / M_SUN
-        q_13 = q**(1.0 / 3.0)
-        q_23 = q**(2.0 / 3.0)
-        r_roche_ratio = 0.49 * q_23 / (0.6 * q_23 + np.log(1.0 + q_13))
-        r_roche_curr = a_curr * r_roche_ratio
-
-        ff = r_p_curr / r_roche_curr if r_roche_curr > 0 else 0.0
-
-        # Core disruption check: if filling factor at core boundary exceeds 1.0, core self-gravity is exceeded
-        if r_p_curr == r_core and ff >= 1.0:
-            return 0.0, 0.0  # Total Hydrodynamic Core Disruption
-
-        # Hydrodynamic Envelope Mass Loss
-        if ff >= 0.95 and m_env_kg > 0.0:
-            m_dot_0 = 1.0e-7 * M_JUP
-            m_dot = m_dot_0 * np.exp(4.0 * (ff - 1.0))
-            loss_kg = m_dot * dt_yr
-
-            if loss_kg >= m_env_kg:
-                m_env_kg = 0.0
-            else:
-                m_env_kg -= loss_kg
-
-            m_total_kg = m_core_kg + m_env_kg
-            da_rlof = -2.0 * a_curr * (-loss_kg / m_total_kg) * 0.5
-            a_curr += da_rlof
-
-        # Stellar Tidal Orbital Decay
-        n_orb = np.sqrt(G * M_SUN / max(1.0e6, a_curr**3))
-        da_tide = (-9.0 * (k2_star / Q_star_prime) * n_orb *
-                   ((R_SUN / max(1.0e6, a_curr))**5) * (m_total_kg / M_SUN) *
-                   a_curr * dt_sec)
-        a_curr += da_tide
-
-        if a_curr <= 0.008 * AU:
-            return 0.0, 0.0  # Engulfed by host star
-
-    final_m_earth = m_total_kg / M_EARTH
-    z_bulk = m_core_kg / m_total_kg if m_total_kg > 0 else 0.0
-    return final_m_earth, z_bulk
+    m_p_total_jup = m_env_init_jup + (m_core_earth * M_EARTH / 1.898e27)
+    integrator = CoupledRLOFIntegrator(m_p_init_jup=m_p_total_jup,
+                                       a_init_au=a_0_au,
+                                       m_core_earth=m_core_earth)
+    res = integrator.integrate(t_max_yr=5.0e9)
+    return res.final_m_remnant_earth, res.z_bulk
 
 
 def main():

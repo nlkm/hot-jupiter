@@ -8,8 +8,9 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, R_JUP, YEAR
+from hot_jupiter.constants import AU, M_JUP, M_SUN, R_JUP
 from hot_jupiter.database import get_db_connection, seed_database_if_empty
+from hot_jupiter.evolution.rlof_engine import CoupledRLOFIntegrator
 
 # Use non-interactive backend
 plt.switch_backend('Agg')
@@ -20,80 +21,19 @@ def compute_coupled_trajectory(M_p_0: float,
                                e_0: float = 0.05,
                                num_pts: int = 300):
     """
-    Fast analytical-hydrostatic ODE integrator for coupled RLOF mass loss and tidal decay.
-    Uses logarithmically spaced time steps to resolve early rapid RLOF dynamics.
+    Coupled trajectory calculation delegating to central CoupledRLOFIntegrator engine.
     """
-    t_arr = np.geomspace(1.0e6, 3.0e9,
-                         num_pts)  # Logarithmically spaced from 1 Myr to 3 Gyr
-    M_p_arr = np.zeros(num_pts)
-    a_arr = np.zeros(num_pts)
-    R_p_arr = np.zeros(num_pts)
-    R_roche_arr = np.zeros(num_pts)
-    ff_arr = np.zeros(num_pts)
-
-    M_p_curr = M_p_0
-    a_curr = a_0
-    e_curr = e_0
-
-    for idx in range(num_pts):
-        if idx == 0:
-            dt_yr = t_arr[0]
-        else:
-            dt_yr = t_arr[idx] - t_arr[idx - 1]
-
-        # 1. Radius scaling R_p = 1.25 * R_Jup * (M_p / M_Jup)^0.15 * exp(-0.08 * t_Gyr)
-        t_gyr = t_arr[idx] / 1.0e9
-        R_p_curr = max(
-            0.2 * R_JUP,
-            1.25 * R_JUP * ((M_p_curr / M_JUP)**0.15) * np.exp(-0.08 * t_gyr))
-
-        # 2. Roche Lobe Radius R_Roche = a * 0.49 * q^(2/3) / (0.6 * q^(2/3) + ln(1 + q^(1/3)))
-        q = M_p_curr / M_SUN
-        q_13 = q**(1.0 / 3.0)
-        q_23 = q**(2.0 / 3.0)
-        r_roche_ratio = 0.49 * q_23 / (0.6 * q_23 + np.log(1.0 + q_13))
-        r_roche_curr = float(a_curr * r_roche_ratio)
-
-        ff = R_p_curr / r_roche_curr if r_roche_curr > 0 else 0.0
-
-        # 3. Mass loss rate dM/dt |_RLOF
-        if ff >= 0.95 and M_p_curr > 15.0 * M_EARTH:
-            excess = max(0.0, ff - 1.0)
-            dM_dt = -1.0e11 * np.exp(4.0 * excess) * (YEAR * dt_yr)
-            da_dt_rlof = -2.0 * a_curr * (dM_dt / M_p_curr) * 0.5
-        else:
-            dM_dt = 0.0
-            da_dt_rlof = 0.0
-
-        # 4. Tidal decay da/dt |_tide
-        k2_over_Q = 1.0e-5
-        n_orb = np.sqrt(6.6743e-11 * M_SUN / max(a_curr**3, 1.0e10))
-        da_dt_tide = -28.5 * k2_over_Q * (M_SUN / M_p_curr) * (
-            (R_p_curr / a_curr)**5) * n_orb * a_curr * (e_curr**
-                                                        2) * (YEAR * dt_yr)
-
-        # Update state
-        M_p_curr = max(10.0 * M_EARTH, M_p_curr + dM_dt)
-        a_curr = max(0.005 * AU, a_curr + da_dt_tide + da_dt_rlof)
-
-        M_p_arr[idx] = M_p_curr / M_JUP
-        a_arr[idx] = a_curr / AU
-        R_p_arr[idx] = R_p_curr / R_JUP
-        R_roche_arr[idx] = r_roche_curr / R_JUP
-        ff_arr[idx] = ff
-
-    outcome = "Disrupted/Engulfed" if a_arr[-1] <= 0.009 or max(
-        ff_arr) > 1.25 else (
-            "Stagnated/Survived" if max(ff_arr) >= 0.95 else "Cooling")
-
+    integrator = CoupledRLOFIntegrator(m_p_init_jup=M_p_0 / M_JUP,
+                                       a_init_au=a_0 / AU)
+    res = integrator.integrate(t_max_yr=3.0e9, num_pts=num_pts)
     return {
-        "t": t_arr / 1.0e6,
-        "M_p": M_p_arr,
-        "a": a_arr,
-        "R_p": R_p_arr,
-        "R_roche": R_roche_arr,
-        "filling_factor": ff_arr,
-        "outcome": outcome
+        "t": res.t_arr / 1.0e6,
+        "M_p": res.m_p_arr,
+        "a": res.a_arr,
+        "R_p": res.r_p_arr,
+        "R_roche": res.r_roche_arr * AU / R_JUP,
+        "filling_factor": res.filling_factor_arr,
+        "outcome": res.outcome.value
     }
 
 
