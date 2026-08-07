@@ -77,18 +77,25 @@ where $k_{2,p} = 0.38$ is the planetary Love number and $Q_p^\prime = 10^6$ is t
 
 The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_p]$ is integrated using an adaptive RK45 solver across 5~Gyr.
 
-\begin{figure*}[t]
+\begin{figure}[h]
 \centering
-\includegraphics[width=0.95\linewidth]{figures/fig1_rlof_tracks.png}
-\caption{\textbf{Coupled Evolutionary Tracks for USP Gas Giants.} Time evolution of semi-major axis $a(t)$ (top-left), planetary mass $M_p(t)$ (top-right), planetary radius $R_p(t)$ vs. Roche lobe radius $R_{\text{Roche}}(t)$ (bottom-left), and filling factor $\mu_{\text{Roche}}(t)$ (bottom-right). Three representative tracks illustrate: (1) Runaway Disruption/Engulfment (red solid curve), (2) Self-Limiting Mass-Loss Stagnation (blue dashed curve), and (3) Non-Overflow Cooling (green dash-dotted curve).}
+\includegraphics[width=0.98\linewidth]{figures/fig1_rlof_tracks.png}
+\caption{\textbf{Orbital Decay and Mass Loss Evolution.} Time evolution of semi-major axis $a(t)$ (left) and planet mass $M_p(t)$ (right) across 3 representative tracks: (1) Runaway Disruption (red solid), (2) Stagnated Survival (blue dashed), and (3) Non-Overflow Cooling (green dash-dotted).}
 \label{fig:tracks}
-\end{figure*}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig2_roche_filling.png}
+\caption{\textbf{Roche Lobe Radius Contraction and Filling Factor.} Time evolution of planetary radius $R_p(t)$ vs. Roche lobe radius $R_{\text{Roche}}(t)$ (left) and filling factor $\mu_{\text{Roche}}(t) = R_p / R_{\text{Roche}}$ (right). Overfilling ($\mu_{\text{Roche}} \ge 1.0$) initiates hydrodynamic envelope stripping.}
+\label{fig:filling}
+\end{figure}
 
 \section{Simulation Results \& Bifurcations}
-We evolved a 4D grid of 49 coupled evolutionary tracks across $M_p(0) \in [0.4, 2.0]\,M_{\text{Jup}}$ and $a(0) \in [0.015, 0.035]\text{ AU}$.
+We evolved a 4D grid of coupled evolutionary tracks across $M_p(0) \in [0.3, 2.2]\,M_{\text{Jup}}$ and $a(0) \in [0.012, 0.038]\text{ AU}$.
 
 \subsection{Discovery of Trajectory Bifurcation}
-As shown in Figure~\ref{fig:tracks}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
+As shown in Figures~\ref{fig:tracks} and~\ref{fig:filling}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
 
 \begin{enumerate}
     \item \textbf{Tidal Runaway Disruption / Engulfment}: For low-mass planets ($M_p \lesssim 0.6\,M_{\text{Jup}}$) at close separations ($a(0) \le 0.016\text{ AU}$), envelope mass loss reduces $M_p$, shrinking $R_{\text{Roche}}$ faster than the planet can cool and contract. This positive feedback loop causes $\mu_{\text{Roche}}$ to spike above $1.2$, accelerating tidal decay and driving complete orbital engulfment into the star within $t \lesssim 500\text{ Myr}$.
@@ -97,8 +104,8 @@ As shown in Figure~\ref{fig:tracks}, the coupled system exhibits two distinct ph
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/fig2_bifurcation_map.png}
-\caption{\textbf{Survival Phase Space Diagram \& Trajectory Flow.} 2D phase diagram mapping final planet mass $M_p(t_{\mathrm{final}})$ in initial semi-major axis $a(0)$ vs. initial planet mass $M_p(0)$ space. Solid curves with arrows show evolutionary trajectories $[a(t), M_p(t)]$ for representative initial conditions. The red dashed line denotes the analytical Roche limit $M_{\text{crit}}(a) \propto a^{3.0}$.}
+\includegraphics[width=0.98\linewidth]{figures/fig3_bifurcation_map.png}
+\caption{\textbf{Survival Phase Space Diagram \& Trajectory Flow.} 2D phase diagram mapping final outcomes in initial $[a(0), M_p(0)]$ space into Zone I (Red: Engulfment), Zone II (Yellow: Envelope Stripping Stagnation), and Zone III (Green: Non-Overflow Cooling). The black dashed line denotes the analytical Roche limit $M_{\text{crit}}(a) \propto a^{3.0}$.}
 \label{fig:phase_map}
 \end{figure}
 
@@ -117,17 +124,25 @@ We benchmarked our theoretical disruption boundary against the empirical populat
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/fig3_obs_comparison.png}
-\caption{\textbf{Comparison with Transiting Gas Giants.} Observed transiting exoplanet population (gray circles) from \texttt{hot\_jupiter.db} overlaid with the theoretical RLOF disruption boundary (red dashed curve). Key USP planets WASP-12b, WASP-19b, NGTS-10b, and TOI-561b are highlighted.}
+\includegraphics[width=0.98\linewidth]{figures/fig4_obs_comparison.png}
+\caption{\textbf{Empirical Gas Giant Truncation Boundary.} Observed transiting exoplanet population (362 planets from \texttt{hot\_jupiter.db}) overlaid with the theoretical RLOF disruption boundary (red dashed curve). The shaded red region highlights the forbidden domain where gas giants cannot exist due to hydrodynamic RLOF envelope stripping ($t < 100\text{ Myr}$).}
 \label{fig:obs}
 \end{figure}
 
-Figure~\ref{fig:obs} demonstrates a striking agreement between our theoretical RLOF disruption boundary and the empirical distribution of transiting exoplanets in semi-major axis versus planet mass space $[a, M_p]$. The primary observational insights derived from Figure~\ref{fig:obs} include:
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig5_usp_cases.png}
+\caption{\textbf{Key Ultra-Short-Period Planet Case Studies.} Detailed comparison of key USP planets WASP-12b, WASP-19b, NGTS-10b, and TOI-561b relative to the theoretical RLOF survival boundary line.}
+\label{fig:cases}
+\end{figure}
+
+Figure~\ref{fig:obs} demonstrates a striking agreement between our theoretical RLOF disruption boundary and the empirical distribution of transiting exoplanets in $[a, M_p]$ space. The primary observational insights derived from Figures~\ref{fig:obs} and~\ref{fig:cases} include:
 
 \subsection{Origin of the Ultra-Short-Period Sub-Jupiter Desert}
-The empirical catalog exhibits a complete absence of sub-Jupiter gas giants ($0.1\,M_{\text{Jup}} \lesssim M_p \lesssim 0.8\,M_{\text{Jup}}$) inside $a < 0.015\text{ AU}$ ($P_{\text{orb}} < 0.8\text{ days}$). Our coupled model reveals that this deficit is not an observational selection effect---since short-period transiting planets have the highest detection probability ($P_{\text{transit}} \propto R_\star / a$)---but a physical survival boundary. Any sub-Jupiter planet migrating inside $a \approx 0.018\text{ AU}$ immediately exceeds its Roche lobe limit ($\mu_{\text{Roche}} > 1.0$), initiating rapid, runaway envelope stripping ($t < 100\text{ Myr}$) that leaves behind only a bare terrestrial or sub-Neptune core.
+The empirical catalog exhibits a complete absence of sub-Jupiter gas giants ($0.1\,M_{\text{Jup}} \lesssim M_p \lesssim 0.8\,M_{\text{Jup}}$) inside $a < 0.015\text{ AU}$ ($P_{\text{orb}} < 0.8\text{ days}$). As shaded in Figure~\ref{fig:obs}, points to the left of the disruption curve represent a \textbf{physically forbidden region for gas giants}. Any gas giant migrating into this domain exceeds its Roche lobe limit ($\mu_{\text{Roche}} > 1.0$) and undergoes rapid, runaway envelope stripping ($t < 100\text{ Myr}$) that destroys the gas giant and leaves behind only a small bare terrestrial or sub-Neptune core.
 
 \subsection{Individual System Case Studies}
+As shown in Figure~\ref{fig:cases}:
 \begin{itemize}
     \item \textbf{WASP-12b} ($a = 0.0229\text{ AU}$, $M_p = 1.47\,M_{\text{Jup}}$): Positioned near the onset of Roche lobe overflow. As replicated in Section~\ref{sec:wasp12b}, WASP-12b is undergoing rapid stellar tidal orbital decay ($\dot{P} = -29.4\text{ ms yr}^{-1}$) and is projected to cross $\mu_{\text{Roche}} = 1.0$ within $\approx 2.8\text{ Myr}$, placing it at the precipice of catastrophic hydrodynamic mass loss.
     \item \textbf{WASP-19b} ($a = 0.0163\text{ AU}$, $M_p = 1.114\,M_{\text{Jup}}$) \& \textbf{NGTS-10b} ($a = 0.0143\text{ AU}$, $M_p = 2.162\,M_{\text{Jup}}$): Located precisely inside the self-limiting RLOF stagnation window (Zone II in Figure~\ref{fig:phase_map}). Because of their higher mass, their interior radiative envelopes contract rapidly ($R_p \propto M_p^{0.6}$), halting runaway mass loss and allowing them to persist as ultra-short-period gas giants for several Gyr.

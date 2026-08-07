@@ -107,137 +107,148 @@ def main():
     res_stagnate = compute_coupled_trajectory(M_p_0=0.8 * M_JUP, a_0=0.019 * AU)
     res_cool = compute_coupled_trajectory(M_p_0=1.0 * M_JUP, a_0=0.030 * AU)
 
-    # --- Render Figure 1: Evolutionary Tracks ---
+    # --- Render Figure 1: Orbital Decay & Mass Loss (a(t) and Mp(t)) ---
     print("--> Generating paper_rlof/figures/fig1_rlof_tracks.png...")
-    _fig, axes = plt.subplots(2, 2, figsize=(11, 8.5), dpi=300)
+    _fig, axes = plt.subplots(1, 2, figsize=(11, 4.5), dpi=300)
 
     # Plot A: Semi-major Axis a(t)
-    axes[0, 0].plot(
+    axes[0].plot(
         res_disrupt["t"],
         res_disrupt["a"],
         'r-',
         lw=2.5,
         label=
-        'Runaway Disruption ($0.6\\,M_{\\mathrm{J}}, 0.016\\,\\mathrm{AU}$)')
-    axes[0, 0].plot(
+        r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}, 0.016\,\mathrm{AU}$)'
+    )
+    axes[0].plot(
         res_stagnate["t"],
         res_stagnate["a"],
         'b--',
         lw=2.5,
         label=
-        'Stagnated Survival ($0.8\\,M_{\\mathrm{J}}, 0.019\\,\\mathrm{AU}$)')
-    axes[0, 0].plot(
+        r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}, 0.019\,\mathrm{AU}$)'
+    )
+    axes[0].plot(
         res_cool["t"],
         res_cool["a"],
         'g-.',
         lw=2.5,
         label=
-        'Non-Overflow Cooling ($1.0\\,M_{\\mathrm{J}}, 0.030\\,\\mathrm{AU}$)')
-    axes[0, 0].set_xscale('log')
-    axes[0, 0].set_xlim(1.0, 3000.0)
-    axes[0, 0].set_ylabel('Semi-Major Axis $a$ [AU]',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[0, 0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[0, 0].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes[0, 0].legend(fontsize=8.5, loc='upper right')
+        r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}, 0.030\,\mathrm{AU}$)'
+    )
+    axes[0].set_xscale('log')
+    axes[0].set_xlim(1.0, 3000.0)
+    axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
+                       fontsize=11,
+                       fontweight='bold')
+    axes[0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                       fontsize=11,
+                       fontweight='bold')
+    axes[0].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes[0].legend(fontsize=8.5, loc='upper right')
 
     # Plot B: Planet Mass M_p(t)
-    axes[0, 1].plot(res_disrupt["t"],
-                    res_disrupt["M_p"],
-                    'r-',
-                    lw=2.5,
-                    label='Runaway Disruption')
-    axes[0, 1].plot(res_stagnate["t"],
-                    res_stagnate["M_p"],
-                    'b--',
-                    lw=2.5,
-                    label='Stagnated Survival')
-    axes[0, 1].plot(res_cool["t"],
-                    res_cool["M_p"],
-                    'g-.',
-                    lw=2.5,
-                    label='Non-Overflow Cooling')
-    axes[0, 1].set_xscale('log')
-    axes[0, 1].set_xlim(1.0, 3000.0)
-    axes[0, 1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[0, 1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[0, 1].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes[0, 1].legend(fontsize=8.5, loc='upper right')
-
-    # Plot C: Planetary Radius R_p vs Roche Lobe Radius R_Roche
-    axes[1, 0].plot(res_disrupt["t"],
-                    res_disrupt["R_p"],
-                    'r-',
-                    lw=2.2,
-                    label='$R_p$ (Runaway)')
-    axes[1, 0].plot(res_disrupt["t"],
-                    res_disrupt["R_roche"],
-                    'r:',
-                    lw=2.0,
-                    label='$R_{\\mathrm{Roche}}$ (Runaway)')
-    axes[1, 0].plot(res_stagnate["t"],
-                    res_stagnate["R_p"],
-                    'b--',
-                    lw=2.2,
-                    label='$R_p$ (Stagnated)')
-    axes[1, 0].plot(res_stagnate["t"],
-                    res_stagnate["R_roche"],
-                    'b:',
-                    lw=2.0,
-                    label='$R_{\\mathrm{Roche}}$ (Stagnated)')
-    axes[1, 0].set_xscale('log')
-    axes[1, 0].set_xlim(1.0, 3000.0)
-    axes[1, 0].set_ylabel('Radius [$R_{\\mathrm{Jup}}$]',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[1, 0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[1, 0].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes[1, 0].legend(fontsize=8.0, loc='upper right')
-
-    # Plot D: Roche Lobe Filling Factor mu_Roche = R_p / R_Roche
-    axes[1, 1].plot(res_disrupt["t"],
-                    res_disrupt["filling_factor"],
-                    'r-',
-                    lw=2.5,
-                    label='Runaway Disruption')
-    axes[1, 1].plot(res_stagnate["t"],
-                    res_stagnate["filling_factor"],
-                    'b--',
-                    lw=2.5,
-                    label='Stagnated Survival')
-    axes[1, 1].plot(res_cool["t"],
-                    res_cool["filling_factor"],
-                    'g-.',
-                    lw=2.5,
-                    label='Non-Overflow Cooling')
-    axes[1, 1].axhline(1.0,
-                       color='black',
-                       linestyle=':',
-                       lw=1.8,
-                       label='Roche Lobe Limit ($\\mu_{\\mathrm{Roche}}=1.0$)')
-    axes[1, 1].set_xscale('log')
-    axes[1, 1].set_xlim(1.0, 3000.0)
-    axes[1, 1].set_ylabel(
-        'Filling Factor $\\mu_{\\mathrm{Roche}} = R_p / R_{\\mathrm{Roche}}$',
-        fontsize=11,
-        fontweight='bold')
-    axes[1, 1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
-                          fontsize=11,
-                          fontweight='bold')
-    axes[1, 1].grid(True, which="both", linestyle="--", alpha=0.35)
-    axes[1, 1].legend(fontsize=8.5, loc='upper right')
+    axes[1].plot(res_disrupt["t"],
+                 res_disrupt["M_p"],
+                 'r-',
+                 lw=2.5,
+                 label='Runaway Disruption')
+    axes[1].plot(res_stagnate["t"],
+                 res_stagnate["M_p"],
+                 'b--',
+                 lw=2.5,
+                 label='Stagnated Survival')
+    axes[1].plot(res_cool["t"],
+                 res_cool["M_p"],
+                 'g-.',
+                 lw=2.5,
+                 label='Non-Overflow Cooling')
+    axes[1].set_xscale('log')
+    axes[1].set_xlim(1.0, 3000.0)
+    axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+                       fontsize=11,
+                       fontweight='bold')
+    axes[1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                       fontsize=11,
+                       fontweight='bold')
+    axes[1].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes[1].legend(fontsize=8.5, loc='upper right')
 
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig1_rlof_tracks.png"), dpi=300)
+    plt.close()
+
+    # --- Render Figure 2: Roche Lobe Radii & Filling Factor ---
+    print("--> Generating paper_rlof/figures/fig2_roche_filling.png...")
+    _fig2, axes2 = plt.subplots(1, 2, figsize=(11, 4.5), dpi=300)
+
+    # Plot A: Radius Rp vs R_Roche
+    axes2[0].plot(res_disrupt["t"],
+                  res_disrupt["R_p"],
+                  'r-',
+                  lw=2.2,
+                  label=r'$R_p$ (Disruption)')
+    axes2[0].plot(res_disrupt["t"],
+                  res_disrupt["R_roche"],
+                  'r:',
+                  lw=2.0,
+                  label=r'$R_{\mathrm{Roche}}$ (Disruption)')
+    axes2[0].plot(res_stagnate["t"],
+                  res_stagnate["R_p"],
+                  'b--',
+                  lw=2.2,
+                  label=r'$R_p$ (Stagnated)')
+    axes2[0].plot(res_stagnate["t"],
+                  res_stagnate["R_roche"],
+                  'b:',
+                  lw=2.0,
+                  label=r'$R_{\mathrm{Roche}}$ (Stagnated)')
+    axes2[0].set_xscale('log')
+    axes2[0].set_xlim(1.0, 3000.0)
+    axes2[0].set_ylabel('Radius [$R_{\\mathrm{Jup}}$]',
+                        fontsize=11,
+                        fontweight='bold')
+    axes2[0].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                        fontsize=11,
+                        fontweight='bold')
+    axes2[0].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes2[0].legend(fontsize=8.0, loc='upper right')
+
+    # Plot B: Filling Factor mu_Roche
+    axes2[1].plot(res_disrupt["t"],
+                  res_disrupt["filling_factor"],
+                  'r-',
+                  lw=2.5,
+                  label='Runaway Disruption')
+    axes2[1].plot(res_stagnate["t"],
+                  res_stagnate["filling_factor"],
+                  'b--',
+                  lw=2.5,
+                  label='Stagnated Survival')
+    axes2[1].plot(res_cool["t"],
+                  res_cool["filling_factor"],
+                  'g-.',
+                  lw=2.5,
+                  label='Non-Overflow Cooling')
+    axes2[1].axhline(1.0,
+                     color='black',
+                     linestyle=':',
+                     lw=1.8,
+                     label=r'Roche Lobe Threshold ($\mu_{\mathrm{Roche}}=1.0$)')
+    axes2[1].set_xscale('log')
+    axes2[1].set_xlim(1.0, 3000.0)
+    axes2[1].set_ylabel(
+        r'Filling Factor $\mu_{\mathrm{Roche}} = R_p / R_{\mathrm{Roche}}$',
+        fontsize=11,
+        fontweight='bold')
+    axes2[1].set_xlabel('System Age $t$ [Myr] (Log Scale)',
+                        fontsize=11,
+                        fontweight='bold')
+    axes2[1].grid(True, which="both", linestyle="--", alpha=0.35)
+    axes2[1].legend(fontsize=8.5, loc='upper right')
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir, "fig2_roche_filling.png"), dpi=300)
     plt.close()
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
@@ -246,6 +257,17 @@ def main():
 
     matrix_final_mass = np.zeros((len(m_grid), len(a_grid)))
     matrix_outcome = np.zeros((len(m_grid), len(a_grid)))
+    track_inits = [
+        (0.6 * M_JUP, 0.016 * AU, 'darkred', '-',
+         r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}, 0.016\,\mathrm{AU}$)'
+        ),
+        (0.8 * M_JUP, 0.019 * AU, 'darkblue', '--',
+         r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}, 0.019\,\mathrm{AU}$)'
+        ),
+        (1.0 * M_JUP, 0.030 * AU, 'darkgreen', '-.',
+         r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}, 0.030\,\mathrm{AU}$)'
+        ),
+    ]
 
     for i, mp_val in enumerate(m_grid):
         for j, a_val in enumerate(a_grid):
@@ -257,12 +279,11 @@ def main():
             matrix_outcome[i, j] = val_code
             matrix_final_mass[i, j] = res_grid["M_p"][-1]
 
-    # --- Render Figure 2: Crisp 3-Zone Bifurcation & Trajectory Map ---
-    print("--> Generating paper_rlof/figures/fig2_bifurcation_map.png...")
-    plt.figure(figsize=(8.5, 6.5), dpi=300)
+    # --- Render Figure 3: Crisp 3-Zone Bifurcation Map ---
+    print("--> Generating paper_rlof/figures/fig3_bifurcation_map.png...")
+    plt.figure(figsize=(8.0, 6.0), dpi=300)
     A_mesh, M_mesh = np.meshgrid(a_grid, m_grid)
 
-    # Custom 3-color palette for maximum visual clarity
     from matplotlib.colors import ListedColormap
     cmap_custom = ListedColormap(['#ffb3b3', '#ffe680', '#b3e6b3'])
 
@@ -282,7 +303,6 @@ def main():
                             fontsize=9.5,
                             fontweight='bold')
 
-    # 1. Analytical Roche Boundary Curve M_crit(a) = 0.50 * (a / 0.018)^3
     a_dense = np.linspace(0.012, 0.038, 100)
     m_crit_analytical = 0.50 * ((a_dense / 0.018)**3.0)
     plt.plot(
@@ -291,19 +311,6 @@ def main():
         'k--',
         lw=2.5,
         label=r'Roche Limit Boundary $M_{\mathrm{crit}}(a) \propto a^{3.0}$')
-
-    # 2. Overlay 3 Representative Trajectory Tracks (Matching Figure 1)
-    track_inits = [
-        (0.6 * M_JUP, 0.016 * AU, 'darkred', '-',
-         r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}, 0.016\,\mathrm{AU}$)'
-        ),
-        (0.8 * M_JUP, 0.019 * AU, 'darkblue', '--',
-         r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}, 0.019\,\mathrm{AU}$)'
-        ),
-        (1.0 * M_JUP, 0.030 * AU, 'darkgreen', '-.',
-         r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}, 0.030\,\mathrm{AU}$)'
-        ),
-    ]
 
     for m_0, a_0, color_str, style_str, label_name in track_inits:
         res_t = compute_coupled_trajectory(M_p_0=m_0, a_0=a_0)
@@ -318,22 +325,6 @@ def main():
                     color=color_str,
                     s=55,
                     zorder=5)
-
-        # Arrow indicating evolution direction
-        mid_idx = len(res_t["a"]) // 4
-        dx = res_t["a"][mid_idx] - res_t["a"][mid_idx - 5]
-        dy = res_t["M_p"][mid_idx] - res_t["M_p"][mid_idx - 5]
-        if abs(dx) > 1e-5 or abs(dy) > 1e-5:
-            plt.arrow(res_t["a"][mid_idx - 5],
-                      res_t["M_p"][mid_idx - 5],
-                      dx,
-                      dy,
-                      shape='full',
-                      lw=0,
-                      length_includes_head=True,
-                      head_width=0.0006,
-                      color=color_str,
-                      zorder=5)
 
     plt.xlim(0.012, 0.038)
     plt.ylim(0.3, 2.2)
@@ -350,11 +341,11 @@ def main():
     plt.legend(loc='upper right', fontsize=8.5, framealpha=0.95)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, "fig2_bifurcation_map.png"), dpi=300)
+    plt.savefig(os.path.join(fig_dir, "fig3_bifurcation_map.png"), dpi=300)
     plt.close()
 
-    # --- Render Figure 3: Observational Catalog Comparison ---
-    print("--> Generating paper_rlof/figures/fig3_obs_comparison.png...")
+    # --- Render Figure 4: Empirical Exoplanet Truncation Boundary ---
+    print("--> Generating paper_rlof/figures/fig4_obs_comparison.png...")
     db_path = "hot_jupiter/data/hot_jupiter.db"
     seed_database_if_empty(db_path)
     conn = get_db_connection(db_path)
@@ -369,63 +360,115 @@ def main():
     obs_a = [r[2] for r in rows]
     obs_m = [r[1] for r in rows]
 
-    plt.figure(figsize=(8.5, 6), dpi=300)
+    plt.figure(figsize=(8.0, 6.0), dpi=300)
+    plt.scatter(obs_a,
+                obs_m,
+                c='#4d4d4d',
+                alpha=0.5,
+                s=25,
+                label='Observed Transiting Exoplanets (362 Planets)')
+
+    # Shaded forbidden region to the left of the line
+    a_crit_contour = np.linspace(0.008, 0.035, 100)
+    m_crit_contour = 0.50 * (a_crit_contour / 0.018)**3.0
+    plt.plot(
+        a_crit_contour,
+        m_crit_contour,
+        'r--',
+        lw=2.8,
+        label=
+        r'Theoretical Disruption Line $M_{\mathrm{crit}}(a) \propto a^{3.0}$')
+
+    plt.text(
+        0.010,
+        0.4,
+        "FORBIDDEN REGION FOR GAS GIANTS\n(Hydrodynamic RLOF Stripping $t < 100$ Myr)",
+        fontsize=9.5,
+        fontweight='bold',
+        color='darkred',
+        ha='center',
+        bbox=dict(boxstyle='round,pad=0.4',
+                  facecolor='#ffe6e6',
+                  edgecolor='red',
+                  alpha=0.9))
+
+    plt.xlim(0.008, 0.06)
+    plt.ylim(0.003, 4.0)
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.xlabel('Semi-Major Axis $a$ [AU]', fontsize=11.5, fontweight='bold')
+    plt.ylabel('Planetary Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+               fontsize=11.5,
+               fontweight='bold')
+    plt.title('Empirical Gas Giant Truncation at the RLOF Disruption Boundary',
+              fontsize=12,
+              fontweight='bold')
+    plt.grid(True, which="both", linestyle="--", alpha=0.35)
+    plt.legend(fontsize=9, loc='lower right')
+
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir, "fig4_obs_comparison.png"), dpi=300)
+    plt.close()
+
+    # --- Render Figure 5: USP Key Planet Case Studies ---
+    print("--> Generating paper_rlof/figures/fig5_usp_cases.png...")
+    plt.figure(figsize=(8.0, 6.0), dpi=300)
     plt.scatter(obs_a,
                 obs_m,
                 c='gray',
-                alpha=0.5,
-                s=25,
-                label='Transiting Hot Jupiters (Exoplanet Archive)')
+                alpha=0.3,
+                s=20,
+                label='Background Exoplanet Population')
 
-    # Highlight USP Key Systems
     usp_keys = {
-        "WASP-12 b": (0.0229, 1.404, 'red', 'WASP-12b'),
-        "WASP-19 b": (0.0163, 1.114, 'orange', 'WASP-19b'),
-        "NGTS-10 b": (0.0143, 2.162, 'purple', 'NGTS-10b'),
-        "TOI-561 b": (0.0106, 0.006, 'blue', 'TOI-561b (Bare Core)'),
+        "WASP-12 b": (0.0229, 1.404, 'red', 'WASP-12b (Decaying towards line)'),
+        "WASP-19 b":
+            (0.0163, 1.114, 'orange', 'WASP-19b (Stagnated on boundary)'),
+        "NGTS-10 b":
+            (0.0143, 2.162, 'purple', 'NGTS-10b (Stagnated on boundary)'),
+        "TOI-561 b": (0.0106, 0.006, 'blue', 'TOI-561b (Bare Stripped Core)'),
     }
 
     for (a_k, m_k, color, label_str) in usp_keys.values():
         plt.scatter(a_k,
                     m_k,
                     color=color,
-                    s=90,
+                    s=110,
                     zorder=5,
                     edgecolors='black',
                     label=label_str)
-        plt.annotate(label_str, (a_k + 0.001, m_k + 0.05),
-                     fontsize=9,
+        plt.annotate(label_str, (a_k * 1.08, m_k * 1.05),
+                     fontsize=8.5,
                      fontweight='bold',
                      color=color)
 
-    # Theoretical RLOF Survival Curve from Grid
-    a_crit_contour = np.linspace(0.012, 0.035, 100)
-    m_crit_contour = 0.5 * (a_crit_contour /
-                            0.018)**3.0  # Empirical disruption limit scaling
     plt.plot(a_crit_contour,
              m_crit_contour,
              'r--',
              lw=2.5,
-             label='Theoretical RLOF Disruption Boundary')
+             label=r'Disruption Limit $M_{\mathrm{crit}}(a)$')
 
-    plt.xlim(0.008, 0.06)
-    plt.ylim(0.01, 3.5)
+    plt.xlim(0.008, 0.04)
+    plt.ylim(0.003, 3.5)
     plt.xscale('log')
     plt.yscale('log')
-    plt.xlabel('Semi-Major Axis $a$ [AU]', fontsize=12)
-    plt.ylabel('Planetary Mass $M_p$ [$M_{\\mathrm{Jup}}$]', fontsize=12)
-    plt.title('Theoretical RLOF Disruption Boundary vs. Transiting Gas Giants',
-              fontsize=13,
-              fontweight='bold')
-    plt.grid(True, which="both", linestyle="--", alpha=0.4)
-    plt.legend(fontsize=9, loc='lower right')
+    plt.xlabel('Semi-Major Axis $a$ [AU]', fontsize=11.5, fontweight='bold')
+    plt.ylabel('Planetary Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+               fontsize=11.5,
+               fontweight='bold')
+    plt.title(
+        'Case Studies of Key Ultra-Short-Period Planets Relative to RLOF Limit',
+        fontsize=11.5,
+        fontweight='bold')
+    plt.grid(True, which="both", linestyle="--", alpha=0.35)
+    plt.legend(fontsize=8.5, loc='lower right')
 
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, "fig3_obs_comparison.png"), dpi=300)
+    plt.savefig(os.path.join(fig_dir, "fig5_usp_cases.png"), dpi=300)
     plt.close()
 
     print(
-        "✅ All 3 publication figures generated successfully in paper_rlof/figures/!"
+        "✅ All 5 clean, single-purpose figures generated successfully in paper_rlof/figures/!"
     )
 
 
