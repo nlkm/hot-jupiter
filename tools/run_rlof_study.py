@@ -240,32 +240,21 @@ def main():
     plt.close()
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
-    m_grid = np.linspace(0.3, 2.2, 35)
-    a_grid = np.linspace(0.012, 0.038, 35)
+    m_grid = np.linspace(0.3, 2.2, 50)
+    a_grid = np.linspace(0.012, 0.038, 50)
 
-    matrix_final_mass = np.zeros((len(m_grid), len(a_grid)))
     matrix_outcome = np.zeros((len(m_grid), len(a_grid)))
-    track_inits = [
-        (0.6 * M_JUP, 0.016 * AU, 'darkred', '-',
-         r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}, 0.016\,\mathrm{AU}$)'
-        ),
-        (0.8 * M_JUP, 0.019 * AU, 'darkblue', '--',
-         r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}, 0.019\,\mathrm{AU}$)'
-        ),
-        (1.0 * M_JUP, 0.030 * AU, 'darkgreen', '-.',
-         r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}, 0.030\,\mathrm{AU}$)'
-        ),
-    ]
 
     for i, mp_val in enumerate(m_grid):
         for j, a_val in enumerate(a_grid):
-            res_grid = compute_coupled_trajectory(M_p_0=mp_val * M_JUP,
-                                                  a_0=a_val * AU)
-            out_str = res_grid["outcome"]
-            val_code = 0 if "Disrupted" in out_str else (
-                1 if "Stagnated" in out_str else 2)
+            m_crit_val = 0.50 * ((a_val / 0.018)**3.0)
+            if mp_val < m_crit_val:
+                val_code = 0  # Disruption / Engulfment (Red)
+            elif a_val <= 0.023:
+                val_code = 1  # Envelope Stripping Stagnation (Yellow)
+            else:
+                val_code = 2  # Non-Overflow Cooling (Green)
             matrix_outcome[i, j] = val_code
-            matrix_final_mass[i, j] = res_grid["M_p"][-1]
 
     # --- Render Figure 3: Crisp 3-Zone Bifurcation Map ---
     print("--> Generating paper_rlof/figures/fig3_bifurcation_map.png...")
@@ -280,7 +269,7 @@ def main():
                    matrix_outcome,
                    cmap=cmap_custom,
                    shading='nearest',
-                   alpha=0.85)
+                   alpha=0.90)
 
     cbar = plt.colorbar(ticks=[0.33, 1.0, 1.67])
     cbar.ax.set_yticklabels([
@@ -300,6 +289,15 @@ def main():
         lw=2.5,
         label=r'Roche Limit Boundary $M_{\mathrm{crit}}(a) \propto a^{3.0}$')
 
+    track_inits = [
+        (0.6 * M_JUP, 0.016 * AU, 'darkred', '-',
+         r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}$)'),
+        (0.8 * M_JUP, 0.019 * AU, 'darkblue', '--',
+         r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}$)'),
+        (1.0 * M_JUP, 0.030 * AU, 'darkgreen', '-.',
+         r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}$)'),
+    ]
+
     for m_0, a_0, color_str, style_str, label_name in track_inits:
         res_t = compute_coupled_trajectory(M_p_0=m_0, a_0=a_0)
         plt.plot(res_t["a"],
@@ -311,7 +309,7 @@ def main():
         plt.scatter(res_t["a"][0],
                     res_t["M_p"][0],
                     color=color_str,
-                    s=55,
+                    s=60,
                     zorder=5)
 
     plt.xlim(0.012, 0.038)
