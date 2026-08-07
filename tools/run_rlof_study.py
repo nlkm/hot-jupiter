@@ -256,9 +256,9 @@ def main():
                 val_code = 2  # Non-Overflow Cooling (Green)
             matrix_outcome[i, j] = val_code
 
-    # --- Render Figure 3: Crisp 3-Zone Bifurcation Map ---
+    # --- Render Figure 3: Pure 2D Survival Zone Map ---
     print("--> Generating paper_rlof/figures/fig3_bifurcation_map.png...")
-    plt.figure(figsize=(8.0, 6.0), dpi=300)
+    plt.figure(figsize=(8.0, 5.5), dpi=300)
     A_mesh, M_mesh = np.meshgrid(a_grid, m_grid)
 
     from matplotlib.colors import ListedColormap
@@ -273,9 +273,9 @@ def main():
 
     cbar = plt.colorbar(ticks=[0.33, 1.0, 1.67])
     cbar.ax.set_yticklabels([
-        'Zone I: Rapid Disruption\n& Engulfment',
+        'Zone I: Disruption & Engulfment\n(Tidal Mass Loss)',
         'Zone II: Envelope Stripping\nStagnation (Remnant Core)',
-        'Zone III: Stable Non-Overflow\nCooling Track'
+        'Zone III: Non-Overflow\nCooling (Intact Giant)'
     ],
                             fontsize=9.5,
                             fontweight='bold')
@@ -286,31 +286,8 @@ def main():
         a_dense,
         m_crit_analytical,
         'k--',
-        lw=2.5,
+        lw=2.8,
         label=r'Roche Limit Boundary $M_{\mathrm{crit}}(a) \propto a^{3.0}$')
-
-    track_inits = [
-        (0.6 * M_JUP, 0.016 * AU, 'darkred', '-',
-         r'Track 1: Runaway Disruption ($0.6\,M_{\mathrm{J}}$)'),
-        (0.8 * M_JUP, 0.019 * AU, 'darkblue', '--',
-         r'Track 2: Stagnated Survival ($0.8\,M_{\mathrm{J}}$)'),
-        (1.0 * M_JUP, 0.030 * AU, 'darkgreen', '-.',
-         r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}$)'),
-    ]
-
-    for m_0, a_0, color_str, style_str, label_name in track_inits:
-        res_t = compute_coupled_trajectory(M_p_0=m_0, a_0=a_0)
-        plt.plot(res_t["a"],
-                 res_t["M_p"],
-                 color=color_str,
-                 lw=2.5,
-                 linestyle=style_str,
-                 label=label_name)
-        plt.scatter(res_t["a"][0],
-                    res_t["M_p"][0],
-                    color=color_str,
-                    s=60,
-                    zorder=5)
 
     plt.xlim(0.012, 0.038)
     plt.ylim(0.3, 2.2)
@@ -320,11 +297,11 @@ def main():
     plt.ylabel('Initial Planet Mass $M_p(0)$ [$M_{\\mathrm{Jup}}$]',
                fontsize=11.5,
                fontweight='bold')
-    plt.title('USP Gas Giant RLOF Phase Space Map & Survival Boundaries',
-              fontsize=12,
+    plt.title('2D RLOF Survival Map for Ultra-Short-Period Gas Giants',
+              fontsize=12.5,
               fontweight='bold')
     plt.grid(True, linestyle=':', alpha=0.45)
-    plt.legend(loc='upper right', fontsize=8.5, framealpha=0.95)
+    plt.legend(loc='lower right', fontsize=9.5, framealpha=0.95)
 
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig3_bifurcation_map.png"), dpi=300)

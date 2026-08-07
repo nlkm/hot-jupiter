@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  6 AUG 2026 21:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -527,12 +527,12 @@ Underfull \hbox (badness 4156) in paragraph at lines 102--103
 20) : For
  []
 
-<figures/fig3_bifurcation_map.png, id=122, 578.16pt x 433.62pt>
+<figures/fig3_bifurcation_map.png, id=122, 578.16pt x 397.485pt>
 File: figures/fig3_bifurcation_map.png Graphic file (type png)
 <use figures/fig3_bifurcation_map.png>
 Package pdftex.def Info: figures/fig3_bifurcation_map.png  used on input line 1
 07.
-(pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
+(pdftex.def)             Requested size: 242.98503pt x 167.05173pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -550,4 +550,4 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 <figures/fig5_usp_cases.png, id=143, 578.16pt x 433.62pt>
 File: figures/fig5_usp_cases.png Graphic file (type png)
-<use figures/fig5_usp_
+<use figures/fig5_usp
