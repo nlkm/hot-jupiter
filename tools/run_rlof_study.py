@@ -241,9 +241,10 @@ def main():
     plt.close()
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
-    m_grid = np.linspace(0.4, 2.0, 15)
-    a_grid = np.linspace(0.015, 0.035, 15)
+    m_grid = np.linspace(0.3, 2.2, 35)
+    a_grid = np.linspace(0.012, 0.038, 35)
 
+    matrix_final_mass = np.zeros((len(m_grid), len(a_grid)))
     matrix_outcome = np.zeros((len(m_grid), len(a_grid)))
 
     for i, mp_val in enumerate(m_grid):
@@ -254,32 +255,134 @@ def main():
             val_code = 0 if "Disrupted" in out_str else (
                 1 if "Stagnated" in out_str else 2)
             matrix_outcome[i, j] = val_code
+            matrix_final_mass[i, j] = res_grid["M_p"][-1]
 
-    # --- Render Figure 2: Bifurcation Map ---
+    # --- Render Figure 2: Bifurcation & Dynamical Flow Map ---
     print("--> Generating paper_rlof/figures/fig2_bifurcation_map.png...")
-    plt.figure(figsize=(8, 6), dpi=300)
+    plt.figure(figsize=(9.5, 7), dpi=300)
     A_mesh, M_mesh = np.meshgrid(a_grid, m_grid)
 
-    cmap = plt.get_cmap('RdYlGn', 3)
-    plt.pcolormesh(A_mesh,
-                   M_mesh,
-                   matrix_outcome,
-                   cmap=cmap,
-                   shading='nearest',
-                   alpha=0.75)
-    cbar = plt.colorbar(ticks=[0.33, 1.0, 1.67])
-    cbar.ax.set_yticklabels([
-        'Tidal Disruption\n/ Engulfment', 'Envelope Stripping\nStagnation',
-        'Non-Overflow\nCooling Track'
-    ])
+    # 1. Filled contour of Final Mass Fraction M_final / M_initial
+    contour_fill = plt.contourf(A_mesh,
+                                M_mesh,
+                                matrix_final_mass,
+                                levels=np.linspace(0.05, 2.2, 20),
+                                cmap='YlGnBu_r',
+                                alpha=0.85)
+    cbar = plt.colorbar(contour_fill)
+    cbar.set_label(
+        'Final Planet Mass $M_p(t_{\\mathrm{final}})$ [$M_{\\mathrm{Jup}}$]',
+        fontsize=11,
+        fontweight='bold')
 
-    plt.xlabel('Initial Semi-Major Axis $a(0)$ [AU]', fontsize=12)
+    # 2. Contour lines for discrete mass boundaries
+    c_lines = plt.contour(A_mesh,
+                          M_mesh,
+                          matrix_final_mass,
+                          levels=[0.1, 0.3, 0.6, 1.0, 1.5],
+                          colors='k',
+                          linewidths=0.8,
+                          linestyles='--')
+    plt.clabel(c_lines, inline=True, fontsize=8, fmt='%.1f $M_{\\mathrm{J}}$')
+
+    # 3. Analytical Roche Boundary Curve M_crit(a) = 0.50 * (a / 0.018)^3
+    a_dense = np.linspace(0.012, 0.038, 100)
+    m_crit_analytical = 0.50 * ((a_dense / 0.018)**3.0)
+    plt.plot(
+        a_dense,
+        m_crit_analytical,
+        'r--',
+        lw=2.8,
+        label='Analytical Roche Limit $M_{\\mathrm{crit}}(a) \\propto a^{3.0}$')
+
+    # 4. Overlay Representative Dynamical Trajectories [a(t), M_p(t)]
+    track_inits = [
+        (0.6 * M_JUP, 0.016 * AU, 'red', 'Track A: Rapid Engulfment'),
+        (0.8 * M_JUP, 0.019 * AU, 'blue',
+         'Track B: Envelope Stripping Stagnation'),
+        (1.2 * M_JUP, 0.022 * AU, 'cyan', 'Track C: Heavy Giant Stagnation'),
+        (1.5 * M_JUP, 0.030 * AU, 'darkgreen', 'Track D: Non-Overflow Cooling'),
+        (1.8 * M_JUP, 0.015 * AU, 'magenta', 'Track E: Deep Disruption'),
+    ]
+
+    for m_0, a_0, color_str, label_name in track_inits:
+        res_t = compute_coupled_trajectory(M_p_0=m_0, a_0=a_0)
+        # Plot trajectory line
+        plt.plot(res_t["a"],
+                 res_t["M_p"],
+                 color=color_str,
+                 lw=2.2,
+                 linestyle='-')
+        # Initial point marker
+        plt.scatter(res_t["a"][0],
+                    res_t["M_p"][0],
+                    color=color_str,
+                    s=40,
+                    zorder=5)
+        # Arrow pointing along direction of evolution
+        mid_idx = len(res_t["a"]) // 3
+        dx = res_t["a"][mid_idx] - res_t["a"][mid_idx - 5]
+        dy = res_t["M_p"][mid_idx] - res_t["M_p"][mid_idx - 5]
+        if abs(dx) > 1e-5 or abs(dy) > 1e-5:
+            plt.arrow(res_t["a"][mid_idx - 5],
+                      res_t["M_p"][mid_idx - 5],
+                      dx,
+                      dy,
+                      shape='full',
+                      lw=0,
+                      length_includes_head=True,
+                      head_width=0.0006,
+                      color=color_str,
+                      zorder=5)
+
+    # 5. Region Annotation Text Callouts
+    plt.text(0.014,
+             0.45,
+             "Zone I: Rapid Tidal\nEngulfment Window",
+             fontsize=9.5,
+             fontweight='bold',
+             color='darkred',
+             bbox=dict(boxstyle='round,pad=0.4',
+                       facecolor='#ffe6e6',
+                       edgecolor='red',
+                       alpha=0.9))
+
+    plt.text(0.020,
+             0.55,
+             "Zone II: Hydrodynamic RLOF\nEnvelope Stripping Stagnation",
+             fontsize=9.5,
+             fontweight='bold',
+             color='darkblue',
+             bbox=dict(boxstyle='round,pad=0.4',
+                       facecolor='#e6f2ff',
+                       edgecolor='blue',
+                       alpha=0.9))
+
+    plt.text(0.029,
+             1.85,
+             "Zone III: Unperturbed\nOrbital Cooling Track",
+             fontsize=9.5,
+             fontweight='bold',
+             color='darkgreen',
+             bbox=dict(boxstyle='round,pad=0.4',
+                       facecolor='#e6ffe6',
+                       edgecolor='green',
+                       alpha=0.9))
+
+    plt.xlim(0.012, 0.038)
+    plt.ylim(0.3, 2.2)
+    plt.xlabel('Initial Semi-Major Axis $a(0)$ [AU]',
+               fontsize=12,
+               fontweight='bold')
     plt.ylabel('Initial Planet Mass $M_p(0)$ [$M_{\\mathrm{Jup}}$]',
-               fontsize=12)
-    plt.title('USP Gas Giant RLOF Survival Phase Space Map',
-              fontsize=13,
-              fontweight='bold')
-    plt.grid(True, linestyle='--', alpha=0.5)
+               fontsize=12,
+               fontweight='bold')
+    plt.title(
+        'USP Gas Giant RLOF Phase Space Map & Dynamical Flow Trajectories',
+        fontsize=12,
+        fontweight='bold')
+    plt.grid(True, linestyle='--', alpha=0.4)
+    plt.legend(loc='upper left', fontsize=8.5)
 
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig2_bifurcation_map.png"), dpi=300)
