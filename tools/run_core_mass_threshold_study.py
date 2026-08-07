@@ -14,7 +14,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, R_EARTH, R_JUP
+from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, R_EARTH, R_JUP, R_SUN, G
 
 # Non-interactive backend
 plt.switch_backend('Agg')
@@ -37,15 +37,17 @@ def simulate_core_survival(m_core_earth: float,
     m_total_kg = m_core_kg + m_env_kg
 
     a_curr = a_0_au * AU
-
     t_arr = np.geomspace(1.0e6, 5.0e9, num_pts)  # 1 Myr to 5 Gyr
+
+    k2_star = 0.03
+    Q_star_prime = 1.5e5
 
     for idx in range(num_pts):
         if idx == 0:
             dt_yr = t_arr[0]
         else:
             dt_yr = t_arr[idx] - t_arr[idx - 1]
-
+        dt_sec = dt_yr * 3.154e7
         t_gyr = t_arr[idx] / 1.0e9
 
         # Core radius equation of state: R_core ~ 1.0 * R_Earth * (M_core / M_Earth)^0.27
@@ -68,14 +70,13 @@ def simulate_core_survival(m_core_earth: float,
 
         ff = r_p_curr / r_roche_curr if r_roche_curr > 0 else 0.0
 
-        # Check for core disruption condition:
-        # If filling factor exceeds 1.0 at core boundary (r_p == r_core), core self-gravity is exceeded
+        # Core disruption check: if filling factor at core boundary exceeds 1.0, core self-gravity is exceeded
         if r_p_curr == r_core and ff >= 1.0:
             return 0.0, 0.0  # Total Hydrodynamic Core Disruption
 
-        # Envelope mass loss rate
+        # Hydrodynamic Envelope Mass Loss
         if ff >= 0.95 and m_env_kg > 0.0:
-            m_dot_0 = 5.0e-8 * M_JUP  # kg/yr
+            m_dot_0 = 1.0e-7 * M_JUP
             m_dot = m_dot_0 * np.exp(4.0 * (ff - 1.0))
             loss_kg = m_dot * dt_yr
 
@@ -85,19 +86,18 @@ def simulate_core_survival(m_core_earth: float,
                 m_env_kg -= loss_kg
 
             m_total_kg = m_core_kg + m_env_kg
-
-            # Mass loss orbital evolution
             da_rlof = -2.0 * a_curr * (-loss_kg / m_total_kg) * 0.5
             a_curr += da_rlof
 
-        # Stellar tidal orbital decay da/dt |_tide
-        k2_Q_star = 1.5e-5  # Q_*' = 1.5e5
-        da_tide = -9.0 * k2_Q_star * np.sqrt(1.327e20) * (6.957e8**5) * (
-            m_total_kg / M_SUN) * (a_curr**(-5.5)) * dt_yr * 3.154e7
+        # Stellar Tidal Orbital Decay
+        n_orb = np.sqrt(G * M_SUN / max(1.0e6, a_curr**3))
+        da_tide = (-9.0 * (k2_star / Q_star_prime) * n_orb *
+                   ((R_SUN / max(1.0e6, a_curr))**5) * (m_total_kg / M_SUN) *
+                   a_curr * dt_sec)
         a_curr += da_tide
 
         if a_curr <= 0.008 * AU:
-            return 0.0, 0.0  # Engulfed by star
+            return 0.0, 0.0  # Engulfed by host star
 
     final_m_earth = m_total_kg / M_EARTH
     z_bulk = m_core_kg / m_total_kg if m_total_kg > 0 else 0.0
@@ -217,16 +217,17 @@ def main():
     )
     plt.figure(figsize=(7.5, 5.0), dpi=300)
 
-    for idx, a_0 in enumerate([0.015, 0.018, 0.022]):
+    for idx, a_0 in enumerate([0.015, 0.018, 0.022, 0.026]):
         rems, z_bulks = results[a_0]
         # Filter valid non-zero remnants
         valid = rems > 0
-        plt.scatter(rems[valid],
-                    z_bulks[valid],
-                    label=f'$a(0) = {a_0:.3f}$ AU',
-                    color=colors[idx],
-                    s=40,
-                    alpha=0.8)
+        if np.any(valid):
+            plt.scatter(rems[valid],
+                        z_bulks[valid],
+                        label=f'$a(0) = {a_0:.3f}$ AU',
+                        color=colors[idx],
+                        s=50,
+                        alpha=0.85)
 
     plt.axhline(0.30,
                 color='black',
