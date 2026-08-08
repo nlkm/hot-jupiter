@@ -149,6 +149,9 @@ class CoupledRLOFIntegrator {
         break;
       }
 
+      r_roche_curr = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun);
+      ff = (r_roche_curr > 0.0) ? (r_p_curr / r_roche_curr) : 0.0;
+
       res.t_arr[i] = t_yr;
       res.a_arr[i] = a_curr / AU;
       res.m_p_arr[i] = m_total_kg / M_JUP;
