@@ -72,7 +72,49 @@ class CoupledRLOFIntegrator:
                   num_pts: int = 400) -> TrajectoryResult:
         """
         Integrate coupled trajectory from t = 1 Myr to t_max_yr.
+        Delegates to high-performance C++ engine if compiled library is present.
         """
+        try:
+            from hot_jupiter.bindings import rlof_integrate_cpp
+            data, c_res = rlof_integrate_cpp(m_p_init_jup=self.m_p_init_jup,
+                                             a_init_au=self.a_init_au,
+                                             m_core_earth=self.m_core_earth,
+                                             m_star_sun=self.m_star_sun,
+                                             t_max_yr=t_max_yr,
+                                             num_pts=num_pts)
+            outcome_map = {
+                0: EvolutionOutcome.DISRUPTED,
+                1: EvolutionOutcome.STAGNATED,
+                2: EvolutionOutcome.COOLING,
+                3: EvolutionOutcome.ENGULFED
+            }
+            t_arr = np.array(data["t"])
+            a_arr = np.array(data["a"])
+            m_p_arr = np.array(data["M_p"])
+            r_p_arr = np.array(data["R_p"])
+            ff_arr = np.array(data["filling_factor"])
+            m_env_arr = np.maximum(
+                0.0, m_p_arr - (self.m_core_earth * M_EARTH / M_JUP))
+            r_roche_arr = np.where(ff_arr > 0, r_p_arr * R_JUP / (ff_arr * AU),
+                                   0.0)
+
+            return TrajectoryResult(
+                t_arr=t_arr,
+                a_arr=a_arr,
+                m_p_arr=m_p_arr,
+                m_env_arr=m_env_arr,
+                m_core_arr=np.full_like(t_arr, self.m_core_earth),
+                r_p_arr=r_p_arr,
+                r_roche_arr=r_roche_arr,
+                filling_factor_arr=ff_arr,
+                outcome=outcome_map.get(c_res.outcome,
+                                        EvolutionOutcome.COOLING),
+                final_m_remnant_earth=c_res.final_m_remnant_earth,
+                z_bulk=c_res.z_bulk)
+        except (ImportError,
+                RuntimeError):  # Fallback to pure Python numerical solver
+            pass
+
         m_core_kg = self.m_core_earth * M_EARTH
         m_env_init_kg = max(0.0, (self.m_p_init_jup * M_JUP) - m_core_kg)
         m_env_kg = m_env_init_kg
@@ -120,23 +162,35 @@ class CoupledRLOFIntegrator:
                 m_env_kg = 0.0
                 break
 
-            # Hydrodynamic RLOF Mass Loss
+            # Hydrodynamic RLOF Mass Loss with Adaptive Sub-Stepping for Silky Smooth Curves
             if ff >= 0.95 and m_env_kg > 0.0:
                 m_dot_0 = 1.0e-7 * M_JUP  # kg/yr
                 m_dot = m_dot_0 * np.exp(self.eta_rlof * (ff - 1.0))
-                loss_kg = m_dot * dt_yr
+                est_loss = m_dot * dt_yr
 
-                if loss_kg >= m_env_kg:
-                    m_env_kg = 0.0
-                else:
-                    m_env_kg -= loss_kg
+                # Calculate sub-steps to ensure smooth mass loss (delta_M <= 0.0005 M_Jup per sub-step)
+                n_sub = max(1, int(np.ceil(est_loss / (0.0005 * M_JUP))),
+                            int(dt_yr / 5000.0))
+                n_sub = min(n_sub, 200)
+                dt_sub_yr = dt_yr / n_sub
 
-                m_total_kg = m_core_kg + m_env_kg
+                for _ in range(n_sub):
+                    if m_env_kg <= 0.0:
+                        break
+                    r_roche_sub = self.compute_roche_lobe_radius(
+                        a_curr, m_total_kg)
+                    ff_sub = r_p_curr / r_roche_sub if r_roche_sub > 0 else 0.0
+                    if ff_sub < 0.95:
+                        break
+                    m_dot_sub = m_dot_0 * np.exp(self.eta_rlof * (ff_sub - 1.0))
+                    loss_sub = min(m_env_kg, m_dot_sub * dt_sub_yr)
 
-                # RLOF orbital expansion / decay
-                da_rlof = -2.0 * a_curr * (-loss_kg / m_total_kg) * (
-                    1.0 - self.beta_angular_momentum)
-                a_curr += da_rlof
+                    m_env_kg -= loss_sub
+                    m_total_kg = m_core_kg + m_env_kg
+
+                    da_rlof_sub = -2.0 * a_curr * (-loss_sub / m_total_kg) * (
+                        1.0 - self.beta_angular_momentum)
+                    a_curr += da_rlof_sub
 
             # Stellar Tidal Orbital Decay da/dt |_tide
             n_orb = np.sqrt(G * (self.m_star_sun * M_SUN) /

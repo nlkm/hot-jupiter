@@ -16,6 +16,8 @@ cc_library(
         "cpp/include/mass_loss.hpp",
         "cpp/include/multi_planet.hpp",
         "cpp/include/orbital.hpp",
+        "cpp/include/population_synth.hpp",
+        "cpp/include/rlof_engine.hpp",
     ],
     includes = ["cpp/include"],
     copts = ["-std=c++17", "-O3", "-fvisibility=default"],
@@ -88,6 +90,20 @@ cc_test(
 cc_test(
     name = "multi_planet_test",
     srcs = ["cpp/include/multi_planet_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_test(
+    name = "population_synth_test",
+    srcs = ["cpp/include/population_synth_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_test(
+    name = "rlof_engine_test",
+    srcs = ["cpp/include/rlof_engine_test.cpp"],
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )

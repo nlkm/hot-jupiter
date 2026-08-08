@@ -32,9 +32,42 @@ void test_c_api_evaluate_density() {
     std::cout << "[PASS] C-API Evaluate Density Test" << std::endl;
 }
 
+void test_c_api_rlof_integrate() {
+    double t_arr[100], a_arr[100], m_p_arr[100], r_p_arr[100], ff_arr[100];
+    C_TrajectoryResult res;
+
+    rlof_integrate_trajectory_c(1.0, 0.035, 10.0, 1.0, 1.0e9, 100,
+                                t_arr, a_arr, m_p_arr, r_p_arr, ff_arr, &res);
+
+    assert(res.outcome == 2);  // COOLING
+    assert(res.final_m_remnant_earth > 0.0);
+    assert(res.num_pts_returned == 100);
+    assert(t_arr[0] == 1.0e6);
+    assert(a_arr[0] > 0.030);
+    std::cout << "[PASS] C-API RLOF Integrate Trajectory Test" << std::endl;
+}
+
+void test_c_api_solve_interior_profile_detailed() {
+    double r[300], m[300], P[300], rho[300], T[300], nad[300];
+    C_PlanetStructureResult res;
+
+    solve_interior_profile_detailed_c(
+        1.0 * hot_jupiter::M_JUP, 10.0 * hot_jupiter::M_EARTH, 1.0e8, 1.0 * hot_jupiter::BAR, 300,
+        r, m, P, rho, T, nad, &res
+    );
+
+    assert(res.num_layers == 300);
+    assert(r[0] > 0.5 * hot_jupiter::R_JUP);
+    assert(rho[0] > 0.0);
+    assert(P[299] > 0.0);
+    std::cout << "[PASS] C-API Detailed Interior Profile Test" << std::endl;
+}
+
 int main() {
     test_c_api_solve_structure();
     test_c_api_evaluate_density();
+    test_c_api_rlof_integrate();
+    test_c_api_solve_interior_profile_detailed();
     std::cout << "All C-API unit tests passed successfully!" << std::endl;
     return 0;
 }
