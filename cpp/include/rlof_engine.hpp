@@ -120,14 +120,18 @@ class CoupledRLOFIntegrator {
         double m_dot = m_dot_0 * std::exp(eta_rlof * (ff - 1.0));
         double est_loss = m_dot * dt_yr;
 
-        int n_sub = std::max(1, std::min(200, static_cast<int>(std::ceil(est_loss / (0.0005 * M_JUP)))));
+        int n_sub = std::max(1, std::min(100000, static_cast<int>(std::ceil(dt_yr / 1000.0))));
         double dt_sub_yr = dt_yr / n_sub;
 
         for (int s = 0; s < n_sub; ++s) {
           if (m_env_kg <= 0.0) break;
+
+          double r_env_sub = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
+          double r_p_sub = std::max(r_core, r_env_sub);
           double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun);
-          double ff_sub = (r_roche_sub > 0.0) ? (r_p_curr / r_roche_sub) : 0.0;
+          double ff_sub = (r_roche_sub > 0.0) ? (r_p_sub / r_roche_sub) : 0.0;
           if (ff_sub < 0.95) break;
+
           double m_dot_sub = m_dot_0 * std::exp(eta_rlof * (ff_sub - 1.0));
           double loss_sub = std::min(m_env_kg, m_dot_sub * dt_sub_yr);
 
@@ -136,6 +140,9 @@ class CoupledRLOFIntegrator {
           double da_rlof_sub = -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
           a_curr += da_rlof_sub;
         }
+
+        double r_env_post = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
+        r_p_curr = std::max(r_core, r_env_post);
       }
 
       double n_orb = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
