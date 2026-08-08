@@ -59,10 +59,7 @@ where $\mu_e = 2/(1+X)$ is the mean molecular weight per electron and $K_{\mathr
 \label{sec:derivation_a4}
 Semi-analytical irradiated atmosphere boundary conditions follow the Guillot (2010) double-gray formulation. Separating thermal infrared and visible radiation streams, the temperature-optical depth profile $T(\tau)$ is governed by:
 \begin{equation}
-\begin{aligned}
-T^4(\tau) &= \frac{3}{4} T_{\mathrm{int}}^4 \left( \tau + \frac{2}{3} \right) + \frac{3}{4} T_{\mathrm{irr}}^4 \left[ \frac{2}{3} + \frac{1}{\gamma\sqrt{3}} \right. \\
-&\quad \left. + \left( \frac{\gamma}{\sqrt{3}} - \frac{1}{\gamma\sqrt{3}} \right) e^{-\gamma \tau \sqrt{3}} \right]
-\end{aligned}
+T^4(\tau) = \frac{3}{4} T_{\mathrm{int}}^4 \left( \tau + \frac{2}{3} \right) + \frac{3}{4} T_{\mathrm{irr}}^4 \left[ \frac{2}{3} + \frac{2}{3\gamma} \left( 1 + \left(\frac{\gamma \tau}{2} - 1\right) e^{-\gamma \tau} \right) \right]
 \end{equation}
 where $\tau = \kappa_{\mathrm{th}} P / g$, $\gamma \equiv \kappa_{\mathrm{vis}}/\kappa_{\mathrm{th}} \approx 0.1$, $T_{\mathrm{int}}$ is the intrinsic effective temperature, and $T_{\mathrm{irr}} = [(1-A_b) F_{\mathrm{inc}} / (4\sigma_{\mathrm{SB}})]^{1/4}$ is the equilibrium irradiation temperature.
 
