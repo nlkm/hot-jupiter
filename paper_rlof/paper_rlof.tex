@@ -166,7 +166,7 @@ As shown in Figure~\ref{fig:cases}:
 \subsection{Statistical Robustness of the Truncation Boundary}
 The theoretical boundary $M_{\text{crit}}(a) \approx 0.50 (a / 0.018\text{ AU})^{3.0}\,M_{\text{Jup}}$ acts as an empirical filter. Out of 362 transiting exoplanets in \texttt{hot\_jupiter.db}, less than $0.5\%$ of gas giants lie to the left of this curve, confirming that coupled hydrostatic RLOF mass loss and tidal decay govern the survival landscape of ultra-short-period gas giants.
 
-\section{The Critical Core Mass Threshold \texorpdfstring{$M_{\text{core, crit}}$}{M_core,crit} for USP Remnants} \label{sec:core_threshold}
+\section{The Critical Core Mass Threshold \texorpdfstring{$M_{\text{core,crit}}$}{M_core,crit} for USP Remnants} \label{sec:core_threshold}
 To answer whether Roche lobe overflowed Hot Jupiters survive as stable USP sub-Neptune / super-Earth remnants or suffer complete hydrodynamic destruction, we conducted a systematic simulation sweep over core masses $M_{\text{core}} \in [1.0, 25.0]\,M_{\text{Earth}}$.
 
 \begin{figure}[h]
@@ -241,8 +241,10 @@ Equating $R_p \approx R_{\text{Roche}}$ yields the critical survival planet mass
 \subsection{C. Hut Tidal Torque \& Dissipation Equations} \label{app:tides}
 Following \citet{Hut1981}, the full coupled evolution of semi-major axis $a$ and eccentricity $e$ under equilibrium tidal dissipation in the star ($\star$) and planet ($p$) is:
 \begin{align}
-\left. \frac{\dot{a}}{a} \right|_{\text{tide}} &= -6 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \left[ f_1(e) - \frac{\Omega_i}{n_{\text{orb}}} f_2(e) \right] \\
-\left. \frac{\dot{e}}{e} \right|_{\text{tide}} &= -27 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \left[ f_3(e) - \frac{11}{18} \frac{\Omega_i}{n_{\text{orb}}} f_4(e) \right]
+\left. \frac{\dot{a}}{a} \right|_{\text{tide}} &= -6 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \nonumber \\
+&\quad \times \left[ f_1(e) - \frac{\Omega_i}{n_{\text{orb}}} f_2(e) \right] \\
+\left. \frac{\dot{e}}{e} \right|_{\text{tide}} &= -27 \sum_{i \in \{\star, p\}} \frac{k_{2,i}}{Q_i^\prime} \frac{M_j}{M_i} \left(\frac{R_i}{a}\right)^5 n_{\text{orb}} \nonumber \\
+&\quad \times \left[ f_3(e) - \frac{11}{18} \frac{\Omega_i}{n_{\text{orb}}} f_4(e) \right]
 \end{align}
 where $n_{\text{orb}} = \sqrt{G(M_\star + M_p)/a^3}$ is the orbital mean motion, and $f_1, \dots, f_4$ are polynomial eccentricity functions ($f_1(0) = f_2(0) = 1$). For synchronous planets ($\Omega_p = n_{\text{orb}}$), planetary tides vanish, and stellar tidal dissipation ($\dot{a}_{\text{tide},\star} \propto a^{-11/2}$) dominates inward migration.
 
