@@ -40,7 +40,7 @@ double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, dou
         double dP_dr = - (G * m_s * rho) / (r_s * r_s);
         double dT_dr = (m_s > M_c) ? nad * (T_s / P_s) * dP_dr : 0.0;
 
-        m += dr * dm_dr;
+        m = std::max(0.0, m + dr * dm_dr);
         P = std::max(P_surf, P + dr * dP_dr);
         T = std::max(T_surf, T + dr * dT_dr);
         r = r_next;
@@ -115,7 +115,7 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
             double dP_dr = - (G * m * rho) / (r * r);
             double dT_dr = (m > M_c) ? nad * (T / P) * dP_dr : 0.0;
 
-            m += dr * dm_dr;
+            m = std::max(0.0, m + dr * dm_dr);
             P = std::max(P_surf, P + dr * dP_dr);
             T = std::max(T_surf, T + dr * dT_dr);
             r = r_next;

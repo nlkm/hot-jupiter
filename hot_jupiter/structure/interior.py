@@ -153,7 +153,67 @@ class InteriorSolver:
         """
         Solve 1D hydrostatic equilibrium for a planet given (M_p, M_c, S_env).
         Returns PlanetStructure with smooth 1D internal profile extending to r = R_p.
+        Delegates to compiled C++ library when available for millisecond execution.
         """
+        try:
+            from hot_jupiter.bindings import solve_interior_profile_detailed_cpp
+            data, c_res = solve_interior_profile_detailed_cpp(
+                M_p, M_c, S_env, P_surf, num_pts)
+            r_full = np.array(data["r"])[::-1]
+            m_full = np.array(data["m"])[::-1]
+            P_full = np.array(data["P"])[::-1]
+            rho_full = np.array(data["rho"])[::-1]
+            T_full = np.array(data["T"])[::-1]
+            nad_full = np.array(data["nabla_ad"])[::-1]
+
+            R_p = c_res.R_p
+            P_c = float(np.max(P_full))
+            T_c = float(np.max(T_full))
+
+            R_c = 0.0
+            P_cb = P_c
+            T_cb = T_c
+            if M_c > 0:
+                idx_cb = np.searchsorted(m_full, M_c)
+                idx_cb = min(idx_cb, len(m_full) - 1)
+                R_c = float(r_full[idx_cb])
+                P_cb = float(P_full[idx_cb])
+                T_cb = float(T_full[idx_cb])
+
+            profile = InternalProfile(m=m_full,
+                                      r=r_full,
+                                      P=P_full,
+                                      rho=rho_full,
+                                      T=T_full,
+                                      nabla_ad=nad_full)
+
+            dr = np.diff(r_full, prepend=0.0)
+            int_T_dm = float(
+                np.sum(T_full * 4.0 * np.pi * r_full**2 * rho_full * dr))
+            E_int = float(
+                np.sum(1.5 * (P_full / np.maximum(rho_full, 1e-10)) * 4.0 *
+                       np.pi * r_full**2 * rho_full * dr))
+            U_grav = float(-G * np.sum((m_full / np.maximum(r_full, 1e3)) *
+                                       4.0 * np.pi * r_full**2 * rho_full * dr))
+
+            return PlanetStructure(
+                M_p=M_p,
+                M_c=M_c,
+                S_env=S_env,
+                R_p=R_p,
+                R_c=R_c,
+                P_c=P_c,
+                T_c=T_c,
+                P_cb=P_cb,
+                T_cb=T_cb,
+                int_T_dm=int_T_dm,
+                E_int=E_int,
+                U_grav=U_grav,
+                profile=profile,
+            )
+        except (ImportError, RuntimeError):
+            pass
+
         R_min = 0.4 * R_JUP
         R_max = 2.5 * R_JUP
 
