@@ -2,6 +2,8 @@
 Unit test for coupled RLOF mass loss and tidal evolution integrator (hot_jupiter/evolution/rlof_coupled.py).
 """
 
+import pytest
+
 from hot_jupiter.constants import AU, BAR, M_EARTH, M_JUP, YEAR
 from hot_jupiter.eos import AnalyticalHHeEOS
 from hot_jupiter.evolution.rlof_coupled import (
@@ -10,6 +12,7 @@ from hot_jupiter.evolution.rlof_coupled import (
 )
 
 
+@pytest.mark.slow
 def test_coupled_rlof_integrator_basic():
     eos = AnalyticalHHeEOS()
     integrator = CoupledRLOFEvolutionIntegrator()

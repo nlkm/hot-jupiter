@@ -2,6 +2,8 @@
 Unit tests for atmosphere, heating, and thermal evolution time integrator.
 """
 
+import pytest
+
 from hot_jupiter.atmosphere import AtmosphereResult, GuillotAtmosphere
 from hot_jupiter.constants import AU, BAR, M_EARTH, M_JUP, M_SUN, R_JUP, YEAR
 from hot_jupiter.eos import AnalyticalHHeEOS
@@ -47,6 +49,7 @@ def test_tidal_heating():
     assert p_tidal > 0.0
 
 
+@pytest.mark.slow
 def test_hot_jupiter_cooling_track():
     eos = AnalyticalHHeEOS()
     solver = InteriorSolver(envelope_eos=eos)

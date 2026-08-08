@@ -2,6 +2,8 @@
 Unit tests for population synthesis, core mass scaling, and selection effects.
 """
 
+import pytest
+
 from hot_jupiter.constants import AU, M_JUP, R_JUP, R_SUN
 from hot_jupiter.population import (
     IncrementalPopulationResult,
@@ -38,6 +40,7 @@ def test_transit_selection_weight():
     assert w_large > w_small
 
 
+@pytest.mark.slow
 def test_population_simulator():
     catalog = get_curated_hot_jupiter_catalog(
     )[:3]  # Fast mini run over 3 systems
