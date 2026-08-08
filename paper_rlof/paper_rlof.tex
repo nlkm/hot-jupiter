@@ -79,9 +79,16 @@ The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/fig1_rlof_tracks.png}
-\caption{\textbf{Orbital Decay and Mass Loss Evolution.} Time evolution of semi-major axis $a(t)$ (left) and planet mass $M_p(t)$ (right) across 3 representative tracks: (1) Runaway Disruption (red solid), (2) Stagnated Survival (blue dashed), and (3) Non-Overflow Cooling (green dash-dotted).}
-\label{fig:tracks}
+\includegraphics[width=0.98\linewidth]{figures/fig1a_orbital_decay.png}
+\caption{\textbf{Tidal Orbital Decay Trajectories.} Time evolution of orbital semi-major axis $a(t)$ across 3 representative tracks: (1) Runaway Disruption (red solid), (2) Stagnated Survival (blue dashed), and (3) Non-Overflow Cooling (green dash-dotted).}
+\label{fig:tracks_decay}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig1b_mass_loss.png}
+\caption{\textbf{Hydrodynamic Envelope Mass Loss.} Time evolution of planetary mass $M_p(t)$ during Roche lobe overflow envelope stripping.}
+\label{fig:tracks_mass}
 \end{figure}
 
 \begin{figure}[h]
@@ -95,7 +102,7 @@ The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_
 We evolved a 4D grid of coupled evolutionary tracks across $M_p(0) \in [0.3, 2.2]\,M_{\text{Jup}}$ and $a(0) \in [0.012, 0.038]\text{ AU}$.
 
 \subsection{Discovery of Trajectory Bifurcation}
-As shown in Figures~\ref{fig:tracks} and~\ref{fig:filling}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
+As shown in Figures~\ref{fig:tracks_decay}, \ref{fig:tracks_mass}, and~\ref{fig:filling}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
 
 \begin{enumerate}
     \item \textbf{Tidal Runaway Disruption / Engulfment}: For low-mass planets ($M_p \lesssim 0.6\,M_{\text{Jup}}$) at close separations ($a(0) \le 0.016\text{ AU}$), envelope mass loss reduces $M_p$, shrinking $R_{\text{Roche}}$ faster than the planet can cool and contract. This positive feedback loop causes $\mu_{\text{Roche}}$ to spike above $1.2$, accelerating tidal decay and driving complete orbital engulfment into the star within $t \lesssim 500\text{ Myr}$.
