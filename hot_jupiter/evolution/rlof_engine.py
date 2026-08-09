@@ -157,8 +157,13 @@ class CoupledRLOFIntegrator:
             else:
                 r_p_curr = r_core
 
+            e2 = e_curr * e_curr
+            f_a_e = 1.0 + 11.5 * e2
+            f_e_e = 1.0 + 3.75 * e2
+
             r_roche_curr = self.compute_roche_lobe_radius(a_curr, m_total_kg)
-            ff = r_p_curr / r_roche_curr if r_roche_curr > 0 else 0.0
+            r_roche_peri = r_roche_curr * max(0.01, 1.0 - e_curr)
+            ff = r_p_curr / r_roche_peri if r_roche_peri > 0 else 0.0
             max_ff = max(max_ff, ff)
 
             # Core disruption check
@@ -183,7 +188,7 @@ class CoupledRLOFIntegrator:
                     if m_env_kg <= 0.0:
                         break
                     r_roche_sub = self.compute_roche_lobe_radius(
-                        a_curr, m_total_kg)
+                        a_curr, m_total_kg) * max(0.01, 1.0 - e_curr)
                     ff_sub = r_p_curr / r_roche_sub if r_roche_sub > 0 else 0.0
                     if ff_sub < 0.95:
                         break
@@ -201,17 +206,18 @@ class CoupledRLOFIntegrator:
             n_orb = np.sqrt(G * (self.m_star_sun * M_SUN) /
                             max(1.0e6, a_curr**3))
             da_tide = (-9.0 * (self.k2_star / self.q_star_prime) * n_orb *
-                       ((R_SUN / max(1.0e6, a_curr))**5) *
+                       f_a_e * ((R_SUN / max(1.0e6, a_curr))**5) *
                        (m_total_kg /
                         (self.m_star_sun * M_SUN)) * a_curr * dt_sec)
             a_curr += da_tide
 
             # Tidal Eccentricity Circularization de/dt (Hut 1981)
             de_dt_p = (10.5 * (self.k2_planet / self.q_planet_prime) * n_orb *
+                       f_e_e *
                        ((self.m_star_sun * M_SUN) / max(1.0e-10, m_total_kg)) *
                        ((r_p_curr / max(1.0e6, a_curr))**5))
             de_dt_star = (4.5 * (self.k2_star / self.q_star_prime) * n_orb *
-                          (m_total_kg / (self.m_star_sun * M_SUN)) *
+                          f_e_e * (m_total_kg / (self.m_star_sun * M_SUN)) *
                           ((R_SUN / max(1.0e6, a_curr))**5))
             e_curr = e_curr * np.exp(-(de_dt_p + de_dt_star) * dt_sec)
 

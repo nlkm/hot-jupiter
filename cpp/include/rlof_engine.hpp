@@ -115,8 +115,13 @@ class CoupledRLOFIntegrator {
         r_p_curr = std::max(r_core, r_env);
       }
 
+      double e2 = e_curr * e_curr;
+      double f_a_e = 1.0 + 11.5 * e2;
+      double f_e_e = 1.0 + 3.75 * e2;
+
       double r_roche_curr = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun);
-      double ff = (r_roche_curr > 0.0) ? (r_p_curr / r_roche_curr) : 0.0;
+      double r_roche_peri = r_roche_curr * std::max(0.01, 1.0 - e_curr);
+      double ff = (r_roche_peri > 0.0) ? (r_p_curr / r_roche_peri) : 0.0;
       max_ff = std::max(max_ff, ff);
 
       if (r_p_curr == r_core && ff >= 1.0) {
@@ -135,7 +140,7 @@ class CoupledRLOFIntegrator {
           if (m_env_kg <= 0.0) break;
           double r_env_sub = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
           double r_p_sub = std::max(r_core, r_env_sub);
-          double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun);
+          double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun) * std::max(0.01, 1.0 - e_curr);
           double ff_sub = (r_roche_sub > 0.0) ? (r_p_sub / r_roche_sub) : 0.0;
           if (ff_sub < 0.95) break;
 
@@ -148,14 +153,14 @@ class CoupledRLOFIntegrator {
       }
 
       double n_orb = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
-      a_curr += -9.0 * (k2_star / q_star_prime) * n_orb *
+      a_curr += -9.0 * (k2_star / q_star_prime) * n_orb * f_a_e *
                 std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
                 (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sec;
 
-      double de_dt_p = 10.5 * (k2_planet / q_planet_prime) * n_orb *
+      double de_dt_p = 10.5 * (k2_planet / q_planet_prime) * n_orb * f_e_e *
                        ((m_star_sun * M_SUN) / std::max(1.0e-10, m_total_kg)) *
                        std::pow(r_p_curr / std::max(1.0e6, a_curr), 5);
-      double de_dt_star = 4.5 * (k2_star / q_star_prime) * n_orb *
+      double de_dt_star = 4.5 * (k2_star / q_star_prime) * n_orb * f_e_e *
                           (m_total_kg / (m_star_sun * M_SUN)) *
                           std::pow(R_SUN / std::max(1.0e6, a_curr), 5);
       e_curr = e_curr * std::exp(-(de_dt_p + de_dt_star) * dt_sec);

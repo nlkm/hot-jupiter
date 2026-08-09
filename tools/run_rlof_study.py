@@ -227,6 +227,70 @@ def main():
                 bbox_inches='tight')
     plt.close()
 
+    # --- Render Figure 4: Scenario 4 - High Eccentricity Warm Jupiter Evolution ---
+    print("--> Generating paper_rlof/figures/fig4_scenario4_eccentric.png...")
+    res_eccentric = compute_coupled_trajectory(M_p_0=1.0 * M_JUP,
+                                               a_0=0.050 * AU,
+                                               e_0=0.45)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
+
+    # 1. Semi-major axis
+    axes[0].plot(res_eccentric["t"], res_eccentric["a"], 'm-', lw=2.5)
+    axes[0].set_xlim(0.0, 3000.0)
+    axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11, fontweight='bold')
+    axes[0].grid(True, linestyle=":", alpha=0.45)
+
+    # 2. Eccentricity Evolution
+    axes[1].plot(res_eccentric["t"], res_eccentric["e"], 'm-', lw=2.5)
+    axes[1].set_xlim(0.0, 3000.0)
+    axes[1].set_ylim(0.0, 0.50)
+    axes[1].set_ylabel('Eccentricity $e$', fontsize=10.5, fontweight='bold')
+    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[1].set_title('Persistent Damping $e(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[1].grid(True, linestyle=":", alpha=0.45)
+
+    # 3. Periastron Separation
+    r_peri = res_eccentric["a"] * (1.0 - res_eccentric["e"])
+    axes[2].plot(res_eccentric["t"], r_peri, 'm-', lw=2.5)
+    axes[2].set_xlim(0.0, 3000.0)
+    axes[2].set_ylabel('Periastron $r_{\\mathrm{peri}}$ [AU]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[2].set_title('Periastron Distance $r_{\\mathrm{peri}}(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[2].grid(True, linestyle=":", alpha=0.45)
+
+    # 4. Planet Radius
+    axes[3].plot(res_eccentric["t"], res_eccentric["R_p"], 'm-', lw=2.5)
+    axes[3].set_xlim(0.0, 3000.0)
+    axes[3].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[3].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[3].set_title('Radius Evolution $R_p(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[3].grid(True, linestyle=":", alpha=0.45)
+
+    fig.suptitle(
+        'Scenario 4: High-Eccentricity Warm Jupiter Evolution ($1.0\\,M_{\\mathrm{Jup}}, 0.050\\,\\mathrm{AU}, e_0=0.45$)',
+        fontsize=12.5,
+        fontweight='bold',
+        y=1.03)
+    plt.tight_layout()
+    plt.savefig(os.path.join(fig_dir, "fig4_scenario4_eccentric.png"),
+                dpi=300,
+                bbox_inches='tight')
+    plt.close()
+
     # --- Render Figure 2: Ultra-Simple Roche Lobe Filling Factor ---
     print("--> Generating paper_rlof/figures/fig2_roche_filling.png...")
     plt.figure(figsize=(7.5, 5.0), dpi=300)
