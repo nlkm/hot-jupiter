@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  9 AUG 2026 15:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  9 AUG 2026 16:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -496,70 +496,78 @@ Underfull \hbox (badness 6316) in paragraph at lines 40--41
  hot[]jupiter \OT1/cmr/m/n/10 (+20) nu-mer-i-cal
  []
 
+
+Overfull \hbox (7.42755pt too wide) detected at line 47
+[][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OML/cmm/m/it/10 ^^Z\OT1/cmr/m/n
+/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 )[] [] \OML/cmm/m/it/10 ;  [] \OT1/cmr/m
+/n/10 = 4\OML/cmm/m/it/10 ^^Yr[]^^Z\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/
+m/n/10 )
+ []
+
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Underfull \hbox (badness 3679) in paragraph at lines 61--62
+Underfull \hbox (badness 3679) in paragraph at lines 62--63
 []\OT1/cmr/m/n/10 (+20) When the Roche lobe fill-ing fac-tor $\OML/cmm/m/it/10 
 ^^V[] \OMS/cmsy/m/n/10 ^^Q
  []
 
-<figures/fig1_scenario1_disruption.png, id=144, 1185.228pt x 286.4301pt>
+<figures/fig1_scenario1_disruption.png, id=142, 1185.228pt x 286.4301pt>
 File: figures/fig1_scenario1_disruption.png Graphic file (type png)
 <use figures/fig1_scenario1_disruption.png>
 Package pdftex.def Info: figures/fig1_scenario1_disruption.png  used on input l
-ine 82.
+ine 83.
 (pdftex.def)             Requested size: 242.98503pt x 58.71854pt.
-<figures/fig2_scenario2_stagnation.png, id=146, 1185.228pt x 286.1892pt>
+<figures/fig2_scenario2_stagnation.png, id=144, 1185.228pt x 286.1892pt>
 File: figures/fig2_scenario2_stagnation.png Graphic file (type png)
 <use figures/fig2_scenario2_stagnation.png>
 Package pdftex.def Info: figures/fig2_scenario2_stagnation.png  used on input l
-ine 89.
+ine 90.
 (pdftex.def)             Requested size: 242.98503pt x 58.66916pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig3_scenario3_cooling.png, id=147, 1185.228pt x 286.36987pt>
+<figures/fig3_scenario3_cooling.png, id=145, 1185.228pt x 286.36987pt>
 File: figures/fig3_scenario3_cooling.png Graphic file (type png)
 <use figures/fig3_scenario3_cooling.png>
 Package pdftex.def Info: figures/fig3_scenario3_cooling.png  used on input line
- 96.
+ 97.
 (pdftex.def)             Requested size: 242.98503pt x 58.70619pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig4_scenario4_eccentric.png, id=148, 1185.228pt x 286.36987pt>
+<figures/fig4_scenario4_eccentric.png, id=146, 1185.228pt x 286.36987pt>
 File: figures/fig4_scenario4_eccentric.png Graphic file (type png)
 <use figures/fig4_scenario4_eccentric.png>
 Package pdftex.def Info: figures/fig4_scenario4_eccentric.png  used on input li
-ne 103.
+ne 104.
 (pdftex.def)             Requested size: 242.98503pt x 58.70619pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig2_roche_filling.png, id=149, 542.025pt x 361.35pt>
+<figures/fig2_roche_filling.png, id=147, 542.025pt x 361.35pt>
 File: figures/fig2_roche_filling.png Graphic file (type png)
 <use figures/fig2_roche_filling.png>
-Package pdftex.def Info: figures/fig2_roche_filling.png  used on input line 110
+Package pdftex.def Info: figures/fig2_roche_filling.png  used on input line 111
 .
 (pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 4156) in paragraph at lines 123--124
+Underfull \hbox (badness 4156) in paragraph at lines 124--125
 []\OT1/cmr/bx/n/10 (+20) Self-Limiting Mass-Loss Stag-na-tion\OT1/cmr/m/n/10 (+
 20) : For
  []
 
 [2 <./figures/fig1_scenario1_disruption.png> <./figures/fig2_scenario2_stagnati
 on.png> <./figures/fig3_scenario3_cooling.png>]
-<figures/fig3_bifurcation_map.png, id=174, 578.16pt x 397.485pt>
+<figures/fig3_bifurcation_map.png, id=171, 578.16pt x 397.485pt>
 File: figures/fig3_bifurcation_map.png Graphic file (type png)
 <use figures/fig3_bifurcation_map.png>
 Package pdftex.def Info: figures/fig3_bifurcation_map.png  used on input line 1
-28.
+29.
 (pdftex.def)             Requested size: 242.98503pt x 167.05173pt.
 
 
@@ -567,30 +575,30 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [3 <./figures/fig4_scenario4_eccentric.png> <./figures/fig2_roche_filling.png> 
 <./figures/fig3_bifurcation_map.png>]
-<figures/fig4_obs_comparison.png, id=189, 578.16pt x 433.62pt>
+<figures/fig4_obs_comparison.png, id=187, 578.16pt x 433.62pt>
 File: figures/fig4_obs_comparison.png Graphic file (type png)
 <use figures/fig4_obs_comparison.png>
 Package pdftex.def Info: figures/fig4_obs_comparison.png  used on input line 16
-2.
+3.
 (pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
-<figures/fig5_usp_cases.png, id=190, 578.16pt x 433.62pt>
+<figures/fig5_usp_cases.png, id=188, 578.16pt x 433.62pt>
 File: figures/fig5_usp_cases.png Graphic file (type png)
 <use figures/fig5_usp_cases.png>
-Package pdftex.def Info: figures/fig5_usp_cases.png  used on input line 169.
+Package pdftex.def Info: figures/fig5_usp_cases.png  used on input line 170.
 (pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 188--189
+Underfull \hbox (badness 10000) in paragraph at lines 189--190
 \OT1/cmr/m/n/10 (+20) The the-o-ret-i-cal bound-ary $\OML/cmm/m/it/10 M[]\OT1/c
 mr/m/n/10 (+20) (\OML/cmm/m/it/10 a\OT1/cmr/m/n/10 (+20) ) \OMS/cmsy/m/n/10 ^^Y
 
  []
 
 
-Underfull \hbox (badness 4441) in paragraph at lines 188--189
+Underfull \hbox (badness 4441) in paragraph at lines 189--190
 \OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 50(\OML/cmm/m/it
 /10 a=\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 018[])[] \
 OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
@@ -598,51 +606,54 @@ OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 190.
+(hyperref)                removing `subscript' on input line 191.
 
 [4 <./figures/fig4_obs_comparison.png> <./figures/fig5_usp_cases.png>]
-<figures/fig6_core_mass_remnants.png, id=206, 534.798pt x 354.123pt>
+<figures/fig6_core_mass_remnants.png, id=204, 534.798pt x 354.123pt>
 File: figures/fig6_core_mass_remnants.png Graphic file (type png)
 <use figures/fig6_core_mass_remnants.png>
 Package pdftex.def Info: figures/fig6_core_mass_remnants.png  used on input lin
-e 195.
+e 196.
 (pdftex.def)             Requested size: 242.98503pt x 160.89926pt.
-<figures/fig7_core_threshold_scaling.png, id=207, 534.798pt x 354.123pt>
+<figures/fig7_core_threshold_scaling.png, id=205, 534.798pt x 354.123pt>
 File: figures/fig7_core_threshold_scaling.png Graphic file (type png)
 <use figures/fig7_core_threshold_scaling.png>
 Package pdftex.def Info: figures/fig7_core_threshold_scaling.png  used on input
- line 202.
+ line 203.
 (pdftex.def)             Requested size: 242.98503pt x 160.89926pt.
-<figures/fig8_heavy_element_enrichment.png, id=208, 534.798pt x 354.123pt>
+<figures/fig8_heavy_element_enrichment.png, id=206, 534.798pt x 354.123pt>
 File: figures/fig8_heavy_element_enrichment.png Graphic file (type png)
 <use figures/fig8_heavy_element_enrichment.png>
 Package pdftex.def Info: figures/fig8_heavy_element_enrichment.png  used on inp
-ut line 209.
+ut line 210.
 (pdftex.def)             Requested size: 242.98503pt x 160.89926pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5 <./figures/fig6_core_mass_remnants.png> <./figures/fig7_core_threshold_scali
-ng.png> <./figures/fig8_heavy_element_enrichment.png>] [6] [7
+ng.png> <./figures/fig8_heavy_element_enrichment.png>] [6]
+Overfull \hbox (73.25816pt too wide) detected at line 306
+[][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[] [] \OML/cmm/m/it/10 ;  [] \OT
+1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[] []
+ []
 
-]
-(./paper_rlof.aux)
+[7] (./paper_rlof.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `paper_rlof.out' has not changed.
-(rerunfilecheck)             Checksum: 30E438710C42B553F07B733EAC647ACA;4760.
+(rerunfilecheck)             Checksum: D6A6A352F33AFBC5F4712BA57D9C544A;5130.
  ) 
 Here is how much of TeX's memory you used:
- 12872 strings out of 476182
- 199186 string characters out of 5795596
+ 12887 strings out of 476182
+ 199467 string characters out of 5795596
  1950975 words of memory out of 5000000
- 34474 multiletter control sequences out of 15000+600000
+ 34480 multiletter control sequences out of 15000+600000
  573793 words of font info for 165 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,13n,79p,1735b,566s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,13n,79p,1735b,558s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/neil/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
@@ -658,10 +669,10 @@ sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on paper_rlof.pdf (7 pages, 3402836 bytes).
+Output written on paper_rlof.pdf (7 pages, 3412006 bytes).
 PDF statistics:
- 339 PDF objects out of 1000 (max. 8388607)
- 274 compressed objects within 3 object streams
- 74 named destinations out of 1000 (max. 500000)
- 33496 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 353 PDF objects out of 1000 (max. 8388607)
+ 288 compressed objects within 3 object streams
+ 83 named destinations out of 1000 (max. 500000)
+ 33504 words of extra memory for PDF output out of 35830 (max. 10000000)
 

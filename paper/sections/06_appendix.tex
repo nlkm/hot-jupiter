@@ -3,15 +3,19 @@
 
 In this appendix, we provide detailed, step-by-step physical derivations from first principles for each equation utilized in the \texttt{hot\_jupiter} physical evolution suite.
 
-\subsection{Derivation A1: 1D Hydrostatic Equilibrium \& Adiabatic Temperature Gradient}
+\subsection{Derivation A1: Roche-Modified 1D Hydrostatic Equilibrium \& Adiabatic Temperature Gradient}
 \label{sec:derivation_a1}
-Consider a thin spherical fluid shell of radius $r$, thickness $dr$, surface area $A = 4\pi r^2$, and enclosed mass $m(r)$. Radial force balance between inward gravitational attraction and outward hydrostatic pressure gradient requires:
+In a corotating reference frame centered on a planet of mass $M_p$ orbiting a host star of mass $M_\star$ at semi-major axis $a$, the 3D Roche potential is $\Phi_{\text{Roche}}(\mathbf{r}) = -G M_p/|\mathbf{r}| - G M_\star/|\mathbf{a} - \mathbf{r}| - \frac{1}{2} \Omega_{\text{orb}}^2 |\mathbf{r} - \mathbf{r}_{\text{cm}}|^2$. The surface-averaged effective gravity $g_{\text{eff}}(r) \equiv \langle |\nabla \Phi_{\text{Roche}}| \rangle$ over a volume-equivalent spherical shell of radius $r$ is:
 \begin{equation}
-A P(r) - A P(r+dr) - \frac{G m(r) \rho(r) A dr}{r^2} = 0 \implies \frac{dP}{dr} = -\frac{G m(r) \rho(r)}{r^2}
+g_{\text{eff}}(r) = g_{\text{iso}}(r) \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right] = \frac{G m(r)}{r^2} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
 \end{equation}
-Along a convective adiabat, specific entropy $S$ is constant. Defining the dimensionless adiabatic temperature gradient $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$, the interior temperature gradient is:
+where $R_{\text{Roche}}$ is Eggleton's volume-equivalent Roche lobe radius. Radial force balance for a thin fluid shell of area $A = 4\pi r^2$ requires:
 \begin{equation}
-\frac{dT}{dr} = \nabla_{\mathrm{ad}} \frac{T}{P} \frac{dP}{dr} = -\nabla_{\mathrm{ad}} \frac{G m(r) \rho(r) T(r)}{r^2 P(r)}
+A P(r) - A P(r+dr) - \rho(r) A dr \, g_{\text{eff}}(r) = 0 \implies \frac{dP}{dr} = -\rho(r) \frac{G m(r)}{r^2} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
+\end{equation}
+Along a convective adiabat ($S = \text{const}$), defining $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$, the interior temperature gradient is:
+\begin{equation}
+\frac{dT}{dr} = \nabla_{\mathrm{ad}} \frac{T}{P} \frac{dP}{dr} = -\nabla_{\mathrm{ad}} \frac{G m(r) \rho(r) T(r)}{r^2 P(r)} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
 \end{equation}
 
 \begin{figure}[htbp]

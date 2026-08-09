@@ -40,11 +40,12 @@ In this paper, we present the first unified 1D hydrostatic and orbital evolution
 We couple the 1D hydrostatic interior solver \texttt{InteriorSolver} from the \texttt{hot\_jupiter} numerical code with dynamic orbital and mass-loss differential equations.
 
 \subsection{1D Hydrostatic Interior \& EOS}
-The planetary interior envelope is integrated from the core-envelope boundary to the atmospheric surface under hydrostatic equilibrium:
+The planetary interior envelope is integrated from the core-envelope boundary to the atmospheric surface under Roche-modified 1D hydrostatic equilibrium:
 \begin{equation}
-\frac{dP}{dr} = -\frac{G M(r) \rho(r)}{r^2}, \quad \frac{dM}{dr} = 4\pi r^2 \rho(r)
+\frac{dP}{dr} = -\rho(r) \frac{G M(r)}{r^2} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right], \quad \frac{dM}{dr} = 4\pi r^2 \rho(r)
+\label{eq:roche_hydrostatic_main}
 \end{equation}
-using the hydrogen-helium equation of state (EOS) \citep{Saumon1995, Chabrier2019}. The outer boundary condition uses the double-gray radiative equilibrium atmospheric profile \citep{Guillot2010}:
+where $R_{\text{Roche}}$ is Eggleton's volume-equivalent Roche lobe radius \citep{Eggleton1983}. As $r \to R_{\text{Roche}}$, effective gravity $g_{\text{eff}}(r) \to 0$ smoothly at the Roche surface, capturing tidal atmospheric expansion under a 1D spherically symmetric framework. (See Appendix~\ref{app:roche_hydrostatic_derivation} for the detailed first-principles potential derivation.)
 \begin{equation}
 T^4(\tau) = \frac{3 T_{\text{int}}^4}{4} \left( \tau + \frac{2}{3} \right) + T_{\text{irr}}^4 \, \mathcal{H}(\tau, \gamma)
 \label{eq:guillot_main}
@@ -278,7 +279,36 @@ Substituting $\dot{R}_p / R_p = \zeta_{\text{ad}} (\dot{M}_p / M_p)$ and $\dot{R
 \begin{equation}
 \frac{\mathrm{d} \mu_{\text{Roche}}}{\mathrm{d}t} = \mu_{\text{Roche}} \left[ \left(\zeta_{\text{ad}} - \frac{1}{3}\right) \left(\frac{\dot{M}_p}{M_p}\right) - \frac{\dot{a}}{a} \right]
 \end{equation}
-Defining $\zeta_{\text{RLOF}} \equiv \zeta_{\text{ad}} - 1/3$ and noting $\dot{a}_{\text{tide}} < 0$ gives Equation~(\ref{eq:stability_main}). For convective envelopes ($\zeta_{\text{ad}} < 1/3$), $\zeta_{\text{RLOF}} < 0$, making $\dot{\mu}_{\text{Roche}} > 0$ under mass loss ($\dot{M}_p < 0$), establishing positive-feedback instability.
+\subsection{E. Derivation of Roche-Modified 1D Hydrostatic Equilibrium} \label{app:roche_hydrostatic_derivation}
+In a corotating reference frame centered on a planet of mass $M_p$ orbiting a host star of mass $M_\star$ at semi-major axis $a$, the 3D Roche potential $\Phi_{\text{Roche}}(\mathbf{r})$ is given by:
+\begin{equation}
+\Phi_{\text{Roche}}(\mathbf{r}) = -\frac{G M_p}{|\mathbf{r}|} - \frac{G M_\star}{|\mathbf{a} - \mathbf{r}|} - \frac{1}{2} \Omega_{\text{orb}}^2 |\mathbf{r} - \mathbf{r}_{\text{cm}}|^2
+\end{equation}
+where $\mathbf{r}_{\text{cm}}$ is the system center of mass and $\Omega_{\text{orb}} = \sqrt{G(M_\star + M_p)/a^3}$ is the orbital angular velocity.
+
+The net effective gravitational acceleration vector is $\mathbf{g}_{\text{eff}}(\mathbf{r}) = -\nabla \Phi_{\text{Roche}}(\mathbf{r})$. At the inner Lagrange point $L_1$ ($\mathbf{r} = \mathbf{r}_{L1}$), planetary self-gravity is exactly balanced by stellar tidal attraction and centrifugal acceleration:
+\begin{equation}
+\mathbf{g}_{\text{eff}}(L_1) = -\frac{G M_p}{r_{L1}^2} + \frac{G M_\star}{(a - r_{L1})^2} + \Omega_{\text{orb}}^2 (r_{\text{cm}} - r_{L1}) = 0
+\end{equation}
+To incorporate 3D Roche lobe distortion into a 1D spherically symmetric planet model of volume-equivalent radius $r$, we average the magnitude of the effective acceleration $|\nabla \Phi_{\text{Roche}}|$ over the 3D equipotential surface of equivalent radius $r$. Following \citet{Kippenhahn1990} and \citet{Jackson2017}, the surface-averaged effective gravity $g_{\text{eff}}(r) \equiv \langle |\nabla \Phi_{\text{Roche}}| \rangle$ is:
+\begin{equation}
+g_{\text{eff}}(r) = g_{\text{iso}}(r) \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
+\end{equation}
+where $g_{\text{iso}}(r) = G m(r) / r^2$ is the standard isolated spherical Newtonian gravity, and $R_{\text{Roche}}$ is Eggleton's volume-equivalent Roche lobe radius (Equation~\ref{app:roche}).
+
+Substituting $g_{\text{eff}}(r)$ into 1D momentum conservation $\mathrm{d}P/\mathrm{d}r = -\rho(r) g_{\text{eff}}(r)$ yields the Roche-modified hydrostatic equilibrium equation:
+\begin{equation}
+\frac{\mathrm{d}P}{\mathrm{d}r} = -\rho(r) \frac{G m(r)}{r^2} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
+\end{equation}
+In mass coordinates $m$ ($\mathrm{d}m = 4\pi r^2 \rho \, \mathrm{d}r$), the hydrostatic pressure gradient and adiabatic temperature gradient become:
+\begin{equation}
+\frac{\mathrm{d}P}{\mathrm{d}m} = -\frac{G m}{4\pi r^4} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right], \quad \frac{\mathrm{d}T}{\mathrm{d}m} = -\frac{G m T \nabla_{\text{ad}}}{4\pi r^4 P} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
+\end{equation}
+This formulation has two crucial physical properties:
+\begin{enumerate}
+    \item \textbf{Roche Boundary Limiting Behavior}: As $r \to R_{\text{Roche}}$, $g_{\text{eff}} \to 0$ and $\mathrm{d}P/\mathrm{d}r \to 0$ smoothly, causing the atmospheric scale height $H = k_B T / (\mu_m m_H g_{\text{eff}})$ to diverge and reproducing tidal inflation near Roche overfilling.
+    \item \textbf{Isolated Limit}: For isolated planets ($a \to \infty \implies R_{\text{Roche}} \to \infty$), $(r/R_{\text{Roche}})^3 \to 0$, recovering standard 1D hydrostatic equilibrium ($\mathrm{d}P/\mathrm{d}r = -G m \rho / r^2$).
+\end{enumerate}
 
 \begin{thebibliography}{99}
 \bibitem[Chabrier et al.(2019)]{Chabrier2019} Chabrier, G., et al. 2019, \textit{ApJ}, 872, 51
@@ -289,6 +319,7 @@ Defining $\zeta_{\text{RLOF}} \equiv \zeta_{\text{ad}} - 1/3$ and noting $\dot{a
 \bibitem[Guillot(2010)]{Guillot2010} Guillot, T. 2010, \textit{A\&A}, 520, A27
 \bibitem[Hut(1981)]{Hut1981} Hut, P. 1981, \textit{A\&A}, 99, 126
 \bibitem[Jackson et al.(2017)]{Jackson2017} Jackson, B., et al. 2017, \textit{AJ}, 154, 137
+\bibitem[Kippenhahn \& Weigert(1990)]{Kippenhahn1990} Kippenhahn, R., \& Weigert, A. 1990, \textit{Stellar Structure and Evolution} (Springer-Verlag)
 \bibitem[Leconte et al.(2010)]{Leconte2010} Leconte, J., et al. 2010, \textit{A\&A}, 516, A64
 \bibitem[Li et al.(2010)]{Li2010} Li, S.-L., et al. 2010, \textit{Nature}, 463, 1054
 \bibitem[Saumon et al.(1995)]{Saumon1995} Saumon, D., et al. 1995, \textit{ApJS}, 99, 713

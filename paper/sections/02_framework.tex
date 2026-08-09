@@ -1,11 +1,11 @@
 \section{Physical \& Mathematical Framework}
 
 \subsection{1D Hydrostatic Interior Structure}
-Assuming spherical symmetry and instantaneous convective mixing along an envelope adiabat $S_{\mathrm{env}}$, the 1D hydrostatic equilibrium equations governing radial radius $r$, pressure $P$, and temperature $T$ with respect to enclosed mass $m$ are:
+Assuming spherical symmetry and instantaneous convective mixing along an envelope adiabat $S_{\mathrm{env}}$, the 1D Roche-modified hydrostatic equilibrium equations governing radial radius $r$, pressure $P$, and temperature $T$ with respect to enclosed mass $m$ are:
 \begin{equation}
-\frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}, \quad \frac{dP}{dm} = -\frac{G m}{4\pi r^4}, \quad \frac{dT}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P}
+\frac{dr}{dm} = \frac{1}{4\pi r^2 \rho}, \quad \frac{dP}{dm} = -\frac{G m}{4\pi r^4} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right], \quad \frac{dT}{dm} = -\frac{G m T \nabla_{\mathrm{ad}}}{4\pi r^4 P} \left[ 1 - \left(\frac{r}{R_{\text{Roche}}}\right)^3 \right]
 \end{equation}
-where $G = 6.6743 \times 10^{-11}\text{ m}^3\text{ kg}^{-1}\text{ s}^{-2}$ is the gravitational constant, $\rho$ is mass density [$\text{kg/m}^3$], and $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$ is the dimensionless adiabatic temperature gradient. A step-by-step derivation from first principles is provided in Appendix~\ref{sec:derivation_a1}.
+where $G = 6.6743 \times 10^{-11}\text{ m}^3\text{ kg}^{-1}\text{ s}^{-2}$ is the gravitational constant, $\rho$ is mass density [$\text{kg/m}^3$], $R_{\text{Roche}}$ is Eggleton's volume-equivalent Roche lobe radius, and $\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_S$ is the dimensionless adiabatic temperature gradient. As $r \to R_{\text{Roche}}$, effective gravity $g_{\text{eff}} \to 0$ smoothly at the Roche surface. A step-by-step derivation from first principles is provided in Appendix~\ref{sec:derivation_a1}.
 
 \subsection{Jupiter Core Modeling \& EOS Calibration}
 Giant planet heavy-element cores ($0 \le m \le M_c$) consist of dense rock/ice mixtures ($SiO_2, MgO, Fe, H_2O$) under ultra-high pressures ($P_c \approx 10 - 40\text{ Mbar}$).

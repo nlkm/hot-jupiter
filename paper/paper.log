@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  8 AUG 2026 22:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  9 AUG 2026 16:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -489,13 +489,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
 []\OT1/cmr/bx/n/14.4 Physical & Math-e-mat-i-cal
  []
 
+
+Overfull \hbox (153.01765pt too wide) detected at line 7
+[][][][] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ;  [] \OT1/cmr/m/n/10 = \OMS/cmsy
+/m/n/10 ^^@[] [] \OML/cmm/m/it/10 ;  [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[
+] []
+ []
+
 [2] [3]
 Overfull \hbox (19.07729pt too wide) detected at line 90
 []
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4229) has occurred while \output is active []
 
 
 Overfull \hbox (4.67348pt too wide) detected at line 109
@@ -765,27 +772,37 @@ Underfull \hbox (badness 3009) in paragraph at lines 20--21
  []
 
 ) (./sections/06_appendix.tex
-Underfull \hbox (badness 2005) in paragraph at lines 6--6
-[]\OT1/cmr/bx/n/12 Derivation A1: 1D Hy-dro-static
+Overfull \hbox (35.2679pt too wide) detected at line 11
+[][][]\OML/cmm/m/it/10 g[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 ) 
+= \OML/cmm/m/it/10 g[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 ) [] =
+ [] []
  []
 
 
-Overfull \hbox (47.79729pt too wide) detected at line 11
+Overfull \hbox (125.56595pt too wide) detected at line 15
 [][][]\OML/cmm/m/it/10 AP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 ) \
 OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 AP\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r \OT1
-/cmr/m/n/10 + \OML/cmm/m/it/10 dr\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ [] \OT1
-/cmr/m/n/10 = 0  =[]\OMS/cmsy/m/n/10 )  [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^
-^@[]
+/cmr/m/n/10 + \OML/cmm/m/it/10 dr\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cm
+m/m/it/10 ^^Z\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 )\OML/cmm/m/it/
+10 Adr g[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 ) = 0  =[]\OMS/cms
+y/m/n/10 )  [] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@\OML/cmm/m/it/10 ^^Z\OT1/c
+mr/m/n/10 (\OML/cmm/m/it/10 r\OT1/cmr/m/n/10 )[] []
+ []
+
+
+Overfull \hbox (20.54884pt too wide) detected at line 19
+[][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 r[][][] \OT1/cmr/m/n/10 = \OMS/cmsy
+/m/n/10 ^^@r[][] []
  []
 
 <figures/derivation_hydrostatic_geom.pdf, id=1587, 344.015pt x 354.6879pt>
 File: figures/derivation_hydrostatic_geom.pdf Graphic file (type pdf)
 <use figures/derivation_hydrostatic_geom.pdf>
 Package pdftex.def Info: figures/derivation_hydrostatic_geom.pdf  used on input
- line 19.
+ line 23.
 (pdftex.def)             Requested size: 203.62018pt x 209.94597pt.
 
-Underfull \hbox (badness 1845) in paragraph at lines 24--24
+Underfull \hbox (badness 1845) in paragraph at lines 28--28
 []\OT1/cmr/bx/n/12 Derivation A2: Isother-mal 3rd-
  []
 
@@ -793,91 +810,93 @@ Underfull \hbox (badness 1845) in paragraph at lines 24--24
 File: figures/derivation_core_strain_geom.pdf Graphic file (type pdf)
 <use figures/derivation_core_strain_geom.pdf>
 Package pdftex.def Info: figures/derivation_core_strain_geom.pdf  used on input
- line 38.
+ line 42.
 (pdftex.def)             Requested size: 203.62018pt x 108.31996pt.
 
-Underfull \hbox (badness 2443) in paragraph at lines 43--43
+Underfull \hbox (badness 2443) in paragraph at lines 47--47
 []\OT1/cmr/bx/n/12 Derivation A3: Non-Relativistic
  []
 
-<figures/derivation_fermi_sphere_geom.pdf, id=1589, 367.88383pt x 268.61089pt>
+[14 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
+in_geom.pdf>]
+<figures/derivation_fermi_sphere_geom.pdf, id=1755, 367.88383pt x 268.61089pt>
 File: figures/derivation_fermi_sphere_geom.pdf Graphic file (type pdf)
 <use figures/derivation_fermi_sphere_geom.pdf>
 Package pdftex.def Info: figures/derivation_fermi_sphere_geom.pdf  used on inpu
-t line 53.
+t line 57.
 (pdftex.def)             Requested size: 203.62018pt x 148.67503pt.
-[14 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
-in_geom.pdf>]
-Overfull \hbox (34.48024pt too wide) detected at line 63
+
+Overfull \hbox (34.48024pt too wide) detected at line 67
 [][][]\OML/cmm/m/it/10 T[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 ^^\\OT1/cmr/m/n/10 
 ) = []\OML/cmm/m/it/10 T[] [] \OT1/cmr/m/n/10 + []\OML/cmm/m/it/10 T[] []
  []
 
-<figures/derivation_radiative_slab_geom.pdf, id=1757, 417.12154pt x 246.35175pt
+<figures/derivation_radiative_slab_geom.pdf, id=1756, 417.12154pt x 246.35175pt
 >
 File: figures/derivation_radiative_slab_geom.pdf Graphic file (type pdf)
 <use figures/derivation_radiative_slab_geom.pdf>
 Package pdftex.def Info: figures/derivation_radiative_slab_geom.pdf  used on in
-put line 68.
+put line 72.
 (pdftex.def)             Requested size: 203.62018pt x 120.25856pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
+Underfull \hbox (badness 10000) in paragraph at lines 77--77
 []\OT1/cmr/bx/n/12 Derivation A5: Metallicity-
  []
 
-<figures/derivation_tidal_bulge_geom.pdf, id=1758, 480.57503pt x 143.91177pt>
+<figures/derivation_tidal_bulge_geom.pdf, id=1757, 480.57503pt x 143.91177pt>
 File: figures/derivation_tidal_bulge_geom.pdf Graphic file (type pdf)
 <use figures/derivation_tidal_bulge_geom.pdf>
 Package pdftex.def Info: figures/derivation_tidal_bulge_geom.pdf  used on input
- line 91.
+ line 95.
 (pdftex.def)             Requested size: 203.62018pt x 60.97612pt.
 
-Underfull \hbox (badness 3179) in paragraph at lines 115--115
+Underfull \hbox (badness 3179) in paragraph at lines 119--119
 []\OT1/cmr/bx/n/12 Derivation A9: Hy-dro-dy-namic
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 115.
+(hyperref)                removing `math shift' on input line 119.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 115.
+(hyperref)                removing `subscript' on input line 119.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 115.
+(hyperref)                removing `math shift' on input line 119.
 
-<figures/derivation_roche_lobe_geom.pdf, id=1759, 461.7307pt x 144.68498pt>
+[15 <./figures/derivation_fermi_sphere_geom.pdf> <./figures/derivation_radiativ
+e_slab_geom.pdf> <./figures/derivation_tidal_bulge_geom.pdf>]
+<figures/derivation_roche_lobe_geom.pdf, id=2020, 461.7307pt x 144.68498pt>
 File: figures/derivation_roche_lobe_geom.pdf Graphic file (type pdf)
 <use figures/derivation_roche_lobe_geom.pdf>
 Package pdftex.def Info: figures/derivation_roche_lobe_geom.pdf  used on input 
-line 125.
+line 129.
 (pdftex.def)             Requested size: 203.62018pt x 63.80508pt.
-[15 <./figures/derivation_fermi_sphere_geom.pdf> <./figures/derivation_radiativ
-e_slab_geom.pdf> <./figures/derivation_tidal_bulge_geom.pdf>]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 138.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 138.
+(hyperref)                removing `math shift' on input line 142.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 138.
+(hyperref)                removing `subscript' on input line 142.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 142.
 
 [16
 
  <./figures/derivation_roche_lobe_geom.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 155.
+(hyperref)                removing `math shift' on input line 159.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 155.
+(hyperref)                removing `math shift' on input line 159.
 
 (./sections/table_342_planets.tex [17
 
@@ -888,11 +907,11 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 895C21149B52935A7A81C3CEABFE7E76;18553.
+(rerunfilecheck)             Checksum: C865E219282C21E8E444ED4971A77C64;18631.
  ) 
 Here is how much of TeX's memory you used:
- 11041 strings out of 476182
- 173091 string characters out of 5795596
+ 11042 strings out of 476182
+ 173104 string characters out of 5795596
  2106975 words of memory out of 5000000
  32663 multiletter control sequences out of 15000+600000
  570348 words of font info for 83 fonts, out of 8000000 for 9000
@@ -924,10 +943,10 @@ y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (22 pages, 921493 bytes).
+Output written on paper.pdf (22 pages, 923458 bytes).
 PDF statistics:
- 2299 PDF objects out of 2487 (max. 8388607)
- 911 compressed objects within 10 object streams
- 198 named destinations out of 1000 (max. 500000)
+ 2301 PDF objects out of 2487 (max. 8388607)
+ 913 compressed objects within 10 object streams
+ 199 named destinations out of 1000 (max. 500000)
  563 words of extra memory for PDF output out of 10000 (max. 10000000)
 
