@@ -41,12 +41,13 @@ void rlof_integrate_trajectory_c(
     int num_pts,
     double* out_t_arr,
     double* out_a_arr,
+    double* out_e_arr,
     double* out_m_p_arr,
     double* out_r_p_arr,
     double* out_ff_arr,
     C_TrajectoryResult* out_result
 ) {
-    hot_jupiter::CoupledRLOFIntegrator integrator(m_p_init_jup, a_init_au, m_core_earth, m_star_sun);
+    hot_jupiter::CoupledRLOFIntegrator integrator(m_p_init_jup, a_init_au, m_core_earth, m_star_sun, 0.15);
     auto res = integrator.integrate(t_max_yr, num_pts);
 
     if (out_result) {
@@ -59,6 +60,7 @@ void rlof_integrate_trajectory_c(
     for (size_t i = 0; i < res.t_arr.size() && i < static_cast<size_t>(num_pts); ++i) {
         if (out_t_arr) out_t_arr[i] = res.t_arr[i];
         if (out_a_arr) out_a_arr[i] = res.a_arr[i];
+        if (out_e_arr) out_e_arr[i] = res.e_arr[i];
         if (out_m_p_arr) out_m_p_arr[i] = res.m_p_arr[i];
         if (out_r_p_arr) out_r_p_arr[i] = res.r_p_arr[i];
         if (out_ff_arr) out_ff_arr[i] = res.filling_factor_arr[i];

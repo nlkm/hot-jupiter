@@ -41,6 +41,7 @@ EXPORT_API void rlof_integrate_trajectory_c(
     int num_pts,
     double* out_t_arr,
     double* out_a_arr,
+    double* out_e_arr,
     double* out_m_p_arr,
     double* out_r_p_arr,
     double* out_ff_arr,

@@ -33,11 +33,11 @@ void test_c_api_evaluate_density() {
 }
 
 void test_c_api_rlof_integrate() {
-    double t_arr[100], a_arr[100], m_p_arr[100], r_p_arr[100], ff_arr[100];
+    double t_arr[100], a_arr[100], e_arr[100], m_p_arr[100], r_p_arr[100], ff_arr[100];
     C_TrajectoryResult res;
 
     rlof_integrate_trajectory_c(1.0, 0.035, 10.0, 1.0, 1.0e9, 100,
-                                t_arr, a_arr, m_p_arr, r_p_arr, ff_arr, &res);
+                                t_arr, a_arr, e_arr, m_p_arr, r_p_arr, ff_arr, &res);
 
     assert(res.outcome == 2);  // COOLING
     assert(res.final_m_remnant_earth > 0.0);

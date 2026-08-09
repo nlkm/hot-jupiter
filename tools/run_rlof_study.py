@@ -18,18 +18,20 @@ plt.switch_backend('Agg')
 
 def compute_coupled_trajectory(M_p_0: float,
                                a_0: float,
-                               e_0: float = 0.05,
+                               e_0: float = 0.15,
                                num_pts: int = 300):
     """
     Coupled trajectory calculation delegating to central CoupledRLOFIntegrator engine.
     """
     integrator = CoupledRLOFIntegrator(m_p_init_jup=M_p_0 / M_JUP,
-                                       a_init_au=a_0 / AU)
+                                       a_init_au=a_0 / AU,
+                                       e_init=e_0)
     res = integrator.integrate(t_max_yr=3.0e9, num_pts=num_pts)
     return {
         "t": res.t_arr / 1.0e6,
         "M_p": res.m_p_arr,
         "a": res.a_arr,
+        "e": res.e_arr,
         "R_p": res.r_p_arr,
         "R_roche": res.r_roche_arr * AU / R_JUP,
         "filling_factor": res.filling_factor_arr,
@@ -47,145 +49,178 @@ def main():
     res_stagnate = compute_coupled_trajectory(M_p_0=0.8 * M_JUP, a_0=0.019 * AU)
     res_cool = compute_coupled_trajectory(M_p_0=1.0 * M_JUP, a_0=0.030 * AU)
 
-    # --- Render Figure 1: Scenario 1 - Runaway Disruption (a, M_p, R_p) ---
+    # --- Render Figure 1: Scenario 1 - Runaway Disruption (a, e, M_p, R_p) ---
     print("--> Generating paper_rlof/figures/fig1_scenario1_disruption.png...")
-    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), dpi=300)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
 
     # 1. Semi-major axis
     axes[0].plot(res_disrupt["t"], res_disrupt["a"], 'r-', lw=2.5)
     axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
-                       fontsize=11,
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
+    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11, fontweight='bold')
     axes[0].grid(True, linestyle=":", alpha=0.45)
 
-    # 2. Planet Mass
-    axes[1].plot(res_disrupt["t"], res_disrupt["M_p"], 'r-', lw=2.5)
+    # 2. Eccentricity
+    axes[1].plot(res_disrupt["t"], res_disrupt["e"], 'r-', lw=2.5)
     axes[1].set_xlim(0.0, 3000.0)
-    axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
-                       fontsize=11,
-                       fontweight='bold')
-    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[1].set_title('Envelope Mass Loss $M_p(t)$',
-                      fontsize=11.5,
+    axes[1].set_ylim(0.0, 0.18)
+    axes[1].set_ylabel('Eccentricity $e$', fontsize=10.5, fontweight='bold')
+    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[1].set_title('Tidal Circularization $e(t)$',
+                      fontsize=11,
                       fontweight='bold')
     axes[1].grid(True, linestyle=":", alpha=0.45)
 
-    # 3. Planet Radius
-    axes[2].plot(res_disrupt["t"], res_disrupt["R_p"], 'r-', lw=2.5)
+    # 3. Planet Mass
+    axes[2].plot(res_disrupt["t"], res_disrupt["M_p"], 'r-', lw=2.5)
     axes[2].set_xlim(0.0, 3000.0)
-    axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
-                       fontsize=11,
+    axes[2].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[2].set_title('Radius Evolution $R_p(t)$',
-                      fontsize=11.5,
+    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[2].set_title('Envelope Mass Loss $M_p(t)$',
+                      fontsize=11,
                       fontweight='bold')
     axes[2].grid(True, linestyle=":", alpha=0.45)
 
+    # 4. Planet Radius
+    axes[3].plot(res_disrupt["t"], res_disrupt["R_p"], 'r-', lw=2.5)
+    axes[3].set_xlim(0.0, 3000.0)
+    axes[3].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[3].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[3].set_title('Radius Evolution $R_p(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[3].grid(True, linestyle=":", alpha=0.45)
+
     fig.suptitle(
-        'Scenario 1: Runaway Tidal Disruption ($0.6\\,M_{\\mathrm{Jup}}, 0.016\\,\\mathrm{AU}$)',
-        fontsize=13,
+        'Scenario 1: Runaway Tidal Disruption ($0.6\\,M_{\\mathrm{Jup}}, 0.016\\,\\mathrm{AU}, e_0=0.15$)',
+        fontsize=12.5,
         fontweight='bold',
-        y=1.02)
+        y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig1_scenario1_disruption.png"),
                 dpi=300,
                 bbox_inches='tight')
     plt.close()
 
-    # --- Render Figure 2: Scenario 2 - Stagnated Survival (a, M_p, R_p) ---
+    # --- Render Figure 2: Scenario 2 - Stagnated Survival (a, e, M_p, R_p) ---
     print("--> Generating paper_rlof/figures/fig2_scenario2_stagnation.png...")
-    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), dpi=300)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
 
     # 1. Semi-major axis
     axes[0].plot(res_stagnate["t"], res_stagnate["a"], 'b--', lw=2.5)
     axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
-                       fontsize=11,
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
+    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11, fontweight='bold')
     axes[0].grid(True, linestyle=":", alpha=0.45)
 
-    # 2. Planet Mass
-    axes[1].plot(res_stagnate["t"], res_stagnate["M_p"], 'b--', lw=2.5)
+    # 2. Eccentricity
+    axes[1].plot(res_stagnate["t"], res_stagnate["e"], 'b--', lw=2.5)
     axes[1].set_xlim(0.0, 3000.0)
-    axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
-                       fontsize=11,
-                       fontweight='bold')
-    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[1].set_title('Envelope Mass Loss $M_p(t)$',
-                      fontsize=11.5,
+    axes[1].set_ylim(0.0, 0.18)
+    axes[1].set_ylabel('Eccentricity $e$', fontsize=10.5, fontweight='bold')
+    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[1].set_title('Tidal Circularization $e(t)$',
+                      fontsize=11,
                       fontweight='bold')
     axes[1].grid(True, linestyle=":", alpha=0.45)
 
-    # 3. Planet Radius
-    axes[2].plot(res_stagnate["t"], res_stagnate["R_p"], 'b--', lw=2.5)
+    # 3. Planet Mass
+    axes[2].plot(res_stagnate["t"], res_stagnate["M_p"], 'b--', lw=2.5)
     axes[2].set_xlim(0.0, 3000.0)
-    axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
-                       fontsize=11,
+    axes[2].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[2].set_title('Radius Evolution $R_p(t)$',
-                      fontsize=11.5,
+    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[2].set_title('Envelope Mass Loss $M_p(t)$',
+                      fontsize=11,
                       fontweight='bold')
     axes[2].grid(True, linestyle=":", alpha=0.45)
 
+    # 4. Planet Radius
+    axes[3].plot(res_stagnate["t"], res_stagnate["R_p"], 'b--', lw=2.5)
+    axes[3].set_xlim(0.0, 3000.0)
+    axes[3].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[3].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[3].set_title('Radius Evolution $R_p(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[3].grid(True, linestyle=":", alpha=0.45)
+
     fig.suptitle(
-        'Scenario 2: Stagnated RLOF Survival ($0.8\\,M_{\\mathrm{Jup}}, 0.019\\,\\mathrm{AU}$)',
-        fontsize=13,
+        'Scenario 2: Stagnated RLOF Survival ($0.8\\,M_{\\mathrm{Jup}}, 0.019\\,\\mathrm{AU}, e_0=0.15$)',
+        fontsize=12.5,
         fontweight='bold',
-        y=1.02)
+        y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig2_scenario2_stagnation.png"),
                 dpi=300,
                 bbox_inches='tight')
     plt.close()
 
-    # --- Render Figure 3: Scenario 3 - Non-Overflow Cooling (a, M_p, R_p) ---
+    # --- Render Figure 3: Scenario 3 - Non-Overflow Cooling (a, e, M_p, R_p) ---
     print("--> Generating paper_rlof/figures/fig3_scenario3_cooling.png...")
-    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2), dpi=300)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
 
     # 1. Semi-major axis
     axes[0].plot(res_cool["t"], res_cool["a"], 'g-.', lw=2.5)
     axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
-                       fontsize=11,
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
+    axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[0].set_title('Orbital Decay $a(t)$', fontsize=11, fontweight='bold')
     axes[0].grid(True, linestyle=":", alpha=0.45)
 
-    # 2. Planet Mass
-    axes[1].plot(res_cool["t"], res_cool["M_p"], 'g-.', lw=2.5)
+    # 2. Eccentricity
+    axes[1].plot(res_cool["t"], res_cool["e"], 'g-.', lw=2.5)
     axes[1].set_xlim(0.0, 3000.0)
-    axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
-                       fontsize=11,
-                       fontweight='bold')
-    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[1].set_title('Planet Mass $M_p(t)$', fontsize=11.5, fontweight='bold')
+    axes[1].set_ylim(0.0, 0.18)
+    axes[1].set_ylabel('Eccentricity $e$', fontsize=10.5, fontweight='bold')
+    axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[1].set_title('Tidal Circularization $e(t)$',
+                      fontsize=11,
+                      fontweight='bold')
     axes[1].grid(True, linestyle=":", alpha=0.45)
 
-    # 3. Planet Radius
-    axes[2].plot(res_cool["t"], res_cool["R_p"], 'g-.', lw=2.5)
+    # 3. Planet Mass
+    axes[2].plot(res_cool["t"], res_cool["M_p"], 'g-.', lw=2.5)
     axes[2].set_xlim(0.0, 3000.0)
-    axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
-                       fontsize=11,
+    axes[2].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
                        fontweight='bold')
-    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
-    axes[2].set_title('Radiative Cooling Radius $R_p(t)$',
-                      fontsize=11.5,
-                      fontweight='bold')
+    axes[2].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[2].set_title('Planet Mass $M_p(t)$', fontsize=11, fontweight='bold')
     axes[2].grid(True, linestyle=":", alpha=0.45)
 
+    # 4. Planet Radius
+    axes[3].plot(res_cool["t"], res_cool["R_p"], 'g-.', lw=2.5)
+    axes[3].set_xlim(0.0, 3000.0)
+    axes[3].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
+                       fontsize=10.5,
+                       fontweight='bold')
+    axes[3].set_xlabel('System Age $t$ [Myr]', fontsize=10.5, fontweight='bold')
+    axes[3].set_title('Radiative Cooling Radius $R_p(t)$',
+                      fontsize=11,
+                      fontweight='bold')
+    axes[3].grid(True, linestyle=":", alpha=0.45)
+
     fig.suptitle(
-        'Scenario 3: Non-Overflow Radiative Cooling ($1.0\\,M_{\\mathrm{Jup}}, 0.030\\,\\mathrm{AU}$)',
-        fontsize=13,
+        'Scenario 3: Non-Overflow Radiative Cooling ($1.0\\,M_{\\mathrm{Jup}}, 0.030\\,\\mathrm{AU}, e_0=0.15$)',
+        fontsize=12.5,
         fontweight='bold',
-        y=1.02)
+        y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig3_scenario3_cooling.png"),
                 dpi=300,

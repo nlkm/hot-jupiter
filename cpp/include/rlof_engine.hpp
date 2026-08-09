@@ -18,6 +18,7 @@ enum class EvolutionOutcome {
 struct TrajectoryResult {
   std::vector<double> t_arr;
   std::vector<double> a_arr;
+  std::vector<double> e_arr;
   std::vector<double> m_p_arr;
   std::vector<double> m_env_arr;
   std::vector<double> m_core_arr;
@@ -33,10 +34,13 @@ class CoupledRLOFIntegrator {
  public:
   double m_p_init_jup;
   double a_init_au;
+  double e_init;
   double m_core_earth;
   double m_star_sun;
   double q_star_prime;
   double k2_star;
+  double q_planet_prime;
+  double k2_planet;
   double eta_rlof;
   double beta_angular_momentum;
 
@@ -44,16 +48,22 @@ class CoupledRLOFIntegrator {
                         double a_init_au = 0.02,
                         double m_core_earth = 10.0,
                         double m_star_sun = 1.0,
+                        double e_init = 0.15,
                         double q_star_prime = 1.5e5,
                         double k2_star = 0.03,
+                        double q_planet_prime = 1.0e5,
+                        double k2_planet = 0.38,
                         double eta_rlof = 4.0,
                         double beta_angular_momentum = 0.5)
       : m_p_init_jup(m_p_init_jup),
         a_init_au(a_init_au),
         m_core_earth(m_core_earth),
         m_star_sun(m_star_sun),
+        e_init(e_init),
         q_star_prime(q_star_prime),
         k2_star(k2_star),
+        q_planet_prime(q_planet_prime),
+        k2_planet(k2_planet),
         eta_rlof(eta_rlof),
         beta_angular_momentum(beta_angular_momentum) {}
 
@@ -70,6 +80,7 @@ class CoupledRLOFIntegrator {
     TrajectoryResult res;
     res.t_arr.resize(num_pts);
     res.a_arr.resize(num_pts);
+    res.e_arr.resize(num_pts);
     res.m_p_arr.resize(num_pts);
     res.m_env_arr.resize(num_pts);
     res.m_core_arr.resize(num_pts, m_core_earth);
@@ -82,6 +93,7 @@ class CoupledRLOFIntegrator {
     double m_env_kg = m_env_init_kg;
     double m_total_kg = m_core_kg + m_env_kg;
     double a_curr = a_init_au * AU;
+    double e_curr = e_init;
     double log_t_min = std::log10(1.0e6);
     double log_t_max = std::log10(t_max_yr);
     double dlog_t = (log_t_max - log_t_min) / (num_pts - 1);
@@ -140,6 +152,14 @@ class CoupledRLOFIntegrator {
                 std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
                 (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sec;
 
+      double de_dt_p = 10.5 * (k2_planet / q_planet_prime) * n_orb *
+                       ((m_star_sun * M_SUN) / std::max(1.0e-10, m_total_kg)) *
+                       std::pow(r_p_curr / std::max(1.0e6, a_curr), 5);
+      double de_dt_star = 4.5 * (k2_star / q_star_prime) * n_orb *
+                          (m_total_kg / (m_star_sun * M_SUN)) *
+                          std::pow(R_SUN / std::max(1.0e6, a_curr), 5);
+      e_curr = e_curr * std::exp(-(de_dt_p + de_dt_star) * dt_sec);
+
       if (a_curr <= 0.008 * AU || m_total_kg <= 0.0) {
         engulfed = true;
         break;
@@ -150,6 +170,7 @@ class CoupledRLOFIntegrator {
 
       res.t_arr[i] = t_yr;
       res.a_arr[i] = a_curr / AU;
+      res.e_arr[i] = e_curr;
       res.m_p_arr[i] = m_total_kg / M_JUP;
       res.m_env_arr[i] = m_env_kg / M_JUP;
       res.r_p_arr[i] = r_p_curr / R_JUP;
@@ -158,13 +179,17 @@ class CoupledRLOFIntegrator {
       valid_pts = i + 1;
     }
 
-    res.t_arr.resize(valid_pts);
-    res.a_arr.resize(valid_pts);
-    res.m_p_arr.resize(valid_pts);
-    res.m_env_arr.resize(valid_pts);
-    res.r_p_arr.resize(valid_pts);
-    res.r_roche_arr.resize(valid_pts);
-    res.filling_factor_arr.resize(valid_pts);
+    if (valid_pts < static_cast<size_t>(num_pts)) {
+      res.t_arr.resize(valid_pts);
+      res.a_arr.resize(valid_pts);
+      res.e_arr.resize(valid_pts);
+      res.m_p_arr.resize(valid_pts);
+      res.m_env_arr.resize(valid_pts);
+      res.m_core_arr.resize(valid_pts);
+      res.r_p_arr.resize(valid_pts);
+      res.r_roche_arr.resize(valid_pts);
+      res.filling_factor_arr.resize(valid_pts);
+    }
 
     if (disrupted || engulfed || m_total_kg <= 0.0) {
       res.outcome = EvolutionOutcome::DISRUPTED;

@@ -35,9 +35,9 @@ def _find_lib() -> str | None:
     workspace_root = os.path.abspath(os.path.join(package_dir, ".."))
 
     possible_paths = [
+        os.path.join(workspace_root, "libhot_jupiter_cpp.so"),
         os.path.join(workspace_root, "bazel-bin", "libhot_jupiter_cpp.so"),
         os.path.join(workspace_root, "build", "libhot_jupiter_cpp.so"),
-        os.path.join(workspace_root, "libhot_jupiter_cpp.so"),
         "libhot_jupiter_cpp.so",
     ]
     for path in possible_paths:
@@ -66,6 +66,7 @@ if _lib_path:
         _cpp_lib.rlof_integrate_trajectory_c.argtypes = [
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double,
             ctypes.c_double, ctypes.c_int,
+            ctypes.POINTER(ctypes.c_double),
             ctypes.POINTER(ctypes.c_double),
             ctypes.POINTER(ctypes.c_double),
             ctypes.POINTER(ctypes.c_double),
@@ -141,6 +142,7 @@ def rlof_integrate_cpp(m_p_init_jup: float = 1.0,
 
     t_arr = (ctypes.c_double * num_pts)()
     a_arr = (ctypes.c_double * num_pts)()
+    e_arr = (ctypes.c_double * num_pts)()
     m_p_arr = (ctypes.c_double * num_pts)()
     r_p_arr = (ctypes.c_double * num_pts)()
     ff_arr = (ctypes.c_double * num_pts)()
@@ -148,12 +150,13 @@ def rlof_integrate_cpp(m_p_init_jup: float = 1.0,
 
     _cpp_lib.rlof_integrate_trajectory_c(m_p_init_jup, a_init_au, m_core_earth,
                                          m_star_sun, t_max_yr, num_pts, t_arr,
-                                         a_arr, m_p_arr, r_p_arr, ff_arr,
+                                         a_arr, e_arr, m_p_arr, r_p_arr, ff_arr,
                                          ctypes.byref(res))
 
     data = {
         "t": [t_arr[i] for i in range(res.num_pts_returned)],
         "a": [a_arr[i] for i in range(res.num_pts_returned)],
+        "e": [e_arr[i] for i in range(res.num_pts_returned)],
         "M_p": [m_p_arr[i] for i in range(res.num_pts_returned)],
         "R_p": [r_p_arr[i] for i in range(res.num_pts_returned)],
         "filling_factor": [ff_arr[i] for i in range(res.num_pts_returned)],
