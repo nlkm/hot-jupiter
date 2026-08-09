@@ -145,7 +145,6 @@ class CoupledRLOFIntegrator:
                 dt_yr = t_arr[0]
             else:
                 dt_yr = t_arr[idx] - t_arr[idx - 1]
-            dt_sec = dt_yr * 3.154e7
             t_gyr = t_arr[idx] / 1.0e9
 
             r_core = 1.0 * R_EARTH * ((self.m_core_earth / 1.0)**0.27)
@@ -173,53 +172,68 @@ class CoupledRLOFIntegrator:
                 m_env_kg = 0.0
                 break
 
-            # Hydrodynamic RLOF Mass Loss with Adaptive Sub-Stepping
-            if ff >= 0.95 and m_env_kg > 0.0:
-                m_dot_0 = 1.0e-7 * M_JUP  # kg/yr
-                m_dot = m_dot_0 * np.exp(self.eta_rlof * (ff - 1.0))
-                est_loss = m_dot * dt_yr
+            # Adaptive sub-stepping for smooth, artifact-free tidal decay and RLOF mass loss
+            n_orb_init = np.sqrt(G * (self.m_star_sun * M_SUN) /
+                                 max(1.0e6, a_curr**3))
+            da_dt_tide = (9.0 * (self.k2_star / self.q_star_prime) *
+                          n_orb_init * f_a_e *
+                          ((R_SUN / max(1.0e6, a_curr))**5) *
+                          (m_total_kg /
+                           (self.m_star_sun * M_SUN)) * a_curr * 3.154e7)
 
-                n_sub = max(1, int(np.ceil(est_loss / (0.0005 * M_JUP))),
-                            int(dt_yr / 1000.0))
-                n_sub = min(n_sub, 100000)
-                dt_sub_yr = dt_yr / n_sub
-
-                for _ in range(n_sub):
-                    if m_env_kg <= 0.0:
-                        break
-                    r_roche_sub = self.compute_roche_lobe_radius(
-                        a_curr, m_total_kg) * max(0.01, 1.0 - e_curr)
-                    ff_sub = r_p_curr / r_roche_sub if r_roche_sub > 0 else 0.0
-                    if ff_sub < 0.95:
-                        break
-                    m_dot_sub = m_dot_0 * np.exp(self.eta_rlof * (ff_sub - 1.0))
-                    loss_sub = min(m_env_kg, m_dot_sub * dt_sub_yr)
-
-                    m_env_kg -= loss_sub
-                    m_total_kg = m_core_kg + m_env_kg
-
-                    da_rlof_sub = -2.0 * a_curr * (-loss_sub / m_total_kg) * (
-                        1.0 - self.beta_angular_momentum)
-                    a_curr += da_rlof_sub
-
-            # Stellar Tidal Orbital Decay da/dt |_tide
-            n_orb = np.sqrt(G * (self.m_star_sun * M_SUN) /
-                            max(1.0e6, a_curr**3))
-            da_tide = (-9.0 * (self.k2_star / self.q_star_prime) * n_orb *
-                       f_a_e * ((R_SUN / max(1.0e6, a_curr))**5) *
-                       (m_total_kg /
-                        (self.m_star_sun * M_SUN)) * a_curr * dt_sec)
-            a_curr += da_tide
-
-            # Tidal Eccentricity Circularization de/dt (Hut 1981)
-            de_dt_p = (10.5 * (self.k2_planet / self.q_planet_prime) * n_orb *
-                       f_e_e *
+            de_dt_p = (10.5 * (self.k2_planet / self.q_planet_prime) *
+                       n_orb_init * f_e_e *
                        ((self.m_star_sun * M_SUN) / max(1.0e-10, m_total_kg)) *
                        ((r_p_curr / max(1.0e6, a_curr))**5))
-            de_dt_star = (4.5 * (self.k2_star / self.q_star_prime) * n_orb *
-                          f_e_e * (m_total_kg / (self.m_star_sun * M_SUN)) *
+            de_dt_star = (4.5 * (self.k2_star / self.q_star_prime) *
+                          n_orb_init * f_e_e * (m_total_kg /
+                                                (self.m_star_sun * M_SUN)) *
                           ((R_SUN / max(1.0e6, a_curr))**5))
-            e_curr = e_curr * np.exp(-(de_dt_p + de_dt_star) * dt_sec)
+            de_dt_total = (de_dt_p + de_dt_star) * 3.154e7
+
+            m_dot_est = (1.0e-7 * M_JUP *
+                         np.exp(self.eta_rlof *
+                                (ff - 1.0))) if ff >= 0.95 else 0.0
+            char_time_rlof = (0.05 * m_total_kg /
+                              m_dot_est) if m_dot_est > 1e-30 else 1e9
+            char_time_a = (0.05 * a_curr /
+                           da_dt_tide) if da_dt_tide > 1e-15 else 1e9
+            dt_target_yr = min(dt_yr, char_time_a, char_time_rlof, 100000.0)
+            n_sub = max(1, int(np.ceil(dt_yr / dt_target_yr)))
+            dt_sub_yr = dt_yr / n_sub
+            dt_sub_sec = dt_sub_yr * 3.154e7
+
+            for _ in range(n_sub):
+                if a_curr <= 0.008 * AU or m_total_kg <= 0:
+                    engulfed = True
+                    break
+
+                if ff >= 0.95 and m_env_kg > 0.0:
+                    r_env_sub = 1.25 * R_JUP * (
+                        (m_env_kg / M_JUP)**0.15) * np.exp(-0.08 * t_gyr)
+                    r_p_sub = max(r_core, r_env_sub)
+                    r_roche_sub = self.compute_roche_lobe_radius(
+                        a_curr, m_total_kg) * max(0.01, 1.0 - e_curr)
+                    ff_sub = r_p_sub / r_roche_sub if r_roche_sub > 0 else 0.0
+                    if ff_sub >= 0.95:
+                        m_dot_0 = 1.0e-7 * M_JUP
+                        m_dot_sub = m_dot_0 * np.exp(self.eta_rlof *
+                                                     (ff_sub - 1.0))
+                        loss_sub = min(m_env_kg, m_dot_sub * dt_sub_yr)
+                        m_env_kg -= loss_sub
+                        m_total_kg = m_core_kg + m_env_kg
+                        a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (
+                            1.0 - self.beta_angular_momentum)
+
+                n_orb_sub = np.sqrt(G * (self.m_star_sun * M_SUN) /
+                                    max(1.0e6, a_curr**3))
+                da_sub = (-9.0 * (self.k2_star / self.q_star_prime) *
+                          n_orb_sub * f_a_e *
+                          ((R_SUN / max(1.0e6, a_curr))**5) *
+                          (m_total_kg /
+                           (self.m_star_sun * M_SUN)) * a_curr * dt_sub_sec)
+                a_curr = max(0.0, a_curr + da_sub)
+                e_curr = e_curr * np.exp(-de_dt_total * dt_sub_yr)
 
             if a_curr <= 0.008 * AU or m_total_kg <= 0:
                 engulfed = True
@@ -243,13 +257,14 @@ class CoupledRLOFIntegrator:
         r_roche_arr = r_roche_arr[:valid_pts]
         ff_arr = ff_arr[:valid_pts]
 
-        # Determine outcome classification
-        if disrupted or engulfed or m_total_kg <= 0:
+        # Determine outcome classification physically
+        m_crit_jup = 0.50 * ((self.a_init_au / 0.018)**3.0)
+
+        if (disrupted or engulfed or a_curr <= 0.008 * AU or m_total_kg <= 0.0):
             outcome = EvolutionOutcome.DISRUPTED
             final_m_rem = 0.0
             z_bulk = 0.0
         elif max_ff >= 0.95:
-            m_crit_jup = 0.50 * ((self.a_init_au / 0.018)**3.0)
             if self.m_p_init_jup < m_crit_jup:
                 outcome = EvolutionOutcome.DISRUPTED
                 final_m_rem = 0.0
@@ -257,11 +272,11 @@ class CoupledRLOFIntegrator:
             else:
                 outcome = EvolutionOutcome.STAGNATED
                 final_m_rem = m_total_kg / M_EARTH
-                z_bulk = m_core_kg / m_total_kg if m_total_kg > 0 else 1.0
+                z_bulk = (m_core_kg / m_total_kg) if m_total_kg > 0.0 else 1.0
         else:
             outcome = EvolutionOutcome.COOLING
             final_m_rem = m_total_kg / M_EARTH
-            z_bulk = m_core_kg / m_total_kg if m_total_kg > 0 else 0.0
+            z_bulk = (m_core_kg / m_total_kg) if m_total_kg > 0.0 else 0.0
 
         return TrajectoryResult(t_arr=t_arr,
                                 a_arr=a_arr,

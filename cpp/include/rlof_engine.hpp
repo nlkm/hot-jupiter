@@ -105,7 +105,6 @@ class CoupledRLOFIntegrator {
     for (int i = 0; i < num_pts; ++i) {
       double t_yr = std::pow(10.0, log_t_min + i * dlog_t);
       double dt_yr = (i == 0) ? t_yr : (t_yr - res.t_arr[i - 1]);
-      double dt_sec = dt_yr * 3.154e7;
       double t_gyr = t_yr / 1.0e9;
 
       double r_core = 1.0 * R_EARTH * std::pow(m_core_earth, 0.27);
@@ -131,39 +130,58 @@ class CoupledRLOFIntegrator {
         break;
       }
 
-      if (ff >= 0.95 && m_env_kg > 0.0) {
-        double m_dot_0 = 1.0e-7 * M_JUP;
-        int n_sub = std::max(1, std::min(100000, static_cast<int>(std::ceil(dt_yr / 1000.0))));
-        double dt_sub_yr = dt_yr / n_sub;
+      // Adaptive sub-stepping for smooth, artifact-free tidal decay and RLOF mass loss
+      double n_orb_init = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
+      double da_dt_tide = 9.0 * (k2_star / q_star_prime) * n_orb_init * f_a_e *
+                          std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
+                          (m_total_kg / (m_star_sun * M_SUN)) * a_curr * 3.154e7; // [m/yr]
 
-        for (int s = 0; s < n_sub; ++s) {
-          if (m_env_kg <= 0.0) break;
+      double de_dt_p = 10.5 * (k2_planet / q_planet_prime) * n_orb_init * f_e_e *
+                       ((m_star_sun * M_SUN) / std::max(1.0e-10, m_total_kg)) *
+                       std::pow(r_p_curr / std::max(1.0e6, a_curr), 5);
+      double de_dt_star = 4.5 * (k2_star / q_star_prime) * n_orb_init * f_e_e *
+                          (m_total_kg / (m_star_sun * M_SUN)) *
+                          std::pow(R_SUN / std::max(1.0e6, a_curr), 5);
+      double de_dt_total = (de_dt_p + de_dt_star) * 3.154e7; // [1/yr]
+
+      double m_dot_est = (ff >= 0.95) ? (1.0e-7 * M_JUP * std::exp(eta_rlof * (ff - 1.0))) : 0.0;
+      double char_time_rlof = (m_dot_est > 1e-30) ? (0.05 * m_total_kg / m_dot_est) : 1e9;
+      double char_time_a = (da_dt_tide > 1e-15) ? (0.05 * a_curr / da_dt_tide) : 1e9;
+      double dt_target_yr = std::min({dt_yr, char_time_a, char_time_rlof, 100000.0});
+      int n_sub = std::max(1, static_cast<int>(std::ceil(dt_yr / dt_target_yr)));
+      double dt_sub_yr = dt_yr / n_sub;
+      double dt_sub_sec = dt_sub_yr * 3.154e7;
+
+      for (int s = 0; s < n_sub; ++s) {
+        if (a_curr <= 0.008 * AU || m_total_kg <= 0.0) {
+          engulfed = true;
+          break;
+        }
+
+        // RLOF mass loss sub-step
+        if (ff >= 0.95 && m_env_kg > 0.0) {
           double r_env_sub = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
           double r_p_sub = std::max(r_core, r_env_sub);
           double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun) * std::max(0.01, 1.0 - e_curr);
           double ff_sub = (r_roche_sub > 0.0) ? (r_p_sub / r_roche_sub) : 0.0;
-          if (ff_sub < 0.95) break;
-
-          double m_dot_sub = m_dot_0 * std::exp(eta_rlof * (ff_sub - 1.0));
-          double loss_sub = std::min(m_env_kg, m_dot_sub * dt_sub_yr);
-          m_env_kg -= loss_sub;
-          m_total_kg = m_core_kg + m_env_kg;
-          a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
+          if (ff_sub >= 0.95) {
+            double m_dot_0 = 1.0e-7 * M_JUP; // kg / yr
+            double m_dot_sub = m_dot_0 * std::exp(eta_rlof * (ff_sub - 1.0));
+            double loss_sub = std::min(m_env_kg, m_dot_sub * dt_sub_yr);
+            m_env_kg -= loss_sub;
+            m_total_kg = m_core_kg + m_env_kg;
+            a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
+          }
         }
+
+        // Tidal decay sub-step
+        double n_orb_sub = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
+        double da_sub = -9.0 * (k2_star / q_star_prime) * n_orb_sub * f_a_e *
+                         std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
+                         (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sub_sec;
+        a_curr = std::max(0.0, a_curr + da_sub);
+        e_curr = e_curr * std::exp(-de_dt_total * dt_sub_yr);
       }
-
-      double n_orb = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
-      a_curr += -9.0 * (k2_star / q_star_prime) * n_orb * f_a_e *
-                std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
-                (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sec;
-
-      double de_dt_p = 10.5 * (k2_planet / q_planet_prime) * n_orb * f_e_e *
-                       ((m_star_sun * M_SUN) / std::max(1.0e-10, m_total_kg)) *
-                       std::pow(r_p_curr / std::max(1.0e6, a_curr), 5);
-      double de_dt_star = 4.5 * (k2_star / q_star_prime) * n_orb * f_e_e *
-                          (m_total_kg / (m_star_sun * M_SUN)) *
-                          std::pow(R_SUN / std::max(1.0e6, a_curr), 5);
-      e_curr = e_curr * std::exp(-(de_dt_p + de_dt_star) * dt_sec);
 
       if (a_curr <= 0.008 * AU || m_total_kg <= 0.0) {
         engulfed = true;
@@ -196,12 +214,13 @@ class CoupledRLOFIntegrator {
       res.filling_factor_arr.resize(valid_pts);
     }
 
-    if (disrupted || engulfed || m_total_kg <= 0.0) {
+    double m_crit_jup = 0.50 * std::pow(a_init_au / 0.018, 3.0);
+
+    if (disrupted || engulfed || a_curr <= 0.008 * AU || m_total_kg <= 0.0) {
       res.outcome = EvolutionOutcome::DISRUPTED;
       res.final_m_remnant_earth = 0.0;
       res.z_bulk = 0.0;
     } else if (max_ff >= 0.95) {
-      double m_crit_jup = 0.50 * std::pow(a_init_au / 0.018, 3.0);
       if (m_p_init_jup < m_crit_jup) {
         res.outcome = EvolutionOutcome::DISRUPTED;
         res.final_m_remnant_earth = 0.0;
