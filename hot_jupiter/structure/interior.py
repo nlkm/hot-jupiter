@@ -149,6 +149,8 @@ class InteriorSolver:
         X: float = 0.75,
         Y: float = 0.25,
         num_pts: int = 150,
+        a_au: float = 0.0,
+        m_star_sun: float = 1.0,
     ) -> PlanetStructure:
         """
         Solve 1D hydrostatic equilibrium for a planet given (M_p, M_c, S_env).
@@ -158,7 +160,7 @@ class InteriorSolver:
         try:
             from hot_jupiter.bindings import solve_interior_profile_detailed_cpp
             data, c_res = solve_interior_profile_detailed_cpp(
-                M_p, M_c, S_env, P_surf, num_pts)
+                M_p, M_c, S_env, P_surf, num_pts, a_au, m_star_sun)
             r_full = np.array(data["r"])[::-1]
             m_full = np.array(data["m"])[::-1]
             P_full = np.array(data["P"])[::-1]

@@ -52,7 +52,7 @@ void test_c_api_solve_interior_profile_detailed() {
     C_PlanetStructureResult res;
 
     solve_interior_profile_detailed_c(
-        1.0 * hot_jupiter::M_JUP, 10.0 * hot_jupiter::M_EARTH, 1.0e8, 1.0 * hot_jupiter::BAR, 300,
+        1.0 * hot_jupiter::M_JUP, 10.0 * hot_jupiter::M_EARTH, 1.0e8, 1.0 * hot_jupiter::BAR, 300, 0.0, 1.0,
         r, m, P, rho, T, nad, &res
     );
 

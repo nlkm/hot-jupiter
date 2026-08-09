@@ -66,6 +66,8 @@ EXPORT_API void solve_interior_profile_detailed_c(
     double S_env,
     double P_surf,
     int num_pts,
+    double a_au,
+    double m_star_sun,
     double* out_r,
     double* out_m,
     double* out_P,

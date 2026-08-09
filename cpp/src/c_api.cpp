@@ -97,6 +97,8 @@ void solve_interior_profile_detailed_c(
     double S_env,
     double P_surf,
     int num_pts,
+    double a_au,
+    double m_star_sun,
     double* out_r,
     double* out_m,
     double* out_P,
@@ -106,7 +108,7 @@ void solve_interior_profile_detailed_c(
     C_PlanetStructureResult* out_result
 ) {
     hot_jupiter::InteriorSolver solver;
-    hot_jupiter::PlanetStructure sys = solver.solve_structure(M_p_kg, M_c_kg, S_env, P_surf, num_pts);
+    hot_jupiter::PlanetStructure sys = solver.solve_structure(M_p_kg, M_c_kg, S_env, P_surf, num_pts, a_au, m_star_sun);
 
     if (out_result) {
         out_result->R_p = sys.R_p;

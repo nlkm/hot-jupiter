@@ -88,7 +88,7 @@ if _lib_path:
 
         _cpp_lib.solve_interior_profile_detailed_c.argtypes = [
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double,
-            ctypes.c_int,
+            ctypes.c_int, ctypes.c_double, ctypes.c_double,
             ctypes.POINTER(ctypes.c_double),
             ctypes.POINTER(ctypes.c_double),
             ctypes.POINTER(ctypes.c_double),
@@ -206,7 +206,9 @@ def solve_interior_profile_detailed_cpp(
         M_c_kg: float,
         S_env: float,
         P_surf: float = 1e5,
-        num_pts: int = 300) -> tuple[dict, C_PlanetStructureResult]:
+        num_pts: int = 300,
+        a_au: float = 0.0,
+        m_star_sun: float = 1.0) -> tuple[dict, C_PlanetStructureResult]:
     """Solve 1D hydrostatic detailed interior profile delegating directly to compiled C++ engine."""
     if _cpp_lib is None:
         raise RuntimeError(
@@ -221,9 +223,9 @@ def solve_interior_profile_detailed_cpp(
     res = C_PlanetStructureResult()
 
     _cpp_lib.solve_interior_profile_detailed_c(M_p_kg, M_c_kg, S_env, P_surf,
-                                               num_pts, r_arr, m_arr, P_arr,
-                                               rho_arr, T_arr, nad_arr,
-                                               ctypes.byref(res))
+                                               num_pts, a_au, m_star_sun, r_arr,
+                                               m_arr, P_arr, rho_arr, T_arr,
+                                               nad_arr, ctypes.byref(res))
 
     n = res.num_layers
     profile_data = {

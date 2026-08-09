@@ -32,10 +32,10 @@ public:
     HydrogenHeliumEOS envelope_eos;
     BirchMurnaghanCoreEOS core_eos;
 
-    PlanetStructure solve_structure(double M_p, double M_c, double S_env, double P_surf = 1.0 * BAR, int num_pts = 300);
+    PlanetStructure solve_structure(double M_p, double M_c, double S_env, double P_surf = 1.0 * BAR, int num_pts = 300, double a_au = 0.0, double m_star_sun = 1.0);
 
 private:
-    double mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf);
+    double mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf, double a_au = 0.0, double m_star_sun = 1.0);
 };
 
 } // namespace hot_jupiter
