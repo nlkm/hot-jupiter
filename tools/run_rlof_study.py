@@ -53,19 +53,17 @@ def main():
 
     # 1. Semi-major axis
     axes[0].plot(res_disrupt["t"], res_disrupt["a"], 'r-', lw=2.5)
-    axes[0].set_xscale('log')
-    axes[0].set_xlim(1.0, 3000.0)
+    axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
                        fontsize=11,
                        fontweight='bold')
     axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
     axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
-    axes[0].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[0].grid(True, linestyle=":", alpha=0.45)
 
     # 2. Planet Mass
     axes[1].plot(res_disrupt["t"], res_disrupt["M_p"], 'r-', lw=2.5)
-    axes[1].set_xscale('log')
-    axes[1].set_xlim(1.0, 3000.0)
+    axes[1].set_xlim(0.0, 3000.0)
     axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
@@ -73,12 +71,11 @@ def main():
     axes[1].set_title('Envelope Mass Loss $M_p(t)$',
                       fontsize=11.5,
                       fontweight='bold')
-    axes[1].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[1].grid(True, linestyle=":", alpha=0.45)
 
     # 3. Planet Radius
     axes[2].plot(res_disrupt["t"], res_disrupt["R_p"], 'r-', lw=2.5)
-    axes[2].set_xscale('log')
-    axes[2].set_xlim(1.0, 3000.0)
+    axes[2].set_xlim(0.0, 3000.0)
     axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
@@ -86,7 +83,7 @@ def main():
     axes[2].set_title('Radius Evolution $R_p(t)$',
                       fontsize=11.5,
                       fontweight='bold')
-    axes[2].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[2].grid(True, linestyle=":", alpha=0.45)
 
     fig.suptitle(
         'Scenario 1: Runaway Tidal Disruption ($0.6\\,M_{\\mathrm{Jup}}, 0.016\\,\\mathrm{AU}$)',
@@ -105,19 +102,17 @@ def main():
 
     # 1. Semi-major axis
     axes[0].plot(res_stagnate["t"], res_stagnate["a"], 'b--', lw=2.5)
-    axes[0].set_xscale('log')
-    axes[0].set_xlim(1.0, 3000.0)
+    axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
                        fontsize=11,
                        fontweight='bold')
     axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
     axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
-    axes[0].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[0].grid(True, linestyle=":", alpha=0.45)
 
     # 2. Planet Mass
     axes[1].plot(res_stagnate["t"], res_stagnate["M_p"], 'b--', lw=2.5)
-    axes[1].set_xscale('log')
-    axes[1].set_xlim(1.0, 3000.0)
+    axes[1].set_xlim(0.0, 3000.0)
     axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
@@ -125,12 +120,11 @@ def main():
     axes[1].set_title('Envelope Mass Loss $M_p(t)$',
                       fontsize=11.5,
                       fontweight='bold')
-    axes[1].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[1].grid(True, linestyle=":", alpha=0.45)
 
     # 3. Planet Radius
     axes[2].plot(res_stagnate["t"], res_stagnate["R_p"], 'b--', lw=2.5)
-    axes[2].set_xscale('log')
-    axes[2].set_xlim(1.0, 3000.0)
+    axes[2].set_xlim(0.0, 3000.0)
     axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
@@ -138,7 +132,7 @@ def main():
     axes[2].set_title('Radius Evolution $R_p(t)$',
                       fontsize=11.5,
                       fontweight='bold')
-    axes[2].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[2].grid(True, linestyle=":", alpha=0.45)
 
     fig.suptitle(
         'Scenario 2: Stagnated RLOF Survival ($0.8\\,M_{\\mathrm{Jup}}, 0.019\\,\\mathrm{AU}$)',
@@ -157,30 +151,27 @@ def main():
 
     # 1. Semi-major axis
     axes[0].plot(res_cool["t"], res_cool["a"], 'g-.', lw=2.5)
-    axes[0].set_xscale('log')
-    axes[0].set_xlim(1.0, 3000.0)
+    axes[0].set_xlim(0.0, 3000.0)
     axes[0].set_ylabel('Semi-Major Axis $a$ [AU]',
                        fontsize=11,
                        fontweight='bold')
     axes[0].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
     axes[0].set_title('Orbital Decay $a(t)$', fontsize=11.5, fontweight='bold')
-    axes[0].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[0].grid(True, linestyle=":", alpha=0.45)
 
     # 2. Planet Mass
     axes[1].plot(res_cool["t"], res_cool["M_p"], 'g-.', lw=2.5)
-    axes[1].set_xscale('log')
-    axes[1].set_xlim(1.0, 3000.0)
+    axes[1].set_xlim(0.0, 3000.0)
     axes[1].set_ylabel('Planet Mass $M_p$ [$M_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
     axes[1].set_xlabel('System Age $t$ [Myr]', fontsize=11, fontweight='bold')
     axes[1].set_title('Planet Mass $M_p(t)$', fontsize=11.5, fontweight='bold')
-    axes[1].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[1].grid(True, linestyle=":", alpha=0.45)
 
     # 3. Planet Radius
     axes[2].plot(res_cool["t"], res_cool["R_p"], 'g-.', lw=2.5)
-    axes[2].set_xscale('log')
-    axes[2].set_xlim(1.0, 3000.0)
+    axes[2].set_xlim(0.0, 3000.0)
     axes[2].set_ylabel('Planet Radius $R_p$ [$R_{\\mathrm{Jup}}$]',
                        fontsize=11,
                        fontweight='bold')
@@ -188,7 +179,7 @@ def main():
     axes[2].set_title('Radiative Cooling Radius $R_p(t)$',
                       fontsize=11.5,
                       fontweight='bold')
-    axes[2].grid(True, which="both", linestyle=":", alpha=0.45)
+    axes[2].grid(True, linestyle=":", alpha=0.45)
 
     fig.suptitle(
         'Scenario 3: Non-Overflow Radiative Cooling ($1.0\\,M_{\\mathrm{Jup}}, 0.030\\,\\mathrm{AU}$)',
@@ -241,21 +232,18 @@ def main():
              lw=2.8,
              label=r'Track 3: Non-Overflow Cooling ($1.0\,M_{\mathrm{J}}$)')
 
-    plt.xscale('log')
-    plt.xlim(1.0, 3000.0)
+    plt.xlim(0.0, 3000.0)
     plt.ylim(0.2, 1.35)
     plt.ylabel(
         r'Roche Lobe Filling Factor $\mu_{\mathrm{Roche}} = R_p / R_{\mathrm{Roche}}$',
         fontsize=11.5,
         fontweight='bold')
-    plt.xlabel('System Age $t$ [Myr] (Log Scale)',
-               fontsize=11.5,
-               fontweight='bold')
+    plt.xlabel('System Age $t$ [Myr]', fontsize=11.5, fontweight='bold')
     plt.title(
         r'Time Evolution of Roche Lobe Overflow ($\mu_{\mathrm{Roche}} \geq 1.0$)',
         fontsize=12,
         fontweight='bold')
-    plt.grid(True, which="both", linestyle=":", alpha=0.45)
+    plt.grid(True, linestyle=":", alpha=0.45)
     plt.legend(fontsize=8.5, loc='upper right', framealpha=0.95)
 
     plt.tight_layout()
