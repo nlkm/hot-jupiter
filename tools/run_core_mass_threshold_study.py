@@ -41,7 +41,7 @@ def simulate_core_survival(m_core_earth: float, m_env_init_jup: float,
 def main():
     print("=== Step 1: Running Core Mass Threshold Sweep ===")
 
-    m_core_grid = np.linspace(1.0, 25.0, 60)  # Core mass from 1 to 25 M_Earth
+    m_core_grid = np.linspace(1.0, 25.0, 250)  # Core mass from 1 to 25 M_Earth
     a_0_list = [0.015, 0.018, 0.022, 0.026]  # AU
 
     results = {}
@@ -59,7 +59,7 @@ def main():
 
     # --- Figure 6: Remnant Mass vs. Core Mass ---
     print("--> Generating paper_rlof/figures/fig6_core_mass_remnants.png...")
-    plt.figure(figsize=(7.5, 5.0), dpi=300)
+    plt.figure(figsize=(7.5, 5.0), dpi=400)
 
     colors = ['#d95f02', '#7570b3', '#1b9e77', '#e7298a']
 
@@ -108,19 +108,23 @@ def main():
     # --- Figure 7: Critical Core Mass Scaling Law M_core,crit(a) ---
     print(
         "--> Generating paper_rlof/figures/fig7_core_threshold_scaling.png...")
-    a_dense_grid = np.linspace(0.013, 0.030, 50)
+    a_dense_grid = np.linspace(0.013, 0.030, 250)
     m_core_crit_list = []
 
     for a_val in a_dense_grid:
-        # Find minimum m_core for survival
+        # Find minimum m_core for survival using binary search
+        low, high = 0.5, 25.0
         m_crit = 25.0
-        for m_c in np.linspace(0.5, 25.0, 100):
-            m_rem, _ = simulate_core_survival(m_core_earth=m_c,
+        for _ in range(12):  # 12 iterations gives precision of 0.005 M_Earth!
+            mid = (low + high) / 2.0
+            m_rem, _ = simulate_core_survival(m_core_earth=mid,
                                               m_env_init_jup=0.8,
                                               a_0_au=a_val)
             if m_rem > 0:
-                m_crit = m_c
-                break
+                m_crit = mid
+                high = mid
+            else:
+                low = mid
         m_core_crit_list.append(m_crit)
 
     m_core_crit_arr = np.array(m_core_crit_list)

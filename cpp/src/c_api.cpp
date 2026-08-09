@@ -67,6 +67,30 @@ void rlof_integrate_trajectory_c(
     }
 }
 
+void rlof_sweep_grid_c(
+    const double* m_grid,
+    int n_m,
+    const double* a_grid,
+    int n_a,
+    double m_core_earth,
+    double m_star_sun,
+    double t_max_yr,
+    int num_pts,
+    int* out_outcomes_matrix
+) {
+    if (!m_grid || !a_grid || !out_outcomes_matrix) return;
+    #pragma omp parallel for collapse(2) schedule(dynamic)
+    for (int i = 0; i < n_m; ++i) {
+        for (int j = 0; j < n_a; ++j) {
+            double mp_val = m_grid[i];
+            double a_val = a_grid[j];
+            hot_jupiter::CoupledRLOFIntegrator integrator(mp_val, a_val, m_core_earth, m_star_sun, 0.15);
+            auto res = integrator.integrate(t_max_yr, num_pts);
+            out_outcomes_matrix[i * n_a + j] = static_cast<int>(res.outcome);
+        }
+    }
+}
+
 void solve_interior_profile_detailed_c(
     double M_p_kg,
     double M_c_kg,

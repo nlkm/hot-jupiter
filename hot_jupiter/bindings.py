@@ -7,6 +7,8 @@ delegate to the C++ core with zero duplication.
 import ctypes
 import os
 
+import numpy as np
+
 
 class C_PlanetStructureResult(ctypes.Structure):
     _fields_ = [
@@ -75,6 +77,14 @@ if _lib_path:
             ctypes.POINTER(C_TrajectoryResult)
         ]
         _cpp_lib.rlof_integrate_trajectory_c.restype = None
+
+        _cpp_lib.rlof_sweep_grid_c.argtypes = [
+            ctypes.POINTER(ctypes.c_double), ctypes.c_int,
+            ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.c_double,
+            ctypes.c_double, ctypes.c_double, ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int)
+        ]
+        _cpp_lib.rlof_sweep_grid_c.restype = None
 
         _cpp_lib.solve_interior_profile_detailed_c.argtypes = [
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double,
@@ -162,6 +172,33 @@ def rlof_integrate_cpp(m_p_init_jup: float = 1.0,
         "filling_factor": [ff_arr[i] for i in range(res.num_pts_returned)],
     }
     return data, res
+
+
+def rlof_sweep_grid_cpp(m_grid: np.ndarray,
+                        a_grid: np.ndarray,
+                        m_core_earth: float = 10.0,
+                        m_star_sun: float = 1.0,
+                        t_max_yr: float = 3.0e9,
+                        num_pts: int = 200) -> np.ndarray:
+    """Perform high-resolution 2D grid sweep directly using native C++ parallel execution."""
+    if _cpp_lib is None:
+        raise RuntimeError(
+            "Compiled C++ library (libhot_jupiter_cpp.so) not found.")
+
+    n_m = len(m_grid)
+    n_a = len(a_grid)
+    m_c_arr = (ctypes.c_double * n_m)(*m_grid)
+    a_c_arr = (ctypes.c_double * n_a)(*a_grid)
+    out_matrix = (ctypes.c_int * (n_m * n_a))()
+
+    _cpp_lib.rlof_sweep_grid_c(m_c_arr, n_m, a_c_arr, n_a, m_core_earth,
+                               m_star_sun, t_max_yr, num_pts, out_matrix)
+
+    result = np.zeros((n_m, n_a), dtype=int)
+    for i in range(n_m):
+        for j in range(n_a):
+            result[i, j] = out_matrix[i * n_a + j]
+    return result
 
 
 def solve_interior_profile_detailed_cpp(

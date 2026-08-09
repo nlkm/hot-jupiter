@@ -48,6 +48,18 @@ EXPORT_API void rlof_integrate_trajectory_c(
     C_TrajectoryResult* out_result
 );
 
+EXPORT_API void rlof_sweep_grid_c(
+    const double* m_grid,
+    int n_m,
+    const double* a_grid,
+    int n_a,
+    double m_core_earth,
+    double m_star_sun,
+    double t_max_yr,
+    int num_pts,
+    int* out_outcomes_matrix
+);
+
 EXPORT_API void solve_interior_profile_detailed_c(
     double M_p_kg,
     double M_c_kg,

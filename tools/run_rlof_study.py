@@ -350,28 +350,34 @@ def main():
     plt.close()
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
-    m_grid = np.linspace(0.3, 2.2, 50)
-    a_grid = np.linspace(0.012, 0.038, 50)
+    from hot_jupiter.bindings import rlof_sweep_grid_cpp
+    m_grid = np.linspace(0.3, 2.2, 200)
+    a_grid = np.linspace(0.012, 0.038, 200)
 
-    matrix_outcome = np.zeros((len(m_grid), len(a_grid)))
-
-    for i, mp_val in enumerate(m_grid):
-        for j, a_val in enumerate(a_grid):
-            m_crit_val = 0.50 * ((a_val / 0.018)**3.0)
-
-            # Compute physical initial Roche filling factor mu_0 at t = 1 Myr
-            r_p_init = 1.30 * ((mp_val / 1.0)**0.18) * R_JUP
-            r_roche_init = 0.462 * (
-                (mp_val * M_JUP / M_SUN)**(1.0 / 3.0)) * (a_val * AU)
-            mu_0 = r_p_init / r_roche_init
-
-            if mp_val < m_crit_val:
-                val_code = 0  # Zone I: Disruption / Engulfment (Red)
-            elif mu_0 >= 1.0:
-                val_code = 1  # Zone II: Envelope Stripping Stagnation (Yellow)
-            else:
-                val_code = 2  # Zone III: Non-Overflow Cooling (Green)
-            matrix_outcome[i, j] = val_code
+    try:
+        matrix_outcome = rlof_sweep_grid_cpp(m_grid,
+                                             a_grid,
+                                             m_core_earth=10.0,
+                                             m_star_sun=1.0,
+                                             t_max_yr=3.0e9,
+                                             num_pts=150)
+    except (RuntimeError, OSError, ValueError) as e:
+        print(f"Fallback to analytical grid evaluation: {e}")
+        matrix_outcome = np.zeros((len(m_grid), len(a_grid)))
+        for i, mp_val in enumerate(m_grid):
+            for j, a_val in enumerate(a_grid):
+                m_crit_val = 0.50 * ((a_val / 0.018)**3.0)
+                r_p_init = 1.30 * ((mp_val / 1.0)**0.18) * R_JUP
+                r_roche_init = 0.462 * (
+                    (mp_val * M_JUP / M_SUN)**(1.0 / 3.0)) * (a_val * AU)
+                mu_0 = r_p_init / r_roche_init
+                if mp_val < m_crit_val:
+                    val_code = 0
+                elif mu_0 >= 1.0:
+                    val_code = 1
+                else:
+                    val_code = 2
+                matrix_outcome[i, j] = val_code
 
     # --- Render Figure 3: Pure 2D Survival Zone Map ---
     print("--> Generating paper_rlof/figures/fig3_bifurcation_map.png...")
