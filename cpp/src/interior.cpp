@@ -8,45 +8,37 @@ double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, dou
     auto [T_surf, rho_surf, nad_surf] = envelope_eos.get_state_from_PS(P_surf, S_env);
     
     int num_pts = 200;
-    double log_r_start = std::log(R_p_try);
-    double log_r_end = std::log(1e4);
-    double dlog_r = (log_r_end - log_r_start) / (num_pts - 1);
+    double dm = - M_p / (num_pts - 1); // Negative mass step integrating inward from surface to center
 
     double m = M_p;
     double P = P_surf;
     double T = T_surf;
-    double r = R_p_try;
+    double V = (4.0 / 3.0) * M_PI * std::pow(R_p_try, 3); // Enclosed volume at surface
 
     for (int i = 0; i < num_pts - 1; ++i) {
-        double r_next = std::exp(log_r_start + (i + 1) * dlog_r);
-        double dr = r_next - r; // negative step
-
-        double P_s = std::max(P, 1.0 * BAR);
-        double T_s = std::max(T, 10.0);
-        double r_s = std::max(r, 1e3);
-        double m_s = std::max(m, 1e15);
-
+        double r = std::pow((3.0 * V) / (4.0 * M_PI), 1.0 / 3.0);
         double rho = 0.0, nad = 0.0;
-        if (m_s <= M_c) {
-            rho = core_eos.density(P_s);
+        if (m <= M_c) {
+            rho = core_eos.density(P);
             nad = 0.0;
         } else {
-            auto state = envelope_eos.get_state_from_PS(P_s, S_env);
+            auto state = envelope_eos.get_state_from_PS(P, S_env);
             rho = std::get<1>(state);
             nad = std::get<2>(state);
         }
 
-        double dm_dr = 4.0 * M_PI * r_s * r_s * rho;
-        double dP_dr = - (G * m_s * rho) / (r_s * r_s);
-        double dT_dr = (m_s > M_c) ? nad * (T_s / P_s) * dP_dr : 0.0;
+        double dV_dm = 1.0 / rho;
+        double dP_dm = - (G * m) / (4.0 * M_PI * std::pow(std::max(1e3, r), 4));
+        double dT_dm = (m > M_c) ? nad * (T / P) * dP_dm : 0.0;
 
-        m = std::max(0.0, m + dr * dm_dr);
-        P = std::max(P_surf, P + dr * dP_dr);
-        T = std::max(T_surf, T + dr * dT_dr);
-        r = r_next;
+        m += dm;
+        V += dm * dV_dm;
+        P += dm * dP_dm;
+        T += dm * dT_dm;
     }
 
-    return m - 0.0;
+    double r_center = std::pow((3.0 * std::max(0.0, V)) / (4.0 * M_PI), 1.0 / 3.0);
+    return r_center; // Radius at center (should be ~0 for valid R_p)
 }
 
 PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S_env, double P_surf, int num_pts) {
@@ -65,7 +57,6 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
         }
     }
 
-    // Default to 1.0 R_JUP if grid search lands on boundary
     if (R_p_sol <= 0.51 * R_JUP || R_p_sol >= 2.49 * R_JUP) {
         R_p_sol = 1.000 * R_JUP;
     }
@@ -77,9 +68,7 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
     st.R_p = R_p_sol;
 
     auto [T_surf, rho_surf, nad_surf] = envelope_eos.get_state_from_PS(P_surf, S_env);
-    double log_r_start = std::log(R_p_sol);
-    double log_r_end = std::log(1e4);
-    double dlog_r = (log_r_end - log_r_start) / (num_pts - 1);
+    double dm = - M_p / (num_pts - 1);
 
     st.r.resize(num_pts);
     st.m.resize(num_pts);
@@ -88,9 +77,11 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
     st.T.resize(num_pts);
     st.nabla_ad.resize(num_pts);
 
-    double m = M_p, P = P_surf, T = T_surf, r = R_p_sol;
+    double m = M_p, P = P_surf, T = T_surf;
+    double V = (4.0 / 3.0) * M_PI * std::pow(R_p_sol, 3);
 
     for (int i = 0; i < num_pts; ++i) {
+        double r = std::pow((3.0 * std::max(1.0, V)) / (4.0 * M_PI), 1.0 / 3.0);
         st.r[i] = r;
         st.m[i] = m;
         st.P[i] = P;
@@ -106,19 +97,16 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
         }
 
         if (i < num_pts - 1) {
-            double r_next = std::exp(log_r_start + (i + 1) * dlog_r);
-            double dr = r_next - r;
-
             double rho = st.rho[i];
             double nad = st.nabla_ad[i];
-            double dm_dr = 4.0 * M_PI * r * r * rho;
-            double dP_dr = - (G * m * rho) / (r * r);
-            double dT_dr = (m > M_c) ? nad * (T / P) * dP_dr : 0.0;
+            double dV_dm = 1.0 / rho;
+            double dP_dm = - (G * m) / (4.0 * M_PI * std::pow(std::max(1e3, r), 4));
+            double dT_dm = (m > M_c) ? nad * (T / P) * dP_dm : 0.0;
 
-            m = std::max(0.0, m + dr * dm_dr);
-            P = std::max(P_surf, P + dr * dP_dr);
-            T = std::max(T_surf, T + dr * dT_dr);
-            r = r_next;
+            m += dm;
+            V += dm * dV_dm;
+            P += dm * dP_dm;
+            T += dm * dT_dm;
         }
     }
 

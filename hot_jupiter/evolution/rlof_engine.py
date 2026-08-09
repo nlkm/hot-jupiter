@@ -191,14 +191,29 @@ class CoupledRLOFIntegrator:
                           ((R_SUN / max(1.0e6, a_curr))**5))
             de_dt_total = (de_dt_p + de_dt_star) * 3.154e7
 
-            m_dot_est = (1.0e-7 * M_JUP *
-                         np.exp(self.eta_rlof *
-                                (ff - 1.0))) if ff >= 0.95 else 0.0
-            char_time_rlof = (0.05 * m_total_kg /
+            # Hydrodynamic L1 nozzle RLOF mass loss rate scale (Lubow & Shu 1975; Rappaport et al. 2013):
+            k_B = 1.380649e-23
+            m_H = 1.6735575e-27
+            mu_m = 2.3
+            T_eq = 5778.0 * np.sqrt(R_SUN / (2.0 * max(1.0e6, a_curr)))
+            H_p = (k_B * T_eq * r_p_curr *
+                   r_p_curr) / (G * max(1.0e-10, m_total_kg) * mu_m * m_H)
+            H_over_R = H_p / r_p_curr
+            P_orb_yr = (2.0 * np.pi * np.sqrt(
+                max(1.0e6, a_curr)**3 /
+                (G * self.m_star_sun * M_SUN))) / 3.154e7
+            m_dot_0 = (m_total_kg / max(1.0e-10, P_orb_yr)) * (
+                H_over_R**3) * 2.0 * np.pi * np.sqrt(
+                    r_p_curr / max(1.0e6, a_curr))
+
+            m_dot_est = m_dot_0 * np.exp(self.eta_rlof * (ff - 1.0))
+            char_time_rlof = (0.02 * m_total_kg /
                               m_dot_est) if m_dot_est > 1e-30 else 1e9
-            char_time_a = (0.05 * a_curr /
+            char_time_a = (0.02 * a_curr /
                            da_dt_tide) if da_dt_tide > 1e-15 else 1e9
-            dt_target_yr = min(dt_yr, char_time_a, char_time_rlof, 100000.0)
+            dt_max_allowed = 50000.0 if ff >= 0.85 else 100000.0
+            dt_target_yr = max(
+                5000.0, min(dt_yr, char_time_a, char_time_rlof, dt_max_allowed))
             n_sub = max(1, int(np.ceil(dt_yr / dt_target_yr)))
             dt_sub_yr = dt_yr / n_sub
             dt_sub_sec = dt_sub_yr * 3.154e7
@@ -208,18 +223,32 @@ class CoupledRLOFIntegrator:
                     engulfed = True
                     break
 
-                if ff >= 0.95 and m_env_kg > 0.0:
+                if m_env_kg > 0.0:
                     r_env_sub = 1.25 * R_JUP * (
                         (m_env_kg / M_JUP)**0.15) * np.exp(-0.08 * t_gyr)
                     r_p_sub = max(r_core, r_env_sub)
                     r_roche_sub = self.compute_roche_lobe_radius(
                         a_curr, m_total_kg) * max(0.01, 1.0 - e_curr)
                     ff_sub = r_p_sub / r_roche_sub if r_roche_sub > 0 else 0.0
-                    if ff_sub >= 0.95:
-                        m_dot_0 = 1.0e-7 * M_JUP
-                        m_dot_sub = m_dot_0 * np.exp(self.eta_rlof *
-                                                     (ff_sub - 1.0))
-                        loss_sub = min(m_env_kg, m_dot_sub * dt_sub_yr)
+                    max_ff = max(max_ff, ff_sub)
+                    if ff_sub >= 0.85:
+                        T_eq_sub = 5778.0 * np.sqrt(R_SUN /
+                                                    (2.0 * max(1.0e6, a_curr)))
+                        H_p_sub = (k_B * T_eq_sub * r_p_sub * r_p_sub) / (
+                            G * max(1.0e-10, m_total_kg) * mu_m * m_H)
+                        H_over_R_sub = H_p_sub / r_p_sub
+                        P_orb_yr_sub = (2.0 * np.pi * np.sqrt(
+                            max(1.0e6, a_curr)**3 /
+                            (G * self.m_star_sun * M_SUN))) / 3.154e7
+                        m_dot_0_sub = (m_total_kg / max(1.0e-10, P_orb_yr_sub)
+                                      ) * (H_over_R_sub**
+                                           3) * 2.0 * np.pi * np.sqrt(
+                                               r_p_sub / max(1.0e6, a_curr))
+                        m_dot_sub = m_dot_0_sub * np.exp(self.eta_rlof *
+                                                         (ff_sub - 1.0))
+                        max_allowed_loss = 0.001 * m_total_kg
+                        loss_sub = min(m_env_kg, m_dot_sub * dt_sub_yr,
+                                       max_allowed_loss)
                         m_env_kg -= loss_sub
                         m_total_kg = m_core_kg + m_env_kg
                         a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (

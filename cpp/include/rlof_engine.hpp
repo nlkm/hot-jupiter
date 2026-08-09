@@ -1,7 +1,9 @@
 #ifndef HOT_JUPITER_RLOF_ENGINE_HPP_
 #define HOT_JUPITER_RLOF_ENGINE_HPP_
 
+#include <algorithm>
 #include <cmath>
+#include <initializer_list>
 #include <string>
 #include <vector>
 #include "constants.hpp"
@@ -34,9 +36,9 @@ class CoupledRLOFIntegrator {
  public:
   double m_p_init_jup;
   double a_init_au;
-  double e_init;
   double m_core_earth;
   double m_star_sun;
+  double e_init;
   double q_star_prime;
   double k2_star;
   double q_planet_prime;
@@ -144,10 +146,22 @@ class CoupledRLOFIntegrator {
                           std::pow(R_SUN / std::max(1.0e6, a_curr), 5);
       double de_dt_total = (de_dt_p + de_dt_star) * 3.154e7; // [1/yr]
 
-      double m_dot_est = (ff >= 0.95) ? (1.0e-7 * M_JUP * std::exp(eta_rlof * (ff - 1.0))) : 0.0;
-      double char_time_rlof = (m_dot_est > 1e-30) ? (0.05 * m_total_kg / m_dot_est) : 1e9;
-      double char_time_a = (da_dt_tide > 1e-15) ? (0.05 * a_curr / da_dt_tide) : 1e9;
-      double dt_target_yr = std::min({dt_yr, char_time_a, char_time_rlof, 100000.0});
+      // Hydrodynamic L1 nozzle RLOF mass loss rate scale (Lubow & Shu 1975; Rappaport et al. 2013):
+      // m_dot_0 = (m_total_kg / P_orb) * (H_p / R_p)^3 * 2pi * sqrt(R_p / a)
+      double k_B = 1.380649e-23;
+      double m_H = 1.6735575e-27;
+      double mu_m = 2.3;
+      double T_eq = 5778.0 * std::sqrt(R_SUN / (2.0 * std::max(1.0e6, a_curr)));
+      double H_p = (k_B * T_eq * r_p_curr * r_p_curr) / (G * std::max(1.0e-10, m_total_kg) * mu_m * m_H);
+      double H_over_R = H_p / r_p_curr;
+      double P_orb_yr = (2.0 * M_PI * std::sqrt(std::pow(a_curr, 3) / (G * m_star_sun * M_SUN))) / 3.154e7;
+      double m_dot_0 = (m_total_kg / std::max(1.0e-10, P_orb_yr)) * std::pow(H_over_R, 3) * 2.0 * M_PI * std::sqrt(r_p_curr / std::max(1.0e6, a_curr));
+
+      double m_dot_est = m_dot_0 * std::exp(eta_rlof * (ff - 1.0));
+      double char_time_rlof = (m_dot_est > 1e-30) ? (0.02 * m_total_kg / m_dot_est) : 1e9;
+      double char_time_a = (da_dt_tide > 1e-15) ? (0.02 * a_curr / da_dt_tide) : 1e9;
+      double dt_max_allowed = (ff >= 0.85) ? 50000.0 : 100000.0;
+      double dt_target_yr = std::max(5000.0, std::min({dt_yr, char_time_a, char_time_rlof, dt_max_allowed}));
       int n_sub = std::max(1, static_cast<int>(std::ceil(dt_yr / dt_target_yr)));
       double dt_sub_yr = dt_yr / n_sub;
       double dt_sub_sec = dt_sub_yr * 3.154e7;
@@ -159,15 +173,21 @@ class CoupledRLOFIntegrator {
         }
 
         // RLOF mass loss sub-step
-        if (ff >= 0.95 && m_env_kg > 0.0) {
+        if (m_env_kg > 0.0) {
           double r_env_sub = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
           double r_p_sub = std::max(r_core, r_env_sub);
           double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun) * std::max(0.01, 1.0 - e_curr);
           double ff_sub = (r_roche_sub > 0.0) ? (r_p_sub / r_roche_sub) : 0.0;
-          if (ff_sub >= 0.95) {
-            double m_dot_0 = 1.0e-7 * M_JUP; // kg / yr
-            double m_dot_sub = m_dot_0 * std::exp(eta_rlof * (ff_sub - 1.0));
-            double loss_sub = std::min(m_env_kg, m_dot_sub * dt_sub_yr);
+          max_ff = std::max(max_ff, ff_sub);
+          if (ff_sub >= 0.85) {
+            double T_eq_sub = 5778.0 * std::sqrt(R_SUN / (2.0 * std::max(1.0e6, a_curr)));
+            double H_p_sub = (k_B * T_eq_sub * r_p_sub * r_p_sub) / (G * std::max(1.0e-10, m_total_kg) * mu_m * m_H);
+            double H_over_R_sub = H_p_sub / r_p_sub;
+            double P_orb_yr_sub = (2.0 * M_PI * std::sqrt(std::pow(a_curr, 3) / (G * m_star_sun * M_SUN))) / 3.154e7;
+            double m_dot_0_sub = (m_total_kg / std::max(1.0e-10, P_orb_yr_sub)) * std::pow(H_over_R_sub, 3) * 2.0 * M_PI * std::sqrt(r_p_sub / std::max(1.0e6, a_curr));
+            double m_dot_sub = m_dot_0_sub * std::exp(eta_rlof * (ff_sub - 1.0));
+            double max_allowed_loss = 0.001 * m_total_kg;
+            double loss_sub = std::min({m_env_kg, m_dot_sub * dt_sub_yr, max_allowed_loss});
             m_env_kg -= loss_sub;
             m_total_kg = m_core_kg + m_env_kg;
             a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
