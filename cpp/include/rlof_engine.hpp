@@ -82,14 +82,13 @@ class CoupledRLOFIntegrator {
     double m_env_kg = m_env_init_kg;
     double m_total_kg = m_core_kg + m_env_kg;
     double a_curr = a_init_au * AU;
-
     double log_t_min = std::log10(1.0e6);
     double log_t_max = std::log10(t_max_yr);
     double dlog_t = (log_t_max - log_t_min) / (num_pts - 1);
-
     bool disrupted = false;
     bool engulfed = false;
     double max_ff = 0.0;
+    size_t valid_pts = 0;
 
     for (int i = 0; i < num_pts; ++i) {
       double t_yr = std::pow(10.0, log_t_min + i * dlog_t);
@@ -97,7 +96,7 @@ class CoupledRLOFIntegrator {
       double dt_sec = dt_yr * 3.154e7;
       double t_gyr = t_yr / 1.0e9;
 
-      double r_core = 1.0 * R_EARTH * std::pow(m_core_earth / 1.0, 0.27);
+      double r_core = 1.0 * R_EARTH * std::pow(m_core_earth, 0.27);
       double r_p_curr = r_core;
       if (m_env_kg > 0.1 * M_EARTH) {
         double r_env = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
@@ -117,15 +116,11 @@ class CoupledRLOFIntegrator {
 
       if (ff >= 0.95 && m_env_kg > 0.0) {
         double m_dot_0 = 1.0e-7 * M_JUP;
-        double m_dot = m_dot_0 * std::exp(eta_rlof * (ff - 1.0));
-        double est_loss = m_dot * dt_yr;
-
         int n_sub = std::max(1, std::min(100000, static_cast<int>(std::ceil(dt_yr / 1000.0))));
         double dt_sub_yr = dt_yr / n_sub;
 
         for (int s = 0; s < n_sub; ++s) {
           if (m_env_kg <= 0.0) break;
-
           double r_env_sub = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
           double r_p_sub = std::max(r_core, r_env_sub);
           double r_roche_sub = compute_roche_lobe_radius(a_curr, m_total_kg, m_star_sun);
@@ -134,22 +129,16 @@ class CoupledRLOFIntegrator {
 
           double m_dot_sub = m_dot_0 * std::exp(eta_rlof * (ff_sub - 1.0));
           double loss_sub = std::min(m_env_kg, m_dot_sub * dt_sub_yr);
-
           m_env_kg -= loss_sub;
           m_total_kg = m_core_kg + m_env_kg;
-          double da_rlof_sub = -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
-          a_curr += da_rlof_sub;
+          a_curr += -2.0 * a_curr * (-loss_sub / m_total_kg) * (1.0 - beta_angular_momentum);
         }
-
-        double r_env_post = 1.25 * R_JUP * std::pow(m_env_kg / M_JUP, 0.15) * std::exp(-0.08 * t_gyr);
-        r_p_curr = std::max(r_core, r_env_post);
       }
 
       double n_orb = std::sqrt(G * (m_star_sun * M_SUN) / std::max(1.0e6, std::pow(a_curr, 3)));
-      double da_tide = -9.0 * (k2_star / q_star_prime) * n_orb *
-                       std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
-                       (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sec;
-      a_curr += da_tide;
+      a_curr += -9.0 * (k2_star / q_star_prime) * n_orb *
+                std::pow(R_SUN / std::max(1.0e6, a_curr), 5) *
+                (m_total_kg / (m_star_sun * M_SUN)) * a_curr * dt_sec;
 
       if (a_curr <= 0.008 * AU || m_total_kg <= 0.0) {
         engulfed = true;
@@ -166,7 +155,16 @@ class CoupledRLOFIntegrator {
       res.r_p_arr[i] = r_p_curr / R_JUP;
       res.r_roche_arr[i] = r_roche_curr / AU;
       res.filling_factor_arr[i] = ff;
+      valid_pts = i + 1;
     }
+
+    res.t_arr.resize(valid_pts);
+    res.a_arr.resize(valid_pts);
+    res.m_p_arr.resize(valid_pts);
+    res.m_env_arr.resize(valid_pts);
+    res.r_p_arr.resize(valid_pts);
+    res.r_roche_arr.resize(valid_pts);
+    res.filling_factor_arr.resize(valid_pts);
 
     if (disrupted || engulfed || m_total_kg <= 0.0) {
       res.outcome = EvolutionOutcome::DISRUPTED;

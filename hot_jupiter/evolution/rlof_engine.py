@@ -134,6 +134,7 @@ class CoupledRLOFIntegrator:
         engulfed = False
         max_ff = 0.0
 
+        valid_pts = 0
         for idx in range(num_pts):
             if idx == 0:
                 dt_yr = t_arr[0]
@@ -170,8 +171,8 @@ class CoupledRLOFIntegrator:
 
                 # Calculate sub-steps to ensure smooth mass loss (delta_M <= 0.0005 M_Jup per sub-step)
                 n_sub = max(1, int(np.ceil(est_loss / (0.0005 * M_JUP))),
-                            int(dt_yr / 5000.0))
-                n_sub = min(n_sub, 200)
+                            int(dt_yr / 1000.0))
+                n_sub = min(n_sub, 100000)
                 dt_sub_yr = dt_yr / n_sub
 
                 for _ in range(n_sub):
@@ -211,6 +212,15 @@ class CoupledRLOFIntegrator:
             r_p_arr[idx] = r_p_curr / R_JUP
             r_roche_arr[idx] = r_roche_curr / AU
             ff_arr[idx] = ff
+            valid_pts = idx + 1
+
+        t_arr = t_arr[:valid_pts]
+        a_arr = a_arr[:valid_pts]
+        m_p_arr = m_p_arr[:valid_pts]
+        m_env_arr = m_env_arr[:valid_pts]
+        r_p_arr = r_p_arr[:valid_pts]
+        r_roche_arr = r_roche_arr[:valid_pts]
+        ff_arr = ff_arr[:valid_pts]
 
         # Determine outcome classification
         if disrupted or engulfed or m_total_kg <= 0:
