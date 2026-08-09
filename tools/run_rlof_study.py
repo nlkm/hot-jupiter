@@ -165,13 +165,13 @@ def main():
         y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig2_scenario2_stagnation.png"),
-                dpi=300,
+                dpi=400,
                 bbox_inches='tight')
     plt.close()
 
     # --- Render Figure 3: Scenario 3 - Non-Overflow Cooling (a, e, M_p, R_p) ---
     print("--> Generating paper_rlof/figures/fig3_scenario3_cooling.png...")
-    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=400)
 
     # 1. Semi-major axis
     axes[0].plot(res_cool["t"], res_cool["a"], 'g-.', lw=2.5)
@@ -223,7 +223,7 @@ def main():
         y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig3_scenario3_cooling.png"),
-                dpi=300,
+                dpi=400,
                 bbox_inches='tight')
     plt.close()
 
@@ -232,7 +232,7 @@ def main():
     res_eccentric = compute_coupled_trajectory(M_p_0=1.0 * M_JUP,
                                                a_0=0.050 * AU,
                                                e_0=0.45)
-    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=300)
+    fig, axes = plt.subplots(1, 4, figsize=(16.5, 3.8), dpi=400)
 
     # 1. Semi-major axis
     axes[0].plot(res_eccentric["t"], res_eccentric["a"], 'm-', lw=2.5)
@@ -287,13 +287,13 @@ def main():
         y=1.03)
     plt.tight_layout()
     plt.savefig(os.path.join(fig_dir, "fig4_scenario4_eccentric.png"),
-                dpi=300,
+                dpi=400,
                 bbox_inches='tight')
     plt.close()
 
     # --- Render Figure 2: Ultra-Simple Roche Lobe Filling Factor ---
     print("--> Generating paper_rlof/figures/fig2_roche_filling.png...")
-    plt.figure(figsize=(7.5, 5.0), dpi=300)
+    plt.figure(figsize=(7.5, 5.0), dpi=400)
 
     # 1. Shaded Region for Sub-Overflow vs Overfilled
     plt.axhspan(0.0,
@@ -346,7 +346,7 @@ def main():
     plt.legend(fontsize=8.5, loc='upper right', framealpha=0.95)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, "fig2_roche_filling.png"), dpi=300)
+    plt.savefig(os.path.join(fig_dir, "fig2_roche_filling.png"), dpi=400)
     plt.close()
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
@@ -375,7 +375,7 @@ def main():
 
     # --- Render Figure 3: Pure 2D Survival Zone Map ---
     print("--> Generating paper_rlof/figures/fig3_bifurcation_map.png...")
-    plt.figure(figsize=(8.0, 5.5), dpi=300)
+    plt.figure(figsize=(8.0, 5.5), dpi=400)
     A_mesh, M_mesh = np.meshgrid(a_grid, m_grid)
 
     from matplotlib.colors import ListedColormap
@@ -443,7 +443,7 @@ def main():
     plt.legend(loc='lower right', fontsize=9.5, framealpha=0.95)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(fig_dir, "fig3_bifurcation_map.png"), dpi=300)
+    plt.savefig(os.path.join(fig_dir, "fig3_bifurcation_map.png"), dpi=400)
     plt.close()
 
     # --- Render Figure 4: Empirical Exoplanet Truncation Boundary ---

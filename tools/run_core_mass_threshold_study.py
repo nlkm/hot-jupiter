@@ -100,7 +100,9 @@ def main():
     plt.grid(True, linestyle='--', alpha=0.4)
     plt.legend(frameon=True, facecolor='white', framealpha=0.9, fontsize=9.5)
     plt.tight_layout()
-    plt.savefig(f'{OUT_DIR}/fig6_core_mass_remnants.png')
+    plt.savefig(f'{OUT_DIR}/fig6_core_mass_remnants.png',
+                dpi=400,
+                bbox_inches='tight')
     plt.close()
 
     # --- Figure 7: Critical Core Mass Scaling Law M_core,crit(a) ---
@@ -123,7 +125,7 @@ def main():
 
     m_core_crit_arr = np.array(m_core_crit_list)
 
-    plt.figure(figsize=(7.5, 5.0), dpi=300)
+    plt.figure(figsize=(7.5, 5.0), dpi=400)
     plt.plot(a_dense_grid,
              m_core_crit_arr,
              'r-',
@@ -158,14 +160,16 @@ def main():
                fontsize=10,
                loc='upper right')
     plt.tight_layout()
-    plt.savefig(f'{OUT_DIR}/fig7_core_threshold_scaling.png')
+    plt.savefig(f'{OUT_DIR}/fig7_core_threshold_scaling.png',
+                dpi=400,
+                bbox_inches='tight')
     plt.close()
 
     # --- Figure 8: Heavy Element Fraction Z_bulk Fingerprint ---
     print(
         "--> Generating paper_rlof/figures/fig8_heavy_element_enrichment.png..."
     )
-    plt.figure(figsize=(7.5, 5.0), dpi=300)
+    plt.figure(figsize=(7.5, 5.0), dpi=400)
 
     for idx, a_0 in enumerate([0.015, 0.018, 0.022, 0.026]):
         rems, z_bulks = results[a_0]
@@ -194,7 +198,9 @@ def main():
     plt.grid(True, linestyle='--', alpha=0.4)
     plt.legend(frameon=True, facecolor='white', framealpha=0.9, fontsize=9.5)
     plt.tight_layout()
-    plt.savefig(f'{OUT_DIR}/fig8_heavy_element_enrichment.png')
+    plt.savefig(f'{OUT_DIR}/fig8_heavy_element_enrichment.png',
+                dpi=400,
+                bbox_inches='tight')
     plt.close()
 
     print("✅ All 3 core mass threshold study figures generated successfully!")
