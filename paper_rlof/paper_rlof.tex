@@ -79,16 +79,23 @@ The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/fig1a_orbital_decay.png}
-\caption{\textbf{Tidal Orbital Decay Trajectories.} Time evolution of orbital semi-major axis $a(t)$ across 3 representative tracks: (1) Runaway Disruption (red solid), (2) Stagnated Survival (blue dashed), and (3) Non-Overflow Cooling (green dash-dotted).}
-\label{fig:tracks_decay}
+\includegraphics[width=0.98\linewidth]{figures/fig1_scenario1_disruption.png}
+\caption{\textbf{Scenario 1: Runaway Tidal Disruption ($0.6\,M_{\text{Jup}}, 0.016\text{ AU}$).} Coupled time evolution of orbital semi-major axis $a(t)$, planetary mass $M_p(t)$, and radius $R_p(t)$ during runaway envelope mass loss and tidal engulfment into the star.}
+\label{fig:scenario1}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/fig1b_mass_loss.png}
-\caption{\textbf{Hydrodynamic Envelope Mass Loss.} Time evolution of planetary mass $M_p(t)$ during Roche lobe overflow envelope stripping.}
-\label{fig:tracks_mass}
+\includegraphics[width=0.98\linewidth]{figures/fig2_scenario2_stagnation.png}
+\caption{\textbf{Scenario 2: Self-Limiting RLOF Stagnation ($0.8\,M_{\text{Jup}}, 0.019\text{ AU}$).} Coupled time evolution of semi-major axis $a(t)$, mass $M_p(t)$, and radius $R_p(t)$. Rapid outer envelope stripping drives structural contraction ($R_p \propto M_p^{0.6}$), halting mass loss and enabling planet survival.}
+\label{fig:scenario2}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/fig3_scenario3_cooling.png}
+\caption{\textbf{Scenario 3: Non-Overflow Radiative Cooling ($1.0\,M_{\text{Jup}}, 0.030\text{ AU}$).} Coupled evolution of semi-major axis $a(t)$, mass $M_p(t)$, and radius $R_p(t)$ for a planet that remains sub-overflow ($\mu_{\text{Roche}} < 1$), retaining its primordial envelope while undergoing standard thermal contraction.}
+\label{fig:scenario3}
 \end{figure}
 
 \begin{figure}[h]
@@ -102,7 +109,7 @@ The complete system of 4 coupled first-order ODEs for $[S_{\text{env}}, a, e, M_
 We evolved a 4D grid of coupled evolutionary tracks across $M_p(0) \in [0.3, 2.2]\,M_{\text{Jup}}$ and $a(0) \in [0.012, 0.038]\text{ AU}$.
 
 \subsection{Discovery of Trajectory Bifurcation}
-As shown in Figures~\ref{fig:tracks_decay}, \ref{fig:tracks_mass}, and~\ref{fig:filling}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
+As shown in Figures~\ref{fig:scenario1}, \ref{fig:scenario2}, \ref{fig:scenario3}, and~\ref{fig:filling}, the coupled system exhibits two distinct physical outcomes when a planet approaches $\mu_{\text{Roche}} \approx 1$:
 
 \begin{enumerate}
     \item \textbf{Tidal Runaway Disruption / Engulfment}: For low-mass planets ($M_p \lesssim 0.6\,M_{\text{Jup}}$) at close separations ($a(0) \le 0.016\text{ AU}$), envelope mass loss reduces $M_p$, shrinking $R_{\text{Roche}}$ faster than the planet can cool and contract. This positive feedback loop causes $\mu_{\text{Roche}}$ to spike above $1.2$, accelerating tidal decay and driving complete orbital engulfment into the star within $t \lesssim 500\text{ Myr}$.

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  8 AUG 2026 21:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  8 AUG 2026 21:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -505,62 +505,70 @@ Underfull \hbox (badness 3679) in paragraph at lines 61--62
 ^^V[] \OMS/cmsy/m/n/10 ^^Q
  []
 
-<figures/fig1a_orbital_decay.png, id=144, 542.025pt x 361.35pt>
-File: figures/fig1a_orbital_decay.png Graphic file (type png)
-<use figures/fig1a_orbital_decay.png>
-Package pdftex.def Info: figures/fig1a_orbital_decay.png  used on input line 82
+<figures/fig1_scenario1_disruption.png, id=144, 968.418pt x 313.17pt>
+File: figures/fig1_scenario1_disruption.png Graphic file (type png)
+<use figures/fig1_scenario1_disruption.png>
+Package pdftex.def Info: figures/fig1_scenario1_disruption.png  used on input l
+ine 82.
+(pdftex.def)             Requested size: 242.98503pt x 78.57423pt.
+<figures/fig2_scenario2_stagnation.png, id=146, 968.418pt x 313.17pt>
+File: figures/fig2_scenario2_stagnation.png Graphic file (type png)
+<use figures/fig2_scenario2_stagnation.png>
+Package pdftex.def Info: figures/fig2_scenario2_stagnation.png  used on input l
+ine 89.
+(pdftex.def)             Requested size: 242.98503pt x 78.57423pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/fig3_scenario3_cooling.png, id=147, 968.418pt x 313.17pt>
+File: figures/fig3_scenario3_cooling.png Graphic file (type png)
+<use figures/fig3_scenario3_cooling.png>
+Package pdftex.def Info: figures/fig3_scenario3_cooling.png  used on input line
+ 96.
+(pdftex.def)             Requested size: 242.98503pt x 78.57423pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/fig2_roche_filling.png, id=148, 542.025pt x 361.35pt>
+File: figures/fig2_roche_filling.png Graphic file (type png)
+<use figures/fig2_roche_filling.png>
+Package pdftex.def Info: figures/fig2_roche_filling.png  used on input line 103
 .
 (pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig1b_mass_loss.png, id=146, 542.025pt x 361.35pt>
-File: figures/fig1b_mass_loss.png Graphic file (type png)
-<use figures/fig1b_mass_loss.png>
-Package pdftex.def Info: figures/fig1b_mass_loss.png  used on input line 89.
-(pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<figures/fig2_roche_filling.png, id=147, 542.025pt x 361.35pt>
-File: figures/fig2_roche_filling.png Graphic file (type png)
-<use figures/fig2_roche_filling.png>
-Package pdftex.def Info: figures/fig2_roche_filling.png  used on input line 96.
-
-(pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Underfull \hbox (badness 4156) in paragraph at lines 109--110
+Underfull \hbox (badness 4156) in paragraph at lines 116--117
 []\OT1/cmr/bx/n/10 (+20) Self-Limiting Mass-Loss Stag-na-tion\OT1/cmr/m/n/10 (+
 20) : For
  []
 
-<figures/fig3_bifurcation_map.png, id=151, 578.16pt x 397.485pt>
+[2 <./figures/fig1_scenario1_disruption.png> <./figures/fig2_scenario2_stagnati
+on.png> <./figures/fig3_scenario3_cooling.png>]
+<figures/fig3_bifurcation_map.png, id=173, 578.16pt x 397.485pt>
 File: figures/fig3_bifurcation_map.png Graphic file (type png)
 <use figures/fig3_bifurcation_map.png>
 Package pdftex.def Info: figures/fig3_bifurcation_map.png  used on input line 1
-14.
+21.
 (pdftex.def)             Requested size: 242.98503pt x 167.05173pt.
 
+
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[2 <./figures/fig1a_orbital_decay.png> <./figures/fig1b_mass_loss.png>]
-<figures/fig4_obs_comparison.png, id=171, 578.16pt x 433.62pt>
+<figures/fig4_obs_comparison.png, id=176, 578.16pt x 433.62pt>
 File: figures/fig4_obs_comparison.png Graphic file (type png)
 <use figures/fig4_obs_comparison.png>
-Package pdftex.def Info: figures/fig4_obs_comparison.png  used on input line 14
-8.
+Package pdftex.def Info: figures/fig4_obs_comparison.png  used on input line 15
+5.
 (pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig5_usp_cases.png, id=172, 578.16pt x 433.62pt>
+<figures/fig5_usp_cases.png, id=177, 578.16pt x 433.62pt>
 File: figures/fig5_usp_cases.png Graphic file (type png)
 <use figures/fig5_usp_cases.png>
-Package pdftex.def Info: figures/fig5_usp_cases.png  used on input line 155.
+Package pdftex.def Info: figures/fig5_usp_cases.png  used on input line 162.
 (pdftex.def)             Requested size: 242.98503pt x 182.23825pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -569,14 +577,14 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Underfull \vbox (badness 4595) has occurred while \output is active []
 
  [3 <./figures/fig2_roche_filling.png> <./figures/fig3_bifurcation_map.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 174--175
+Underfull \hbox (badness 10000) in paragraph at lines 181--182
 \OT1/cmr/m/n/10 (+20) The the-o-ret-i-cal bound-ary $\OML/cmm/m/it/10 M[]\OT1/c
 mr/m/n/10 (+20) (\OML/cmm/m/it/10 a\OT1/cmr/m/n/10 (+20) ) \OMS/cmsy/m/n/10 ^^Y
 
  []
 
 
-Underfull \hbox (badness 4441) in paragraph at lines 174--175
+Underfull \hbox (badness 4441) in paragraph at lines 181--182
 \OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 50(\OML/cmm/m/it
 /10 a=\OT1/cmr/m/n/10 (+20) 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 (+20) 018[])[] \
 OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
@@ -584,31 +592,31 @@ OML/cmm/m/it/10 M[]$ \OT1/cmr/m/n/10 (+20) acts as an em-pir-i-cal fil-
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 176.
+(hyperref)                removing `subscript' on input line 183.
 
-<figures/fig6_core_mass_remnants.png, id=193, 542.025pt x 361.35pt>
+<figures/fig6_core_mass_remnants.png, id=197, 542.025pt x 361.35pt>
 File: figures/fig6_core_mass_remnants.png Graphic file (type png)
 <use figures/fig6_core_mass_remnants.png>
 Package pdftex.def Info: figures/fig6_core_mass_remnants.png  used on input lin
-e 181.
+e 188.
 (pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig7_core_threshold_scaling.png, id=194, 542.025pt x 361.35pt>
+<figures/fig7_core_threshold_scaling.png, id=198, 542.025pt x 361.35pt>
 File: figures/fig7_core_threshold_scaling.png Graphic file (type png)
 <use figures/fig7_core_threshold_scaling.png>
 Package pdftex.def Info: figures/fig7_core_threshold_scaling.png  used on input
- line 188.
+ line 195.
 (pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/fig8_heavy_element_enrichment.png, id=195, 542.025pt x 361.35pt>
+<figures/fig8_heavy_element_enrichment.png, id=199, 542.025pt x 361.35pt>
 File: figures/fig8_heavy_element_enrichment.png Graphic file (type png)
 <use figures/fig8_heavy_element_enrichment.png>
 Package pdftex.def Info: figures/fig8_heavy_element_enrichment.png  used on inp
-ut line 195.
+ut line 202.
 (pdftex.def)             Requested size: 242.98503pt x 161.98845pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -624,11 +632,11 @@ Package rerunfilecheck Info: File `paper_rlof.out' has not changed.
 (rerunfilecheck)             Checksum: 30E438710C42B553F07B733EAC647ACA;4760.
  ) 
 Here is how much of TeX's memory you used:
- 12841 strings out of 476182
- 198343 string characters out of 5795596
+ 12856 strings out of 476182
+ 198808 string characters out of 5795596
  1951975 words of memory out of 5000000
- 34458 multiletter control sequences out of 15000+600000
- 573460 words of font info for 159 fonts, out of 8000000 for 9000
+ 34466 multiletter control sequences out of 15000+600000
+ 573631 words of font info for 162 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,13n,79p,1735b,564s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/neil/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
@@ -646,10 +654,10 @@ sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on paper_rlof.pdf (6 pages, 2017866 bytes).
+Output written on paper_rlof.pdf (6 pages, 2392930 bytes).
 PDF statistics:
- 324 PDF objects out of 1000 (max. 8388607)
- 264 compressed objects within 3 object streams
- 71 named destinations out of 1000 (max. 500000)
- 33486 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 328 PDF objects out of 1000 (max. 8388607)
+ 266 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 33491 words of extra memory for PDF output out of 35830 (max. 10000000)
 
