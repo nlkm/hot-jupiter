@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Thorngren & Fortney (2018) AJ 155, 214
+# Figure 1: Heating Efficiency eta [%] vs Equilibrium Temperature Teq [K]
+TEQ_K,ETA_PERCENT_REF
+1000.0,0.60
+1300.0,1.80
+1500.0,2.50
+1700.0,2.00
+2000.0,0.70
+2400.0,0.15
+
+# Figure 2: Radius Anomaly Delta_R [RJ] vs Deposited Power Pdep [erg/s]
+PDEP_ERG_S,DELTA_R_RJ_REF
+1e26,0.02
+1e27,0.08
+1e28,0.22
+1e29,0.48
+1e30,0.75
