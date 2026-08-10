@@ -31,11 +31,11 @@ def compute_coupled_trajectory(M_p_0: float,
     res = integrator.integrate(t_max_yr=t_max_yr, num_pts=num_pts)
     return {
         "t": res.t_arr / 1.0e6,  # Myr
-        "M_p": res.m_p_arr / M_JUP,
-        "a": res.a_arr / AU,
+        "M_p": res.m_p_arr,  # Already in M_Jup
+        "a": res.a_arr,  # Already in AU
         "e": res.e_arr,
-        "R_p": res.r_p_arr / R_JUP,
-        "R_roche": res.r_roche_arr / R_JUP,
+        "R_p": res.r_p_arr,  # Already in R_Jup
+        "R_roche": res.r_roche_arr * AU / R_JUP,
         "filling_factor": res.filling_factor_arr,
         "outcome": res.outcome.value
     }

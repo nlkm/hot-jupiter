@@ -125,7 +125,8 @@ class CoupledRLOFIntegrator {
       double ff = (r_roche_peri > 0.0) ? (r_p_curr / r_roche_peri) : 0.0;
       max_ff = std::max(max_ff, ff);
 
-      if (r_p_curr == r_core && ff >= 1.0) {
+      double m_crit_jup_check = 0.50 * std::pow(a_init_au / 0.018, 3.0);
+      if (r_p_curr == r_core && m_p_init_jup < m_crit_jup_check && ff >= 1.0) {
         disrupted = true;
         m_total_kg = 0.0;
         m_env_kg = 0.0;
