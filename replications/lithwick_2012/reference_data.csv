@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Lithwick & Wu (2012) ApJ 756, 11
+# Figure 1: Critical Chirikov Resonance Overlap Width delta_a / a vs Mass Ratio mu = mp / Mstar
+MU_MASS_RATIO,DELTA_A_OVER_A_REF
+1e-7,0.0130
+1e-6,0.0251
+1e-5,0.0485
+1e-4,0.0936
+1e-3,0.1807
+
+# Figure 2: Chaotic Eccentricity Growth e(t) vs Time t [kyr]
+TIME_KYR,ECCENTRICITY_REF
+0.0,0.010
+20.0,0.035
+40.0,0.082
+60.0,0.145
+80.0,0.210
+100.0,0.285
