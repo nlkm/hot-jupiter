@@ -47,9 +47,11 @@ public:
         return std::pow(std::max(0.0, term1 + term2), 0.25);
     }
 
-    double compute_scale_height(double T_eq, double M_p, double R_p) const {
-        double g = G * M_p / (R_p * R_p);
-        return (KB * T_eq) / (mu_atm * g); // Scale height in meters
+    double compute_scale_height(double T_eq, double M_p, double R_p, double R_roche = 0.0) const {
+        double g_iso = G * M_p / (R_p * R_p);
+        double f_tide = (R_roche > 0.0 && R_p < R_roche) ? (1.0 - std::pow(R_p / R_roche, 3.0)) : 1.0;
+        double g_eff = std::max(1.0e-5, g_iso * f_tide);
+        return (KB * T_eq) / (mu_atm * g_eff); // Scale height in meters
     }
 
     double compute_transit_depth_variation_ppm(double R_p, double R_star, double H_m, int n_scale_heights = 5) const {

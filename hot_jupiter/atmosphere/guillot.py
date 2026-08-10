@@ -61,11 +61,15 @@ class GuillotAtmosphere(BaseAtmosphere):
         S_env: float,
         F_inc: float = 0.0,
         A_b: float = 0.1,
+        R_roche: float = 0.0,
     ) -> AtmosphereResult:
         """
         Find intrinsic temperature T_int and net power L_int matching envelope entropy S_env.
         """
-        g = (G * M_p) / (R_p**2)
+        g_iso = (G * M_p) / (R_p**2)
+        f_tide = (1.0 - (R_p / R_roche)**3) if (R_roche > 0 and
+                                                R_p < R_roche) else 1.0
+        g = max(1e-5, g_iso * f_tide)
 
         # Absorbed irradiation temperature T_irr
         F_abs = (1.0 - A_b) * F_inc / 4.0

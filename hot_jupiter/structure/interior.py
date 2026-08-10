@@ -35,6 +35,7 @@ class InteriorSolver:
         X: float = 0.75,
         Y: float = 0.25,
         num_pts: int = 250,
+        r_roche: float = 0.0,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray,
                np.ndarray]:
         """
@@ -76,8 +77,10 @@ class InteriorSolver:
                     _, rho, nad = self.envelope_eos.get_state_from_PS(
                         P_s, S_env, X, Y)
 
+                f_tide = (1.0 - (r_s / r_roche)**3) if (r_roche > 0 and
+                                                        r_s < r_roche) else 1.0
                 dm = 4.0 * np.pi * r_s**2 * rho
-                dP = -(G * m_s * rho) / (r_s**2)
+                dP = -(G * m_s * rho * f_tide) / (r_s**2)
                 dT = nad * (T_s / P_s) * dP if m_s > M_c else 0.0
 
                 return dm, dP, dT, rho, nad

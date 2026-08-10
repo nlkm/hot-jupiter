@@ -39,7 +39,7 @@ double InteriorSolver::mass_residual(double R_p_try, double M_p, double M_c, dou
         double f_tide = 1.0;
         if (r_roche > 0.0) {
             double ratio = r / r_roche;
-            f_tide = std::max(0.0, 1.0 - ratio * ratio * ratio);
+            f_tide = (ratio < 1.0) ? (1.0 - ratio * ratio * ratio) : 0.0;
         }
 
         double dV_dm = 1.0 / rho;
@@ -127,7 +127,7 @@ PlanetStructure InteriorSolver::solve_structure(double M_p, double M_c, double S
             double f_tide = 1.0;
             if (r_roche > 0.0) {
                 double ratio = r / r_roche;
-                f_tide = std::max(0.0, 1.0 - ratio * ratio * ratio);
+                f_tide = (ratio < 1.0) ? (1.0 - ratio * ratio * ratio) : 0.0;
             }
 
             double dV_dm = 1.0 / rho;
