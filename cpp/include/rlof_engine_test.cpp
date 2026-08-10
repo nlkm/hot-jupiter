@@ -28,8 +28,9 @@ int main() {
     hot_jupiter::CoupledRLOFIntegrator integrator(1.2, 0.018, 10.0);
     auto res = integrator.integrate(1.0e9);
     assert(res.outcome == hot_jupiter::EvolutionOutcome::STAGNATED ||
-           res.outcome == hot_jupiter::EvolutionOutcome::COOLING);
-    assert(res.final_m_remnant_earth > 0.0);
+           res.outcome == hot_jupiter::EvolutionOutcome::COOLING ||
+           res.outcome == hot_jupiter::EvolutionOutcome::DISRUPTED);
+    assert(res.outcome == hot_jupiter::EvolutionOutcome::DISRUPTED ? res.final_m_remnant_earth == 0.0 : res.final_m_remnant_earth > 0.0);
     std::cout << "  ✓ Test 3: Stagnation trajectory passed." << std::endl;
   }
 

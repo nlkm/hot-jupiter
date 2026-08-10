@@ -13,7 +13,7 @@ int main() {
   for (const auto& p : results) {
     assert(p.m_p_init_jup >= 0.1 && p.m_p_init_jup <= 3.0);
     assert(p.a_init_au >= 0.015 && p.a_init_au <= 0.030);
-    if (p.outcome == 0) num_disrupted++;
+    if (p.outcome == 2) num_disrupted++;
     else num_survived++;
   }
 
