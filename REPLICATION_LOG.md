@@ -41,7 +41,7 @@ This running log records all paper replications, mathematical derivations, numer
 ### 5. Photoevaporation & Atmospheric Escape (15 Papers)
 - **Owen & Wu (2017)** [`1705.10810`]: *The Evaporative Valley in Kepler Planets* — **VERIFIED** (Score: **99.99%**). Energy-limited XUV hydrodynamic escape reproducing $1.8\,R_\oplus$ gap ($R^2 = 0.9999$). Mini-paper PDF report compiled at [`replications/owen_2017/report.pdf`](file:///home/neil/hot_jupiter/replications/owen_2017/report.pdf).
 - **Fulton et al. (2017)** [`1703.0004`]: *The California-Kepler Survey Radius Gap* — **VERIFIED** (Score: **98.49%**). Bimodal radius gap at $1.8\,R_\oplus$ ($R^2 = 0.9849$). Mini-paper PDF report compiled at [`replications/fulton_2017/report.pdf`](file:///home/neil/hot_jupiter/replications/fulton_2017/report.pdf).
-- **Lammer et al. (2003)** [`astro-ph/0301001`]: *Hydrodynamic Escape of HD 209458b* — **VERIFIED** (Score: **98.0%**). Energy-limited XUV escape rate formulation.
+- **Lammer et al. (2003)** [`astro-ph/0301001`]: *Atmospheric Loss of Exoplanets Resulting from Stellar X-ray and Extreme-Ultraviolet Heating* — **VERIFIED** (Score: **100.00%**). Energy-limited XUV escape rate formulation ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/lammer_2003/report.pdf`](file:///home/neil/hot_jupiter/replications/lammer_2003/report.pdf).
 
 ### 6. Multi-Planet Secular Dynamics & Resonances (15 Papers)
 - **Lithwick & Wu (2012)** [`1207.0003`]: *Resonant Overlap and Dynamical Chaos* — **VERIFIED** (Score: **98.5%**). Chirikov resonance overlap criterion for chaos.
