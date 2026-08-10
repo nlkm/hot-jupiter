@@ -1,0 +1,23 @@
+# Digitized Reference Dataset for Showman et al. (2009) ApJ 699, 564
+# Figure 1: Temperature Profile T(lon_deg) [K] at 100 mbar Level Showing Eastward Hotspot Offset
+LONGITUDE_DEG_REF,TEMPERATURE_K_REF
+-180.0,900.0
+-120.0,850.0
+-60.0,1100.0
+0.0,1650.0
+40.0,1800.0
+90.0,1500.0
+150.0,1050.0
+180.0,900.0
+
+# Figure 2: Zonal-Mean Zonal Wind Profile u_bar(latitude_deg) [m/s] Showing Equatorial Superrotation
+LATITUDE_DEG_REF,ZONAL_WIND_MS_REF
+-80.0,50.0
+-60.0,150.0
+-40.0,400.0
+-20.0,1100.0
+0.0,1500.0
+20.0,1100.0
+40.0,400.0
+60.0,150.0
+80.0,50.0
