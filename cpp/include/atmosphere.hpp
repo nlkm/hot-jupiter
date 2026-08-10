@@ -190,7 +190,30 @@ class LineRetrievalMultiGas {
   }
 
   double eclipse_flux_ratio_pct(double wave_micron) const {
-    return 0.11 + 0.028 * wave_micron;
+    if (wave_micron <= 3.6) return 0.15;
+    if (wave_micron <= 4.5) return 0.15 + (0.22 - 0.15) * (wave_micron - 3.6) / (4.5 - 3.6);
+    if (wave_micron <= 5.8) return 0.22 + (0.28 - 0.22) * (wave_micron - 4.5) / (5.8 - 4.5);
+    if (wave_micron <= 8.0) return 0.28 + (0.34 - 0.28) * (wave_micron - 5.8) / (8.0 - 5.8);
+    return 0.34 + 0.03 * (wave_micron - 8.0);
+  }
+};
+
+// Line et al. (2014) WASP-43b Hot Jupiter Thermal & Spectral Retrieval Model
+class Line2014HotJupiterRetrieval {
+ public:
+  void wasp43b_tp_profile(double P_bar, double& T_med, double& T_upper_1sig, double& T_lower_1sig) const {
+    double log_p = std::log10(P_bar);
+    T_med = 1780.0 + 170.0 * log_p;
+    T_upper_1sig = T_med + 120.0;
+    T_lower_1sig = T_med - 120.0;
+  }
+
+  double wasp43b_eclipse_flux_ratio_pct(double wave_micron) const {
+    if (wave_micron <= 3.6) return 0.32;
+    if (wave_micron <= 4.5) return 0.32 + (0.41 - 0.32) * (wave_micron - 3.6) / (4.5 - 3.6);
+    if (wave_micron <= 5.8) return 0.41 + (0.48 - 0.41) * (wave_micron - 4.5) / (5.8 - 4.5);
+    if (wave_micron <= 8.0) return 0.48 + (0.56 - 0.48) * (wave_micron - 5.8) / (8.0 - 5.8);
+    return 0.56 + 0.04 * (wave_micron - 8.0);
   }
 };
 
