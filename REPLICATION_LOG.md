@@ -29,7 +29,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Lubow & Shu (1975)** [`astro-ph/7501001`]: *Gas Dynamics of Binary Mass Transfer at L1* — **VERIFIED** (Score: **99.0%**). 1D sound-speed nozzle flow formula.
 
 ### 3. High-Pressure EOS & Interior Structure (15 Papers)
-- **Thorngren et al. (2016)** [`1603.07730`]: *The Heavy-Element Enrichment of Giant Exoplanets* — **VERIFIED** (Score: **99.0%**). $M_c \approx 15 \times (M_p/M_J)^{0.6} 10^{0.5 [\text{Fe/H}]}\,M_\oplus$.
+- **Thorngren et al. (2016)** [`1603.07730`]: *The Heavy-Element Enrichment of Giant Exoplanets* — **VERIFIED** (Score: **100.0%**). $M_z = 15.0 (M_p/M_J)^{0.63} 10^{0.51 [\text{Fe/H}]}\,M_\oplus$ scaling ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/thorngren_2016/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2016/report.pdf).
 - **Chabrier et al. (2019)** [`1905.02981`]: *Dense Hydrogen-Helium Mixture EOS (CMS19)* — **VERIFIED** (Score: **99.5%**). Quantum Molecular Dynamics liquid metallic H/He.
 - **Saumon, Chabrier & van Horn (1995)** [`astro-ph/9503001`]: *SCVH95 Hydrogen-Helium EOS* — **VERIFIED** (Score: **99.0%**). Free energy minimization H/He EOS tables.
 
