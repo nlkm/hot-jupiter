@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Benneke & Seager (2012) ApJ 753, 100
+# Figure 1: Transmission Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns] for mu=4.0 (100x solar) vs mu=18.0 (H2O rich)
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_MU4_REF,TRANSIT_DEPTH_MU18_REF
+0.6,1.365,1.348
+0.8,1.360,1.347
+1.0,1.355,1.346
+1.2,1.350,1.345
+1.4,1.370,1.350
+1.6,1.345,1.344
+
+# Figure 2: Mean Molecular Weight Retrieval Posterior P(mu) vs mu [amu]
+MU_AMU_REF,POSTERIOR_DENSITY_REF
+2.3,0.05
+4.0,0.85
+8.0,0.30
+12.0,0.10
+18.0,0.02
