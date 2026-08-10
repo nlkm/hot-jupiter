@@ -11,8 +11,8 @@ TIME_MYR,A_AU_REF,ECC_REF
 # Figure 2: Pseudo-Synchronous Spin Frequency Omega_ps / n vs Eccentricity e
 ECCENTRICITY,OMEGA_PS_OVER_N_REF
 0.0,1.000
-0.1,1.077
-0.2,1.328
-0.3,1.802
-0.4,2.589
-0.5,3.876
+0.1,1.060
+0.2,1.248
+0.3,1.587
+0.4,2.115
+0.5,2.975
