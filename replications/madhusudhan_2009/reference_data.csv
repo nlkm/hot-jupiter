@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Madhusudhan & Seager (2009) ApJ 707, 24
+# Figure 1: Atmospheric Retrieval T-P Envelope T_median, T_upper_1sig, T_lower_1sig [K] vs Pressure P [bar]
+PRESSURE_BAR_REF,TEMP_MEDIAN_K_REF,TEMP_UPPER_1SIG_K_REF,TEMP_LOWER_1SIG_K_REF
+0.001,1150.0,1300.0,1000.0
+0.010,1220.0,1350.0,1090.0
+0.100,1380.0,1480.0,1280.0
+1.000,1650.0,1740.0,1560.0
+10.000,2050.0,2150.0,1950.0
+
+# Figure 2: Secondary Eclipse Planet-to-Star Flux Ratio F_p / F_star [%] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,FLUX_RATIO_PCT_REF
+3.6,0.14
+4.5,0.18
+5.8,0.22
+8.0,0.26
+16.0,0.32
