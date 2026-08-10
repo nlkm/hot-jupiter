@@ -53,7 +53,7 @@ def main():
                                              a_0=0.016 * AU,
                                              t_max_yr=3.0e9)
     res_stagnate = compute_coupled_trajectory(M_p_0=0.8 * M_JUP,
-                                              a_0=0.019 * AU,
+                                              a_0=0.022 * AU,
                                               t_max_yr=1.0e10)
     res_cool = compute_coupled_trajectory(M_p_0=1.0 * M_JUP,
                                           a_0=0.030 * AU,
@@ -173,7 +173,7 @@ def main():
     axes[3].grid(True, linestyle=":", alpha=0.45)
 
     fig.suptitle(
-        'Scenario 2: Self-Limiting RLOF Mass Loss Stagnation ($0.8\\,M_{\\mathrm{Jup}}, 0.019\\,\\mathrm{AU}, e_0=0.15$)',
+        'Scenario 2: Self-Limiting RLOF Mass Loss Stagnation ($0.8\\,M_{\\mathrm{Jup}}, 0.022\\,\\mathrm{AU}, e_0=0.15$)',
         fontsize=12.5,
         fontweight='bold',
         y=1.03)
