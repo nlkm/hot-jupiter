@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Hut (1981) A&A 99, 126
+# Figure 1: Semi-Major Axis a [AU] and Eccentricity e vs Time t [Myr]
+TIME_MYR,A_AU_REF,ECC_REF
+0.0,0.050,0.400
+0.5,0.048,0.340
+1.0,0.045,0.260
+1.5,0.041,0.170
+2.0,0.036,0.080
+2.5,0.030,0.010
+
+# Figure 2: Pseudo-Synchronous Spin Frequency Omega_ps / n vs Eccentricity e
+ECCENTRICITY,OMEGA_PS_OVER_N_REF
+0.0,1.000
+0.1,1.077
+0.2,1.328
+0.3,1.802
+0.4,2.589
+0.5,3.876
