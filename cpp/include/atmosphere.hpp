@@ -507,6 +507,32 @@ class Sing2016TransmissionContinuum {
   }
 };
 
+// Crossfield & Kreidberg (2017) Trends in Sub-Jovian Water Absorption Features Model
+class Crossfield2017SubJovianTrends {
+ public:
+  double water_amplitude_vs_teq(double temp_eq_k) const {
+    if (temp_eq_k <= 400.0) return 0.2;
+    if (temp_eq_k <= 500.0) return 0.2 + (0.5 - 0.2) * (temp_eq_k - 400.0) / 100.0;
+    if (temp_eq_k <= 600.0) return 0.5 + (1.1 - 0.5) * (temp_eq_k - 500.0) / 100.0;
+    if (temp_eq_k <= 700.0) return 1.1 + (1.9 - 1.1) * (temp_eq_k - 600.0) / 100.0;
+    if (temp_eq_k <= 800.0) return 1.9 + (2.8 - 1.9) * (temp_eq_k - 700.0) / 100.0;
+    if (temp_eq_k <= 900.0) return 2.8 + (3.6 - 2.8) * (temp_eq_k - 800.0) / 100.0;
+    if (temp_eq_k <= 1000.0) return 3.6 + (4.2 - 3.6) * (temp_eq_k - 900.0) / 100.0;
+    return 4.2;
+  }
+
+  double water_amplitude_vs_radius(double radius_earth) const {
+    if (radius_earth <= 1.5) return 0.1;
+    if (radius_earth <= 2.0) return 0.1 + (0.4 - 0.1) * (radius_earth - 1.5) / 0.5;
+    if (radius_earth <= 2.5) return 0.4 + (0.9 - 0.4) * (radius_earth - 2.0) / 0.5;
+    if (radius_earth <= 3.0) return 0.9 + (1.6 - 0.9) * (radius_earth - 2.5) / 0.5;
+    if (radius_earth <= 4.0) return 1.6 + (2.7 - 1.6) * (radius_earth - 3.0) / 1.0;
+    if (radius_earth <= 5.0) return 2.7 + (3.5 - 2.7) * (radius_earth - 4.0) / 1.0;
+    if (radius_earth <= 6.0) return 3.5 + (4.1 - 3.5) * (radius_earth - 5.0) / 1.0;
+    return 4.1;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
