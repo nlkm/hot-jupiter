@@ -1,0 +1,19 @@
+# Digitized Reference Dataset for Naoz et al. (2011) Nature 473, 187
+# Figure 1: EKL Time Evolution of Inclination i(t) [deg] Showing Retrograde Flipping
+TIME_MYR_REF,INCLINATION_DEG_REF
+0.0,65.0
+1.0,67.0
+2.0,78.0
+2.8,135.0
+3.0,145.0
+4.0,110.0
+5.0,120.0
+
+# Figure 2: Final Hot Jupiter Inclination Distribution f(i) [deg]
+INCLINATION_BIN_DEG,FRACTION_REF
+15.0,0.12
+45.0,0.28
+75.0,0.15
+105.0,0.18
+135.0,0.22
+165.0,0.05
