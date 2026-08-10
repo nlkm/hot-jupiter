@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Komacek & Showman (2016) ApJ 821, 16
+# Figure 1: Day-Night Fractional Temperature Contrast Delta T / Delta T_eq vs Equilibrium Temperature T_eq [K]
+TEQ_K_REF,FRAC_CONTRAST_REF
+1000.0,0.15
+1200.0,0.22
+1400.0,0.35
+1600.0,0.50
+1800.0,0.68
+2000.0,0.82
+2200.0,0.91
+
+# Figure 2: Equatorial Zonal Wind Speed U [m/s] vs Drag Timescale tau_drag [s]
+TAU_DRAG_SEC_REF,ZONAL_WIND_MS_REF
+1.0e+03,200.0
+1.0e+04,600.0
+1.0e+05,1400.0
+1.0e+06,2200.0
+1.0e+07,2500.0
