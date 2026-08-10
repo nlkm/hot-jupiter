@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Lubow & Shu (1975) ApJ 198, 383
+# Figure 1: L1 Gas Stream Trajectory (x/d, y/d) in Rotating Frame
+X_OVER_D_REF,Y_OVER_D_REF
+0.500,0.000
+0.480,-0.020
+0.450,-0.055
+0.400,-0.120
+0.350,-0.190
+0.300,-0.250
+
+# Figure 2: Mass Transfer Rate Mdot [g/s] vs Sound Speed Ratio cs / (Omega * d)
+CS_OVER_OMEGA_D,MDOT_L1_GS_REF
+0.010,1.0e+14
+0.020,4.0e+14
+0.030,9.0e+14
+0.040,1.6e+15
+0.050,2.5e+15
