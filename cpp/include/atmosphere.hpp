@@ -476,6 +476,37 @@ class Parmentier2018ThermalRegimes {
   }
 };
 
+// Sing et al. (2016) Clear-to-Cloudy Hot-Jupiter Transmission Continuum Model
+class Sing2016TransmissionContinuum {
+ public:
+  double transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 2.05;
+    if (wave_micron <= 0.45) return 2.05 + (2.02 - 2.05) * (wave_micron - 0.35) / 0.10;
+    if (wave_micron <= 0.60) return 2.02 + (2.01 - 2.02) * (wave_micron - 0.45) / 0.15;
+    if (wave_micron <= 0.80) return 2.01 + (2.03 - 2.01) * (wave_micron - 0.60) / 0.20;
+    if (wave_micron <= 1.15) return 2.03 + (2.07 - 2.03) * (wave_micron - 0.80) / 0.35;
+    if (wave_micron <= 1.40) return 2.07 + (2.15 - 2.07) * (wave_micron - 1.15) / 0.25;
+    if (wave_micron <= 1.65) return 2.15 + (2.09 - 2.15) * (wave_micron - 1.40) / 0.25;
+    if (wave_micron <= 3.60) return 2.09 + (2.02 - 2.09) * (wave_micron - 1.65) / 1.95;
+    if (wave_micron <= 4.50) return 2.02 + (2.05 - 2.02) * (wave_micron - 3.60) / 0.90;
+    return 2.05;
+  }
+
+  double water_amplitude_scale_heights(double planet_index) const {
+    if (planet_index <= 1.0) return 4.2;
+    if (planet_index <= 2.0) return 4.2 + (3.8 - 4.2) * (planet_index - 1.0) / 1.0;
+    if (planet_index <= 3.0) return 3.8 + (3.5 - 3.8) * (planet_index - 2.0) / 1.0;
+    if (planet_index <= 4.0) return 3.5 + (2.9 - 3.5) * (planet_index - 3.0) / 1.0;
+    if (planet_index <= 5.0) return 2.9 + (2.4 - 2.9) * (planet_index - 4.0) / 1.0;
+    if (planet_index <= 6.0) return 2.4 + (1.8 - 2.4) * (planet_index - 5.0) / 1.0;
+    if (planet_index <= 7.0) return 1.8 + (1.5 - 1.8) * (planet_index - 6.0) / 1.0;
+    if (planet_index <= 8.0) return 1.5 + (1.1 - 1.5) * (planet_index - 7.0) / 1.0;
+    if (planet_index <= 9.0) return 1.1 + (0.7 - 1.1) * (planet_index - 8.0) / 1.0;
+    if (planet_index <= 10.0) return 0.7 + (0.3 - 0.7) * (planet_index - 9.0) / 1.0;
+    return 0.3;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
