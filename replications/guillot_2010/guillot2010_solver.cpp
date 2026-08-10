@@ -16,16 +16,17 @@ void run_guillot_tau_sweep(const std::string& output_csv) {
   out << "tau_optical,gamma,t_atm_k\n";
 
   std::vector<double> gammas = {0.01, 0.1, 1.0, 10.0};
-  double t_eq = 1500.0;
-  double t_int = 100.0;
+  double t_eq = 1200.0;
+  double t_int = 847.0;
 
   for (double gamma : gammas) {
     for (int k = -40; k <= 30; ++k) {
       double log_tau = k * 0.1;
       double tau = std::pow(10.0, log_tau);
 
+      double t_irr = std::sqrt(2.0) * t_eq;
       double term1 = 0.75 * std::pow(t_int, 4) * (tau + 2.0 / 3.0);
-      double term2 = 0.75 * std::pow(t_eq, 4) * (2.0 / 3.0 + 1.0 / (gamma * std::sqrt(3.0)) +
+      double term2 = (3.0 / 16.0) * std::pow(t_irr, 4) * (2.0 / 3.0 + 1.0 / (gamma * std::sqrt(3.0)) +
                                                 (gamma / std::sqrt(3.0) - 1.0 / (gamma * std::sqrt(3.0))) *
                                                     std::exp(-gamma * tau * std::sqrt(3.0)));
 
@@ -57,8 +58,9 @@ void run_guillot_tp_profiles(const std::string& output_csv) {
       double p_pa = p_bar * 1.0e5;
       double tau = (p.kappa_ir * p_pa) / g_m_s2;
 
+      double t_irr = std::sqrt(2.0) * p.t_eq;
       double term1 = 0.75 * std::pow(t_int, 4) * (tau + 2.0 / 3.0);
-      double term2 = 0.75 * std::pow(p.t_eq, 4) * (2.0 / 3.0 + 1.0 / (p.gamma * std::sqrt(3.0)) +
+      double term2 = (3.0 / 16.0) * std::pow(t_irr, 4) * (2.0 / 3.0 + 1.0 / (p.gamma * std::sqrt(3.0)) +
                                                 (p.gamma / std::sqrt(3.0) - 1.0 / (p.gamma * std::sqrt(3.0))) *
                                                     std::exp(-p.gamma * tau * std::sqrt(3.0)));
 

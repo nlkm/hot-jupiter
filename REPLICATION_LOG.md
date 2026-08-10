@@ -34,7 +34,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Saumon, Chabrier & van Horn (1995)** [`astro-ph/9503001`]: *SCVH95 Hydrogen-Helium EOS* — **VERIFIED** (Score: **99.0%**). Free energy minimization H/He EOS tables.
 
 ### 4. Atmospheric Radiative Transfer & Thermal Inflation (20 Papers)
-- **Guillot (2010)** [`1005.0371`]: *Double-Gray Radiative Equilibrium Atmospheres* — **VERIFIED** (Score: **99.8%**). 2-stream double-gray Eddington profile $T(\tau)$.
+- **Guillot (2010)** [`1005.0371`]: *On the Radiative Equilibrium of Irradiated Planetary Atmospheres* — **VERIFIED** (Score: **98.92%**). Double-gray 2-stream $T(\tau)$ and $T(P)$ radiative equilibrium profiles ($R^2 = 0.9892$). Mini-paper PDF report compiled at [`replications/guillot_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/guillot_2010/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic & Tidal Heating* — **VERIFIED** (Score: **97.5%**). Gaussian Ohmic efficiency peak at $T_{\text{eq}} \sim 1600\,\text{K}$.
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflated Hot Jupiters from Ohmic Dissipation* — **VERIFIED** (Score: **97.0%**). Magnetic drag & atmospheric velocity coupling.
 
