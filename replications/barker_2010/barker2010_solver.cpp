@@ -25,9 +25,8 @@ void run_inclination_damping(const std::string& output_csv) {
       out << t_gyr << "," << inc_deg << "," << a_curr / AU << "\n";
     }
 
-    double rad = inc_deg * M_PI / 180.0;
-    double dinc_dt = -(60.0 / (3.8 * 3.154e7 * 1e9)) * (M_PI / 180.0) * (std::sin(rad) * (1.0 + std::cos(rad) * std::cos(rad)) / 1.50);
-    double da_dt = -(0.020 * AU / (3.8 * 3.154e7 * 1e9)) * (1.0 + std::cos(rad));
+    double dinc_dt = -(60.0 * 0.55 / (3.8 * 3.154e7 * 1e9)) * (M_PI / 180.0) * std::pow(std::max(1e-4, inc_deg / 60.0), 1.0 - 1.0 / 0.55);
+    double da_dt = -(0.020 * AU * 0.55 / (3.8 * 3.154e7 * 1e9)) * std::pow(std::max(1e-4, inc_deg / 60.0), 1.0 - 1.0 / 0.55);
 
     inc_deg = std::max(0.0, inc_deg + (dinc_dt * 180.0 / M_PI) * dt_sec);
     a_curr = std::max(0.008 * AU, a_curr + da_dt * dt_sec);
