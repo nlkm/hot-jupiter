@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Owen & Wu (2017) ApJ 847, 29
+# Figure 1: Bimodal Planet Radius Distribution dN/dlogR vs Rp [REarth]
+RADIUS_REARTH,DN_DLOGR_REF
+1.0,0.12
+1.3,0.38
+1.5,0.45
+1.8,0.08
+2.2,0.42
+2.6,0.36
+3.2,0.15
+
+# Figure 2: Evaporative Radius Valley Gap Rp [REarth] vs Orbital Period Porb [days]
+PORB_DAYS,R_GAP_REARTH_REF
+1.0,2.54
+3.0,2.15
+10.0,1.80
+30.0,1.52
+100.0,1.28
