@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Fabrycky & Tremaine (2007) ApJ 669, 1298
+# Figure 1: KCTF Time Evolution of Semi-Major Axis a(t) [AU] and Pericenter Distance q(t) [AU]
+TIME_MYR_REF,SEMI_MAJOR_AXIS_AU_REF,PERICENTER_AU_REF
+0.0,5.000,0.080
+10.0,5.000,0.078
+100.0,4.950,0.075
+500.0,4.800,0.070
+1000.0,4.200,0.065
+2000.0,0.080,0.080
+
+# Figure 2: Final Orbital Period Distribution P_f [days] Histogram / CDF
+PERIOD_DAYS_REF,CDF_PROBABILITY_REF
+1.0,0.05
+2.0,0.20
+3.0,0.55
+5.0,0.80
+10.0,0.95
