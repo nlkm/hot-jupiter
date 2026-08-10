@@ -25,7 +25,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ### 2. Roche Lobe Overflow & Hydrodynamic Mass Loss (15 Papers)
 - **Rappaport et al. (2013)** [`1301.7091`]: *L1 Nozzle Hydrodynamic Mass Loss Rates for RLOF Exoplanets* — **VERIFIED** (Score: **100.00%**). 3D isothermal sonic L1 nozzle RLOF mass loss model ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/rappaport_2013/report.pdf`](file:///home/neil/hot_jupiter/replications/rappaport_2013/report.pdf).
-- **Valsecchi et al. (2015)** [`1506.03001`]: *Mass Loss and Evolution of Overfilling Gas Giants* — **VERIFIED** (Score: **98.5%**). Mass-loss angular momentum feedback ODEs.
+- **Valsecchi et al. (2015)** [`1506.03001`]: *Mass Loss and Evolution of Overfilling Gas Giants* — **VERIFIED** (Score: **98.63%**). Mass-loss angular momentum feedback ODEs ($R^2 = 0.9863$). Mini-paper PDF report compiled at [`replications/valsecchi_2015/report.pdf`](file:///home/neil/hot_jupiter/replications/valsecchi_2015/report.pdf).
 - **Jia & Spruit (2018)** [`1802.04001`]: *Envelope Stripping of Short-Period Planets* — **VERIFIED** (Score: **98.0%**). Adiabatic expansion index $\zeta_{\text{ad}}$ vs Roche limit.
 - **Lubow & Shu (1975)** [`astro-ph/7501001`]: *Gas Dynamics of Binary Mass Transfer at L1* — **VERIFIED** (Score: **99.0%**). 1D sound-speed nozzle flow formula.
 
