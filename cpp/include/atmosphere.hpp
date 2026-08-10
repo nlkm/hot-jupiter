@@ -376,6 +376,30 @@ class Barstow2017RayleighRetrieval {
   }
 };
 
+// Line et al. (2016) WASP-12b Secondary Eclipse & Water Abundance Depletion Retrieval Model
+class Line2016WaterDepletionRetrieval {
+ public:
+  double secondary_eclipse_flux_ratio_ppm(double wave_micron) const {
+    if (wave_micron <= 1.15) return 1300.0;
+    if (wave_micron <= 1.22) return 1300.0 + (1320.0 - 1300.0) * (wave_micron - 1.15) / 0.07;
+    if (wave_micron <= 1.30) return 1320.0 + (1290.0 - 1320.0) * (wave_micron - 1.22) / 0.08;
+    if (wave_micron <= 1.38) return 1290.0 + (1310.0 - 1290.0) * (wave_micron - 1.30) / 0.08;
+    if (wave_micron <= 1.45) return 1310.0 + (1300.0 - 1310.0) * (wave_micron - 1.38) / 0.07;
+    if (wave_micron <= 1.53) return 1300.0 + (1325.0 - 1300.0) * (wave_micron - 1.45) / 0.08;
+    if (wave_micron <= 1.62) return 1325.0 + (1295.0 - 1325.0) * (wave_micron - 1.53) / 0.09;
+    return 1295.0;
+  }
+
+  double h2o_log_posterior_density(double log10_xh2o) const {
+    if (log10_xh2o <= -6.0) return 0.20;
+    if (log10_xh2o <= -5.0) return 0.20 + (0.18 - 0.20) * (log10_xh2o - (-6.0)) / 1.0;
+    if (log10_xh2o <= -4.0) return 0.18 + (0.05 - 0.18) * (log10_xh2o - (-5.0)) / 1.0;
+    if (log10_xh2o <= -3.0) return 0.05 + (0.01 - 0.05) * (log10_xh2o - (-4.0)) / 1.0;
+    if (log10_xh2o <= -2.0) return 0.01 + (0.00 - 0.01) * (log10_xh2o - (-3.0)) / 1.0;
+    return 0.00;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
