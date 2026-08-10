@@ -160,8 +160,8 @@ class CoupledRLOFIntegrator {
       double m_dot_est = m_dot_0 * std::exp(eta_rlof * (ff - 1.0));
       double char_time_rlof = (m_dot_est > 1e-30) ? (0.02 * m_total_kg / m_dot_est) : 1e9;
       double char_time_a = (da_dt_tide > 1e-15) ? (0.02 * a_curr / da_dt_tide) : 1e9;
-      double dt_max_allowed = (ff >= 0.85) ? 50000.0 : 100000.0;
-      double dt_target_yr = std::max(5000.0, std::min({dt_yr, char_time_a, char_time_rlof, dt_max_allowed}));
+      double dt_max_allowed = (ff >= 0.85) ? 50000.0 : 200000.0;
+      double dt_target_yr = std::max(10000.0, std::min({dt_yr, char_time_a, char_time_rlof, dt_max_allowed}));
       int n_sub = std::max(1, static_cast<int>(std::ceil(dt_yr / dt_target_yr)));
       double dt_sub_yr = dt_yr / n_sub;
       double dt_sub_sec = dt_sub_yr * 3.154e7;

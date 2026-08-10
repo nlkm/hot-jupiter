@@ -351,8 +351,8 @@ def main():
 
     print("=== Step 3: Running 2D Grid Parameter Study ===")
     from hot_jupiter.bindings import rlof_sweep_grid_cpp
-    m_grid = np.linspace(0.3, 2.2, 200)
-    a_grid = np.linspace(0.012, 0.038, 200)
+    m_grid = np.linspace(0.3, 2.2, 120)
+    a_grid = np.linspace(0.012, 0.038, 120)
 
     try:
         matrix_outcome = rlof_sweep_grid_cpp(m_grid,
@@ -360,7 +360,7 @@ def main():
                                              m_core_earth=10.0,
                                              m_star_sun=1.0,
                                              t_max_yr=3.0e9,
-                                             num_pts=150)
+                                             num_pts=100)
     except (RuntimeError, OSError, ValueError) as e:
         print(f"Fallback to analytical grid evaluation: {e}")
         matrix_outcome = np.zeros((len(m_grid), len(a_grid)))

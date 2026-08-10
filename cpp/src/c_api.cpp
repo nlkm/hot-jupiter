@@ -79,7 +79,6 @@ void rlof_sweep_grid_c(
     int* out_outcomes_matrix
 ) {
     if (!m_grid || !a_grid || !out_outcomes_matrix) return;
-    #pragma omp parallel for collapse(2) schedule(dynamic)
     for (int i = 0; i < n_m; ++i) {
         for (int j = 0; j < n_a; ++j) {
             double mp_val = m_grid[i];

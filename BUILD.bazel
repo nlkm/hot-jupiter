@@ -20,7 +20,8 @@ cc_library(
         "cpp/include/rlof_engine.hpp",
     ],
     includes = ["cpp/include"],
-    copts = ["-std=c++17", "-O3", "-fvisibility=default"],
+    copts = ["-std=c++17", "-O3", "-fopenmp", "-fvisibility=default"],
+    linkopts = ["-fopenmp"],
     alwayslink = True,
 )
 

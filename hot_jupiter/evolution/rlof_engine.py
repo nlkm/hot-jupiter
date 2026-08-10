@@ -211,9 +211,10 @@ class CoupledRLOFIntegrator:
                               m_dot_est) if m_dot_est > 1e-30 else 1e9
             char_time_a = (0.02 * a_curr /
                            da_dt_tide) if da_dt_tide > 1e-15 else 1e9
-            dt_max_allowed = 50000.0 if ff >= 0.85 else 100000.0
+            dt_max_allowed = 50000.0 if ff >= 0.85 else 200000.0
             dt_target_yr = max(
-                5000.0, min(dt_yr, char_time_a, char_time_rlof, dt_max_allowed))
+                10000.0, min(dt_yr, char_time_a, char_time_rlof,
+                             dt_max_allowed))
             n_sub = max(1, int(np.ceil(dt_yr / dt_target_yr)))
             dt_sub_yr = dt_yr / n_sub
             dt_sub_sec = dt_sub_yr * 3.154e7
@@ -301,11 +302,12 @@ class CoupledRLOFIntegrator:
             else:
                 outcome = EvolutionOutcome.STAGNATED
                 final_m_rem = m_total_kg / M_EARTH
-                z_bulk = (m_core_kg / m_total_kg) if m_total_kg > 0.0 else 1.0
+                z_bulk = (self.m_core_kg /
+                          m_total_kg) if m_total_kg > 0.0 else 1.0
         else:
             outcome = EvolutionOutcome.COOLING
             final_m_rem = m_total_kg / M_EARTH
-            z_bulk = (m_core_kg / m_total_kg) if m_total_kg > 0.0 else 0.0
+            z_bulk = 0.0
 
         return TrajectoryResult(t_arr=t_arr,
                                 a_arr=a_arr,
