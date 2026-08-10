@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Wu & Lithwick (2011) ApJ 735, 109
+# Figure 1: Secular Chaos Eccentricity Growth e(t) over 100 Myr [Myr]
+TIME_MYR,ECCENTRICITY_REF
+0.0,0.10
+20.0,0.45
+40.0,0.78
+60.0,0.92
+80.0,0.98
+100.0,0.99
+
+# Figure 2: Final Semi-Major Axis af [AU] vs Initial Eccentricity ei (for ai = 1.0 AU)
+INITIAL_E,FINAL_A_AU_REF
+0.90,0.190
+0.92,0.154
+0.94,0.116
+0.96,0.078
+0.98,0.040
