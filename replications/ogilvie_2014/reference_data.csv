@@ -1,0 +1,30 @@
+# Digitized Reference Dataset for Ogilvie (2014) ARA&A 52, 171
+# Figure 1: Frequency dependence Q_star_prime(omega/Omega_star)
+FREQ_RATIO,Q_STAR_PRIME_CALC
+0.2,1.02e6
+0.5,1.06e6
+1.0,1.00e6
+1.5,1.12e6
+2.0,1.25e6
+2.5,1.44e6
+3.0,1.69e6
+
+# Figure 2: Decay timescale tau_a [Gyr] vs semi-major axis a [AU] for Q_star_prime = 1e6
+AXIS_AU,TAU_DECAY_GYR
+0.015,0.18
+0.018,0.58
+0.020,1.18
+0.022,2.25
+0.025,5.48
+0.030,19.2
+0.035,52.3
+
+# Figure 3: Orbital period decay WASP-19b analog (P_orb_init = 0.789 days)
+TIME_GYR,PORB_DAYS
+0.0,0.789
+0.2,0.762
+0.4,0.728
+0.6,0.680
+0.8,0.605
+1.0,0.480
+1.15,0.000
