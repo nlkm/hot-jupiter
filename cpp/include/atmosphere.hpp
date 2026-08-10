@@ -217,6 +217,25 @@ class Line2014HotJupiterRetrieval {
   }
 };
 
+// Madhusudhan et al. (2014) C/O Ratio Atmospheric Chemical Equilibrium Model
+class Madhusudhan2014Chemistry {
+ public:
+  void equilibrium_abundances_solar(double T_K, double& log_h2o, double& log_co, double& log_ch4, double& log_co2) const {
+    log_h2o = -3.3;
+    log_co = -3.3;
+    log_co2 = -6.5;
+    log_ch4 = -3.3 - 2.8 * (T_K - 500.0) / 1000.0;
+  }
+
+  double water_abundance_vs_co(double co_ratio) const {
+    if (co_ratio < 1.0) {
+      return -3.3 - 0.5 * (co_ratio - 0.5);
+    } else {
+      return -6.0;
+    }
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP

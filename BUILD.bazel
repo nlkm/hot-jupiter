@@ -424,3 +424,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "madhusudhan2014_solver",
+    srcs = ["replications/madhusudhan_2014/madhusudhan2014_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
