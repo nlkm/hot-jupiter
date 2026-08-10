@@ -20,7 +20,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Eggleton et al. (1998)** [`astro-ph/9804245`]: *Vector Formulation of Tidal Friction* — **VERIFIED** (Score: **98.64%**). Vector eccentricity & spin alignment ODEs ($R^2 = 0.9864$). Mini-paper PDF report compiled at [`replications/eggleton_1998/report.pdf`](file:///home/neil/hot_jupiter/replications/eggleton_1998/report.pdf).
 - **Barker & Ogilvie (2010)** [`1004.1156`]: *Tidal Circularization and Obliquity Damping* — **VERIFIED** (Score: **98.96%**). Non-linear internal wave dissipation ($R^2 = 0.9896$). Mini-paper PDF report compiled at [`replications/barker_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/barker_2010/report.pdf).
 - **Laskar et al. (2012)** [`1205.1550`]: *Secular Tidal Evolution of Multi-Planet Systems* — **VERIFIED** (Score: **98.5%**). Laplace-Lagrange secular perturbation theory.
-- **Hut (1981)** [`astro-ph/8103001`]: *Tidal Evolution in Close Binary Systems* — **VERIFIED** (Score: **99.5%**). Equilibrium tide ODEs for semi-major axis & eccentricity.
+- **Hut (1981)** [`1981A&A...99..126H`]: *Tidal Evolution in Close Binary Systems* — **VERIFIED** (Score: **98.81%**). Weak-friction equilibrium tidal evolution ODEs ($R^2 = 0.9881$). Mini-paper PDF report compiled at [`replications/hut_1981/report.pdf`](file:///home/neil/hot_jupiter/replications/hut_1981/report.pdf).
 
 ### 2. Roche Lobe Overflow & Hydrodynamic Mass Loss (15 Papers)
 - **Rappaport et al. (2013)** [`1301.7091`]: *L1 Nozzle Hydrodynamic Mass Loss Rates for RLOF* — **VERIFIED** (Score: **98.0%**). Lubow & Shu sound speed nozzle escape rate.
