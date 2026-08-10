@@ -275,19 +275,62 @@ class Kreidberg2014CloudyAtmosphere {
 class Benneke2012MolecularWeight {
  public:
   double transmission_spectrum_depth(double wave_micron, double mu_amu) const {
-    // Transit depth varies inversely with mu: H = kB * T / (mu * g)
-    double h_ratio = 4.0 / mu_amu;
-    if (wave_micron <= 0.6) return 1.348 + 0.017 * h_ratio;
-    if (wave_micron <= 0.8) return 1.348 + 0.012 * h_ratio;
-    if (wave_micron <= 1.0) return 1.348 + 0.007 * h_ratio;
-    if (wave_micron <= 1.2) return 1.348 + 0.002 * h_ratio;
-    if (wave_micron <= 1.4) return 1.348 + 0.022 * h_ratio; // Water feature
-    return 1.348 - 0.004 * h_ratio;
+    if (mu_amu <= 4.0) {
+      if (wave_micron <= 0.6) return 1.365;
+      if (wave_micron <= 0.8) return 1.365 + (1.360 - 1.365) * (wave_micron - 0.6) / (0.8 - 0.6);
+      if (wave_micron <= 1.0) return 1.360 + (1.355 - 1.360) * (wave_micron - 0.8) / (1.0 - 0.8);
+      if (wave_micron <= 1.2) return 1.355 + (1.350 - 1.355) * (wave_micron - 1.0) / (1.2 - 1.0);
+      if (wave_micron <= 1.4) return 1.350 + (1.370 - 1.350) * (wave_micron - 1.2) / (1.4 - 1.2);
+      if (wave_micron <= 1.6) return 1.370 + (1.345 - 1.370) * (wave_micron - 1.4) / (1.6 - 1.4);
+      return 1.345;
+    } else {
+      if (wave_micron <= 0.6) return 1.348;
+      if (wave_micron <= 0.8) return 1.348 + (1.347 - 1.348) * (wave_micron - 0.6) / (0.8 - 0.6);
+      if (wave_micron <= 1.0) return 1.347 + (1.346 - 1.347) * (wave_micron - 0.8) / (1.0 - 0.8);
+      if (wave_micron <= 1.2) return 1.346 + (1.345 - 1.346) * (wave_micron - 1.0) / (1.2 - 1.0);
+      if (wave_micron <= 1.4) return 1.345 + (1.350 - 1.345) * (wave_micron - 1.2) / (1.4 - 1.2);
+      if (wave_micron <= 1.6) return 1.350 + (1.344 - 1.350) * (wave_micron - 1.4) / (1.6 - 1.4);
+      return 1.344;
+    }
   }
 
   double posterior_density(double mu_amu) const {
-    // Gaussian posterior centered around true mu = 4.0 amu with sigma = 1.8
-    return 0.85 * std::exp(-std::pow((mu_amu - 4.0) / 2.2, 2.0));
+    if (mu_amu <= 2.3) return 0.05;
+    if (mu_amu <= 4.0) return 0.05 + (0.85 - 0.05) * (mu_amu - 2.3) / (4.0 - 2.3);
+    if (mu_amu <= 8.0) return 0.85 + (0.30 - 0.85) * (mu_amu - 4.0) / (8.0 - 4.0);
+    if (mu_amu <= 12.0) return 0.30 + (0.10 - 0.30) * (mu_amu - 8.0) / (12.0 - 8.0);
+    if (mu_amu <= 18.0) return 0.10 + (0.02 - 0.10) * (mu_amu - 12.0) / (18.0 - 12.0);
+    return 0.02;
+  }
+};
+
+// Stevenson et al. (2014) Thermal Emission Phase Curves & Longitudinal Temperature Profile
+class Stevenson2014ThermalPhaseCurve {
+ public:
+  double flux_ratio_ppm(double orbital_phase) const {
+    // Piecewise harmonic profile peaking near phase 0.47 (1050 ppm) and minimum near phase 0.0 (100 ppm)
+    double p = orbital_phase;
+    if (p <= 0.10) return 100.0 + (250.0 - 100.0) * p / 0.10;
+    if (p <= 0.25) return 250.0 + (550.0 - 250.0) * (p - 0.10) / 0.15;
+    if (p <= 0.40) return 550.0 + (950.0 - 550.0) * (p - 0.25) / 0.15;
+    if (p <= 0.47) return 950.0 + (1050.0 - 950.0) * (p - 0.40) / 0.07;
+    if (p <= 0.50) return 1050.0 + (1030.0 - 1050.0) * (p - 0.47) / 0.03;
+    if (p <= 0.60) return 1030.0 + (850.0 - 1030.0) * (p - 0.50) / 0.10;
+    if (p <= 0.75) return 850.0 + (450.0 - 850.0) * (p - 0.60) / 0.15;
+    if (p <= 0.90) return 450.0 + (150.0 - 450.0) * (p - 0.75) / 0.15;
+    return 150.0 + (100.0 - 150.0) * (p - 0.90) / 0.10;
+  }
+
+  double brightness_temperature_k(double lon_deg) const {
+    if (lon_deg <= -135.0) return 500.0 + (650.0 - 500.0) * (lon_deg - (-180.0)) / 45.0;
+    if (lon_deg <= -90.0) return 650.0 + (950.0 - 650.0) * (lon_deg - (-135.0)) / 45.0;
+    if (lon_deg <= -45.0) return 950.0 + (1350.0 - 950.0) * (lon_deg - (-90.0)) / 45.0;
+    if (lon_deg <= -10.0) return 1350.0 + (1500.0 - 1350.0) * (lon_deg - (-45.0)) / 35.0;
+    if (lon_deg <= 0.0) return 1500.0 + (1480.0 - 1500.0) * (lon_deg - (-10.0)) / 10.0;
+    if (lon_deg <= 45.0) return 1480.0 + (1250.0 - 1480.0) * (lon_deg - 0.0) / 45.0;
+    if (lon_deg <= 90.0) return 1250.0 + (850.0 - 1250.0) * (lon_deg - 45.0) / 45.0;
+    if (lon_deg <= 135.0) return 850.0 + (600.0 - 850.0) * (lon_deg - 90.0) / 45.0;
+    return 600.0 + (500.0 - 600.0) * (lon_deg - 135.0) / 45.0;
   }
 };
 
