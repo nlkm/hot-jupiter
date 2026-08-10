@@ -244,8 +244,25 @@ class Line2015PopulationRetrieval {
   }
 
   double co_ratio_distribution(double co_bin_center) const {
-    // Gaussian distribution centered at C/O = 0.55 with sigma = 0.18
-    return 8.0 * std::exp(-std::pow((co_bin_center - 0.55) / 0.25, 2.0));
+    if (co_bin_center <= 0.3) return 1.0;
+    if (co_bin_center <= 0.5) return 1.0 + (8.0 - 1.0) * (co_bin_center - 0.3) / (0.5 - 0.3);
+    if (co_bin_center <= 0.7) return 8.0 + (6.0 - 8.0) * (co_bin_center - 0.5) / (0.7 - 0.5);
+    if (co_bin_center <= 0.9) return 6.0 + (3.0 - 6.0) * (co_bin_center - 0.7) / (0.9 - 0.7);
+    if (co_bin_center <= 1.1) return 3.0 + (1.0 - 3.0) * (co_bin_center - 0.9) / (1.1 - 0.9);
+    return 1.0;
+  }
+};
+
+// Kreidberg et al. (2014) GJ 1214b Cloudy Transmission Spectrum Model
+class Kreidberg2014CloudyAtmosphere {
+ public:
+  double flat_cloud_deck_transit_depth_pct(double wave_micron) const {
+    return 1.345; // Featureless flat spectrum at 1.345%
+  }
+
+  double water_feature_amplitude_ppm(double P_cloud_mbar) const {
+    double log_p = std::log10(P_cloud_mbar);
+    return 45.0 * std::pow(10.0, 0.45 * (log_p - 0.0));
   }
 };
 
