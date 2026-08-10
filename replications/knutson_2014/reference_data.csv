@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Knutson et al. (2014) ApJ 785, 126
+# Figure 1: Transmission Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns] for HD 97658b
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PCT_REF,TRANSIT_DEPTH_ERR_REF
+1.15,0.570,0.008
+1.22,0.572,0.008
+1.30,0.569,0.008
+1.38,0.571,0.008
+1.45,0.570,0.008
+1.53,0.572,0.008
+1.62,0.569,0.008
+
+# Figure 2: Water Feature Amplitude Delta (R_p / R_star)^2 [ppm] vs Metallicity [M/H] [dex] (0 to 3.0)
+METALLICITY_DEX_REF,H2O_AMPLITUDE_PPM_REF
+0.0,180.0
+0.5,140.0
+1.0,90.0
+1.5,50.0
+2.0,25.0
+2.5,10.0
+3.0,3.0
