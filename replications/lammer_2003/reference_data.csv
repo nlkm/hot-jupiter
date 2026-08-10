@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Lammer et al. (2003) ApJL 598, L121
+# Figure 1: Hydrodynamic Mass Loss Rate dM/dt [g/s] vs Stellar XUV Flux FXUV [erg/cm^2/s]
+FXUV_ERG_CM2_S,DM_DT_GS_REF
+10.0,1.2e10
+30.0,3.6e10
+100.0,1.2e11
+300.0,3.6e11
+1000.0,1.2e12
+3000.0,3.6e12
+
+# Figure 2: Mass Evolution Mp(t) [MJ] for HD 209458b over 5 Gyr
+TIME_GYR,MP_MJ_REF
+0.0,0.720
+1.0,0.712
+2.0,0.704
+3.0,0.696
+4.0,0.688
+5.0,0.680
