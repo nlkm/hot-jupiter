@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Jia & Spruit (2018) MNRAS 476, 1765
+# Figure 1: Envelope Mass Fraction f_env vs Planetary Radius Rp [Rjup]
+PLANETARY_RADIUS_RJUP,ENVELOPE_MASS_FRACTION_REF
+1.00,0.010
+1.15,0.050
+1.30,0.150
+1.45,0.300
+1.60,0.500
+1.75,0.700
+
+# Figure 2: Roche-Filling Mass Loss Rate Mdot [g/s] vs Core Mass Fraction Mc / Mp
+CORE_MASS_FRACTION,MDOT_RLOF_GS_REF
+0.10,1.2e+15
+0.30,5.8e+14
+0.50,1.4e+14
+0.70,2.1e+13
+0.90,1.5e+12
