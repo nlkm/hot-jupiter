@@ -1,21 +1,20 @@
 # Replication Specification: Sing et al. (2016)
-**Title**: A Continuum from Clear to Cloudy Hot-Jupiter Atmospheres  
-**Authors**: D. K. Sing et al.  
+**Title**: A continuum from clear to cloudy hot-Jupiter atmospheres  
+**Authors**: David K. Sing, Jonathan J. Fortney, Nikolay Nikolov, et al.  
 **Journal**: Nature, 529, 59 (2016) | **arXiv**: `1512.04341`
 
 ---
 
 ## Executive Summary & Core Equations
 
-Sing et al. (2016) perform HST and Spitzer transmission spectroscopy of 10 hot Jupiters, establishing a clear-to-cloudy atmospheric continuum.
+Sing et al. (2016) perform a landmark HST/Spitzer transmission spectral survey of 10 hot Jupiters, establishing a clear-to-cloudy continuum governed by cloud opacity dampening.
 
-### 1. Transmission Spectral Slope & Scale Height Scaling
-$$\Delta \left( \frac{R_p}{R_\star} \right)^2 = \frac{2 R_p H}{R_\star^2} \ln \left( \frac{\kappa_\lambda}{\kappa_0} \right)$$
-where $H = \frac{k_B T}{\mu g}$.
+### 1. Water Spectral Feature Scale Height Formula
+$$\Delta N_H = \frac{\Delta (R_p/R_\star)}{H / R_\star}$$
 
 ---
 
 ## Benchmark Figures to Replicate
 
-1. **Figure 1**: Transmission spectra $(R_p/R_\star)^2$ vs wavelength $\lambda$ [$\mu$m] for clear (WASP-31b) vs hazy/cloudy (WASP-12b) atmospheres.
-2. **Figure 2**: Water feature amplitude $\Delta H_{\text{H2O}}$ [scale heights] vs cloud optical depth $\tau_{\text{cloud}}$.
+1. **Figure 1**: WASP-39b clear transmission spectrum $(R_p / R_\star)^2$ vs wavelength $\lambda$ [$\mu$m] (0.3 to 5.0 $\mu$m).
+2. **Figure 2**: Water absorption amplitude $\Delta N_H$ [scale heights] across 10 hot Jupiters.
