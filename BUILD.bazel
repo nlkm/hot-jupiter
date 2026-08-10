@@ -466,3 +466,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "barstow2017_solver",
+    srcs = ["replications/barstow_2017/barstow2017_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)

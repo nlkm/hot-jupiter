@@ -352,6 +352,30 @@ class Knutson2014HighMetallicityAtmosphere {
   }
 };
 
+// Barstow et al. (2017) Multi-Planet Transmission Spectra & Rayleigh Slope Retrieval Model
+class Barstow2017RayleighRetrieval {
+ public:
+  double transmission_spectrum_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.520;
+    if (wave_micron <= 0.45) return 1.520 + (1.490 - 1.520) * (wave_micron - 0.35) / 0.10;
+    if (wave_micron <= 0.60) return 1.490 + (1.470 - 1.490) * (wave_micron - 0.45) / 0.15;
+    if (wave_micron <= 0.80) return 1.470 + (1.460 - 1.470) * (wave_micron - 0.60) / 0.20;
+    if (wave_micron <= 1.15) return 1.460 + (1.455 - 1.460) * (wave_micron - 0.80) / 0.35;
+    if (wave_micron <= 1.40) return 1.455 + (1.485 - 1.455) * (wave_micron - 1.15) / 0.25;
+    if (wave_micron <= 1.65) return 1.485 + (1.450 - 1.485) * (wave_micron - 1.40) / 0.25;
+    return 1.450;
+  }
+
+  double rayleigh_slope_index(double P_cloud_mbar) const {
+    double log_p = std::log10(P_cloud_mbar);
+    if (log_p <= -2.0) return -1.2;
+    if (log_p <= -1.0) return -1.2 + (-2.0 - (-1.2)) * (log_p - (-2.0)) / (-1.0 - (-2.0));
+    if (log_p <= 0.0) return -2.0 + (-3.5 - (-2.0)) * (log_p - (-1.0)) / (0.0 - (-1.0));
+    if (log_p <= 1.0) return -3.5 + (-4.0 - (-3.5)) * (log_p - 0.0) / (1.0 - 0.0);
+    return -4.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
