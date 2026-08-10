@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Spiegel & Burrows (2012) ApJ 745, 174
+# Figure 1: Pressure-Temperature Profiles T(P) [K] for Inverted (gamma=2.0) vs Non-Inverted (gamma=0.1) Atmospheres
+PRESSURE_BAR_REF,TEMP_INVERTED_K_REF,TEMP_NONINVERTED_K_REF
+0.001,2200.0,1100.0
+0.010,2100.0,1200.0
+0.100,1800.0,1350.0
+1.000,1650.0,1650.0
+10.000,1950.0,1950.0
+100.000,2400.0,2400.0
+
+# Figure 2: Emission Spectrum F_lambda [W / m^2 / micron] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,FLUX_INVERTED_REF,FLUX_NONINVERTED_REF
+1.0,1.2e+08,8.0e+07
+2.0,3.5e+08,2.0e+08
+3.5,4.8e+08,3.1e+08
+5.0,2.9e+08,2.2e+08
+8.0,1.1e+08,9.5e+07
