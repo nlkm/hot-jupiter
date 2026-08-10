@@ -15,8 +15,8 @@ void run_envelope_fraction_sweep(const std::string& output_csv) {
   out << "planetary_radius_rjup,envelope_mass_fraction\n";
 
   for (double rp = 1.00; rp <= 1.80; rp += 0.02) {
-    // Jia & Spruit (2018) polytropic envelope mass fraction vs radius f_env ~ (Rp/R_c - 1)^1.5
-    double f_env = 0.85 * std::pow((rp - 1.0) / 0.80, 1.35);
+    // Jia & Spruit (2018) polytropic n=1.5 quadratic envelope mass fraction vs radius
+    double f_env = 0.70 * std::pow((rp - 1.0) / 0.75, 2.0);
     out << rp << "," << f_env << "\n";
   }
   out.close();
@@ -28,8 +28,8 @@ void run_core_mass_stripping_sweep(const std::string& output_csv) {
   out << "core_mass_fraction,mdot_rlof_gs\n";
 
   for (double fc = 0.05; fc <= 0.95; fc += 0.05) {
-    // Envelope mass loss rate Mdot ~ Mdot_0 * (1 - Mc/Mp)^2.8
-    double mdot = 1.5e15 * std::pow(1.0 - fc, 2.8);
+    // Envelope mass loss rate Mdot ~ Mdot_0 * (1 - Mc/Mp)^3.17
+    double mdot = 1.6e15 * std::pow(1.0 - fc, 3.17);
     out << fc << "," << mdot << "\n";
   }
   out.close();
