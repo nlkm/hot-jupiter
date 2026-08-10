@@ -14,13 +14,14 @@ void run_mass_radius_grid(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "mass_mearth,radius_rj\n";
 
-  double m_core_mearth = 10.0; // Core mass in MEarth
-
   for (double m_earth = 10.0; m_earth <= 3178.0; m_earth *= 1.15) {
-    double m_jup = m_earth / 317.8;
-    double r_gas = 1.05 * std::pow(m_jup, 0.04);
-    double core_reduction = 1.0 - 0.12 * std::pow(m_core_mearth / m_earth, 0.5);
-    double r_jup = r_gas * core_reduction;
+    double r_jup;
+    if (m_earth < 100.0) {
+      r_jup = 0.78 * std::pow(m_earth / 100.0, 0.51);
+    } else {
+      double x = std::log(m_earth / 100.0);
+      r_jup = 0.78 + 0.24 * x - 0.05 * x * x;
+    }
 
     out << m_earth << "," << r_jup << "\n";
   }
