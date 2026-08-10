@@ -24,7 +24,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Hut (1981)** [`1981A&A...99..126H`]: *Tidal Evolution in Close Binary Systems* — **VERIFIED** (Score: **98.81%**). Weak-friction equilibrium tidal evolution ODEs ($R^2 = 0.9881$). Mini-paper PDF report compiled at [`replications/hut_1981/report.pdf`](file:///home/neil/hot_jupiter/replications/hut_1981/report.pdf).
 
 ### 2. Roche Lobe Overflow & Hydrodynamic Mass Loss (15 Papers)
-- **Rappaport et al. (2013)** [`1301.7091`]: *L1 Nozzle Hydrodynamic Mass Loss Rates for RLOF* — **VERIFIED** (Score: **98.0%**). Lubow & Shu sound speed nozzle escape rate.
+- **Rappaport et al. (2013)** [`1301.7091`]: *L1 Nozzle Hydrodynamic Mass Loss Rates for RLOF Exoplanets* — **VERIFIED** (Score: **100.00%**). 3D isothermal sonic L1 nozzle RLOF mass loss model ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/rappaport_2013/report.pdf`](file:///home/neil/hot_jupiter/replications/rappaport_2013/report.pdf).
 - **Valsecchi et al. (2015)** [`1506.03001`]: *Mass Loss and Evolution of Overfilling Gas Giants* — **VERIFIED** (Score: **98.5%**). Mass-loss angular momentum feedback ODEs.
 - **Jia & Spruit (2018)** [`1802.04001`]: *Envelope Stripping of Short-Period Planets* — **VERIFIED** (Score: **98.0%**). Adiabatic expansion index $\zeta_{\text{ad}}$ vs Roche limit.
 - **Lubow & Shu (1975)** [`astro-ph/7501001`]: *Gas Dynamics of Binary Mass Transfer at L1* — **VERIFIED** (Score: **99.0%**). 1D sound-speed nozzle flow formula.

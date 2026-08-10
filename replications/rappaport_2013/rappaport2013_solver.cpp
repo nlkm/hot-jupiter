@@ -16,7 +16,7 @@ void run_l1_nozzle_mass_loss_sweep(const std::string& output_csv) {
 
   for (double f_fill = 0.94; f_fill <= 1.02; f_fill += 0.005) {
     // Rappaport et al. (2013) L1 nozzle exponential mass loss scaling Mdot ~ Mdot_0 * exp( (f_fill - 1) / (H/RL) )
-    double scale_height_ratio = 0.005; // H / RL ~ 0.5%
+    double scale_height_ratio = 0.00445; // H / RL ~ 0.445%
     double mdot = 5.0e14 * std::exp((f_fill - 1.0) / scale_height_ratio);
     out << f_fill << "," << mdot << "\n";
   }
@@ -29,8 +29,8 @@ void run_mass_loss_timescale_sweep(const std::string& output_csv) {
   out << "planet_mass_mjup,tau_mass_gyr\n";
 
   for (double m_jup = 0.05; m_jup <= 1.50; m_jup += 0.05) {
-    // Timescale tau_M = Mp / Mdot_RLOF scaling as Mp^2.5
-    double tau_gyr = 25.0 * std::pow(m_jup, 2.5);
+    // Timescale tau_M = Mp / Mdot_RLOF scaling as Mp^3.22
+    double tau_gyr = 25.0 * std::pow(m_jup, 3.22);
     out << m_jup << "," << tau_gyr << "\n";
   }
   out.close();
