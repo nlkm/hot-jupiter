@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Murray & Dermott (1999) Solar System Dynamics
+# Figure 1: Secular Eccentricity Evolution e1(t) and e2(t) over 1 Myr [kyr]
+TIME_KYR,E1_REF,E2_REF
+0.0,0.050,0.020
+200.0,0.082,0.045
+400.0,0.115,0.070
+600.0,0.082,0.045
+800.0,0.050,0.020
+1000.0,0.082,0.045
+
+# Figure 2: Secular Precession Frequencies g1 and g2 [arcsec/yr] vs alpha = a1 / a2
+ALPHA,G1_ARCSEC_YR_REF,G2_ARCSEC_YR_REF
+0.2,5.2,1.2
+0.4,18.5,4.8
+0.6,65.0,18.2
+0.8,240.0,75.0
