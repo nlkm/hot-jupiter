@@ -200,3 +200,10 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "jackson2017_solver",
+    srcs = ["replications/jackson_2017/jackson2017_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
