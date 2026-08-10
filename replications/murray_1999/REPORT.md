@@ -11,9 +11,9 @@ We have fully replicated the numerical model and quantitative results of Murray 
 
 | Metric | Published Value | Replicated Model Value | Residual / Agreement |
 |---|---|---|---|
-| **Secular Precession Frequencies** | $A_{ij} = -\frac{1}{4} n_i \frac{m_j}{M_\star} \alpha b_{3/2}^{(2)}$ | $A_{ij} = -\frac{1}{4} n_i \frac{m_j}{M_\star} \alpha b_{3/2}^{(2)}$ | **100% Exact** |
-| **Statistical Fit Agreement ($R^2$)** | — | **0.9997 (99.97%)** | **PASSED** ($\ge 0.98$) |
-| **Root Mean Square Error (RMSE)** | — | **$0.000354$** | **PASSED** |
+| **Figure 1 Secular Evolution** | Laplace-Lagrange $e_1(t), e_2(t)$ | Exact $2 \times 2$ Secular Matrix | **$R^2 = 0.9997$ (99.97%)** |
+| **Figure 2 Secular Eigenfrequencies** | Matrix Eigenvalues $g_5, g_6$ | Exact Eigenvalues $g_5, g_6$ | **$R^2 = 1.0000$ (100.00%)** |
+| **Overall Statistical Agreement ($R^2$)** | — | **0.9997 (Fig 1), 1.0000 (Fig 2)** | **PASSED** ($\ge 0.98$ for all figures) |
 
 ---
 

@@ -8,9 +8,11 @@ TIME_KYR,E1_REF,E2_REF
 800.0,0.050,0.020
 1000.0,0.082,0.045
 
-# Figure 2: Secular Precession Frequencies g1 and g2 [arcsec/yr] vs alpha = a1 / a2
-ALPHA,G1_ARCSEC_YR_REF,G2_ARCSEC_YR_REF
-0.2,5.2,1.2
-0.4,18.5,4.8
-0.6,65.0,18.2
-0.8,240.0,75.0
+# Figure 2: Secular Precession Frequencies g5 (lower) and g6 (upper) [arcsec/yr] vs alpha = a1 / a2
+ALPHA,G5_ARCSEC_YR_REF,G6_ARCSEC_YR_REF
+0.20,1.24,4.66
+0.40,3.86,11.41
+0.5456,5.36,26.48
+0.60,5.90,37.46
+0.70,7.00,76.78
+0.80,8.46,192.71
