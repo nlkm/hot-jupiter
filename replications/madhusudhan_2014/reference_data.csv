@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Madhusudhan et al. (2014) Space Sci Rev 186, 269
+# Figure 1: Atmospheric Abundance vs Temperature T [K] for C/O = 0.5 (Solar)
+TEMP_K_REF,LOG10_X_H2O_REF,LOG10_X_CO_REF,LOG10_X_CH4_REF,LOG10_X_CO2_REF
+800.0,-3.3,-3.3,-4.2,-6.5
+1200.0,-3.3,-3.3,-5.1,-6.5
+1600.0,-3.3,-3.3,-6.4,-6.5
+2000.0,-3.3,-3.3,-7.6,-6.5
+2400.0,-3.3,-3.3,-8.7,-6.5
+
+# Figure 2: Water Mixing Ratio log10(X_H2O) vs C/O ratio
+CO_RATIO_REF,LOG10_X_H2O_CO_REF
+0.2,-3.1
+0.5,-3.3
+0.8,-3.7
+1.0,-6.0
+1.2,-6.0
+1.5,-6.0
