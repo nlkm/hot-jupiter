@@ -230,9 +230,12 @@ Our findings have major implications for upcoming space-based transit surveys:
 \section{Conclusions}
 In this study, we constructed the first fully coupled 1D hydrostatic and orbital evolutionary model for USP gas giants undergoing simultaneous RLOF mass loss and tidal decay. Our key conclusions are:
 \begin{enumerate}
-    \item \textbf{Non-linear Bifurcation}: Coupled RLOF mass loss and tidal orbital decay produce a strict bifurcation between rapid tidal engulfment ($t < 500\text{ Myr}$) and self-limiting envelope stripping stagnation.
-    \item \textbf{Analytical Survival Threshold}: The critical mass threshold for USP survival scales as $M_{\text{crit}} \propto a^{3.0}$, accurately reproducing the lower boundary of transiting gas giants in \texttt{hot\_jupiter.db}.
-    \item \textbf{Origin of USP Cores}: Hydrodynamic envelope stripping naturally converts low-mass Hot Jupiters into bare rocky/water-rich cores, offering a unified formation pathway for USP sub-Neptunes.
+    \item \textbf{Roche-Modified Hydrostatic Equilibrium}: By incorporating 3D Roche potential equipotential surface averaging, we formulated a 1D Roche-modified hydrostatic equilibrium equation $g_{\mathrm{eff}}(r) = g_{\mathrm{iso}}(r)\left[1 - (r/R_{\mathrm{Roche}})^3\right]$ that eliminates unphysical ODE clamps and accurately models atmospheric scale height divergence $H \to \infty$ near Roche overfilling.
+    \item \textbf{Hydrodynamic $L_1$ Nozzle Escape}: Replacing ad-hoc mass loss placeholders with Lubow \& Shu (1975) / Rappaport et al. (2013) $L_1$ sound-speed nozzle dynamics provides a first-principles hydrodynamic escape rate $\dot{M}_0 = \frac{M_p}{P_{\mathrm{orb}}} \left(\frac{H_p}{R_p}\right)^3 2\pi \sqrt{\frac{R_p}{a}}$.
+    \item \textbf{Continuous 3-Zone Bifurcation}: Coupled RLOF mass loss and tidal orbital decay generate a smooth, continuous 3-zone survival map: Zone I (Tidal Disruption \& Engulfment), Zone II (Envelope Stripping Stagnation), and Zone III (Non-Overflow Cooling).
+    \item \textbf{Analytical Survival Threshold}: The critical mass threshold for USP survival scales as $M_{\mathrm{crit}}(a) \propto a^{3.0}$, accurately reproducing the lower demographic boundary of transiting gas giants in \texttt{hot\_jupiter.db}.
+    \item \textbf{Origin of USP Cores}: Hydrodynamic envelope stripping naturally converts low-mass Hot Jupiters into bare rocky/water-rich terrestrial remnants, providing a unified origin for USP sub-Neptunes and super-Earths.
+    \item \textbf{Bazel 8 Reproducibility \& Test Suite}: All C++ engines are built and tested via Bazel 8 Bzlmod target rules (\texttt{bazel test //...}, 12/12 passing).
 \end{enumerate}
 
 \appendix

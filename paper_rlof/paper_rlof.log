@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  9 AUG 2026 17:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.3)  9 AUG 2026 17:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -632,8 +632,18 @@ ut line 210.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5 <./figures/fig6_core_mass_remnants.png> <./figures/fig7_core_threshold_scali
-ng.png> <./figures/fig8_heavy_element_enrichment.png>] [6]
-Overfull \hbox (73.25816pt too wide) detected at line 306
+ng.png> <./figures/fig8_heavy_element_enrichment.png>]
+Underfull \hbox (badness 1596) in paragraph at lines 233--234
+\OT1/cmr/m/n/10 (+20) in-cor-po-rat-ing 3D Roche po-ten-tial equipo-ten-tial
+ []
+
+
+Underfull \hbox (badness 1377) in paragraph at lines 233--234
+\OT1/cmr/m/n/10 (+20) sur-face av-er-ag-ing, we for-mu-lated a 1D Roche-
+ []
+
+[6]
+Overfull \hbox (73.25816pt too wide) detected at line 309
 [][][][] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[] [] \OML/cmm/m/it/10 ;  [] \OT
 1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^@[] []
  []
@@ -647,11 +657,11 @@ Package rerunfilecheck Info: File `paper_rlof.out' has not changed.
 (rerunfilecheck)             Checksum: D6A6A352F33AFBC5F4712BA57D9C544A;5130.
  ) 
 Here is how much of TeX's memory you used:
- 12887 strings out of 476182
- 199467 string characters out of 5795596
- 1950975 words of memory out of 5000000
+ 12896 strings out of 476182
+ 199538 string characters out of 5795596
+ 1951975 words of memory out of 5000000
  34480 multiletter control sequences out of 15000+600000
- 573793 words of font info for 165 fonts, out of 8000000 for 9000
+ 573973 words of font info for 168 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,13n,79p,1735b,558s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/neil/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600p
@@ -661,18 +671,20 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on paper_rlof.pdf (7 pages, 3405672 bytes).
+s/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on paper_rlof.pdf (7 pages, 3426382 bytes).
 PDF statistics:
- 353 PDF objects out of 1000 (max. 8388607)
- 288 compressed objects within 3 object streams
- 83 named destinations out of 1000 (max. 500000)
+ 367 PDF objects out of 1000 (max. 8388607)
+ 298 compressed objects within 3 object streams
+ 86 named destinations out of 1000 (max. 500000)
  33504 words of extra memory for PDF output out of 35830 (max. 10000000)
 
