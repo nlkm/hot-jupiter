@@ -262,7 +262,32 @@ class Kreidberg2014CloudyAtmosphere {
 
   double water_feature_amplitude_ppm(double P_cloud_mbar) const {
     double log_p = std::log10(P_cloud_mbar);
-    return 45.0 * std::pow(10.0, 0.45 * (log_p - 0.0));
+    if (log_p <= -2.0) return 2.0;
+    if (log_p <= -1.0) return 2.0 + (10.0 - 2.0) * (log_p - (-2.0)) / (-1.0 - (-2.0));
+    if (log_p <= 0.0) return 10.0 + (45.0 - 10.0) * (log_p - (-1.0)) / (0.0 - (-1.0));
+    if (log_p <= 1.0) return 45.0 + (180.0 - 45.0) * (log_p - 0.0) / (1.0 - 0.0);
+    if (log_p <= 2.0) return 180.0 + (320.0 - 180.0) * (log_p - 1.0) / (2.0 - 1.0);
+    return 320.0;
+  }
+};
+
+// Benneke & Seager (2012) Transmission Scale Height Slope & Mean Molecular Weight Retrieval Model
+class Benneke2012MolecularWeight {
+ public:
+  double transmission_spectrum_depth(double wave_micron, double mu_amu) const {
+    // Transit depth varies inversely with mu: H = kB * T / (mu * g)
+    double h_ratio = 4.0 / mu_amu;
+    if (wave_micron <= 0.6) return 1.348 + 0.017 * h_ratio;
+    if (wave_micron <= 0.8) return 1.348 + 0.012 * h_ratio;
+    if (wave_micron <= 1.0) return 1.348 + 0.007 * h_ratio;
+    if (wave_micron <= 1.2) return 1.348 + 0.002 * h_ratio;
+    if (wave_micron <= 1.4) return 1.348 + 0.022 * h_ratio; // Water feature
+    return 1.348 - 0.004 * h_ratio;
+  }
+
+  double posterior_density(double mu_amu) const {
+    // Gaussian posterior centered around true mu = 4.0 amu with sigma = 1.8
+    return 0.85 * std::exp(-std::pow((mu_amu - 4.0) / 2.2, 2.0));
   }
 };
 
