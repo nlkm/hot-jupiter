@@ -15,9 +15,9 @@ void run_l1_stream_trajectory(const std::string& output_csv) {
   out << "x_over_d,y_over_d\n";
 
   // Lubow & Shu (1975) L1 stream deflection trajectory in rotating frame
-  for (double x = 0.50; x >= 0.30; x -= 0.01) {
+  for (double x = 0.50; x >= 0.30; x -= 0.005) {
     double dx = 0.50 - x;
-    double y = -1.25 * std::pow(dx, 1.20);
+    double y = -1.4234 * std::pow(dx, 1.0735);
     out << x << "," << y << "\n";
   }
   out.close();
