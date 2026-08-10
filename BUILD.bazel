@@ -284,3 +284,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "fortney2007_solver",
+    srcs = ["replications/fortney_2007/fortney2007_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
