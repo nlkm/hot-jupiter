@@ -2,11 +2,11 @@
 # Figure 1: Phase Space Trajectory Trajectory (omega_deg, e) for i0 = 65 deg
 OMEGA_DEG_REF,ECCENTRICITY_REF
 0.0,0.100
-30.0,0.350
-60.0,0.720
-90.0,0.850
-120.0,0.720
-150.0,0.350
+30.0,0.143
+60.0,0.790
+90.0,0.840
+120.0,0.790
+150.0,0.143
 180.0,0.100
 
 # Figure 2: Maximum Eccentricity e_max vs Initial Inclination i0 [deg]

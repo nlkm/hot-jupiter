@@ -17,15 +17,30 @@ void run_kozai_phase_space(const std::string& output_csv) {
   double i0_rad = 65.0 * M_PI / 180.0;
   double hz = std::cos(i0_rad);  // H_z for e0 -> 0
 
-  for (double deg = 0.0; deg <= 180.0; deg += 2.0) {
+  double e0 = 0.10;
+  double hz2 = hz * hz;
+  double c2i_0 = hz2 / (1.0 - e0 * e0);
+  double s2i_0 = 1.0 - c2i_0;
+  double theta_0 = (2.0 + 3.0 * e0 * e0) * (3.0 * c2i_0 - 1.0) + 15.0 * e0 * e0 * s2i_0;
+
+  for (double deg = 0.0; deg <= 180.0; deg += 1.0) {
     double omega = deg * M_PI / 180.0;
-    // Solve Kozai Hamiltonian for e(omega) with fixed H_z = sqrt(1-e^2)*cos(i)
-    // Theta = (2 + 3e^2)*(3 cos^2 i - 1) + 15 e^2 sin^2 i cos(2 omega)
-    // For i0 = 65 deg: e(omega = 90 deg) = e_max, e(omega = 0) = 0.10
-    double sin2_omega = std::sin(omega) * std::sin(omega);
-    double e_max = std::sqrt(1.0 - (5.0 / 3.0) * hz * hz);
-    double e = e_max * std::sqrt(sin2_omega) + 0.10 * (1.0 - std::sqrt(sin2_omega));
-    out << deg << "," << e << "\n";
+    double cos_2w = std::cos(2.0 * omega);
+    double best_e = 0.0;
+    double min_diff = 1e9;
+
+    for (double e_val = 0.01; e_val < 0.99; e_val += 0.001) {
+      double c2i = hz2 / (1.0 - e_val * e_val);
+      double s2i = 1.0 - c2i;
+      if (s2i < 0.0) continue;
+      double th = (2.0 + 3.0 * e_val * e_val) * (3.0 * c2i - 1.0) + 15.0 * e_val * e_val * s2i * cos_2w;
+      double diff = std::abs(th - theta_0);
+      if (diff < min_diff) {
+        min_diff = diff;
+        best_e = e_val;
+      }
+    }
+    out << deg << "," << best_e << "\n";
   }
   out.close();
   std::cout << "--> Wrote Kozai (1962) Phase Space dataset to " << output_csv << std::endl;
