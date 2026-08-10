@@ -425,6 +425,31 @@ class Arcangeli2018HMinerOpacity {
   }
 };
 
+// Lothringer et al. (2018) Ultra-Hot Jupiter Thermal Inversion & Emergent Spectrum Model
+class Lothringer2018UltraHotJupiter {
+ public:
+  double temperature_k(double P_bar) const {
+    double log_p = std::log10(P_bar);
+    if (log_p <= -3.0) return 3100.0 + (3200.0 - 3100.0) * (log_p - (-4.0)) / 1.0;
+    if (log_p <= -2.0) return 2800.0 + (3100.0 - 2800.0) * (log_p - (-3.0)) / 1.0;
+    if (log_p <= -1.0) return 2300.0 + (2800.0 - 2300.0) * (log_p - (-2.0)) / 1.0;
+    if (log_p <= 0.0) return 2000.0 + (2300.0 - 2000.0) * (log_p - (-1.0)) / 1.0;
+    if (log_p <= 1.0) return 2000.0 + (2400.0 - 2000.0) * log_p / 1.0;
+    return 2400.0;
+  }
+
+  double emergent_flux_lambda(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.2;
+    if (wave_micron <= 0.45) return 1.2 + (2.5 - 1.2) * (wave_micron - 0.35) / 0.10;
+    if (wave_micron <= 0.60) return 2.5 + (4.8 - 2.5) * (wave_micron - 0.45) / 0.15;
+    if (wave_micron <= 0.80) return 4.8 + (6.5 - 4.8) * (wave_micron - 0.60) / 0.20;
+    if (wave_micron <= 1.15) return 6.5 + (5.2 - 6.5) * (wave_micron - 0.80) / 0.35;
+    if (wave_micron <= 1.40) return 5.2 + (4.1 - 5.2) * (wave_micron - 1.15) / 0.25;
+    if (wave_micron <= 1.65) return 4.1 + (3.4 - 4.1) * (wave_micron - 1.40) / 0.25;
+    return 3.4;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
