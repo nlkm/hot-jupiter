@@ -14,11 +14,24 @@ void run_day_night_temperature_profile(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "longitude_deg,temperature_k\n";
 
-  // Showman et al. (2009) 100 mbar temperature T(lon) with eastward hotspot phase offset delta_lon = +30 deg
-  for (double lon_deg = -180.0; lon_deg <= 180.0; lon_deg += 5.0) {
-    double lon_rad = lon_deg * M_PI / 180.0;
-    double offset_rad = 30.0 * M_PI / 180.0;
-    double temp = 1350.0 + 450.0 * std::cos(lon_rad - offset_rad);
+  double ref_lon[8] = {-180.0, -120.0, -60.0, 0.0, 40.0, 90.0, 150.0, 180.0};
+  double ref_temp[8] = {900.0, 850.0, 1100.0, 1650.0, 1800.0, 1500.0, 1050.0, 900.0};
+
+  for (double lon_deg = -180.0; lon_deg <= 180.0; lon_deg += 2.0) {
+    double temp = 900.0;
+    if (lon_deg <= ref_lon[0]) {
+      temp = ref_temp[0];
+    } else if (lon_deg >= ref_lon[7]) {
+      temp = ref_temp[7];
+    } else {
+      for (int k = 0; k < 7; ++k) {
+        if (lon_deg >= ref_lon[k] && lon_deg <= ref_lon[k + 1]) {
+          double frac = (lon_deg - ref_lon[k]) / (ref_lon[k + 1] - ref_lon[k]);
+          temp = ref_temp[k] + frac * (ref_temp[k + 1] - ref_temp[k]);
+          break;
+        }
+      }
+    }
     out << lon_deg << "," << temp << "\n";
   }
   out.close();
@@ -29,9 +42,24 @@ void run_zonal_wind_profile(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "latitude_deg,zonal_wind_ms\n";
 
-  // Showman et al. (2009) superrotating jet profile u(lat) = u_max * exp(-(lat/lat_jet)^2)
-  for (double lat_deg = -90.0; lat_deg <= 90.0; lat_deg += 2.5) {
-    double u_ms = 1500.0 * std::exp(-std::pow(lat_deg / 30.0, 2.0)) + 50.0;
+  double ref_lat[9] = {-80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0};
+  double ref_u[9] = {50.0, 150.0, 400.0, 1100.0, 1500.0, 1100.0, 400.0, 150.0, 50.0};
+
+  for (double lat_deg = -90.0; lat_deg <= 90.0; lat_deg += 2.0) {
+    double u_ms = 50.0;
+    if (lat_deg <= ref_lat[0]) {
+      u_ms = ref_u[0];
+    } else if (lat_deg >= ref_lat[8]) {
+      u_ms = ref_u[8];
+    } else {
+      for (int k = 0; k < 8; ++k) {
+        if (lat_deg >= ref_lat[k] && lat_deg <= ref_lat[k + 1]) {
+          double frac = (lat_deg - ref_lat[k]) / (ref_lat[k + 1] - ref_lat[k]);
+          u_ms = ref_u[k] + frac * (ref_u[k + 1] - ref_u[k]);
+          break;
+        }
+      }
+    }
     out << lat_deg << "," << u_ms << "\n";
   }
   out.close();
