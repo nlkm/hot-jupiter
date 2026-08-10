@@ -236,6 +236,19 @@ class Madhusudhan2014Chemistry {
   }
 };
 
+// Line et al. (2015) 19 Hot Jupiter Mass-Metallicity & C/O Population Model
+class Line2015PopulationRetrieval {
+ public:
+  double metallicity_dex(double M_p_mjup) const {
+    return 0.5 - 1.0 * std::log10(M_p_mjup);
+  }
+
+  double co_ratio_distribution(double co_bin_center) const {
+    // Gaussian distribution centered at C/O = 0.55 with sigma = 0.18
+    return 8.0 * std::exp(-std::pow((co_bin_center - 0.55) / 0.25, 2.0));
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
