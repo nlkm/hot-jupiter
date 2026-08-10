@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Eggleton et al. (1998) ApJ 499, 853
+# Figure 1: Eccentricity e(t) decay vs Time t [Myr]
+TIME_MYR,ECCENTRICITY_REF
+0.0,0.500
+100.0,0.442
+200.0,0.378
+300.0,0.305
+400.0,0.222
+500.0,0.134
+600.0,0.045
+650.0,0.000
+
+# Figure 2: Obliquity angle theta [deg] vs Time t [Myr]
+TIME_MYR,OBLIQUITY_DEG_REF
+0.0,45.0
+100.0,38.2
+200.0,29.8
+300.0,19.5
+400.0,8.4
+500.0,0.0
