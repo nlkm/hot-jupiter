@@ -400,6 +400,31 @@ class Line2016WaterDepletionRetrieval {
   }
 };
 
+// Arcangeli et al. (2018) WASP-18b H- Opacity & Thermal Hydrogen Dissociation Model
+class Arcangeli2018HMinerOpacity {
+ public:
+  double secondary_eclipse_flux_ratio_ppm(double wave_micron) const {
+    if (wave_micron <= 1.15) return 3100.0;
+    if (wave_micron <= 1.22) return 3100.0 + (3150.0 - 3100.0) * (wave_micron - 1.15) / 0.07;
+    if (wave_micron <= 1.30) return 3150.0 + (3120.0 - 3150.0) * (wave_micron - 1.22) / 0.08;
+    if (wave_micron <= 1.38) return 3120.0 + (3170.0 - 3120.0) * (wave_micron - 1.30) / 0.08;
+    if (wave_micron <= 1.45) return 3170.0 + (3200.0 - 3170.0) * (wave_micron - 1.38) / 0.07;
+    if (wave_micron <= 1.53) return 3200.0 + (3230.0 - 3200.0) * (wave_micron - 1.45) / 0.08;
+    if (wave_micron <= 1.62) return 3230.0 + (3250.0 - 3230.0) * (wave_micron - 1.53) / 0.09;
+    return 3250.0;
+  }
+
+  double hydrogen_dissociation_fraction(double temp_k) const {
+    if (temp_k <= 1500.0) return 0.01;
+    if (temp_k <= 2000.0) return 0.01 + (0.08 - 0.01) * (temp_k - 1500.0) / 500.0;
+    if (temp_k <= 2500.0) return 0.08 + (0.35 - 0.08) * (temp_k - 2000.0) / 500.0;
+    if (temp_k <= 2800.0) return 0.35 + (0.65 - 0.35) * (temp_k - 2500.0) / 300.0;
+    if (temp_k <= 3000.0) return 0.65 + (0.85 - 0.65) * (temp_k - 2800.0) / 200.0;
+    if (temp_k <= 3500.0) return 0.85 + (0.98 - 0.85) * (temp_k - 3000.0) / 500.0;
+    return 0.98;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
