@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Line et al. (2015) ApJ 807, 183
+# Figure 1: Atmospheric Metallicity [M/H] dex vs Planet Mass M_p [M_Jup]
+PLANET_MASS_MJUP_REF,METALLICITY_DEX_REF,METALLICITY_UPPER_REF,METALLICITY_LOWER_REF
+0.05,1.8,2.3,1.3
+0.10,1.5,1.9,1.1
+0.30,1.0,1.4,0.6
+0.50,0.8,1.2,0.4
+1.00,0.5,0.8,0.2
+2.00,0.2,0.5,-0.1
+5.00,-0.2,0.1,-0.5
+
+# Figure 2: C/O Ratio Distribution Histogram Bins (Bin Center, Count)
+CO_BIN_CENTER_REF,CO_COUNT_REF
+0.3,1.0
+0.5,8.0
+0.7,6.0
+0.9,3.0
+1.1,1.0
