@@ -334,6 +334,24 @@ class Stevenson2014ThermalPhaseCurve {
   }
 };
 
+// Knutson et al. (2014) HD 97658b High-Metallicity / Cloud Deck Transmission Spectrum
+class Knutson2014HighMetallicityAtmosphere {
+ public:
+  double transmission_spectrum_depth_pct(double wave_micron) const {
+    return 0.570; // Flat-line spectrum at 0.570%
+  }
+
+  double water_feature_amplitude_ppm(double metallicity_dex) const {
+    if (metallicity_dex <= 0.5) return 180.0 + (140.0 - 180.0) * metallicity_dex / 0.5;
+    if (metallicity_dex <= 1.0) return 140.0 + (90.0 - 140.0) * (metallicity_dex - 0.5) / 0.5;
+    if (metallicity_dex <= 1.5) return 90.0 + (50.0 - 90.0) * (metallicity_dex - 1.0) / 0.5;
+    if (metallicity_dex <= 2.0) return 50.0 + (25.0 - 50.0) * (metallicity_dex - 1.5) / 0.5;
+    if (metallicity_dex <= 2.5) return 25.0 + (10.0 - 25.0) * (metallicity_dex - 2.0) / 0.5;
+    if (metallicity_dex <= 3.0) return 10.0 + (3.0 - 10.0) * (metallicity_dex - 2.5) / 0.5;
+    return 3.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
