@@ -1,0 +1,22 @@
+# Digitized Reference Dataset for Barker & Ogilvie (2010) MNRAS 404, 1849
+# Figure 1: Stellar inclination i [deg] vs Time t [Gyr]
+TIME_GYR,INCLINATION_DEG_REF
+0.0,60.0
+0.5,56.2
+1.0,51.8
+1.5,46.5
+2.0,40.1
+2.5,32.2
+3.0,22.4
+3.5,10.1
+3.8,0.0
+
+# Figure 2: Semi-major axis a [AU] vs Stellar Inclination i [deg]
+INCLINATION_DEG,A_AU_REF
+60.0,0.0300
+50.0,0.0275
+40.0,0.0248
+30.0,0.0218
+20.0,0.0185
+10.0,0.0148
+0.0,0.0100
