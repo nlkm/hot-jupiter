@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Fortney et al. (2007) ApJ 659, 1661
+# Figure 1: Planetary Radius Rp [RJ] vs Planetary Mass Mp [MEarth] for Core Mass Mcore = 10 MEarth at 4.5 Gyr
+MASS_MEARTH,RADIUS_RJ_REF
+30.0,0.42
+100.0,0.78
+300.0,1.02
+1000.0,1.10
+3000.0,1.05
+
+# Figure 2: Planetary Radius Evolution Rp [RJ] vs Age t [Gyr] for 1.0 MJ planet
+AGE_GYR,RADIUS_EVOL_RJ_REF
+0.01,1.45
+0.10,1.25
+1.00,1.08
+4.50,1.02
+10.00,0.98
