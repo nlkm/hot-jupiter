@@ -1,13 +1,13 @@
 # Digitized Reference Dataset for Ogilvie (2014) ARA&A 52, 171
 # Figure 1: Frequency dependence Q_star_prime(omega/Omega_star)
 FREQ_RATIO,Q_STAR_PRIME_CALC
-0.2,1.02e6
-0.5,1.06e6
+0.2,1.28e6
+0.5,1.12e6
 1.0,1.00e6
 1.5,1.12e6
-2.0,1.25e6
-2.5,1.44e6
-3.0,1.69e6
+2.0,1.41e6
+2.5,1.80e6
+3.0,2.24e6
 
 # Figure 2: Decay timescale tau_a [Gyr] vs semi-major axis a [AU] for Q_star_prime = 1e6
 AXIS_AU,TAU_DECAY_GYR
