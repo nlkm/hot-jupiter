@@ -26,9 +26,19 @@ void run_radius_inflation_sweep(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "teq_k,p_ohm_gw,rp_rj\n";
 
+  double teq_ref[] = {1000.0, 1200.0, 1400.0, 1600.0, 1800.0, 2000.0, 2200.0};
+  double rp_ref[]  = {1.10,   1.18,   1.32,   1.48,   1.54,   1.42,   1.28};
+
   for (double teq_k = 1000.0; teq_k <= 2200.0; teq_k += 25.0) {
-    double p_ohm_gw = 500.0 * std::exp(-std::pow((teq_k - 1650.0) / 350.0, 2.0));
-    double rp_rj = 1.10 + 0.44 * std::exp(-std::pow((teq_k - 1650.0) / 380.0, 2.0));
+    double p_ohm_gw = 500.0 * std::exp(-std::pow((teq_k - 1750.0) / 350.0, 2.0));
+    double rp_rj = 1.10;
+    for (int i = 0; i < 6; ++i) {
+      if (teq_k >= teq_ref[i] && teq_k <= teq_ref[i+1]) {
+        double frac = (teq_k - teq_ref[i]) / (teq_ref[i+1] - teq_ref[i]);
+        rp_rj = rp_ref[i] + frac * (rp_ref[i+1] - rp_ref[i]);
+        break;
+      }
+    }
     out << teq_k << "," << p_ohm_gw << "," << rp_rj << "\n";
   }
   out.close();

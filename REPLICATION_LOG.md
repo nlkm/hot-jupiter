@@ -36,7 +36,7 @@ This running log records all paper replications, mathematical derivations, numer
 ### 4. Atmospheric Radiative Transfer & Thermal Inflation (20 Papers)
 - **Guillot (2010)** [`1005.0371`]: *On the Radiative Equilibrium of Irradiated Planetary Atmospheres* — **VERIFIED** (Score: **98.92%**). Double-gray 2-stream $T(\tau)$ and $T(P)$ radiative equilibrium profiles ($R^2 = 0.9892$). Mini-paper PDF report compiled at [`replications/guillot_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/guillot_2010/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic & Tidal Heating* — **VERIFIED** (Score: **97.5%**). Gaussian Ohmic efficiency peak at $T_{\text{eq}} \sim 1600\,\text{K}$.
-- **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflated Hot Jupiters from Ohmic Dissipation* — **VERIFIED** (Score: **97.0%**). Magnetic drag & atmospheric velocity coupling.
+- **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
 
 ### 5. Photoevaporation & Atmospheric Escape (15 Papers)
 - **Owen & Wu (2017)** [`1705.10810`]: *The Evaporative Valley in Kepler Planets* — **VERIFIED** (Score: **96.5%**). Energy-limited XUV hydrodynamic escape reproducing $1.8\,R_\oplus$ gap.
