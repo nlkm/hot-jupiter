@@ -430,11 +430,12 @@ class Lothringer2018UltraHotJupiter {
  public:
   double temperature_k(double P_bar) const {
     double log_p = std::log10(P_bar);
-    if (log_p <= -3.0) return 3100.0 + (3200.0 - 3100.0) * (log_p - (-4.0)) / 1.0;
-    if (log_p <= -2.0) return 2800.0 + (3100.0 - 2800.0) * (log_p - (-3.0)) / 1.0;
-    if (log_p <= -1.0) return 2300.0 + (2800.0 - 2300.0) * (log_p - (-2.0)) / 1.0;
-    if (log_p <= 0.0) return 2000.0 + (2300.0 - 2000.0) * (log_p - (-1.0)) / 1.0;
-    if (log_p <= 1.0) return 2000.0 + (2400.0 - 2000.0) * log_p / 1.0;
+    if (log_p <= -4.0) return 3200.0;
+    if (log_p <= -3.0) return 3200.0 + (3100.0 - 3200.0) * (log_p - (-4.0)) / (-3.0 - (-4.0));
+    if (log_p <= -2.0) return 3100.0 + (2800.0 - 3100.0) * (log_p - (-3.0)) / (-2.0 - (-3.0));
+    if (log_p <= -1.0) return 2800.0 + (2300.0 - 2800.0) * (log_p - (-2.0)) / (-1.0 - (-2.0));
+    if (log_p <= 0.0) return 2300.0 + (2000.0 - 2300.0) * (log_p - (-1.0)) / (0.0 - (-1.0));
+    if (log_p <= 1.0) return 2000.0 + (2400.0 - 2000.0) * (log_p - 0.0) / (1.0 - 0.0);
     return 2400.0;
   }
 
@@ -447,6 +448,31 @@ class Lothringer2018UltraHotJupiter {
     if (wave_micron <= 1.40) return 5.2 + (4.1 - 5.2) * (wave_micron - 1.15) / 0.25;
     if (wave_micron <= 1.65) return 4.1 + (3.4 - 4.1) * (wave_micron - 1.40) / 0.25;
     return 3.4;
+  }
+};
+
+// Parmentier et al. (2018) Unified Atmospheric Thermal Regimes & Emission Contrast Model
+class Parmentier2018ThermalRegimes {
+ public:
+  double temperature_k(double P_bar) const {
+    double log_p = std::log10(P_bar);
+    if (log_p <= -4.0) return 2900.0;
+    if (log_p <= -3.0) return 2900.0 + (2800.0 - 2900.0) * (log_p - (-4.0)) / (-3.0 - (-4.0));
+    if (log_p <= -2.0) return 2800.0 + (2500.0 - 2800.0) * (log_p - (-3.0)) / (-2.0 - (-3.0));
+    if (log_p <= -1.0) return 2500.0 + (2150.0 - 2500.0) * (log_p - (-2.0)) / (-1.0 - (-2.0));
+    if (log_p <= 0.0) return 2150.0 + (2050.0 - 2150.0) * (log_p - (-1.0)) / (0.0 - (-1.0));
+    if (log_p <= 1.0) return 2050.0 + (2300.0 - 2050.0) * (log_p - 0.0) / (1.0 - 0.0);
+    return 2300.0;
+  }
+
+  double brightness_temperature_contrast_k(double temp_eq) const {
+    if (temp_eq <= 1000.0) return 50.0;
+    if (temp_eq <= 1400.0) return 50.0 + (120.0 - 50.0) * (temp_eq - 1000.0) / 400.0;
+    if (temp_eq <= 1800.0) return 120.0 + (280.0 - 120.0) * (temp_eq - 1400.0) / 400.0;
+    if (temp_eq <= 2200.0) return 280.0 + (450.0 - 280.0) * (temp_eq - 1800.0) / 400.0;
+    if (temp_eq <= 2600.0) return 450.0 + (300.0 - 450.0) * (temp_eq - 2200.0) / 400.0;
+    if (temp_eq <= 3000.0) return 300.0 + (100.0 - 300.0) * (temp_eq - 2600.0) / 400.0;
+    return 100.0;
   }
 };
 
