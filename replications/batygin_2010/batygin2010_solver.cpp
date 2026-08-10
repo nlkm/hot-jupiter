@@ -14,8 +14,9 @@ void run_conductivity_sweep(const std::string& output_csv) {
   out << "temperature_k,sigma_elec_sm\n";
 
   for (double temp_k = 1000.0; temp_k <= 2500.0; temp_k += 20.0) {
-    // Thermal ionization equation: sigma(T) = 1.0e-12 * exp(18.5 * (T - 1000) / 1000)
-    double sigma = 1.2e-6 * std::exp(8.96 * (temp_k - 1000.0) / 1000.0);
+    // Batygin & Stevenson (2010) Eq. 1: Saha thermal ionization of potassium/sodium
+    double sigma = 1.2e-6 * std::pow(temp_k / 1000.0, 0.75) *
+                   std::exp(25.18 * (1.0 - 1000.0 / temp_k));
     out << temp_k << "," << sigma << "\n";
   }
   out.close();

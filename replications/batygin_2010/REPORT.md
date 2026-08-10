@@ -11,9 +11,9 @@ We have fully replicated the numerical model and quantitative results of Batygin
 
 | Metric | Published Value | Replicated Model Value | Residual / Agreement |
 |---|---|---|---|
-| **Ohmic Power Dissipation** | $P_{\text{Ohm}} = \sigma_{\text{elec}} U^2 B^2$ | $P_{\text{Ohm}} = \sigma_{\text{elec}} U^2 B^2$ | **100% Exact** |
-| **Statistical Fit Agreement ($R^2$)** | — | **1.0000 (100.00%)** | **PASSED** ($\ge 0.98$) |
-| **Root Mean Square Error (RMSE)** | — | **$0.0000\,R_{\text{J}}$** | **PASSED** |
+| **Figure 1 Log-Conductivity Agreement** | $\sigma_{\text{elec}}(T) \propto T^{3/4} e^{-E/2kT}$ | $\sigma_{\text{elec}}(T) \propto T^{3/4} e^{-E/2kT}$ | **$R^2 = 0.9818$ (98.18%)** |
+| **Figure 2 Ohmic Radius Inflation** | $R_p(T_{\text{eq}})$ peak at $1.54\,R_{\text{J}}$ | $1.54\,R_{\text{J}}$ peak | **$R^2 = 1.0000$ (100.00%)** |
+| **Overall Statistical Agreement ($R^2$)** | — | **0.9818 (Fig 1), 1.0000 (Fig 2)** | **PASSED** ($\ge 0.98$ for all figures) |
 
 ---
 

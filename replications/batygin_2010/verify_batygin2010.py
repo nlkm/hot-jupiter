@@ -93,6 +93,24 @@ def verify_batygin2010():
     plot_fig1_conductivity()
     plot_fig2_radius_inflation()
 
+    # Verify Figure 1: Log Electrical Conductivity
+    ref_fig1 = np.genfromtxt(REPLICATION_DIR / "reference_data.csv",
+                             delimiter=",",
+                             skip_header=3,
+                             max_rows=8)
+    ref_temp, ref_log_sigma = ref_fig1[:, 0], np.log10(ref_fig1[:, 1])
+
+    sim_fig1 = np.genfromtxt(REPLICATION_DIR / "sim_conductivity.csv",
+                             delimiter=",",
+                             skip_header=1)
+    sim_temp, sim_log_sigma = sim_fig1[:, 0], np.log10(sim_fig1[:, 1])
+
+    calc_log_sigma = np.interp(ref_temp, sim_temp, sim_log_sigma)
+    ss_res1 = np.sum((ref_log_sigma - calc_log_sigma)**2)
+    ss_tot1 = np.sum((ref_log_sigma - np.mean(ref_log_sigma))**2)
+    r2_fig1 = 1.0 - (ss_res1 / ss_tot1)
+
+    # Verify Figure 2: Ohmic Radius Inflation
     ref_data = np.genfromtxt(REPLICATION_DIR / "reference_data.csv",
                              delimiter=",",
                              skip_header=14,
@@ -105,17 +123,17 @@ def verify_batygin2010():
     sim_teq, sim_rp = sim_data[:, 0], sim_data[:, 2]
 
     calc_rp = np.interp(ref_teq, sim_teq, sim_rp)
-    ss_res = np.sum((ref_rp - calc_rp)**2)
-    ss_tot = np.sum((ref_rp - np.mean(ref_rp))**2)
-    r2_score = 1.0 - (ss_res / ss_tot)
-    rmse = np.sqrt(np.mean((ref_rp - calc_rp)**2))
+    ss_res2 = np.sum((ref_rp - calc_rp)**2)
+    ss_tot2 = np.sum((ref_rp - np.mean(ref_rp))**2)
+    r2_fig2 = 1.0 - (ss_res2 / ss_tot2)
 
     print(
-        f"--> Ohmic Radius Inflation R^2 Score: {r2_score:.4f} ({r2_score:.2%})"
-    )
-    print(f"--> Root Mean Square Error:           {rmse:.4f} R_J")
-    assert r2_score > 0.98, f"Verification failed! R^2 = {r2_score:.4f} < 0.98"
-    print("✅ Batygin & Stevenson (2010) Verification PASSED!")
+        f"--> Fig 1 Log-Conductivity R^2 Score: {r2_fig1:.4f} ({r2_fig1:.2%})")
+    print(
+        f"--> Fig 2 Radius Inflation R^2 Score: {r2_fig2:.4f} ({r2_fig2:.2%})")
+    assert r2_fig1 > 0.98, f"Figure 1 verification failed! R^2 = {r2_fig1:.4f} < 0.98"
+    assert r2_fig2 > 0.98, f"Figure 2 verification failed! R^2 = {r2_fig2:.4f} < 0.98"
+    print("✅ Batygin & Stevenson (2010) Verification PASSED FOR ALL FIGURES!")
 
 
 if __name__ == "__main__":
