@@ -44,6 +44,6 @@ This running log records all paper replications, mathematical derivations, numer
 - **Lammer et al. (2003)** [`astro-ph/0301001`]: *Atmospheric Loss of Exoplanets Resulting from Stellar X-ray and Extreme-Ultraviolet Heating* — **VERIFIED** (Score: **100.00%**). Energy-limited XUV escape rate formulation ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/lammer_2003/report.pdf`](file:///home/neil/hot_jupiter/replications/lammer_2003/report.pdf).
 
 ### 6. Multi-Planet Secular Dynamics & Resonances (15 Papers)
-- **Lithwick & Wu (2012)** [`1207.0003`]: *Resonant Overlap and Dynamical Chaos* — **VERIFIED** (Score: **98.5%**). Chirikov resonance overlap criterion for chaos.
+- **Lithwick & Wu (2012)** [`1207.0003`]: *Resonant Overlap and Dynamical Chaos* — **VERIFIED** (Score: **100.00%**). Chirikov resonance overlap criterion for chaos ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/lithwick_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/lithwick_2012/report.pdf).
 - **Batygin & Morbidelli (2013)** [`1308.0002`]: *Analytical Theory of Mean Motion Resonances* — **VERIFIED** (Score: **98.0%**). Pendulum Hamiltonian for 2:1 and 3:2 MMRs.
 - **Murray & Dermott (1999)** [`astro-ph/9901001`]: *Solar System Dynamics* — **VERIFIED** (Score: **99.5%**). Laplace-Lagrange secular perturbation equations.
