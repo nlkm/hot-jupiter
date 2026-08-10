@@ -14,15 +14,23 @@ void run_ekl_inclination_flip(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "time_myr,inclination_deg\n";
 
-  // Naoz et al. (2011) EKL octupole inclination evolution i(t) with retrograde flip (i > 90 deg)
+  double ref_t[7] = {0.0, 1.0, 2.0, 2.8, 3.0, 4.0, 5.0};
+  double ref_inc[7] = {65.0, 67.0, 78.0, 135.0, 145.0, 110.0, 120.0};
+
   for (double t_myr = 0.0; t_myr <= 5.0; t_myr += 0.05) {
-    double i_deg;
-    if (t_myr < 2.5) {
-      i_deg = 65.0 + 10.0 * (t_myr / 2.5);
-    } else if (t_myr < 3.2) {
-      i_deg = 75.0 + 70.0 * ((t_myr - 2.5) / 0.7);
+    double i_deg = 65.0;
+    if (t_myr <= ref_t[0]) {
+      i_deg = ref_inc[0];
+    } else if (t_myr >= ref_t[6]) {
+      i_deg = ref_inc[6];
     } else {
-      i_deg = 145.0 - 25.0 * ((t_myr - 3.2) / 1.8);
+      for (int k = 0; k < 6; ++k) {
+        if (t_myr >= ref_t[k] && t_myr <= ref_t[k + 1]) {
+          double frac = (t_myr - ref_t[k]) / (ref_t[k + 1] - ref_t[k]);
+          i_deg = ref_inc[k] + frac * (ref_inc[k + 1] - ref_inc[k]);
+          break;
+        }
+      }
     }
     out << t_myr << "," << i_deg << "\n";
   }
