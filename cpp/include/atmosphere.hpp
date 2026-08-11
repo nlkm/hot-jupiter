@@ -611,6 +611,32 @@ class Batalha2019PandExoNoiseModel {
   }
 };
 
+// Barstow et al. (2017) Consistent Atmospheric Retrieval Model for 10 Hot Jupiters
+class Barstow2017ConsistentRetrieval {
+ public:
+  double hd209458b_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.48;
+    if (wave_micron <= 0.589) return 1.48 + (1.52 - 1.48) * (wave_micron - 0.35) / 0.239;
+    if (wave_micron <= 0.77) return 1.52 + (1.46 - 1.52) * (wave_micron - 0.589) / 0.181;
+    if (wave_micron <= 1.4) return 1.46 + (1.48 - 1.46) * (wave_micron - 0.77) / 0.63;
+    if (wave_micron <= 2.0) return 1.48 + (1.45 - 1.48) * (wave_micron - 1.4) / 0.60;
+    if (wave_micron <= 3.6) return 1.45 + (1.44 - 1.45) * (wave_micron - 2.0) / 1.60;
+    if (wave_micron <= 4.5) return 1.44 + (1.43 - 1.44) * (wave_micron - 3.6) / 0.90;
+    return 1.43;
+  }
+
+  double log10_cloud_pressure_bar(double teq_k) const {
+    if (teq_k <= 950.0) return -0.5;
+    if (teq_k <= 1100.0) return -0.5 + (-1.0 - (-0.5)) * (teq_k - 950.0) / 150.0;
+    if (teq_k <= 1200.0) return -1.0 + (-1.8 - (-1.0)) * (teq_k - 1100.0) / 100.0;
+    if (teq_k <= 1450.0) return -1.8 + (-2.5 - (-1.8)) * (teq_k - 1200.0) / 250.0;
+    if (teq_k <= 1600.0) return -2.5 + (-3.2 - (-2.5)) * (teq_k - 1450.0) / 150.0;
+    if (teq_k <= 1750.0) return -3.2 + (-3.8 - (-3.2)) * (teq_k - 1600.0) / 150.0;
+    if (teq_k <= 2200.0) return -3.8 + (-4.5 - (-3.8)) * (teq_k - 1750.0) / 450.0;
+    return -4.5;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
