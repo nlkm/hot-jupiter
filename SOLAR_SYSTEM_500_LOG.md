@@ -134,6 +134,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #124 | Killen (2007), Leblanc (2007), Burger (2010), Cassidy (2015) | Mercury Exospheric Sodium Cycle \& Solar Wind Sputtering | Core C++ Engine | `//:mercury_sodium_exosphere_solver` | $0.9998$ | ✅ Completed |
 | #125 | Zimmer (2000), Spohn \& Schubert (2003), Vance (2014), Gomez Casajus (2021) | Callisto Subsurface Ocean Hydrodynamics \& Induced Dipole Response | Core C++ Engine | `//:callisto_subsurface_ocean_solver` | $0.9998$ | ✅ Completed (MILESTONE 25\%) |
 | #126 | Tittemore \& Wisdom (1989), Peale (1999), Cuk (2014), Castillo-Rogez (2023) | Uranian Moons Thermal-Tidal Resonance History \& Ocean Evolution | Core C++ Engine | `//:uranian_moons_tidal_resonance_solver` | $0.9998$ | ✅ Completed |
+| #127 | McCord (1966), Goldreich (1989), Agnor \& Hamilton (2006), Nimmo (2015) | Neptune Triton Retrograde Capture \& Tidal Circularization Heating | Core C++ Engine | `//:triton_tidal_circularization_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
