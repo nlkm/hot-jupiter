@@ -1202,6 +1202,36 @@ class Baxter2020UltraHotPopulationModel {
   }
 };
 
+// Arcangeli et al. (2019) WASP-18b Climate & Water Dissociation Model
+class Arcangeli2019Wasp18bClimateModel {
+ public:
+  double dayside_emission_flux_ppm(double wavelength_micron) const {
+    const double wl[10] = {1.12, 1.18, 1.24, 1.30, 1.36, 1.42, 1.48, 1.54, 1.60, 1.66};
+    const double flux[10] = {820.0, 910.0, 1030.0, 1120.0, 1200.0, 1260.0, 1310.0, 1350.0, 1380.0, 1400.0};
+    if (wavelength_micron <= wl[0]) return flux[0];
+    if (wavelength_micron >= wl[9]) return flux[9];
+    for (int i = 0; i < 9; ++i) {
+      if (wavelength_micron >= wl[i] && wavelength_micron <= wl[i+1]) {
+        return flux[i] + (flux[i+1] - flux[i]) * (wavelength_micron - wl[i]) / (wl[i+1] - wl[i]);
+      }
+    }
+    return flux[0];
+  }
+
+  double nightside_emission_flux_ppm(double wavelength_micron) const {
+    const double wl[5] = {1.12, 1.24, 1.36, 1.48, 1.60};
+    const double flux[5] = {180.0, 240.0, 300.0, 350.0, 390.0};
+    if (wavelength_micron <= wl[0]) return flux[0];
+    if (wavelength_micron >= wl[4]) return flux[4];
+    for (int i = 0; i < 4; ++i) {
+      if (wavelength_micron >= wl[i] && wavelength_micron <= wl[i+1]) {
+        return flux[i] + (flux[i+1] - flux[i]) * (wavelength_micron - wl[i]) / (wl[i+1] - wl[i]);
+      }
+    }
+    return flux[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
