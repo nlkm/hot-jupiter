@@ -57,7 +57,40 @@ M_p = 1.0 * M_JUP
 M_c = 10.0 * M_EARTH
 S_initial = eos.specific_entropy(1.0 * BAR, 600.0)
 
-# 3. Evolve Planet Cooling over 4.56 Gyr
+---
+
+## 🛠️ Google Engineering Standards & Bazel Build System
+
+This repository adheres strictly to **Google Software Engineering Standards**, **Google C++ Style Guide**, and **Google Python Style Guide**:
+
+### 🎯 Building & Testing with Bazel
+
+All C++ core engines, multi-domain astrophysics libraries, and paper replication suites are built and verified using **Bazel**:
+
+```bash
+# Run full Bazel test suite across all 110 targets and 15 test packages
+bazel test //...
+
+# Run specific domain test suites
+bazel test //:astrophysics_test
+bazel test //:solar_system_test
+bazel test //:paper_replication_suite_test
+
+# Build high-performance shared library
+bazel build //:libhot_jupiter_cpp.so
+```
+
+### 📐 Google Language Style Guides
+
+- **C++ Code**:
+  - Google C++ Style Guide (`cpplint` compliance).
+  - Explicit `hot_jupiter` namespace isolation.
+  - `-O3`, `-ffast-math`, `-funroll-loops`, and `-ftree-vectorize` SIMD compilation flags.
+- **Python Code**:
+  - Google Python Style Guide (`yapf --style=google` and `ruff` compliance).
+  - Explicit type hints and Google-style docstrings (`Args:`, `Returns:`).
+  - Zero lookup table policy (100% first-principles physical equations).
+
 result = integrator.evolve(
     M_p=M_p,
     M_c=M_c,

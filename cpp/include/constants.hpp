@@ -32,6 +32,7 @@ constexpr double HBAR = 1.054571817e-34;// Reduced Planck constant [J s]
 constexpr double MASS_E = 9.1093837015e-31;// Electron mass [kg]
 constexpr double MASS_P = 1.67262192369e-27;// Proton mass [kg]
 constexpr double SIGMA_SB = 5.670374419e-8;// Stefan-Boltzmann constant [W m^-2 K^-4]
+constexpr double EV = 1.602176634e-19;   // Electronvolt [J]
 
 } // namespace hot_jupiter
 
