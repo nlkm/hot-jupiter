@@ -637,6 +637,32 @@ class Barstow2017ConsistentRetrieval {
   }
 };
 
+// Fisher & Heng (2018) Analytical Atmospheric Retrieval Model for 38 Hot Jupiters
+class Fisher2018AnalyticalRetrieval {
+ public:
+  double wasp12b_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.52;
+    if (wave_micron <= 0.50) return 1.52 + (1.49 - 1.52) * (wave_micron - 0.35) / 0.15;
+    if (wave_micron <= 0.75) return 1.49 + (1.46 - 1.49) * (wave_micron - 0.50) / 0.25;
+    if (wave_micron <= 1.4) return 1.46 + (1.44 - 1.46) * (wave_micron - 0.75) / 0.65;
+    if (wave_micron <= 2.0) return 1.44 + (1.42 - 1.44) * (wave_micron - 1.4) / 0.60;
+    if (wave_micron <= 3.6) return 1.42 + (1.39 - 1.42) * (wave_micron - 2.0) / 1.60;
+    if (wave_micron <= 4.5) return 1.39 + (1.38 - 1.39) * (wave_micron - 3.6) / 0.90;
+    return 1.38;
+  }
+
+  double scattering_index_gamma(double teq_k) const {
+    if (teq_k <= 600.0) return 4.0;
+    if (teq_k <= 1000.0) return 4.0;
+    if (teq_k <= 1400.0) return 4.0 + (3.8 - 4.0) * (teq_k - 1000.0) / 400.0;
+    if (teq_k <= 1800.0) return 3.8 + (2.5 - 3.8) * (teq_k - 1400.0) / 400.0;
+    if (teq_k <= 2200.0) return 2.5 + (1.0 - 2.5) * (teq_k - 1800.0) / 400.0;
+    if (teq_k <= 2600.0) return 1.0 + (0.2 - 1.0) * (teq_k - 2200.0) / 400.0;
+    if (teq_k <= 2800.0) return 0.2 + (0.0 - 0.2) * (teq_k - 2600.0) / 200.0;
+    return 0.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
