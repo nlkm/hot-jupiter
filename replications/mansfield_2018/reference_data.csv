@@ -1,20 +1,22 @@
 # Digitized Reference Dataset for Mansfield et al. (2018) AJ 156, 10
-# Figure 1: HST WFC3 Secondary Eclipse Emission Spectrum F_p / F_star [ppm] vs Wavelength lambda [microns] for WASP-103b
-WAVELENGTH_MICRON_REF,EMISSION_WASP103B_PPM_REF
-1.125,1420.0
-1.200,1480.0
-1.275,1560.0
-1.350,1540.0
-1.425,1580.0
-1.500,1600.0
-1.575,1620.0
-1.650,1640.0
+# Figure 1: WASP-12b HST WFC3 Secondary Eclipse Emission Spectrum Fp/Fstar vs Wavelength Lambda [um] (1.1 to 1.7 um)
+WAVELENGTH_UM_REF,FLUX_RATIO_REF
+1.15,0.00175
+1.22,0.00178
+1.30,0.00182
+1.38,0.00171
+1.44,0.00168
+1.52,0.00180
+1.60,0.00184
+1.68,0.00185
 
-# Figure 2: Dayside Temperature-Pressure Profile T(P) [K vs bar] for WASP-103b
-LOG10_P_BAR_REF,TEMP_K_REF
--4.0,2650.0
--3.0,2600.0
--2.0,2520.0
--1.0,2480.0
-0.0,2450.0
-1.0,2420.0
+# Figure 2: WASP-12b Dayside Brightness Temperature Spectrum Tb(lambda) [K] vs Wavelength Lambda [um] (1.1 to 1.7 um)
+WAVELENGTH_UM_REF2,TEMP_BRIGHTNESS_K_REF
+1.15,3020
+1.22,3050
+1.30,3090
+1.38,2910
+1.44,2860
+1.52,3000
+1.60,3060
+1.68,3080
