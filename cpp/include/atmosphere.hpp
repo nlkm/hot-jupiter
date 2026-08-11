@@ -751,6 +751,32 @@ class Tsiaras2019SuperEarthAtmosphere {
   }
 };
 
+// Benneke et al. (2019) Habitable-Zone Sub-Neptune K2-18b Cloud Condensation Model
+class Benneke2019SubNeptuneAtmosphere {
+ public:
+  double k2_18b_joint_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.45) return 0.705;
+    if (wave_micron <= 0.75) return 0.705 + (0.703 - 0.705) * (wave_micron - 0.45) / 0.30;
+    if (wave_micron <= 1.15) return 0.703 + (0.701 - 0.703) * (wave_micron - 0.75) / 0.40;
+    if (wave_micron <= 1.40) return 0.701 + (0.724 - 0.701) * (wave_micron - 1.15) / 0.25;
+    if (wave_micron <= 1.65) return 0.724 + (0.702 - 0.724) * (wave_micron - 1.40) / 0.25;
+    if (wave_micron <= 3.60) return 0.702 + (0.698 - 0.702) * (wave_micron - 1.65) / 1.95;
+    if (wave_micron <= 4.50) return 0.698 + (0.695 - 0.698) * (wave_micron - 3.60) / 0.90;
+    return 0.695;
+  }
+
+  double h2o_log_posterior_density(double log10_xh2o) const {
+    if (log10_xh2o <= -5.0) return 0.01;
+    if (log10_xh2o <= -4.0) return 0.01 + (0.15 - 0.01) * (log10_xh2o - (-5.0)) / 1.0;
+    if (log10_xh2o <= -3.0) return 0.15 + (0.95 - 0.15) * (log10_xh2o - (-4.0)) / 1.0;
+    if (log10_xh2o <= -2.5) return 0.95 + (0.70 - 0.95) * (log10_xh2o - (-3.0)) / 0.5;
+    if (log10_xh2o <= -2.0) return 0.70 + (0.20 - 0.70) * (log10_xh2o - (-2.5)) / 0.5;
+    if (log10_xh2o <= -1.5) return 0.20 + (0.05 - 0.20) * (log10_xh2o - (-2.0)) / 0.5;
+    if (log10_xh2o <= -1.0) return 0.05 + (0.00 - 0.05) * (log10_xh2o - (-1.5)) / 0.5;
+    return 0.00;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
