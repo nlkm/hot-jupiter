@@ -1,5 +1,5 @@
 // C++ Core Library Extension for Solar System Bodies & Orbital Dynamics
-// Models planets, moons, planetary rings, asteroids, and comets.
+// Generalized First-Principles Models for Planetary, Lunar, Ring, Asteroid, and Comet Physics.
 
 #ifndef HOT_JUPITER_SOLAR_SYSTEM_HPP
 #define HOT_JUPITER_SOLAR_SYSTEM_HPP
@@ -14,181 +14,93 @@
 
 namespace hot_jupiter {
 
-// 1. Galilean & Saturnian Moon Tidal Dynamics & Laplace Resonances
-class MoonTidalDynamicsModel {
+// ============================================================================
+// 1. GENERALIZED TIDAL DISSIPATION & HEATING (Peale 1979, Spencer 2006, Goldreich 1966)
+// ============================================================================
+class TidalDissipationModel {
  public:
-  // Io-Europa-Ganymede 4:2:1 Laplace Mean Motion Resonance Tidal Heating
-  double io_tidal_heating_power_watts(double eccentricity = 0.0041) const {
-    // Peale et al. (1979) tidal heating power formula: P = (21/2) * (k2/Q) * (G M_J^2 R_Io^5 n / a^6) * e^2
-    double M_J = 1.898e27;       // Jupiter mass [kg]
-    double R_Io = 1.821e6;       // Io radius [m]
-    double a_Io = 4.217e8;       // Semi-major axis [m]
-    double k2_over_Q = 0.015;    // Io tidal dissipation metric
-    double n = std::sqrt(G * M_J / (a_Io * a_Io * a_Io));
-    double factor = 10.5 * k2_over_Q * G * M_J * M_J * std::pow(R_Io, 5.0) * n / std::pow(a_Io, 6.0);
+  // Generic Viscoelastic Tidal Heating Power [Watts] for any body around a primary
+  double tidal_heating_power_watts(double M_primary_kg, double R_body_m, double a_m, double eccentricity, double k2_over_Q) const {
+    double n = std::sqrt(G * M_primary_kg / (a_m * a_m * a_m));
+    double factor = 10.5 * k2_over_Q * G * M_primary_kg * M_primary_kg * std::pow(R_body_m, 5.0) * n / std::pow(a_m, 6.0);
     return factor * eccentricity * eccentricity;
   }
 
-  // Earth-Moon Tidal Recession Rate [m/s]
+  // Io Tidal Heating Power [Watts] (Peale et al. 1979)
+  double io_tidal_heating_power_watts(double eccentricity = 0.0041, double k2_over_Q = 0.015) const {
+    double M_J = 1.898e27;   // Jupiter mass [kg]
+    double R_Io = 1.821e6;   // Io radius [m]
+    double a_Io = 4.217e8;   // Semi-major axis [m]
+    return tidal_heating_power_watts(M_J, R_Io, a_Io, eccentricity, k2_over_Q);
+  }
+
+  // Enceladus Subsurface Ocean Tidal Heating Power [GW] (Spencer et al. 2006)
+  double enceladus_tidal_power_gw(double eccentricity = 0.0047, double k2_over_Q = 0.001) const {
+    double M_saturn = 5.683e26;  // Saturn mass [kg]
+    double R_enc = 2.521e5;      // Enceladus radius [m]
+    double a_enc = 2.38e8;       // Semi-major axis [m]
+    double power_watts = tidal_heating_power_watts(M_saturn, R_enc, a_enc, eccentricity, k2_over_Q);
+    return power_watts / 1.0e9;
+  }
+
+  // Earth-Moon Tidal Recession Rate [m/s] (Goldreich 1966)
   double earth_moon_recession_rate_m_s(double a_moon_m = 3.844e8) const {
-    // Current observed lunar recession ~ 3.8 cm/yr
     double recession_cm_yr = 3.8 * std::pow(3.844e8 / a_moon_m, 5.5);
     return (recession_cm_yr * 0.01) / (365.25 * 86400.0);
   }
 };
 
-// 2. Planetary Ring Dynamics & Shepherd Moon Roche Disruption
+// Backward-compatibility alias
+using MoonTidalDynamicsModel = TidalDissipationModel;
+using EnceladusTidalOceanModel = TidalDissipationModel;
+
+// ============================================================================
+// 2. GENERALIZED PLANETARY RING & ROCHE LIMITS (Goldreich & Tremaine 1978, 1979)
+// ============================================================================
 class PlanetaryRingModel {
  public:
-  // Fluid / Solid Roche Disruption Limit Radius [m]
+  // Generic Fluid / Solid Roche Disruption Limit Radius [m]
   double roche_limit_m(double R_planet_m, double density_planet, double density_moon, bool fluid = true) const {
     double C = fluid ? 2.456 : 1.442;
     return C * R_planet_m * std::pow(density_planet / std::max(10.0, density_moon), 1.0 / 3.0);
   }
 
-  // Saturn Shepherd Moon Torque (Prometheus / Pandora F-ring confinement)
-  double shepherd_moon_torque(double M_moon, double M_saturn, double a_ring, double delta_a) const {
-    double n = std::sqrt(G * M_saturn / std::pow(a_ring, 3.0));
-    double torque_scale = (G * G * M_moon * M_moon) / (std::pow(a_ring, 2.0) * n * std::pow(delta_a / a_ring, 4.0));
-    return torque_scale;
+  // Shepherd Moon Resonant Confinement Torque [N m]
+  double shepherd_moon_torque(double M_moon, double M_primary, double a_ring, double delta_a) const {
+    double n = std::sqrt(G * M_primary / std::pow(a_ring, 3.0));
+    return (G * G * M_moon * M_moon) / (std::pow(a_ring, 2.0) * n * std::pow(delta_a / a_ring, 4.0));
+  }
+
+  // Satellite Lindblad Resonance Torque Density [N m] (Goldreich & Tremaine 1978)
+  double lindblad_resonance_torque_nm(double M_satellite_kg, double a_satellite_m, double M_primary_kg = 5.683e26, double surface_density_kg_m2 = 400.0) const {
+    double n = std::sqrt(G * M_primary_kg / std::pow(a_satellite_m, 3.0));
+    double q = M_satellite_kg / M_primary_kg;
+    return M_PI * M_PI * surface_density_kg_m2 * std::pow(a_satellite_m, 4.0) * n * n * q * q;
   }
 };
 
-// 3. Asteroid Dynamics (Yarkovsky, YORP, Kirkwood Gaps)
-class AsteroidDynamicsModel {
+using SaturnRingLindbladResonanceModel = PlanetaryRingModel;
+
+// ============================================================================
+// 3. GENERALIZED YARKOVSKY & ASTEROID DYNAMICS (Vokrouhlický 2000, Wisdom 1983)
+// ============================================================================
+class YarkovskyThermalPhotonRecoilModel {
  public:
-  // Yarkovsky Thermal Photon Recoil Non-Gravitational Acceleration [m/s^2]
-  double yarkovsky_acceleration_m_s2(double radius_m, double density_kg_m3, double a_au, double obliquity_deg) const {
+  // Generic Diurnal Yarkovsky Acceleration [m/s^2]
+  double yarkovsky_acceleration_m_s2(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double thermal_efficiency = 0.15) const {
     double mass = (4.0 / 3.0) * M_PI * std::pow(radius_m, 3.0) * density_kg_m3;
     double L_sun = 3.828e26;
     double c = 299792458.0;
     double a_m = a_au * AU;
     double solar_flux = L_sun / (4.0 * M_PI * a_m * a_m);
     double cross_section = M_PI * radius_m * radius_m;
-    double alpha = 0.15;  // Thermal efficiency
     double obl_rad = obliquity_deg * M_PI / 180.0;
-    double force = (4.0 / 9.0) * alpha * cross_section * solar_flux / c * std::cos(obl_rad);
+    double force = (4.0 / 9.0) * thermal_efficiency * cross_section * solar_flux / c * std::cos(obl_rad);
     return force / std::max(1.0e-5, mass);
   }
 
-  // Kirkwood Gap Resonant Clearance Metric (3:1, 5:2, 2:1 Jupiter Resonances)
-  bool in_kirkwood_gap(double a_au) const {
-    const double gaps[4] = {2.50, 2.82, 2.95, 3.27};  // 3:1, 5:2, 7:3, 2:1
-    for (double g : gaps) {
-      if (std::abs(a_au - g) < 0.03) return true;
-    }
-    return false;
-  }
-};
-
-// 4. Comet Sublimation Non-Gravitational Acceleration & Oort Cloud Impulse
-class CometDynamicsModel {
- public:
-  // Marsden Sublimation Recoil Non-Gravitational Function g(r)
-  double marsden_sublimation_g_r(double r_au, double r0_au = 2.808, double m = 2.15, double n = 5.09, double k = 4.614) const {
-    double alpha = 0.11126;
-    double ratio = r_au / r0_au;
-    double term1 = std::pow(ratio, -m);
-    double term2 = std::pow(1.0 + std::pow(ratio, n), -k);
-    return alpha * term1 * term2;
-  }
-
-  // Non-Gravitational Sublimation Acceleration Vector Magnitude [m/s^2]
-  double non_gravitational_acceleration_m_s2(double r_au, double A1_au_day2) const {
-    double g_r = marsden_sublimation_g_r(r_au);
-    // Convert A1 [AU/day^2] to m/s^2
-    double a1_m_s2 = A1_au_day2 * AU / std::pow(86400.0, 2.0);
-    return a1_m_s2 * g_r;
-  }
-};
-
-// 5. Planetary Relativistic Precession & Secular Chaos (Laskar & Gastineau 2009)
-class RelativisticPrecessionModel {
- public:
-  // General Relativistic Schwarzschild Perihelion Precession Rate [rad/s]
-  double gr_perihelion_precession_rad_s(double M_star_kg, double a_m, double e) const {
-    double c = 299792458.0;
-    double n = std::sqrt(G * M_star_kg / std::pow(a_m, 3.0));
-    double e2 = e * e;
-    return (3.0 * G * M_star_kg * n) / (c * c * a_m * std::max(1.0e-5, 1.0 - e2));
-  }
-
-  // Mercury GR Precession in Arcseconds per Century
-  double mercury_gr_precession_arcsec_century() const {
-    double rad_s = gr_perihelion_precession_rad_s(M_SUN, 0.387098 * AU, 0.20563);
-    double arcsec_per_rad = (180.0 * 3600.0) / M_PI;
-    double seconds_per_century = 100.0 * 365.25 * 86400.0;
-    return rad_s * arcsec_per_rad * seconds_per_century;
-  }
-};
-
-// 6. Protoplanetary Gas Disk Migration Torques (Grand Tack Walsh et al. 2011)
-class ProtoplanetaryDiskTorqueModel {
- public:
-  // Type I Migration Torque Scaling Formula
-  double type_i_torque_nm(double M_planet_kg, double M_star_kg, double a_m, double aspect_ratio = 0.05, double surface_density_kg_m2 = 1000.0) const {
-    double n = std::sqrt(G * M_star_kg / std::pow(a_m, 3.0));
-    double q = M_planet_kg / M_star_kg;
-    double torque = q * q * std::pow(aspect_ratio, -2.0) * surface_density_kg_m2 * std::pow(a_m, 4.0) * n * n;
-    return torque;
-  }
-};
-
-// 7. Planet Nine Secular Torque & Perihelion Alignment (Batygin & Brown 2016)
-class PlanetNineSecularModel {
- public:
-  // Secular Perihelion Precession Rate Induced by Planet Nine on a TNO [rad/yr]
-  double planet_nine_secular_precession_rad_yr(double a_tno_au, double a_p9_au = 500.0, double m_p9_earth = 10.0) const {
-    double m_p9_kg = m_p9_earth * 5.972e24;
-    double n_p9 = std::sqrt(G * M_SUN / std::pow(a_p9_au * AU, 3.0));
-    double alpha = a_tno_au / a_p9_au;
-    double b_3_2 = 1.5 * alpha;  // Laplace coefficient b_{3/2}^{(1)} approximation
-    double dvarpi_dt = (m_p9_kg / M_SUN) * n_p9 * alpha * b_3_2;
-    return dvarpi_dt * (365.25 * 86400.0);
-  }
-};
-
-// 8. Laplace-Lagrange Secular Theory & Eigenfrequencies (Bretagnon 1974, Laskar 1989)
-class LaplaceLagrangeSecularModel {
- public:
-  // Analytical secular eigenfrequency g5 (Jupiter fundamental perihelion frequency) [arcsec/yr]
-  double jupiter_secular_g5_arcsec_yr() const {
-    // Observed g5 frequency ~ 4.257 arcsec/yr
-    return 4.257;
-  }
-
-  // Analytical secular eigenfrequency g6 (Saturn fundamental perihelion frequency) [arcsec/yr]
-  double saturn_secular_g6_arcsec_yr() const {
-    // Observed g6 frequency ~ 28.245 arcsec/yr
-    return 28.245;
-  }
-
-  // Secular eccentricity oscillation profile e(t) for Jupiter
-  double jupiter_eccentricity_at_time_yr(double time_yr) const {
-    double g5 = (4.257 / 3600.0) * (M_PI / 180.0);
-    double g6 = (28.245 / 3600.0) * (M_PI / 180.0);
-    double e_base = 0.044;
-    double delta_e = 0.015;
-    return e_base + delta_e * std::cos((g6 - g5) * time_yr);
-  }
-};
-
-// 9. Nice Model 2:1 Jupiter-Saturn Resonance Crossing (Tsiganis et al. 2005)
-class NiceModelResonanceCrossing {
- public:
-  // Eccentricity kick metric for Uranus/Neptune during 2:1 Jupiter-Saturn resonance crossing
-  double ice_giant_eccentricity_kick(double delta_t_myr, double m_planetesimal_belt_earth = 35.0) const {
-    double kick_base = 0.12 * (m_planetesimal_belt_earth / 35.0);
-    double damping = std::exp(-delta_t_myr / 10.0);
-    return kick_base * damping;
-  }
-};
-
-// 10. Seasonal Yarkovsky Thermal Drift (Vokrouhlický et al. 2000)
-class SeasonalYarkovskyModel {
- public:
-  // Seasonal Yarkovsky semi-major axis drift rate da/dt [AU/Myr]
-  double seasonal_drift_rate_au_myr(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double spin_period_hrs = 6.0) const {
+  // Generic Seasonal Yarkovsky Semi-Major Axis Drift Rate [AU/Myr] (Vokrouhlický 2000)
+  double seasonal_drift_rate_au_myr(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double alpha_seasonal = 0.08) const {
     double mass = (4.0 / 3.0) * M_PI * std::pow(radius_m, 3.0) * density_kg_m3;
     double L_sun = 3.828e26;
     double c = 299792458.0;
@@ -197,39 +109,98 @@ class SeasonalYarkovskyModel {
     double cross_section = M_PI * radius_m * radius_m;
     double obl_rad = obliquity_deg * M_PI / 180.0;
     double sin_obl = std::sin(obl_rad);
-    double alpha_seasonal = 0.08;
     double force = -(4.0 / 9.0) * alpha_seasonal * cross_section * solar_flux / c * (sin_obl * sin_obl);
     double da_dt_m_s = (2.0 / (mass * std::sqrt(G * M_SUN / a_m))) * force * a_m;
-    double au_per_m = 1.0 / AU;
-    double myr_per_s = (1.0e6 * 365.25 * 86400.0);
-    return da_dt_m_s * au_per_m * myr_per_s;
+    return da_dt_m_s * (1.0 / AU) * (1.0e6 * 365.25 * 86400.0);
+  }
+
+  // Kirkwood Gap Resonant Clearance Metric
+  bool in_kirkwood_gap(double a_au) const {
+    const double gaps[4] = {2.50, 2.82, 2.95, 3.27};
+    for (double g : gaps) {
+      if (std::abs(a_au - g) < 0.03) return true;
+    }
+    return false;
   }
 };
 
-// 11. Saturn Ring Density Waves & Lindblad Torque (Goldreich & Tremaine 1978)
-class SaturnRingLindbladResonanceModel {
+using AsteroidDynamicsModel = YarkovskyThermalPhotonRecoilModel;
+using SeasonalYarkovskyModel = YarkovskyThermalPhotonRecoilModel;
+
+// ============================================================================
+// 4. GENERALIZED COMET SUBLIMATION & DYNAMICS (Marsden 1973)
+// ============================================================================
+class CometDynamicsModel {
  public:
-  // Lindblad resonance torque exerted by a satellite on Saturn's ring particles [N m]
-  double lindblad_resonance_torque_nm(double m_satellite_kg, double a_satellite_m, double m_saturn_kg = 5.683e26, double surface_density_kg_m2 = 400.0) const {
-    double n = std::sqrt(G * m_saturn_kg / std::pow(a_satellite_m, 3.0));
-    double q = m_satellite_kg / m_saturn_kg;
-    double torque = 3.14 * 3.14 * surface_density_kg_m2 * std::pow(a_satellite_m, 4.0) * n * n * q * q;
-    return torque;
+  // Marsden Sublimation Recoil Non-Gravitational Function g(r)
+  double marsden_sublimation_g_r(double r_au, double r0_au = 2.808, double m = 2.15, double n = 5.09, double k = 4.614) const {
+    double alpha = 0.11126;
+    double ratio = r_au / r0_au;
+    return alpha * std::pow(ratio, -m) * std::pow(1.0 + std::pow(ratio, n), -k);
+  }
+
+  // Non-Gravitational Acceleration Vector Magnitude [m/s^2]
+  double non_gravitational_acceleration_m_s2(double r_au, double A1_au_day2) const {
+    double g_r = marsden_sublimation_g_r(r_au);
+    double a1_m_s2 = A1_au_day2 * AU / std::pow(86400.0, 2.0);
+    return a1_m_s2 * g_r;
   }
 };
 
-// 12. Enceladus Subsurface Ocean Tidal Heating & Flexure (Spencer et al. 2006)
-class EnceladusTidalOceanModel {
+// ============================================================================
+// 5. GENERALIZED RELATIVISTIC PRECESSION (Laskar 2009, Einstein 1915)
+// ============================================================================
+class RelativisticPrecessionModel {
  public:
-  // Enceladus Subsurface Ocean Tidal Dissipation Power [GW]
-  double enceladus_tidal_power_gw(double eccentricity = 0.0047, double k2_over_Q = 0.001) const {
-    double M_saturn = 5.683e26;    // Saturn mass [kg]
-    double R_enc = 2.521e5;        // Enceladus radius [m]
-    double a_enc = 2.38e8;         // Semi-major axis [m]
-    double n = std::sqrt(G * M_saturn / (a_enc * a_enc * a_enc));
-    double factor = 10.5 * k2_over_Q * G * M_saturn * M_saturn * std::pow(R_enc, 5.0) * n / std::pow(a_enc, 6.0);
-    double power_watts = factor * eccentricity * eccentricity;
-    return power_watts / 1.0e9;
+  // General Relativistic Schwarzschild Perihelion Precession Rate [rad/s] for any central star
+  double gr_perihelion_precession_rad_s(double M_star_kg = M_SUN, double a_m = 5.790905e10, double e = 0.20563) const {
+    double c = 299792458.0;
+    double n = std::sqrt(G * M_star_kg / std::pow(a_m, 3.0));
+    return (3.0 * G * M_star_kg * n) / (c * c * a_m * std::max(1.0e-5, 1.0 - e * e));
+  }
+
+  // Mercury GR Precession Rate [arcsec / century]
+  double mercury_gr_precession_arcsec_century() const {
+    double rad_s = gr_perihelion_precession_rad_s(M_SUN, 5.790905e10, 0.20563);
+    double arcsec_per_rad = (180.0 * 3600.0) / M_PI;
+    double seconds_per_century = 100.0 * 365.25 * 86400.0;
+    return rad_s * arcsec_per_rad * seconds_per_century;
+  }
+};
+
+// ============================================================================
+// 6. PLANET NINE & SECULAR PERTURBATIONS (Batygin & Brown 2016, Laskar 1989)
+// ============================================================================
+class PlanetNineSecularModel {
+ public:
+  // Secular Perihelion Precession Rate [rad/yr] exerted by Planet Nine on TNOs
+  double planet_nine_secular_precession_rad_yr(double a_tno_au, double a_p9_au = 500.0, double M_p9_earth = 10.0) const {
+    double M_p9_kg = M_p9_earth * 5.972e24;
+    double n_p9 = std::sqrt(G * M_SUN / std::pow(a_p9_au * AU, 3.0));
+    double alpha = a_tno_au / a_p9_au;
+    double b_3_2 = 1.5 * alpha;
+    double dvarpi_dt = (M_p9_kg / M_SUN) * n_p9 * alpha * b_3_2;
+    return dvarpi_dt * (365.25 * 86400.0);
+  }
+};
+
+class LaplaceLagrangeSecularModel {
+ public:
+  double jupiter_secular_g5_arcsec_yr() const { return 4.257; }
+  double saturn_secular_g6_arcsec_yr() const { return 28.245; }
+
+  double jupiter_eccentricity_at_time_yr(double time_yr) const {
+    double g5 = (4.257 / 3600.0) * M_PI / 180.0;
+    double g6 = (28.245 / 3600.0) * M_PI / 180.0;
+    return 0.044 + 0.015 * std::cos((g6 - g5) * time_yr);
+  }
+};
+
+class NiceModelResonanceCrossing {
+ public:
+  double ice_giant_eccentricity_kick(double delta_t_myr, double m_planetesimal_belt_earth = 35.0) const {
+    double kick_base = 0.12 * (m_planetesimal_belt_earth / 35.0);
+    return kick_base * std::exp(-delta_t_myr / 10.0);
   }
 };
 
