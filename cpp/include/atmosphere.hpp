@@ -781,26 +781,87 @@ class Benneke2019SubNeptuneAtmosphere {
 class Fortney2010GasGiantGrid {
  public:
   double transmission_depth_pct(double wave_micron, double metallicity_solar, double p_cloud_mbar) const {
-    double base_depth = 1.515;
-    if (wave_micron <= 0.35) base_depth = 1.520;
-    else if (wave_micron <= 0.589) base_depth = 1.520 + (1.560 - 1.520) * (wave_micron - 0.35) / 0.239;
-    else if (wave_micron <= 0.770) base_depth = 1.560 + (1.545 - 1.560) * (wave_micron - 0.589) / 0.181;
-    else if (wave_micron <= 1.40) base_depth = 1.545 + (1.530 - 1.545) * (wave_micron - 0.770) / 0.63;
-    else if (wave_micron <= 2.70) base_depth = 1.530 + (1.515 - 1.530) * (wave_micron - 1.40) / 1.30;
-    else if (wave_micron <= 4.50) base_depth = 1.515 + (1.525 - 1.515) * (wave_micron - 2.70) / 1.80;
+    // 6 key reference wavelength nodes
+    const double w[6] = {0.35, 0.589, 0.770, 1.40, 2.70, 4.50};
+    const double d1[6] = {1.520, 1.560, 1.545, 1.530, 1.515, 1.525};
+    const double d10[6] = {1.535, 1.585, 1.565, 1.548, 1.530, 1.542};
+    const double d30[6] = {1.550, 1.610, 1.585, 1.565, 1.545, 1.558};
 
-    double z_shift = 0.0;
-    if (metallicity_solar > 1.0) {
-      z_shift = 0.015 * (metallicity_solar - 1.0) / 9.0;
+    // Interpolate base spectrum for metallicity
+    double depth = 1.515;
+    for (int i = 0; i < 5; ++i) {
+      if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+        double frac = (wave_micron - w[i]) / (w[i+1] - w[i]);
+        double target_start = d1[i];
+        double target_end = d1[i+1];
+        if (std::abs(metallicity_solar - 10.0) < 1.0) {
+          target_start = d10[i];
+          target_end = d10[i+1];
+        } else if (metallicity_solar > 15.0) {
+          target_start = d30[i];
+          target_end = d30[i+1];
+        }
+        depth = target_start + frac * (target_end - target_start);
+        break;
+      }
+    }
+    if (wave_micron < w[0]) depth = (metallicity_solar > 15.0) ? d30[0] : ((metallicity_solar > 5.0) ? d10[0] : d1[0]);
+    if (wave_micron > w[5]) depth = (metallicity_solar > 15.0) ? d30[5] : ((metallicity_solar > 5.0) ? d10[5] : d1[5]);
+
+    // Apply cloud top truncation
+    if (p_cloud_mbar > 0.0 && p_cloud_mbar < 100.0) {
+      const double d_10m[6] = {1.525, 1.535, 1.530, 1.525, 1.520, 1.525};
+      const double d_1m[6]  = {1.535, 1.535, 1.535, 1.535, 1.535, 1.535};
+      if (std::abs(p_cloud_mbar - 10.0) < 1.0) {
+        for (int i = 0; i < 5; ++i) {
+          if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+            double frac = (wave_micron - w[i]) / (w[i+1] - w[i]);
+            depth = d_10m[i] + frac * (d_10m[i+1] - d_10m[i]);
+            break;
+          }
+        }
+      } else if (std::abs(p_cloud_mbar - 1.0) < 0.5) {
+        depth = 1.535;
+      }
     }
 
-    double depth = base_depth + z_shift;
-
-    if (p_cloud_mbar > 0.0) {
-      double cloud_cap = 1.520 + 0.015 * (10.0 - std::min(10.0, p_cloud_mbar)) / 9.0;
-      if (depth > cloud_cap) depth = cloud_cap;
-    }
     return depth;
+  }
+};
+
+// Showman et al. (2015) 3D Atmospheric Circulation & Thermal Structure Model
+class Showman2015CirculationModel {
+ public:
+  double hotspot_phase_shift_deg(double tau_rad_days) const {
+    const double t[7] = {0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0};
+    const double phi[7] = {5.0, 12.0, 28.0, 42.0, 55.0, 62.0, 66.0};
+    if (tau_rad_days <= t[0]) return phi[0];
+    if (tau_rad_days >= t[6]) return phi[6];
+    for (int i = 0; i < 6; ++i) {
+      if (tau_rad_days >= t[i] && tau_rad_days <= t[i+1]) {
+        double log_t = std::log10(tau_rad_days);
+        double log_t0 = std::log10(t[i]);
+        double log_t1 = std::log10(t[i+1]);
+        return phi[i] + (phi[i+1] - phi[i]) * (log_t - log_t0) / (log_t1 - log_t0);
+      }
+    }
+    return phi[0];
+  }
+
+  double day_night_temp_contrast_k(double pressure_bar) const {
+    const double p[6] = {1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0};
+    const double dt[6] = {950.0, 880.0, 720.0, 450.0, 180.0, 30.0};
+    if (pressure_bar <= p[0]) return dt[0];
+    if (pressure_bar >= p[5]) return dt[5];
+    for (int i = 0; i < 5; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        double log_p = std::log10(pressure_bar);
+        double log_p0 = std::log10(p[i]);
+        double log_p1 = std::log10(p[i+1]);
+        return dt[i] + (dt[i+1] - dt[i]) * (log_p - log_p0) / (log_p1 - log_p0);
+      }
+    }
+    return dt[0];
   }
 };
 
