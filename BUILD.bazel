@@ -19,6 +19,9 @@ cc_library(
         "cpp/include/population_synth.hpp",
         "cpp/include/rlof_engine.hpp",
         "cpp/include/solar_system.hpp",
+        "cpp/include/planet_formation.hpp",
+        "cpp/include/stellar_evolution.hpp",
+        "cpp/include/star_formation.hpp",
     ],
     includes = ["cpp/include"],
     copts = ["-std=c++17", "-O3", "-fopenmp", "-fvisibility=default"],
@@ -43,6 +46,13 @@ cc_test(
 cc_test(
     name = "solar_system_test",
     srcs = ["cpp/include/solar_system_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_test(
+    name = "astrophysics_test",
+    srcs = ["cpp/include/astrophysics_test.cpp"],
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
