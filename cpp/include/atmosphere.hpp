@@ -1349,6 +1349,36 @@ class Welbanks2019MassMetallicityModel {
   }
 };
 
+// Showman & Kaspi (2013) Terrestrial & Super-Earth Atmospheric Dynamics Model
+class Showman2013TerrestrialDynamicsModel {
+ public:
+  double zonal_jet_speed_ms(double t_eq_k) const {
+    const double t[6] = {300.0, 500.0, 800.0, 1200.0, 1600.0, 2000.0};
+    const double u[6] = {120.0, 310.0, 620.0, 1050.0, 1480.0, 1850.0};
+    if (t_eq_k <= t[0]) return u[0];
+    if (t_eq_k >= t[5]) return u[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return u[i] + (u[i+1] - u[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return u[0];
+  }
+
+  double rossby_deformation_ratio(double prot_days) const {
+    const double p[6] = {1.0, 3.0, 5.0, 10.0, 20.0, 30.0};
+    const double ld[6] = {0.18, 0.31, 0.40, 0.57, 0.80, 0.98};
+    if (prot_days <= p[0]) return ld[0];
+    if (prot_days >= p[5]) return ld[5];
+    for (int i = 0; i < 5; ++i) {
+      if (prot_days >= p[i] && prot_days <= p[i+1]) {
+        return ld[i] + (ld[i+1] - ld[i]) * (prot_days - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return ld[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
