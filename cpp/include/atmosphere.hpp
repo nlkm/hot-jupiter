@@ -1589,6 +1589,36 @@ class Baxter2021EclipseTransitionModel {
   }
 };
 
+// Fortney et al. (2020) Thermal Dissociation & Ultra-Hot Climate Model
+class Fortney2020ThermalDissociationModel {
+ public:
+  double h2_dissociation_fraction(double pressure_bar) const {
+    const double p[7] = {1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2};
+    const double a[7] = {0.995, 0.982, 0.940, 0.820, 0.580, 0.280, 0.100};
+    if (pressure_bar <= p[0]) return a[0];
+    if (pressure_bar >= p[6]) return a[6];
+    for (int i = 0; i < 6; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return a[0];
+  }
+
+  double temperature_k(double pressure_bar) const {
+    const double p[8] = {1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2};
+    const double t[8] = {2850.0, 2920.0, 3080.0, 3350.0, 3100.0, 2650.0, 2400.0, 2300.0};
+    if (pressure_bar <= p[0]) return t[0];
+    if (pressure_bar >= p[7]) return t[7];
+    for (int i = 0; i < 7; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
