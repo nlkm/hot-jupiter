@@ -1078,6 +1078,36 @@ class Kempton2018AtmosphericMetricsModel {
   }
 };
 
+// Mansfield et al. (2018) WASP-103b Secondary Eclipse Spectrum Model
+class Mansfield2018Wasp103bAtmosphere {
+ public:
+  double emission_spectrum_wasp103b_ppm(double wave_micron) const {
+    const double w[8] = {1.125, 1.200, 1.275, 1.350, 1.425, 1.500, 1.575, 1.650};
+    const double em[8] = {1420.0, 1480.0, 1560.0, 1540.0, 1580.0, 1600.0, 1620.0, 1640.0};
+    if (wave_micron <= w[0]) return em[0];
+    if (wave_micron >= w[7]) return em[7];
+    for (int i = 0; i < 7; ++i) {
+      if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+        return em[i] + (em[i+1] - em[i]) * (wave_micron - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return em[0];
+  }
+
+  double temperature_k(double log10_p_bar) const {
+    const double p[6] = {-4.0, -3.0, -2.0, -1.0, 0.0, 1.0};
+    const double t[6] = {2650.0, 2600.0, 2520.0, 2480.0, 2450.0, 2420.0};
+    if (log10_p_bar <= p[0]) return t[0];
+    if (log10_p_bar >= p[5]) return t[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_p_bar >= p[i] && log10_p_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (log10_p_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
