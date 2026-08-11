@@ -1138,6 +1138,36 @@ class Kreidberg2018Wasp103bPhaseCurveModel {
   }
 };
 
+// Beatty et al. (2019) KELT-1b Brown Dwarf Phase Curve & Recirculation Efficiency Model
+class Beatty2019Kelt1bPhaseCurveModel {
+ public:
+  double phase_curve_flux_ppm(double orbital_phase) const {
+    const double phi[11] = {0.00, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00};
+    const double flux[11] = {420.0, 510.0, 680.0, 850.0, 940.0, 930.0, 840.0, 660.0, 500.0, 430.0, 420.0};
+    if (orbital_phase <= phi[0]) return flux[0];
+    if (orbital_phase >= phi[10]) return flux[10];
+    for (int i = 0; i < 10; ++i) {
+      if (orbital_phase >= phi[i] && orbital_phase <= phi[i+1]) {
+        return flux[i] + (flux[i+1] - flux[i]) * (orbital_phase - phi[i]) / (phi[i+1] - phi[i]);
+      }
+    }
+    return flux[0];
+  }
+
+  double recirculation_efficiency(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double eps[5] = {0.65, 0.48, 0.25, 0.12, 0.05};
+    if (t_eq_k <= t[0]) return eps[0];
+    if (t_eq_k >= t[4]) return eps[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return eps[i] + (eps[i+1] - eps[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return eps[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
