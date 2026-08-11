@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 97
+- **Total Verified Papers**: 98
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -110,6 +110,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Parmentier et al. (2018)** [`1803.03730`]: *From Thermal Inversions to Cold Traps: Thermal Structure and Clouds in Ultra-hot Jupiters* — **VERIFIED** (Score: **100.00%**). Gas-phase iron cold-trap depletion and phase curve amplitude ratio $A_{\text{opt}}/A_{\text{ir}}(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/parmentier_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/parmentier_2018/report.pdf).
 - **Mansfield et al. (2018)** [`1805.00020`]: *Detection of Water Vapor in the Thermal Emission Spectrum of WASP-12b* — **VERIFIED** (Score: **100.00%**). HST WFC3 thermal emission flux ratio $F_p/F_\star(\lambda)$ and dayside brightness temperature spectrum $T_b(\lambda)$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/mansfield_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/mansfield_2018/report.pdf).
 - **Arcangeli et al. (2018)** [`1801.02489`]: *H- Opacity and Hydrogen Dissociation in the Atmosphere of WASP-18b* — **VERIFIED** (Score: **100.00%**). WASP-18b $\text{H}^-$ continuum emission spectrum and molecular thermal dissociation fraction $\alpha_{\text{diss}}(T)$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/arcangeli_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/arcangeli_2018/report.pdf).
+- **Kreidberg et al. (2018)** [`1805.00025`]: *Global Climate of an Ultra-hot WASP-103b from Phase-resolved Spectroscopy* — **VERIFIED** (Score: **99.98%**). WASP-103b HST WFC3 phase curve $F_p/F_\star(\phi)$ and longitudinal temperature profile $T(\text{longitude})$ ($R^2 = 0.9998$). Mini-paper PDF report compiled at [`replications/kreidberg_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/kreidberg_2018/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).

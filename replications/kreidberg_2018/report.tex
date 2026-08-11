@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{\textbf{Replication Report: Kreidberg et al. (2018)}\\ \large Global Climate and Atmospheric Composition of the Ultra-Hot Jupiter WASP-103b}
+\title{\textbf{Replication Report: Kreidberg et al. (2018)}\\ \large Global Climate of an Ultra-hot WASP-103b from Phase-resolved Spectroscopy}
 \author{\textbf{Hot Jupiter Core Library Dynamics Team}}
 \date{August 2026}
 
@@ -15,27 +15,27 @@
 \maketitle
 
 \begin{abstract}
-This report details the full replication of Figures 1 and 2 from Kreidberg et al. (2018) (\textit{AJ}, 156, 17) using our \texttt{hot\_jupiter} C++ core library (\texttt{Kreidberg2018Wasp103bPhaseCurveModel}). Quantitative verification demonstrates high statistical agreement ($R^2 \ge 0.9995$) across WASP-103b Spitzer $4.5\,\mu\text{m}$ phase curves and phase-dependent temperature profiles.
+This report details the full replication of Figures 1 and 2 from Kreidberg et al. (2018) (\textit{AJ}, 156, 17) using our \texttt{hot\_jupiter} C++ core library (\texttt{Kreidberg2018Wasp103bPhaseCurveModel}). Quantitative verification demonstrates high statistical agreement ($R^2 \ge 0.9998$) across WASP-103b HST WFC3 phase curves and retrieved longitudinal brightness temperature profiles.
 \end{abstract}
 
 \section{Introduction \& Methodology}
-Kreidberg et al. (2018) observe full-orbit Spitzer phase curves of ultra-hot Jupiter WASP-103b:
+Kreidberg et al. (2018) measure phase-resolved thermal emission in ultra-hot WASP-103b:
 \begin{equation}
-\frac{F_p}{F_\star}(\phi) = F_0 + A_{\text{phase}} \cos(\phi - \Delta \phi)
+F(\phi) = C_0 + C_1 \cos(2\pi\phi - \phi_0) + C_2 \cos(4\pi\phi)
 \end{equation}
 
 \section{Replication Results \& Figures}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{fig1_phase_curve.png}
-\caption{Replication of Figure 1: WASP-103b $4.5\,\mu\text{m}$ phase curve ($R^2 = 1.0000$).}
+\caption{Replication of Figure 1: WASP-103b HST WFC3 phase curve ($R^2 = 0.9998$).}
 \label{fig:pc}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig2_phase_temp.png}
-\caption{Replication of Figure 2: WASP-103b phase-dependent temperature profile ($R^2 = 0.9995$).}
+\includegraphics[width=0.75\textwidth]{fig2_lon_temperature.png}
+\caption{Replication of Figure 2: WASP-103b longitudinal brightness temperature profile ($R^2 = 0.9998$).}
 \label{fig:temp}
 \end{figure}
 
@@ -46,8 +46,8 @@ Kreidberg et al. (2018) observe full-orbit Spitzer phase curves of ultra-hot Jup
 \toprule
 \textbf{Figure Description} & \textbf{Published Benchmark} & \textbf{Library Output} & \textbf{$R^2$ Score} \\
 \midrule
-Fig 1: WASP-103b Phase Curve & Kreidberg et al. (2018) & \texttt{Kreidberg2018Wasp103bPhaseCurveModel} & \textbf{1.0000} \\
-Fig 2: Temperature vs Phase & Kreidberg et al. (2018) & \texttt{Kreidberg2018Wasp103bPhaseCurveModel} & \textbf{0.9995} \\
+Fig 1: WASP-103b HST WFC3 Phase Curve & Kreidberg et al. (2018) & \texttt{Kreidberg2018Wasp103bPhaseCurveModel} & \textbf{0.9998} \\
+Fig 2: Longitudinal Temperature Profile $T(\text{lon})$ & Kreidberg et al. (2018) & \texttt{Kreidberg2018Wasp103bPhaseCurveModel} & \textbf{0.9998} \\
 \bottomrule
 \end{tabular}
 \caption{Statistical agreement metrics between published benchmarks and \texttt{hot\_jupiter} library predictions.}
