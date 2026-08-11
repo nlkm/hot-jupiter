@@ -1,22 +1,20 @@
 # Digitized Reference Dataset for Kreidberg et al. (2018) AJ 156, 17
-# Figure 1: Spitzer 4.5 micron Phase Curve F_p / F_star [ppm] vs Orbital Phase phi (0.0 to 1.0)
-ORBITAL_PHASE_REF,FLUX_PPM_REF
-0.00,1050.0
-0.10,1220.0
-0.20,1500.0
-0.30,1750.0
-0.40,1890.0
-0.50,1880.0
-0.60,1720.0
-0.70,1450.0
-0.80,1200.0
-0.90,1060.0
-1.00,1050.0
+# Figure 1: WASP-103b HST WFC3 Phase Curve Fp/Fstar vs Orbital Phase phi (0.0 to 1.0)
+PHASE_REF,FLUX_RATIO_REF
+0.00,0.00045
+0.15,0.00075
+0.30,0.00140
+0.48,0.00192
+0.65,0.00155
+0.80,0.00085
+1.00,0.00045
 
-# Figure 2: Temperature Profile T [K] vs Orbital Phase phi
-ORBITAL_PHASE_TEMP_REF,TEMP_K_REF
-0.00,1400.0
-0.25,2100.0
-0.50,2850.0
-0.75,2100.0
-1.00,1400.0
+# Figure 2: Longitudinal Temperature Profile T_bright [K] vs Longitude [deg] (-180 to +180 deg)
+LONGITUDE_DEG_REF,TEMP_BRIGHT_K_REF
+-180,1580
+-120,1650
+-60,2150
+12,2890
+60,2720
+120,2050
+180,1580
