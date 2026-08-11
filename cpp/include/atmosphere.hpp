@@ -1379,6 +1379,36 @@ class Showman2013TerrestrialDynamicsModel {
   }
 };
 
+// Koll & Abbot (2016) Thermal Inversion & Day-Night Contrast Model
+class Koll2016InversionModel {
+ public:
+  double delta_t_dn_k(double t_eq_k) const {
+    const double t[5] = {500.0, 1000.0, 1500.0, 2000.0, 2500.0};
+    const double dt[5] = {80.0, 260.0, 520.0, 840.0, 1180.0};
+    if (t_eq_k <= t[0]) return dt[0];
+    if (t_eq_k >= t[4]) return dt[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return dt[i] + (dt[i+1] - dt[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return dt[0];
+  }
+
+  double inversion_strength(double gamma_opacity) const {
+    const double g[5] = {0.01, 0.10, 1.00, 10.00, 100.00};
+    const double eta[5] = {-0.65, -0.40, 0.00, 0.45, 0.72};
+    if (gamma_opacity <= g[0]) return eta[0];
+    if (gamma_opacity >= g[4]) return eta[4];
+    for (int i = 0; i < 4; ++i) {
+      if (gamma_opacity >= g[i] && gamma_opacity <= g[i+1]) {
+        return eta[i] + (eta[i+1] - eta[i]) * (std::log10(gamma_opacity) - std::log10(g[i])) / (std::log10(g[i+1]) - std::log10(g[i]));
+      }
+    }
+    return eta[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
