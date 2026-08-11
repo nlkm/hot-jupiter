@@ -1232,6 +1232,50 @@ class Arcangeli2019Wasp18bClimateModel {
   }
 };
 
+// Lothringer & Barman (2019) Stellar Spectral Type & Thermal Inversion Model
+class Lothringer2019StellarSpectralTypeModel {
+ public:
+  double temperature_k(double log10_p_bar, const std::string& spectral_type) const {
+    const double p[5] = {-6.0, -4.0, -2.0, 0.0, 2.0};
+    double t[5] = {3200.0, 3000.0, 2500.0, 2200.0, 2100.0};  // Default G star
+
+    if (spectral_type == "F") {
+      t[0] = 3600.0; t[1] = 3400.0; t[2] = 2800.0; t[3] = 2400.0; t[4] = 2200.0;
+    } else if (spectral_type == "K") {
+      t[0] = 2600.0; t[1] = 2450.0; t[2] = 2100.0; t[3] = 1950.0; t[4] = 1900.0;
+    } else if (spectral_type == "M") {
+      t[0] = 2000.0; t[1] = 1900.0; t[2] = 1700.0; t[3] = 1650.0; t[4] = 1600.0;
+    }
+
+    if (log10_p_bar <= p[0]) return t[0];
+    if (log10_p_bar >= p[4]) return t[4];
+    for (int i = 0; i < 4; ++i) {
+      if (log10_p_bar >= p[i] && log10_p_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (log10_p_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return t[0];
+  }
+
+  double emission_flux_ppm(double wavelength_micron, const std::string& spectral_type) const {
+    const double wl[6] = {0.5, 1.0, 1.5, 2.0, 3.0, 4.5};
+    double flux[6] = {180.0, 850.0, 1450.0, 1800.0, 2100.0, 2400.0};  // Default G star
+
+    if (spectral_type == "F") {
+      flux[0] = 120.0; flux[1] = 650.0; flux[2] = 1200.0; flux[3] = 1500.0; flux[4] = 1800.0; flux[5] = 2100.0;
+    }
+
+    if (wavelength_micron <= wl[0]) return flux[0];
+    if (wavelength_micron >= wl[5]) return flux[5];
+    for (int i = 0; i < 5; ++i) {
+      if (wavelength_micron >= wl[i] && wavelength_micron <= wl[i+1]) {
+        return flux[i] + (flux[i+1] - flux[i]) * (wavelength_micron - wl[i]) / (wl[i+1] - wl[i]);
+      }
+    }
+    return flux[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
