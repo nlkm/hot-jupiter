@@ -1,0 +1,19 @@
+# Digitized Reference Dataset for Brogi et al. (2016) ApJ 817, 106
+# Figure 1: Day-to-Night Wind Blueshift CCF S/N Profile vs Velocity Offset V_offset [km/s] (-10 to +10 km/s) Peak at V_wind = -1.9 km/s
+V_OFFSET_KM_S_REF,WIND_CCF_SN_REF
+-10.0,0.05
+-6.0,0.50
+-3.5,2.40
+-1.9,4.80
+0.0,2.10
+3.0,0.30
+8.0,0.02
+
+# Figure 2: CCF Broadening Significance vs Rotational Velocity V_rot sin(i) [km/s] (0 to 10 km/s) Peak at 3.4 km/s
+V_ROT_KM_S_REF,ROT_CCF_SN_REF
+0.0,3.6
+1.5,4.1
+3.4,4.8
+5.0,4.2
+7.0,2.8
+10.0,1.1
