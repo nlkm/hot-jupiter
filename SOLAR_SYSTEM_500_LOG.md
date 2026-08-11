@@ -70,6 +70,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #60 | Jeans (1902), Shu (1977) | GMC Gravitational Collapse \& Shu Accretion | `JeansInstabilityModel` | `//:gmc_collapse_fragmentation_solver` | $0.9998$ | ✅ Completed |
 | #61 | Chambers (1998), Agnor (1999) | Terrestrial Planet Formation \& Giant Impacts | Core C++ Engine | `//:terrestrial_planet_accretion_solver` | $0.9997$ | ✅ Completed |
 | #62 | Salpeter (1955), Kroupa (2001), Chabrier (2003) | Stellar Initial Mass Function (IMF) | `InitialMassFunctionModel` | `//:imf_mass_function_solver` | $0.9998$ | ✅ Completed |
+| #63 | Hubeny (2003), Fortney (2007), Baraffe (2008) | Exoplanet Radiative-Convective Atmosphere & Inversion | Core C++ Engine | `//:exoplanet_atmosphere_structure_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
