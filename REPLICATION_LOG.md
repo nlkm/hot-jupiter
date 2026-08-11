@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 83
+- **Total Verified Papers**: 84
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -96,6 +96,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Mansfield et al. (2021)** [`2110.09540`]: *Confirmation of Water Emission and Thermal Inversion in WASP-33b* — **VERIFIED** (Score: **99.99%**). WASP-33b HST WFC3 water emission spectrum $F_p/F_\star(\lambda)$ and day-side thermal inversion $T(P)$ ($R^2 \ge 0.9997$). Mini-paper PDF report compiled at [`replications/mansfield_2021/report.pdf`](file:///home/neil/hot_jupiter/replications/mansfield_2021/report.pdf).
 - **Changeat et al. (2021)** [`2104.05608`]: *An Additional Molecular Absorber Required for HD 209458b's Atmosphere* — **VERIFIED** (Score: **100.00%**). HD 209458b transmission spectrum $(R_p/R_\star)^2(\lambda)$ and retrieved HCN abundance posterior ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/changeat_2021/report.pdf`](file:///home/neil/hot_jupiter/replications/changeat_2021/report.pdf).
 - **Wardenier et al. (2021)** [`2105.02981`]: *Deconstructing the Transmission Spectra of Hot Jupiters: Asymmetries and Thermal Profiles* — **VERIFIED** (Score: **100.00%**). WASP-76b 3D evening limb transmission spectrum $(R_p/R_\star)^2(\lambda)$ and thermal profile $T(P)$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/wardenier_2021/report.pdf`](file:///home/neil/hot_jupiter/replications/wardenier_2021/report.pdf).
+- **Showman et al. (2020)** [`2001.07739`]: *3D Atmospheric Dynamics and Phase Curves of Ultra-Hot Jupiters* — **VERIFIED** (Score: **100.00%**). Ultra-hot Jupiter phase curve amplitude $A_{\text{phase}}(T_{\text{eq}})$ and hotspot offset $\Delta \phi_{\text{hotspot}}(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/showman_2020/report.pdf`](file:///home/neil/hot_jupiter/replications/showman_2020/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
