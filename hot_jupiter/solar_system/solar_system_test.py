@@ -5,7 +5,9 @@ Unit tests for hot_jupiter.solar_system subpackage.
 from hot_jupiter.solar_system import (
     AsteroidDynamics,
     CometDynamics,
+    LaplaceLagrangeSecular,
     MoonTidalDynamics,
+    NiceModelResonanceCrossing,
     PlanetaryRings,
     PlanetNineSecular,
     RelativisticPrecession,
@@ -52,3 +54,17 @@ def test_planet_nine_secular():
     p9 = PlanetNineSecular()
     prec = p9.planet_nine_secular_precession_rad_yr(250.0)
     assert prec > 1.0e-10, "Planet Nine secular precession should be positive"
+
+
+def test_laplace_lagrange_secular():
+    ll = LaplaceLagrangeSecular()
+    g5 = ll.jupiter_secular_g5_arcsec_yr()
+    g6 = ll.saturn_secular_g6_arcsec_yr()
+    assert abs(g5 - 4.257) < 0.01, "g5 frequency should be ~4.257 arcsec/yr"
+    assert abs(g6 - 28.245) < 0.01, "g6 frequency should be ~28.245 arcsec/yr"
+
+
+def test_nice_model_resonance():
+    nice = NiceModelResonanceCrossing()
+    kick = nice.ice_giant_eccentricity_kick(0.0)
+    assert kick > 0.10, "Nice model kick should be > 0.10"

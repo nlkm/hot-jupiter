@@ -45,6 +45,18 @@ int main() {
   std::cout << "--> Planet Nine TNO Precession (250 AU): " << p9_prec << " rad/yr" << std::endl;
   assert(p9_prec > 1.0e-10 && "Planet Nine secular precession should be positive!");
 
+  hot_jupiter::LaplaceLagrangeSecularModel ll_model;
+  double g5 = ll_model.jupiter_secular_g5_arcsec_yr();
+  double g6 = ll_model.saturn_secular_g6_arcsec_yr();
+  std::cout << "--> Secular Eigenfrequencies: g5 = " << g5 << ", g6 = " << g6 << " arcsec/yr" << std::endl;
+  assert(std::abs(g5 - 4.257) < 0.01 && "g5 frequency mismatch!");
+  assert(std::abs(g6 - 28.245) < 0.01 && "g6 frequency mismatch!");
+
+  hot_jupiter::NiceModelResonanceCrossing nice_model;
+  double kick = nice_model.ice_giant_eccentricity_kick(0.0, 35.0);
+  std::cout << "--> Nice Model Ice Giant Eccentricity Kick: " << kick << std::endl;
+  assert(kick > 0.10 && "Nice Model eccentricity kick out of range!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

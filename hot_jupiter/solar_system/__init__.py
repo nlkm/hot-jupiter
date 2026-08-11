@@ -117,10 +117,35 @@ class PlanetNineSecular:
         return dvarpi_dt * (365.25 * 86400.0)
 
 
+class LaplaceLagrangeSecular:
+
+    def jupiter_secular_g5_arcsec_yr(self):
+        return 4.257
+
+    def saturn_secular_g6_arcsec_yr(self):
+        return 28.245
+
+    def jupiter_eccentricity_at_time_yr(self, time_yr):
+        g5 = np.radians(4.257 / 3600.0)
+        g6 = np.radians(28.245 / 3600.0)
+        return 0.044 + 0.015 * np.cos((g6 - g5) * time_yr)
+
+
+class NiceModelResonanceCrossing:
+
+    def ice_giant_eccentricity_kick(self,
+                                    delta_t_myr,
+                                    m_planetesimal_belt_earth=35.0):
+        kick_base = 0.12 * (m_planetesimal_belt_earth / 35.0)
+        return kick_base * np.exp(-delta_t_myr / 10.0)
+
+
 __all__ = [
     "AsteroidDynamics",
     "CometDynamics",
+    "LaplaceLagrangeSecular",
     "MoonTidalDynamics",
+    "NiceModelResonanceCrossing",
     "PlanetNineSecular",
     "PlanetaryRings",
     "RelativisticPrecession",

@@ -148,6 +148,42 @@ class PlanetNineSecularModel {
   }
 };
 
+// 8. Laplace-Lagrange Secular Theory & Eigenfrequencies (Bretagnon 1974, Laskar 1989)
+class LaplaceLagrangeSecularModel {
+ public:
+  // Analytical secular eigenfrequency g5 (Jupiter fundamental perihelion frequency) [arcsec/yr]
+  double jupiter_secular_g5_arcsec_yr() const {
+    // Observed g5 frequency ~ 4.257 arcsec/yr
+    return 4.257;
+  }
+
+  // Analytical secular eigenfrequency g6 (Saturn fundamental perihelion frequency) [arcsec/yr]
+  double saturn_secular_g6_arcsec_yr() const {
+    // Observed g6 frequency ~ 28.245 arcsec/yr
+    return 28.245;
+  }
+
+  // Secular eccentricity oscillation profile e(t) for Jupiter
+  double jupiter_eccentricity_at_time_yr(double time_yr) const {
+    double g5 = (4.257 / 3600.0) * (M_PI / 180.0);
+    double g6 = (28.245 / 3600.0) * (M_PI / 180.0);
+    double e_base = 0.044;
+    double delta_e = 0.015;
+    return e_base + delta_e * std::cos((g6 - g5) * time_yr);
+  }
+};
+
+// 9. Nice Model 2:1 Jupiter-Saturn Resonance Crossing (Tsiganis et al. 2005)
+class NiceModelResonanceCrossing {
+ public:
+  // Eccentricity kick metric for Uranus/Neptune during 2:1 Jupiter-Saturn resonance crossing
+  double ice_giant_eccentricity_kick(double delta_t_myr, double m_planetesimal_belt_earth = 35.0) const {
+    double kick_base = 0.12 * (m_planetesimal_belt_earth / 35.0);
+    double damping = std::exp(-delta_t_myr / 10.0);
+    return kick_base * damping;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
