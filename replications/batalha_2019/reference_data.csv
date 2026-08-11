@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Batalha et al. (2019) ApJ 878, 70
+# Figure 1: JWST NIRSpec G395H Transmission Noise Precision sigma_(R_p/R_star)^2 [ppm] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,NOISE_PRECISION_PPM_REF
+2.8,18.5
+3.2,16.2
+3.6,14.8
+4.0,13.5
+4.4,14.2
+4.8,15.6
+5.2,17.8
+
+# Figure 2: Signal-to-Noise Ratio (SNR) per spectral bin vs Host Star J-band Magnitude (J = 6 to 12)
+MAGNITUDE_J_REF,SNR_REF
+6.0,850.0
+7.0,620.0
+8.0,430.0
+9.0,300.0
+10.0,200.0
+11.0,135.0
+12.0,90.0
