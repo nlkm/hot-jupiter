@@ -554,6 +554,13 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "dynamo_saturation_fast_rotators_solver",
+    srcs = ["replications_ss/paper_085/dynamo_saturation_fast_rotators_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",
