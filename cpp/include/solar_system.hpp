@@ -107,6 +107,15 @@ class YarkovskyThermalPhotonRecoilModel {
     return force / std::max(1.0e-5, mass);
   }
 
+  // Generic Diurnal Yarkovsky Semi-Major Axis Drift Rate [AU/Myr] (Vokrouhlický 1999)
+  double diurnal_drift_rate_au_myr(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double thermal_efficiency = 0.15) const {
+    double accel = yarkovsky_acceleration_m_s2(radius_m, density_kg_m3, a_au, obliquity_deg, thermal_efficiency);
+    double a_m = a_au * AU;
+    double orbital_v = std::sqrt(G * M_SUN / a_m);
+    double da_dt_m_s = 2.0 * accel * (orbital_v / (G * M_SUN / (a_m * a_m)));
+    return da_dt_m_s * (1.0 / AU) * (1.0e6 * 365.25 * 86400.0);
+  }
+
   // Generic Seasonal Yarkovsky Semi-Major Axis Drift Rate [AU/Myr] (Vokrouhlický 2000)
   double seasonal_drift_rate_au_myr(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double alpha_seasonal = 0.08) const {
     double mass = (4.0 / 3.0) * M_PI * std::pow(radius_m, 3.0) * density_kg_m3;
