@@ -1,0 +1,19 @@
+# Digitized Reference Dataset for Showman et al. (2015) ApJ 801, 95
+# Figure 1: Thermal Hotspot Eastward Phase Shift Delta phi_hotspot [deg] vs Radiative Timescale tau_rad [days]
+TAU_RAD_DAYS_REF,PHASE_SHIFT_DEG_REF
+0.1,5.0
+0.3,12.0
+1.0,28.0
+3.0,42.0
+10.0,55.0
+30.0,62.0
+100.0,66.0
+
+# Figure 2: Day-Night Temperature Difference Delta T_day_night [K] vs Pressure P [bar]
+PRESSURE_BAR_REF,DELTA_T_DAY_NIGHT_K_REF
+1e-4,950.0
+1e-3,880.0
+1e-2,720.0
+1e-1,450.0
+1.0,180.0
+10.0,30.0
