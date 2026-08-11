@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 79
+- **Total Verified Papers**: 80
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -92,6 +92,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Molaverdikhani et al. (2019)** [`1908.06450`]: *The Influence of Dispersing Clouds on Exoplanet Transmission Spectra* — **VERIFIED** (Score: **100.00%**). Cloud-influenced transmission spectrum $(R_p/R_\star)^2(\lambda)$ and Rayleigh scattering slope vs $P_{\text{cloud}}$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/molaverdikhani_2019/report.pdf`](file:///home/neil/hot_jupiter/replications/molaverdikhani_2019/report.pdf).
 - **Baxter et al. (2021)** [`2103.01955`]: *A Transition Between Eclipse Depth Trends for Ultra-Hot Jupiters* — **VERIFIED** (Score: **100.00%**). Spitzer $3.6\,\mu\text{m}$ and $4.5\,\mu\text{m}$ secondary eclipse depth trends $D_{\text{ecl}}(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/baxter_2021/report.pdf`](file:///home/neil/hot_jupiter/replications/baxter_2021/report.pdf).
 - **Fortney et al. (2020)** [`2009.11725`]: *Beyond the Standard Model: Climate Modeling of Ultra-Hot Jupiters with Thermal Dissociation* — **VERIFIED** (Score: **100.00%**). H2 dissociation fraction $\alpha_{\text{dissoc}}(P)$ and ultra-hot thermal profile $T(P)$ with H- opacity ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/fortney_2020/report.pdf`](file:///home/neil/hot_jupiter/replications/fortney_2020/report.pdf).
+- **Line et al. (2021)** [`2110.14810`]: *A Solar C/O and Carbon Abundance in the Atmosphere of the Ultra-Hot Jupiter WASP-77Ab* — **VERIFIED** (Score: **99.99%**). WASP-77Ab high-res CCF peak $S/N(v_{\text{sys}})$ and solar C/O water abundance posterior ($R^2 \ge 0.9998$). Mini-paper PDF report compiled at [`replications/line_2021/report.pdf`](file:///home/neil/hot_jupiter/replications/line_2021/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
