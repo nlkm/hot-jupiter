@@ -533,6 +533,32 @@ class Crossfield2017SubJovianTrends {
   }
 };
 
+// Wakeford et al. (2017) HAT-P-26b Warm Neptune Primordial Atmosphere Model
+class Wakeford2017PrimordialAtmosphere {
+ public:
+  double transmission_depth_ppm(double wave_micron) const {
+    if (wave_micron <= 0.50) return 4520.0;
+    if (wave_micron <= 0.65) return 4520.0 + (4500.0 - 4520.0) * (wave_micron - 0.50) / 0.15;
+    if (wave_micron <= 0.80) return 4500.0 + (4480.0 - 4500.0) * (wave_micron - 0.65) / 0.15;
+    if (wave_micron <= 1.15) return 4480.0 + (4510.0 - 4480.0) * (wave_micron - 0.80) / 0.35;
+    if (wave_micron <= 1.40) return 4510.0 + (4650.0 - 4510.0) * (wave_micron - 1.15) / 0.25;
+    if (wave_micron <= 1.65) return 4650.0 + (4530.0 - 4650.0) * (wave_micron - 1.40) / 0.25;
+    if (wave_micron <= 3.60) return 4530.0 + (4470.0 - 4530.0) * (wave_micron - 1.65) / 1.95;
+    if (wave_micron <= 4.50) return 4470.0 + (4490.0 - 4470.0) * (wave_micron - 3.60) / 0.90;
+    return 4490.0;
+  }
+
+  double log10_metallicity(double planet_mass_earth) const {
+    if (planet_mass_earth <= 1.0) return 2.1;
+    if (planet_mass_earth <= 14.5) return 2.1 + (1.9 - 2.1) * (planet_mass_earth - 1.0) / 13.5;
+    if (planet_mass_earth <= 17.1) return 1.9 + (1.8 - 1.9) * (planet_mass_earth - 14.5) / 2.6;
+    if (planet_mass_earth <= 19.0) return 1.8 + (0.68 - 1.8) * (planet_mass_earth - 17.1) / 1.9;
+    if (planet_mass_earth <= 95.2) return 0.68 + (1.2 - 0.68) * (planet_mass_earth - 19.0) / 76.2;
+    if (planet_mass_earth <= 317.8) return 1.2 + (0.0 - 1.2) * (planet_mass_earth - 95.2) / 222.6;
+    return 0.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
