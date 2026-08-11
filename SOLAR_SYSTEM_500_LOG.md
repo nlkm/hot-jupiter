@@ -82,6 +82,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #72 | Batygin \& Stevenson (2010), Laughlin (2011) | Hot Jupiter Radius Inflation via Ohmic Dissipation | Core C++ Engine | `//:ohmic_dissipation_inflation_solver` | $0.9998$ | ✅ Completed |
 | #73 | Seager (2007), Valencia (2006), Zeng (2016) | Super-Earth Mass-Radius Relations \& Composition Scalings | Core C++ Engine | `//:exoplanet_mass_radius_solver` | $0.9998$ | ✅ Completed |
 | #74 | Wyatt (2003), Mouillet (1997), Augereau (1999) | Debris Disk Spiral Structure \& Planet Resonant Traps | Core C++ Engine | `//:debris_disk_structure_solver` | $0.9998$ | ✅ Completed |
+| #75 | Skumanich (1972), Barnes (2007), Mamajek (2008) | Stellar Rotation \& Gyrochronology Age-Spin Relations | `StellarMainSequenceModel` | `//:gyrochronology_spin_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
