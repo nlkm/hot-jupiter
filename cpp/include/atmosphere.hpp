@@ -724,6 +724,33 @@ class Welbanks2019WaterDepletion {
   }
 };
 
+// Tsiaras et al. (2019) Habitable-Zone Super-Earth K2-18b Water Atmosphere Model
+class Tsiaras2019SuperEarthAtmosphere {
+ public:
+  double k2_18b_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 1.125) return 0.701;
+    if (wave_micron <= 1.200) return 0.701 + (0.702 - 0.701) * (wave_micron - 1.125) / 0.075;
+    if (wave_micron <= 1.275) return 0.702 + (0.703 - 0.702) * (wave_micron - 1.200) / 0.075;
+    if (wave_micron <= 1.350) return 0.703 + (0.718 - 0.703) * (wave_micron - 1.275) / 0.075;
+    if (wave_micron <= 1.425) return 0.718 + (0.725 - 0.718) * (wave_micron - 1.350) / 0.075;
+    if (wave_micron <= 1.500) return 0.725 + (0.710 - 0.725) * (wave_micron - 1.425) / 0.075;
+    if (wave_micron <= 1.575) return 0.710 + (0.704 - 0.710) * (wave_micron - 1.500) / 0.075;
+    if (wave_micron <= 1.650) return 0.704 + (0.702 - 0.704) * (wave_micron - 1.575) / 0.075;
+    return 0.702;
+  }
+
+  double mu_log_posterior_density(double mu_g_mol) const {
+    if (mu_g_mol <= 2.3) return 0.02;
+    if (mu_g_mol <= 3.0) return 0.02 + (0.35 - 0.02) * (mu_g_mol - 2.3) / 0.7;
+    if (mu_g_mol <= 4.0) return 0.35 + (0.98 - 0.35) * (mu_g_mol - 3.0) / 1.0;
+    if (mu_g_mol <= 5.0) return 0.98 + (0.60 - 0.98) * (mu_g_mol - 4.0) / 1.0;
+    if (mu_g_mol <= 7.0) return 0.60 + (0.15 - 0.60) * (mu_g_mol - 5.0) / 2.0;
+    if (mu_g_mol <= 10.0) return 0.15 + (0.05 - 0.15) * (mu_g_mol - 7.0) / 3.0;
+    if (mu_g_mol <= 18.0) return 0.05 + (0.00 - 0.05) * (mu_g_mol - 10.0) / 8.0;
+    return 0.00;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
