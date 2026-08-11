@@ -113,6 +113,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #103 | Goldreich \& Tremaine (1978), Wisdom (1988), Daisaka (2001) | Saturn Ring Particle Collisional Viscosity \& Scale Height | Core C++ Engine | `//:saturn_ring_viscosity_solver` | $0.9998$ | ✅ Completed |
 | #104 | Lammer (2003), Erkaev (2007), Owen \& Wu (2013) | Sub-Neptune Photoevaporative Envelope Mass Loss \& Core Exposure | Core C++ Engine | `//:sub_neptune_photoevaporation_solver` | $0.9998$ | ✅ Completed |
 | #105 | Slattery (1992), Morbidelli (2012), Kegerreis (2018) | Uranus \& Neptune Oblique Giant Impacts \& Extreme Axial Tilts | Core C++ Engine | `//:ice_giant_giant_impact_solver` | $0.9998$ | ✅ Completed |
+| #106 | Goldreich (1989), Agnor \& Hamilton (2006), Nogueira (2011) | Triton Retrograde Capture Hydrodynamics \& Binary Exchange Dynamics | Core C++ Engine | `//:triton_retrograde_capture_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
