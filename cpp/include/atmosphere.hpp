@@ -1831,6 +1831,37 @@ class Sing2016CloudContinuumModel {
   }
 };
 
+// Spake et al. (2018) Metastable Helium Triplet Exosphere Escape Model
+class Spake2018MetastableHeliumModel {
+ public:
+  double helium_transmission_spectrum(double wavelength_um) const {
+    const double w[7] = {1.00, 1.04, 1.07, 1.0833, 1.095, 1.12, 1.15};
+    const double d[7] = {0.02050, 0.02040, 0.02045, 0.02165, 0.02042, 0.02038, 0.02035};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[6]) return d[6];
+    for (int i = 0; i < 6; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double log10_mass_loss_rate_g_s(double he_fraction) const {
+    const double y[6] = {0.05, 0.08, 0.10, 0.12, 0.15, 0.20};
+    const double m[6] = {10.10, 10.35, 10.50, 10.62, 10.78, 10.95};
+    if (he_fraction <= y[0]) return m[0];
+    if (he_fraction >= y[5]) return m[5];
+    for (int i = 0; i < 5; ++i) {
+      if (he_fraction >= y[i] && he_fraction <= y[i+1]) {
+        return m[i] + (m[i+1] - m[i]) * (he_fraction - y[i]) / (y[i+1] - y[i]);
+      }
+    }
+    return m[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
