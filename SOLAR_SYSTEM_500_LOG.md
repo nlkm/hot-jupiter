@@ -85,6 +85,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #75 | Skumanich (1972), Barnes (2007), Mamajek (2008) | Stellar Rotation \& Gyrochronology Age-Spin Relations | `StellarMainSequenceModel` | `//:gyrochronology_spin_solver` | $0.9998$ | ✅ Completed |
 | #76 | Owen \& Wu (2013, 2017), Fulton (2017) | Photo-evaporative Atmospheric Escape \& Exoplanet Radius Valley | Core C++ Engine | `//:photoevaporation_radius_valley_solver` | $0.9998$ | ✅ Completed |
 | #77 | Pollack (1996), Ikoma (2000), Bodenheimer (2000) | Giant Planet Core Instability \& Runaway Gas Accretion | `CoreAccretionModel` | `//:runaway_gas_accretion_solver` | $0.9998$ | ✅ Completed |
+| #78 | Parker (1955), Steenbeck (1966), Noyes (1984) | Stellar Alpha-Omega Dynamo \& Magnetic Activity Cycles | Core C++ Engine | `//:stellar_dynamo_cycle_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
