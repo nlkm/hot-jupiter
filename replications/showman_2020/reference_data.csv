@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Showman et al. (2020) ApJ 891, 78
+# Figure 1: Phase Curve Amplitude A_phase vs Teq [K] (1500 to 3200 K)
+TEQ_K_REF,APHASE_REF
+1500.0,0.35
+1800.0,0.52
+2100.0,0.72
+2400.0,0.88
+2800.0,0.95
+3200.0,0.98
+
+# Figure 2: Phase Curve Hotspot Offset Delta_phi_hotspot [deg] vs Teq [K] (1500 to 3200 K)
+TEQ_K_OFFSET_REF,HOTSPOT_OFFSET_DEG_REF
+1500.0,28.5
+1800.0,22.0
+2100.0,15.5
+2400.0,9.0
+2800.0,4.5
+3200.0,2.0
