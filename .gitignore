@@ -24,3 +24,18 @@ hot_jupiter/data/hot_jupiter.db
 # Lock Files & Temp Files
 .paper_build.lock
 .DS_Store
+
+# LaTeX Intermediate Build Artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Temporary Scratch Files & Generated Solver Data
+scratch/
+sim_*.csv
+*.csv.tmp
+
