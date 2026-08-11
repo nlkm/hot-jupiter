@@ -10,39 +10,38 @@
 
 namespace hot_jupiter {
 
-void run_tbright_sweep(const std::string& output_csv) {
+void run_inversion_sweep(const std::string& output_csv) {
   Baxter2020UltraHotPopulationModel model;
   std::ofstream out(output_csv);
-  out << "t_eq_k,tbright_36_k,tbright_45_k\n";
+  out << "teq_k,delta_t_inv_k\n";
 
-  for (double teq = 2200.0; teq <= 4000.0; teq += 50.0) {
-    double tb36 = model.t_bright_36_k(teq);
-    double tb45 = model.t_bright_45_k(teq);
-    out << teq << "," << tb36 << "," << tb45 << "\n";
+  for (double t = 1500.0; t <= 3400.0; t += 25.0) {
+    double dt = model.delta_t_inversion(t);
+    out << t << "," << dt << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Baxter et al. (2020) Brightness Temperature dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Baxter et al. (2020) Population Thermal Inversion dataset to " << output_csv << std::endl;
 }
 
-void run_delta_tbright_sweep(const std::string& output_csv) {
+void run_tbright_36_sweep(const std::string& output_csv) {
   Baxter2020UltraHotPopulationModel model;
   std::ofstream out(output_csv);
-  out << "t_eq_k,delta_tbright_k\n";
+  out << "teq_k,t_bright_36_k\n";
 
-  for (double teq = 2200.0; teq <= 4000.0; teq += 50.0) {
-    double delta_tb = model.delta_t_bright_k(teq);
-    out << teq << "," << delta_tb << "\n";
+  for (double t = 1500.0; t <= 3400.0; t += 25.0) {
+    double tb = model.t_bright_36_k(t);
+    out << t << "," << tb << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Baxter et al. (2020) Delta Brightness Temperature dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Baxter et al. (2020) Dayside 3.6 um Brightness Temperature dataset to " << output_csv << std::endl;
 }
 
 }  // namespace hot_jupiter
 
 int main() {
-  std::cout << "=== Baxter et al. (2020) C++ Ultra-Hot Jupiter Population Solver ===" << std::endl;
-  hot_jupiter::run_tbright_sweep("replications/baxter_2020/sim_tbright.csv");
-  hot_jupiter::run_delta_tbright_sweep("replications/baxter_2020/sim_delta_tbright.csv");
+  std::cout << "=== Baxter et al. (2020) C++ Ultra-Hot Population Solver ===" << std::endl;
+  hot_jupiter::run_inversion_sweep("replications/baxter_2020/sim_inversion.csv");
+  hot_jupiter::run_tbright_36_sweep("replications/baxter_2020/sim_tbright_36.csv");
   std::cout << "✅ Baxter et al. (2020) C++ Datasets Generated Successfully!" << std::endl;
   return 0;
 }

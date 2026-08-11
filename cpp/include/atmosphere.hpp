@@ -1197,12 +1197,25 @@ class Beatty2019Kelt1bPhaseCurveModel {
 // Baxter et al. (2020) Ultra-Hot Jupiter Population Thermal Inversion & H- Model
 class Baxter2020UltraHotPopulationModel {
  public:
+  double delta_t_inversion(double t_eq_k) const {
+    const double t[7] = {1500.0, 1800.0, 2100.0, 2400.0, 2700.0, 3000.0, 3400.0};
+    const double dt[7] = {-150.0, -80.0, -20.0, 120.0, 280.0, 350.0, 380.0};
+    if (t_eq_k <= t[0]) return dt[0];
+    if (t_eq_k >= t[6]) return dt[6];
+    for (int i = 0; i < 6; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return dt[i] + (dt[i+1] - dt[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return dt[0];
+  }
+
   double t_bright_36_k(double t_eq_k) const {
-    const double t[6] = {2200.0, 2500.0, 2800.0, 3100.0, 3500.0, 4000.0};
-    const double tb[6] = {2400.0, 2700.0, 3000.0, 3320.0, 3750.0, 4250.0};
+    const double t[7] = {1500.0, 1800.0, 2100.0, 2400.0, 2700.0, 3000.0, 3400.0};
+    const double tb[7] = {1620.0, 1950.0, 2280.0, 2580.0, 2840.0, 3050.0, 3260.0};
     if (t_eq_k <= t[0]) return tb[0];
-    if (t_eq_k >= t[5]) return tb[5];
-    for (int i = 0; i < 5; ++i) {
+    if (t_eq_k >= t[6]) return tb[6];
+    for (int i = 0; i < 6; ++i) {
       if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
         return tb[i] + (tb[i+1] - tb[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
       }
@@ -1211,20 +1224,11 @@ class Baxter2020UltraHotPopulationModel {
   }
 
   double t_bright_45_k(double t_eq_k) const {
-    const double t[6] = {2200.0, 2500.0, 2800.0, 3100.0, 3500.0, 4000.0};
-    const double tb[6] = {2350.0, 2620.0, 2900.0, 3200.0, 3600.0, 4100.0};
-    if (t_eq_k <= t[0]) return tb[0];
-    if (t_eq_k >= t[5]) return tb[5];
-    for (int i = 0; i < 5; ++i) {
-      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
-        return tb[i] + (tb[i+1] - tb[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
-      }
-    }
-    return tb[0];
+    return t_bright_36_k(t_eq_k) + delta_t_inversion(t_eq_k);
   }
 
   double delta_t_bright_k(double t_eq_k) const {
-    return t_bright_36_k(t_eq_k) - t_bright_45_k(t_eq_k);
+    return delta_t_inversion(t_eq_k);
   }
 };
 
