@@ -27,77 +27,75 @@ def load_csv(filename):
 def verify_benneke2019():
     ref_rows = load_csv("replications/benneke_2019/reference_data.csv")
 
-    # Figure 1: Joint HST/Spitzer Transmission Spectrum (first 7 data rows)
-    ref_fig1_data = np.array(ref_rows[:7])
-    ref_wave = ref_fig1_data[:, 0]
+    # Figure 1: K2-18b Transmission Spectrum (first 8 data rows)
+    ref_fig1_data = np.array(ref_rows[:8])
+    ref_wl = ref_fig1_data[:, 0]
     ref_depth = ref_fig1_data[:, 1]
-    ref_err = ref_fig1_data[:, 2]
 
-    sim_spec_data = load_csv(
-        "replications/benneke_2019/sim_transmission_spectrum.csv")
-    sim_spec = np.array(sim_spec_data)
+    sim_trans_data = load_csv(
+        "replications/benneke_2019/sim_k218b_spectrum.csv")
+    sim_trans = np.array(sim_trans_data)
+    sim_trans = sim_trans[np.argsort(sim_trans[:, 0])]
 
-    sim_interp_depth = np.interp(ref_wave, sim_spec[:, 0], sim_spec[:, 1])
+    sim_interp_depth = np.interp(ref_wl, sim_trans[:, 0], sim_trans[:, 1])
 
     r2_fig1 = 1.0 - (np.sum((sim_interp_depth - ref_depth)**2) / np.sum(
         (ref_depth - np.mean(ref_depth))**2))
 
     fig, ax = plt.subplots(figsize=(7, 5))
-    ax.plot(sim_spec[:, 0],
-            sim_spec[:, 1],
-            'r-',
+    ax.plot(sim_trans[:, 0],
+            sim_trans[:, 1] * 100,
+            'b-',
             lw=2.5,
-            label='hot_jupiter Cloud Model')
-    ax.errorbar(ref_wave,
-                ref_depth,
-                yerr=ref_err,
-                fmt='ko',
-                capsize=4,
-                ms=6,
-                label='Benneke et al. (2019) HST/Spitzer Data')
+            label='hot_jupiter Model Spectrum')
+    ax.plot(ref_wl,
+            ref_depth * 100,
+            'ko',
+            ms=7,
+            label='Benneke et al. (2019) K2-18b Data')
 
-    ax.set_xscale('log')
-    ax.set_xlabel(r"Wavelength $\lambda$ [$\mu$m]", fontsize=12)
+    ax.set_xlabel(r"Wavelength $\lambda$ [$\mu\mathrm{m}$]", fontsize=12)
     ax.set_ylabel(r"Transit Depth $(R_p/R_\star)^2$ [\%]", fontsize=12)
-    ax.set_title("Benneke et al. (2019) Figure 1: K2-18b Transmission Spectrum",
-                 fontsize=13)
+    ax.set_title(
+        "Benneke et al. (2019) Figure 1: K2-18b Water Transmission Spectrum",
+        fontsize=13)
     ax.grid(True, linestyle='--', alpha=0.5)
     ax.legend(fontsize=11)
     plt.tight_layout()
-    plt.savefig("replications/benneke_2019/fig1_transmission_spectrum.png",
-                dpi=300)
+    plt.savefig("replications/benneke_2019/fig1_k218b_spectrum.png", dpi=300)
     plt.close(fig)
 
-    # Figure 2: Water Volume Abundance Posterior Distribution (next 7 data rows)
-    ref_fig2_data = np.array(ref_rows[7:])
-    ref_h2o = ref_fig2_data[:, 0]
+    # Figure 2: Water Abundance Posterior (next 6 data rows)
+    ref_fig2_data = np.array(ref_rows[8:])
+    ref_logx = ref_fig2_data[:, 0]
     ref_prob = ref_fig2_data[:, 1]
 
-    sim_prob_data = load_csv("replications/benneke_2019/sim_h2o_posterior.csv")
-    sim_prob = np.array(sim_prob_data)
+    sim_post_data = load_csv("replications/benneke_2019/sim_h2o_posterior.csv")
+    sim_post = np.array(sim_post_data)
 
-    sim_interp_prob = np.interp(ref_h2o, sim_prob[:, 0], sim_prob[:, 1])
+    sim_interp_prob = np.interp(ref_logx, sim_post[:, 0], sim_post[:, 1])
 
     r2_fig2 = 1.0 - (np.sum((sim_interp_prob - ref_prob)**2) / np.sum(
         (ref_prob - np.mean(ref_prob))**2))
 
     fig, ax = plt.subplots(figsize=(7, 5))
-    ax.plot(sim_prob[:, 0],
-            sim_prob[:, 1],
-            'b-',
+    ax.plot(sim_post[:, 0],
+            sim_post[:, 1],
+            'r-',
             lw=2.5,
-            label=r'hot_jupiter Posterior Density')
-    ax.plot(ref_h2o,
+            label='hot_jupiter Posterior')
+    ax.plot(ref_logx,
             ref_prob,
             'ko',
             ms=7,
-            label='Benneke et al. (2019) SCARLET')
+            label='Benneke et al. (2019) Posterior')
 
-    ax.set_xlabel(r"Water Volume Abundance $\log_{10}(X_{\mathrm{H2O}})$",
+    ax.set_xlabel(r"$\log_{10} X_{\mathrm{H}_2\mathrm{O}}$ Abundance",
                   fontsize=12)
-    ax.set_ylabel("Posterior Probability Density $P$", fontsize=12)
-    ax.set_title("Benneke et al. (2019) Figure 2: K2-18b Water Abundance",
-                 fontsize=13)
+    ax.set_ylabel(r"Probability Density", fontsize=12)
+    ax.set_title(
+        "Benneke et al. (2019) Figure 2: Retrieved Water Abundance Posterior",
+        fontsize=13)
     ax.grid(True, linestyle='--', alpha=0.5)
     ax.legend(fontsize=11)
     plt.tight_layout()
@@ -105,10 +103,10 @@ def verify_benneke2019():
     plt.close(fig)
 
     print(
-        f"--> Fig 1 Joint Transmission Spectrum R^2 Score: {r2_fig1:.4f} ({r2_fig1*100:.2f}%)"
+        f"--> Fig 1 K2-18b Spectrum R^2 Score: {r2_fig1:.4f} ({r2_fig1*100:.2f}%)"
     )
     print(
-        f"--> Fig 2 Water Abundance Posterior R^2 Score: {r2_fig2:.4f} ({r2_fig2*100:.2f}%)"
+        f"--> Fig 2 H2O Posterior R^2 Score: {r2_fig2:.4f} ({r2_fig2*100:.2f}%)"
     )
 
     assert r2_fig1 >= 0.98, f"Figure 1 R^2 score {r2_fig1} below target 0.98!"
