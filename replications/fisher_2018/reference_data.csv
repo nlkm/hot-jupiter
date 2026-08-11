@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Fisher & Heng (2018) MNRAS 481, 4698
+# Figure 1: WASP-12b Analytical Retrieval Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PCT_REF,TRANSIT_DEPTH_ERR_PCT_REF
+0.35,1.52,0.02
+0.50,1.49,0.02
+0.75,1.46,0.02
+1.4,1.44,0.015
+2.0,1.42,0.02
+3.6,1.39,0.02
+4.5,1.38,0.02
+
+# Figure 2: Optical Scattering Index gamma vs Equilibrium Temperature T_eq [K] (38 hot Jupiters)
+TEQ_K_REF,GAMMA_REF
+600.0,4.0
+1000.0,4.0
+1400.0,3.8
+1800.0,2.5
+2200.0,1.0
+2600.0,0.2
+2800.0,0.0
