@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Gandhi & Madhusudhan (2019) MNRAS 485, 5817
+# Figure 1: Retrieved Volume Mixing Ratios log10(X_H2O) and log10(X_CO) vs Teq [K] (1000 to 3000 K)
+TEQ_K_REF,LOG10_XH2O_REF,LOG10_XCO_REF
+1000.0,-3.30,-3.80
+1500.0,-3.40,-3.50
+2000.0,-3.80,-3.20
+2500.0,-4.50,-3.00
+3000.0,-5.20,-3.00
+
+# Figure 2: Retrieved C/O Ratio vs Teq [K] (1000 to 3000 K)
+TEQ_K_CO_REF,CO_RATIO_REF
+1000.0,0.55
+1500.0,0.60
+2000.0,0.75
+2500.0,0.92
+3000.0,0.98
