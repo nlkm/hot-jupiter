@@ -1,0 +1,21 @@
+# Digitized Reference Dataset for Arcangeli et al. (2019) A&A 625, A136
+# Figure 1: WASP-18b Dayside HST WFC3 Secondary Eclipse Emission Spectrum F_p / F_star [ppm] vs Wavelength [micron]
+WAVELENGTH_MICRON_REF,FLUX_PPM_REF
+1.12,820.0
+1.18,910.0
+1.24,1030.0
+1.30,1120.0
+1.36,1200.0
+1.42,1260.0
+1.48,1310.0
+1.54,1350.0
+1.60,1380.0
+1.66,1400.0
+
+# Figure 2: WASP-18b Day vs Night Emission Flux Ratio (Dayside 2900 K vs Nightside 1500 K)
+WAVELENGTH_MICRON_DAYNIGHT_REF,FLUX_DAY_PPM_REF,FLUX_NIGHT_PPM_REF
+1.12,820.0,180.0
+1.24,1030.0,240.0
+1.36,1200.0,300.0
+1.48,1310.0,350.0
+1.60,1380.0,390.0
