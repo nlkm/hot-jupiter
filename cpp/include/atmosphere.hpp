@@ -1499,6 +1499,36 @@ class Changeat2020Kelt11bModel {
   }
 };
 
+// Carone et al. (2020) Pressure-Dependent Equatorial Jet Model
+class Carone2020VerticalJetModel {
+ public:
+  double wasp43b_zonal_wind_ms(double pressure_bar) const {
+    const double p[8] = {1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2};
+    const double u[8] = {100.0, 450.0, 1200.0, 2100.0, 2850.0, 2300.0, 900.0, 50.0};
+    if (pressure_bar <= p[0]) return u[0];
+    if (pressure_bar >= p[7]) return u[7];
+    for (int i = 0; i < 7; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return u[i] + (u[i+1] - u[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return u[0];
+  }
+
+  double hd209458b_zonal_wind_ms(double pressure_bar) const {
+    const double p[8] = {1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2};
+    const double u[8] = {250.0, 850.0, 1950.0, 3200.0, 4100.0, 3600.0, 1500.0, 100.0};
+    if (pressure_bar <= p[0]) return u[0];
+    if (pressure_bar >= p[7]) return u[7];
+    for (int i = 0; i < 7; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return u[i] + (u[i+1] - u[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return u[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
