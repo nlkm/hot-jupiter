@@ -24,7 +24,15 @@ cc_library(
         "cpp/include/star_formation.hpp",
     ],
     includes = ["cpp/include"],
-    copts = ["-std=c++17", "-O3", "-fopenmp", "-fvisibility=default"],
+    copts = [
+        "-std=c++17",
+        "-O3",
+        "-ffast-math",
+        "-funroll-loops",
+        "-ftree-vectorize",
+        "-fopenmp",
+        "-fvisibility=default",
+    ],
     linkopts = ["-fopenmp"],
     alwayslink = True,
 )
