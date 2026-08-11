@@ -1,19 +1,20 @@
 # Digitized Reference Dataset for Welbanks et al. (2019) ApJL 887, L20
-# Figure 1: WASP-127b Transmission Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns]
-WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PCT_REF,TRANSIT_DEPTH_ERR_PCT_REF
-0.35,1.90,0.02
-0.589,1.96,0.025
-0.77,1.89,0.02
-1.4,1.91,0.015
-2.0,1.87,0.02
-3.6,1.85,0.02
-4.5,1.84,0.02
+# Figure 1: Atmospheric Water Abundance log10(X_H2O) vs Planet Mass M_p / M_Jup (0.01 to 10.0 M_Jup)
+MASS_MJUP_REF,LOG10_XH2O_REF
+0.01,-1.50
+0.05,-2.20
+0.10,-2.70
+0.50,-3.80
+1.00,-4.30
+5.00,-5.10
+10.00,-5.60
 
-# Figure 2: Water Abundance [H2O/H] and Na Abundance [Na/H] vs Planet Mass M_p [M_earth] (19 exoplanets)
-PLANET_MASS_EARTH_REF,LOG10_XH2O_REF,LOG10_XNA_REF
-10.0,-1.0,1.8
-19.0,-1.5,1.5
-50.0,-2.0,1.2
-95.0,-2.5,0.8
-150.0,-2.8,0.5
-300.0,-3.2,0.0
+# Figure 2: Atmospheric Metallicity [M/H] (Relative to Solar) vs Planet Mass M_p / M_Jup
+MASS_MJUP_MH_REF,METALLICITY_SOLAR_REF
+0.01,250.0
+0.05,80.0
+0.10,35.0
+0.50,5.0
+1.00,2.0
+5.00,0.5
+10.00,0.2
