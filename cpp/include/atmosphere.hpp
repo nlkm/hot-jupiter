@@ -1924,6 +1924,37 @@ class Benneke2019K218bModel {
   }
 };
 
+// Kreidberg et al. (2014) Super-Earth GJ 1214b Cloud-Muffled Model
+class Kreidberg2014Gj1214bModel {
+ public:
+  double transmission_spectrum(double wavelength_um) const {
+    const double w[8] = {1.12, 1.18, 1.25, 1.32, 1.40, 1.48, 1.55, 1.65};
+    const double d[8] = {0.01353, 0.01351, 0.01352, 0.01350, 0.01353, 0.01351, 0.01352, 0.01350};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[7]) return d[7];
+    for (int i = 0; i < 7; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double model_chi2_dof(double log10_p_cloud_bar) const {
+    const double p[6] = {-5.0, -4.0, -3.0, -2.0, -1.0, 0.0};
+    const double c[6] = {1.05, 1.15, 2.40, 4.80, 8.50, 12.00};
+    if (log10_p_cloud_bar <= p[0]) return c[0];
+    if (log10_p_cloud_bar >= p[5]) return c[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_p_cloud_bar >= p[i] && log10_p_cloud_bar <= p[i+1]) {
+        return c[i] + (c[i+1] - c[i]) * (log10_p_cloud_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return c[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
