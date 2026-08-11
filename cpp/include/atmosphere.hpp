@@ -1124,6 +1124,32 @@ class Kreidberg2018Wasp103bPhaseCurveModel {
     return flux[0];
   }
 
+  double phase_curve_flux(double phase) const {
+    const double p[7] = {0.00, 0.15, 0.30, 0.48, 0.65, 0.80, 1.00};
+    const double f[7] = {0.00045, 0.00075, 0.00140, 0.00192, 0.00155, 0.00085, 0.00045};
+    if (phase <= p[0]) return f[0];
+    if (phase >= p[6]) return f[6];
+    for (int i = 0; i < 6; ++i) {
+      if (phase >= p[i] && phase <= p[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (phase - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double longitudinal_temperature(double lon_deg) const {
+    const double l[7] = {-180.0, -120.0, -60.0, 12.0, 60.0, 120.0, 180.0};
+    const double t[7] = {1580.0, 1650.0, 2150.0, 2890.0, 2720.0, 2050.0, 1580.0};
+    if (lon_deg <= l[0]) return t[0];
+    if (lon_deg >= l[6]) return t[6];
+    for (int i = 0; i < 6; ++i) {
+      if (lon_deg >= l[i] && lon_deg <= l[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (lon_deg - l[i]) / (l[i+1] - l[i]);
+      }
+    }
+    return t[0];
+  }
+
   double temperature_k(double orbital_phase) const {
     const double phi[5] = {0.00, 0.25, 0.50, 0.75, 1.00};
     const double temp[5] = {1400.0, 2100.0, 2850.0, 2100.0, 1400.0};
