@@ -96,6 +96,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #86 | Lambrechts \& Johansen (2012, 2014), Bitsch (2015) | Pebble Accretion Hydrodynamic Gas Drag \& Core Isolation Mass | Core C++ Engine | `//:pebble_isolation_mass_solver` | $0.9998$ | ✅ Completed |
 | #87 | Agol (2005), Holman (2005), Lithwick (2012) | Exoplanet Transit Timing Variations \& Mass Determination | Core C++ Engine | `//:transit_timing_variation_solver` | $0.9998$ | ✅ Completed |
 | #88 | Oort (1950), Duncan (1987), Kaib \& Quinn (2008) | Oort Cloud Formation \& Galactic Tide Dynamics | Core C++ Engine | `//:oort_cloud_galactic_tide_solver` | $0.9998$ | ✅ Completed |
+| #89 | Owen \& Wu (2013, 2017), Jin (2014), Lopez (2014) | Super-Earth Core Photoevaporation Valley \& Radius Bimodality | Core C++ Engine | `//:super_earth_evaporation_valley_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
