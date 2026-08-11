@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Mansfield et al. (2021) Nature Astronomy 5, 1224
+# Figure 1: WASP-33b HST WFC3 Secondary Eclipse Spectrum Fp/Fstar [ppm] vs Wavelength Lambda [um] (1.1 to 1.7 um)
+WAVELENGTH_UM_REF,FP_FSTAR_PPM_REF
+1.12,1850.0
+1.20,2100.0
+1.30,2450.0
+1.40,3150.0
+1.50,2800.0
+1.60,2400.0
+1.68,2250.0
+
+# Figure 2: Day-side Thermal Profile T(P) [K] vs Pressure P [bar] (1e-4 to 1.0 bar)
+P_BAR_TP_REF,T_K_INVERSION_REF
+1e-4,3550.0
+1e-3,3400.0
+1e-2,3100.0
+1e-1,2650.0
+1e0,2350.0
