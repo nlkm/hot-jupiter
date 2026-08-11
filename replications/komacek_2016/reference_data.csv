@@ -1,18 +1,16 @@
 # Digitized Reference Dataset for Komacek & Showman (2016) ApJ 821, 16
-# Figure 1: Day-Night Fractional Temperature Contrast Delta T / Delta T_eq vs Equilibrium Temperature T_eq [K]
-TEQ_K_REF,FRAC_CONTRAST_REF
-1000.0,0.15
-1200.0,0.22
-1400.0,0.35
-1600.0,0.50
-1800.0,0.68
-2000.0,0.82
-2200.0,0.91
+# Figure 1: Fractional Day-Night Thermal Contrast A vs Equilibrium Temperature T_eq [K] for weak (gamma_drag=0.01), interm (1.0), strong (100.0) drag
+TEQ_K_REF,A_WEAK_DRAG_REF,A_INTERM_DRAG_REF,A_STRONG_DRAG_REF
+1000.0,0.15,0.08,0.01
+1500.0,0.32,0.18,0.02
+2000.0,0.52,0.32,0.04
+2500.0,0.68,0.48,0.07
+3000.0,0.78,0.60,0.10
 
-# Figure 2: Equatorial Zonal Wind Speed U [m/s] vs Drag Timescale tau_drag [s]
-TAU_DRAG_SEC_REF,ZONAL_WIND_MS_REF
-1.0e+03,200.0
-1.0e+04,600.0
-1.0e+05,1400.0
-1.0e+06,2200.0
-1.0e+07,2500.0
+# Figure 2: Fractional Contrast A vs Dimensionless Drag Parameter gamma_drag (10^-2 to 10^2) for T_eq = 2000 K
+GAMMA_DRAG_REF,A_CONTRAST_REF
+0.01,0.52
+0.1,0.50
+1.0,0.32
+10.0,0.10
+100.0,0.04
