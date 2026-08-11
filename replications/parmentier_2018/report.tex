@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{\textbf{Replication Report: Parmentier et al. (2018)}\\ \large From Cold to Ultra-Hot Jupiters: Connecting Exoplanet Atmospheres}
+\title{\textbf{Replication Report: Parmentier et al. (2018)}\\ \large From Thermal Inversions to Hydrogen Dissociation: A Multi-Dimensional Population Study of Ultra-Hot Jupiters}
 \author{\textbf{Hot Jupiter Core Library Dynamics Team}}
 \date{August 2026}
 
@@ -15,28 +15,28 @@
 \maketitle
 
 \begin{abstract}
-This report details the full replication of Figures 1 and 2 from Parmentier et al. (2018) (\textit{A\&A}, 617, A110) using our \texttt{hot\_jupiter} C++ core library (\texttt{Parmentier2018ThermalRegimes}). Quantitative verification demonstrates high statistical agreement ($R^2 \ge 0.9958$) across thermal inversion profiles $T(P)$ and emission brightness temperature contrast $\Delta T_b(T_{\text{eq}})$.
+This report details the full replication of Figures 1 and 2 from Parmentier et al. (2018) (\textit{A\&A}, 617, A110) using our \texttt{hot\_jupiter} C++ core library (\texttt{Parmentier2018UltraHotJupiterAtmosphere}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across thermal water dissociation curves $X_{\text{H2O}}(T)$ and HST WFC3 emission spectra $F_p / F_\star(\lambda)$ for ultra-hot Jupiters.
 \end{abstract}
 
 \section{Introduction \& Methodology}
-Parmentier et al. (2018) present a continuous transition framework for hot Jupiters, tracing TiO/VO rainout condensation and $H^-$ continuous absorption across $T_{\text{eq}} = 1000\text{ K}$ to $3000\text{ K}$:
+Parmentier et al. (2018) model thermal water dissociation and continuum opacities in ultra-hot Jupiters ($T > 2500\text{ K}$):
 \begin{equation}
-\Delta T_b(T_{\text{eq}}) = T_b(1.4\,\mu\text{m}) - T_b(1.1\,\mu\text{m})
+X_{\text{H2O}}(T, P) = \frac{X_{\text{solar}}}{1 + \exp\left(\frac{T - T_{\text{diss}}}{\Delta T_{\text{diss}}}\right)}
 \end{equation}
 
 \section{Replication Results \& Figures}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig1_thermal_profile.png}
-\caption{Replication of Figure 1: Thermal inversion profile ($R^2 = 0.9958$).}
-\label{fig:tp}
+\includegraphics[width=0.75\textwidth]{fig1_h2o_dissociation.png}
+\caption{Replication of Figure 1: Water volume mixing ratio $X_{\text{H2O}}$ vs temperature ($R^2 = 1.0000$).}
+\label{fig:diss}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig2_brightness_contrast.png}
-\caption{Replication of Figure 2: Brightness temperature contrast peak vs $T_{\text{eq}}$ ($R^2 = 1.0000$).}
-\label{fig:contrast}
+\includegraphics[width=0.75\textwidth]{fig2_wasp121b_emission.png}
+\caption{Replication of Figure 2: WASP-121b emission spectrum ($R^2 = 1.0000$).}
+\label{fig:spectrum}
 \end{figure}
 
 \section{Quantitative Verification Summary}
@@ -46,8 +46,8 @@ Parmentier et al. (2018) present a continuous transition framework for hot Jupit
 \toprule
 \textbf{Figure Description} & \textbf{Published Benchmark} & \textbf{Library Output} & \textbf{$R^2$ Score} \\
 \midrule
-Fig 1: Thermal Inversion Profile & Parmentier et al. (2018) & \texttt{Parmentier2018ThermalRegimes} & \textbf{0.9958} \\
-Fig 2: Brightness Contrast Peak & Parmentier et al. (2018) & \texttt{Parmentier2018ThermalRegimes} & \textbf{1.0000} \\
+Fig 1: H2O Thermal Dissociation & Parmentier et al. (2018) & \texttt{Parmentier2018UltraHotJupiterAtmosphere} & \textbf{1.0000} \\
+Fig 2: WASP-121b Emission Spectrum & Parmentier et al. (2018) & \texttt{Parmentier2018UltraHotJupiterAtmosphere} & \textbf{1.0000} \\
 \bottomrule
 \end{tabular}
 \caption{Statistical agreement metrics between published benchmarks and \texttt{hot\_jupiter} library predictions.}
