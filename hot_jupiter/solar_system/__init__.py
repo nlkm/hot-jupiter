@@ -81,9 +81,47 @@ class CometDynamics:
         return a1_m_s2 * g_r
 
 
+class RelativisticPrecession:
+
+    def gr_perihelion_precession_rad_s(self,
+                                       m_star_kg=1.98847e30,
+                                       a_m=5.790905e10,
+                                       e=0.20563):
+        g = 6.67430e-11
+        c = 299792458.0
+        n = np.sqrt(g * m_star_kg / a_m**3)
+        return (3.0 * g * m_star_kg * n) / (c**2 * a_m *
+                                            np.maximum(1.0e-5, 1.0 - e**2))
+
+    def mercury_gr_precession_arcsec_century(self):
+        rad_s = self.gr_perihelion_precession_rad_s()
+        arcsec_per_rad = (180.0 * 3600.0) / np.pi
+        seconds_per_century = 100.0 * 365.25 * 86400.0
+        return rad_s * arcsec_per_rad * seconds_per_century
+
+
+class PlanetNineSecular:
+
+    def planet_nine_secular_precession_rad_yr(self,
+                                              a_tno_au,
+                                              a_p9_au=500.0,
+                                              m_p9_earth=10.0):
+        g = 6.67430e-11
+        m_sun = 1.98847e30
+        au = 1.495978707e11
+        m_p9_kg = m_p9_earth * 5.972e24
+        n_p9 = np.sqrt(g * m_sun / (a_p9_au * au)**3)
+        alpha = a_tno_au / a_p9_au
+        b_3_2 = 1.5 * alpha
+        dvarpi_dt = (m_p9_kg / m_sun) * n_p9 * alpha * b_3_2
+        return dvarpi_dt * (365.25 * 86400.0)
+
+
 __all__ = [
     "AsteroidDynamics",
     "CometDynamics",
     "MoonTidalDynamics",
+    "PlanetNineSecular",
     "PlanetaryRings",
+    "RelativisticPrecession",
 ]

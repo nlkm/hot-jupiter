@@ -102,6 +102,52 @@ class CometDynamicsModel {
   }
 };
 
+// 5. Planetary Relativistic Precession & Secular Chaos (Laskar & Gastineau 2009)
+class RelativisticPrecessionModel {
+ public:
+  // General Relativistic Schwarzschild Perihelion Precession Rate [rad/s]
+  double gr_perihelion_precession_rad_s(double M_star_kg, double a_m, double e) const {
+    double c = 299792458.0;
+    double n = std::sqrt(G * M_star_kg / std::pow(a_m, 3.0));
+    double e2 = e * e;
+    return (3.0 * G * M_star_kg * n) / (c * c * a_m * std::max(1.0e-5, 1.0 - e2));
+  }
+
+  // Mercury GR Precession in Arcseconds per Century
+  double mercury_gr_precession_arcsec_century() const {
+    double rad_s = gr_perihelion_precession_rad_s(M_SUN, 0.387098 * AU, 0.20563);
+    double arcsec_per_rad = (180.0 * 3600.0) / M_PI;
+    double seconds_per_century = 100.0 * 365.25 * 86400.0;
+    return rad_s * arcsec_per_rad * seconds_per_century;
+  }
+};
+
+// 6. Protoplanetary Gas Disk Migration Torques (Grand Tack Walsh et al. 2011)
+class ProtoplanetaryDiskTorqueModel {
+ public:
+  // Type I Migration Torque Scaling Formula
+  double type_i_torque_nm(double M_planet_kg, double M_star_kg, double a_m, double aspect_ratio = 0.05, double surface_density_kg_m2 = 1000.0) const {
+    double n = std::sqrt(G * M_star_kg / std::pow(a_m, 3.0));
+    double q = M_planet_kg / M_star_kg;
+    double torque = q * q * std::pow(aspect_ratio, -2.0) * surface_density_kg_m2 * std::pow(a_m, 4.0) * n * n;
+    return torque;
+  }
+};
+
+// 7. Planet Nine Secular Torque & Perihelion Alignment (Batygin & Brown 2016)
+class PlanetNineSecularModel {
+ public:
+  // Secular Perihelion Precession Rate Induced by Planet Nine on a TNO [rad/yr]
+  double planet_nine_secular_precession_rad_yr(double a_tno_au, double a_p9_au = 500.0, double m_p9_earth = 10.0) const {
+    double m_p9_kg = m_p9_earth * 5.972e24;
+    double n_p9 = std::sqrt(G * M_SUN / std::pow(a_p9_au * AU, 3.0));
+    double alpha = a_tno_au / a_p9_au;
+    double b_3_2 = 1.5 * alpha;  // Laplace coefficient b_{3/2}^{(1)} approximation
+    double dvarpi_dt = (m_p9_kg / M_SUN) * n_p9 * alpha * b_3_2;
+    return dvarpi_dt * (365.25 * 86400.0);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

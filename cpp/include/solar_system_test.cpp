@@ -35,6 +35,16 @@ int main() {
   std::cout << "--> Marsden Comet Sublimation g(1 AU): " << g_1au << std::endl;
   assert(g_1au > 0.05 && "Marsden sublimation g(r) at 1 AU out of range!");
 
+  hot_jupiter::RelativisticPrecessionModel gr_model;
+  double merc_gr = gr_model.mercury_gr_precession_arcsec_century();
+  std::cout << "--> Mercury GR Perihelion Precession: " << merc_gr << " arcsec/century" << std::endl;
+  assert(std::abs(merc_gr - 43.0) < 3.0 && "Mercury GR precession should be ~43 arcsec/century!");
+
+  hot_jupiter::PlanetNineSecularModel p9_model;
+  double p9_prec = p9_model.planet_nine_secular_precession_rad_yr(250.0);
+  std::cout << "--> Planet Nine TNO Precession (250 AU): " << p9_prec << " rad/yr" << std::endl;
+  assert(p9_prec > 1.0e-10 && "Planet Nine secular precession should be positive!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

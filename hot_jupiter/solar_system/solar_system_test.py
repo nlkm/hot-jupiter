@@ -7,6 +7,8 @@ from hot_jupiter.solar_system import (
     CometDynamics,
     MoonTidalDynamics,
     PlanetaryRings,
+    PlanetNineSecular,
+    RelativisticPrecession,
 )
 
 
@@ -37,3 +39,16 @@ def test_comet_dynamics():
     comet = CometDynamics()
     g_1au = comet.marsden_sublimation_g_r(1.0)
     assert g_1au > 0.05, "Marsden sublimation g(r) at 1 AU should be > 0.05"
+
+
+def test_relativistic_precession():
+    gr = RelativisticPrecession()
+    merc = gr.mercury_gr_precession_arcsec_century()
+    assert abs(merc -
+               43.0) < 3.0, "Mercury GR precession should be ~43 arcsec/century"
+
+
+def test_planet_nine_secular():
+    p9 = PlanetNineSecular()
+    prec = p9.planet_nine_secular_precession_rad_yr(250.0)
+    assert prec > 1.0e-10, "Planet Nine secular precession should be positive"
