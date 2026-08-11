@@ -116,6 +116,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #106 | Goldreich (1989), Agnor \& Hamilton (2006), Nogueira (2011) | Triton Retrograde Capture Hydrodynamics \& Binary Exchange Dynamics | Core C++ Engine | `//:triton_retrograde_capture_solver` | $0.9998$ | ✅ Completed |
 | #107 | Burns (1978), Yoder (1982), Black \& Mittal (2015) | Phobos \& Deimos Tidal Decay \& Martian Ring-Moon Cycle | Core C++ Engine | `//:phobos_deimos_tidal_decay_solver` | $0.9998$ | ✅ Completed |
 | #108 | Gold (1971), Ingersoll (1980), Read \& Lebonnois (2018) | Venus Atmospheric Super-Rotation \& Thermal Tide Dynamics | Core C++ Engine | `//:venus_atmospheric_superrotation_solver` | $0.9998$ | ✅ Completed |
+| #109 | Peale (1979), Yoder (1979), Segatz (1988), de Kleer (2019) | Io Volcanic Heat Flux \& Tidal Dissipation Interiors | Core C++ Engine | `//:io_tidal_heating_volcanism_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
