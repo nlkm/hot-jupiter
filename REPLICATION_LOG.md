@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 87
+- **Total Verified Papers**: 88
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -100,6 +100,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Colón et al. (2020)** [`2005.05153`]: *An Optical Transmission Spectrum of WASP-52b* — **VERIFIED** (Score: **100.00%**). WASP-52b optical transmission spectrum $(R_p/R_\star)^2(\lambda)$ and retrieved Na abundance posterior ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/colon_2020/report.pdf`](file:///home/neil/hot_jupiter/replications/colon_2020/report.pdf).
 - **Sing et al. (2016)** [`1512.04341`]: *A Continuum from Clear to Cloudy Hot-Jupiter Atmospheres without Water Depletion* — **VERIFIED** (Score: **100.00%**). WASP-12b transmission spectrum $(R_p/R_\star)^2(\lambda)$ and water feature attenuation trend $\Delta (R_p/R_\star)^2_{1.4\mu\text{m}}(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/sing_2016/report.pdf`](file:///home/neil/hot_jupiter/replications/sing_2016/report.pdf).
 - **Spake et al. (2018)** [`1805.01298`]: *Helium in the Eroding Atmosphere of an Exoplanet* — **VERIFIED** (Score: **99.97%**). WASP-107b 1083 nm metastable helium absorption peak $(R_p/R_\star)^2(\lambda)$ and mass-loss rate constraint $\dot{M}_{\text{he}}(y_{\text{He}})$ ($R^2 \ge 0.9994$). Mini-paper PDF report compiled at [`replications/spake_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/spake_2018/report.pdf).
+- **Sing et al. (2019)** [`1905.07684`]: *The HST PanCET Program: Exospheric Na I and K I Absorption in WASP-121b* — **VERIFIED** (Score: **100.00%**). WASP-121b optical transmission spectrum $(R_p/R_\star)^2(\lambda)$ and exospheric sodium line excess $\Delta (R_p/R_\star)^2(v)$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/sing_2019/report.pdf`](file:///home/neil/hot_jupiter/replications/sing_2019/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
