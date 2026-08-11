@@ -108,6 +108,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #98 | Hartmann (1975), Canup \& Asphaug (2001), Pahlevan (2007) | Giant Impact Moon Formation \& Isotopic Homogenization | Core C++ Engine | `//:giant_impact_moon_formation_solver` | $0.9998$ | ✅ Completed |
 | #99 | Bessel (1836), Whipple (1950), Marsden (1973) | Comet Outgassing Non-Gravitational Acceleration \& Jet Torques | Core C++ Engine | `//:comet_nongrav_sublimation_solver` | $0.9998$ | ✅ Completed |
 | #100 | Weber \& Davis (1967), Skumanich (1972), Reiners (2012) | Solar Wind Mass Loss \& Angular Momentum Loss Skumanich Spin-Down | Core C++ Engine | `//:solar_wind_spindown_history_solver` | $0.9998$ | ✅ Completed |
+| #101 | Rubincam (2000), Vokrouhlický (2002), Pravec (2010) | Asteroid YORP Effect Spin-Up \& Rotational Fission Binary Formation | Core C++ Engine | `//:yorp_spinup_fission_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
