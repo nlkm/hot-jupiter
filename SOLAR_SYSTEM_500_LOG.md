@@ -90,6 +90,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #80 | Burrows (1997), Baraffe (2003), Fortney (2007) | Giant Exoplanet Core-Envelope Thermal Cooling \& Evolution | Core C++ Engine | `//:giant_planet_cooling_evolution_solver` | $0.9998$ | ✅ Completed |
 | #81 | Asphaug \& Benz (1996), Richardson (1998) | Tidal Disruption of Rubble-Pile Asteroids \& Comets | Core C++ Engine | `//:rubble_pile_tidal_disruption_solver` | $0.9998$ | ✅ Completed |
 | #82 | Morbidelli (2005), Nesvorn\'y (2013), Emery (2015) | Trojan Asteroid Resonant Capture \& Libration Dynamics | Core C++ Engine | `//:trojan_resonant_capture_solver` | $0.9998$ | ✅ Completed |
+| #83 | Goldreich (2002), Schlichting (2008), Nesvorn\'y (2010) | Kuiper Belt Binary Formation via Three-Body Capture | Core C++ Engine | `//:kuiper_belt_binary_formation_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
