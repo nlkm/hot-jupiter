@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Kempton et al. (2018) PASP 130, 114401
+# Figure 1: Transmission Spectroscopy Metric TSM vs Planet Radius R_p [R_Earth]
+R_PLANET_EARTH_REF,TSM_REF
+1.2,15.0
+2.0,45.0
+3.0,30.0
+6.0,85.0
+10.0,140.0
+15.0,220.0
+
+# Figure 2: Emission Spectroscopy Metric ESM vs Equilibrium Temperature Teq [K]
+TEQ_K_REF,ESM_REF
+400.0,3.0
+800.0,18.0
+1200.0,45.0
+1600.0,90.0
+2000.0,150.0
+2500.0,240.0
