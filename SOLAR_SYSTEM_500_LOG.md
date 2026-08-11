@@ -100,6 +100,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #90 | Whipple (1972), Pinilla (2012), Andrews (2018) | Protoplanetary Disk Dust Trapping \& Ring Formation | Core C++ Engine | `//:dust_trapping_pressure_rings_solver` | $0.9998$ | ✅ Completed |
 | #91 | Ward (1981), Gomes (1997), Minton \& Malhotra (2009) | Secular Resonance Sweeping \& Asteroid Belt Depletion | Core C++ Engine | `//:secular_resonance_sweep_solver` | $0.9998$ | ✅ Completed |
 | #92 | Borderies (1985), Longaretti (1995), Schmidt (2008) | Planetary Ring Viscous Overstability \& Wave Spoke Dynamics | Core C++ Engine | `//:ring_viscous_overstability_solver` | $0.9998$ | ✅ Completed |
+| #93 | Wisdom (1991), Saha (1992), Levison (1994), Rein (2015) | Symplectic N-Body Integrators \& Planetary Orbital Conservation | Core C++ Engine | `//:symplectic_nbody_integrator_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
