@@ -1955,6 +1955,36 @@ class Kreidberg2014Gj1214bModel {
   }
 };
 
+// Madhusudhan et al. (2014) Water Depletion & C/O Ratio Model
+class Madhusudhan2014CoRatioModel {
+ public:
+  double h2o_abundance_posterior(double log10_xh2o) const {
+    const double x[6] = {-6.0, -5.4, -4.8, -4.4, -3.8, -3.0};
+    const double p[6] = {0.02, 0.30, 0.92, 1.00, 0.40, 0.05};
+    if (log10_xh2o <= x[0]) return p[0];
+    if (log10_xh2o >= x[5]) return p[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_xh2o >= x[i] && log10_xh2o <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_xh2o - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+
+  double co_ratio_posterior(double co_ratio) const {
+    const double c[6] = {0.1, 0.3, 0.55, 0.75, 0.95, 1.2};
+    const double p[6] = {0.05, 0.35, 1.00, 0.70, 0.25, 0.02};
+    if (co_ratio <= c[0]) return p[0];
+    if (co_ratio >= c[5]) return p[5];
+    for (int i = 0; i < 5; ++i) {
+      if (co_ratio >= c[i] && co_ratio <= c[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (co_ratio - c[i]) / (c[i+1] - c[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
