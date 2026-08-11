@@ -13,11 +13,11 @@ namespace hot_jupiter {
 void run_phase_curve_sweep(const std::string& output_csv) {
   Beatty2019Kelt1bPhaseCurveModel model;
   std::ofstream out(output_csv);
-  out << "orbital_phase,flux_ppm\n";
+  out << "phase,flux_ppm\n";
 
-  for (double phi = 0.0; phi <= 1.0; phi += 0.01) {
-    double flux = model.phase_curve_flux_ppm(phi);
-    out << phi << "," << flux << "\n";
+  for (double p = 0.0; p <= 1.0; p += 0.01) {
+    double f = model.phase_curve_flux_ppm(p);
+    out << p << "," << f << "\n";
   }
   out.close();
   std::cout << "--> Wrote Beatty et al. (2019) KELT-1b Phase Curve dataset to " << output_csv << std::endl;
@@ -26,11 +26,11 @@ void run_phase_curve_sweep(const std::string& output_csv) {
 void run_recirculation_sweep(const std::string& output_csv) {
   Beatty2019Kelt1bPhaseCurveModel model;
   std::ofstream out(output_csv);
-  out << "t_eq_k,epsilon_recirc\n";
+  out << "teq_k,recirculation_eff\n";
 
-  for (double teq = 1000.0; teq <= 3000.0; teq += 50.0) {
-    double eps = model.recirculation_efficiency(teq);
-    out << teq << "," << eps << "\n";
+  for (double t = 1500.0; t <= 3200.0; t += 25.0) {
+    double eps = model.recirculation_efficiency(t);
+    out << t << "," << eps << "\n";
   }
   out.close();
   std::cout << "--> Wrote Beatty et al. (2019) Recirculation Efficiency dataset to " << output_csv << std::endl;

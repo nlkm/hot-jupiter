@@ -1181,11 +1181,11 @@ class Beatty2019Kelt1bPhaseCurveModel {
   }
 
   double recirculation_efficiency(double t_eq_k) const {
-    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
-    const double eps[5] = {0.65, 0.48, 0.25, 0.12, 0.05};
+    const double t[7] = {1500.0, 1800.0, 2100.0, 2400.0, 2700.0, 3000.0, 3200.0};
+    const double eps[7] = {0.50, 0.38, 0.22, 0.12, 0.06, 0.04, 0.03};
     if (t_eq_k <= t[0]) return eps[0];
-    if (t_eq_k >= t[4]) return eps[4];
-    for (int i = 0; i < 4; ++i) {
+    if (t_eq_k >= t[6]) return eps[6];
+    for (int i = 0; i < 6; ++i) {
       if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
         return eps[i] + (eps[i+1] - eps[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
       }
