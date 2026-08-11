@@ -11,6 +11,8 @@ from hot_jupiter.solar_system import (
     PlanetaryRings,
     PlanetNineSecular,
     RelativisticPrecession,
+    SaturnRingLindbladResonance,
+    SeasonalYarkovsky,
 )
 
 
@@ -68,3 +70,15 @@ def test_nice_model_resonance():
     nice = NiceModelResonanceCrossing()
     kick = nice.ice_giant_eccentricity_kick(0.0)
     assert kick > 0.10, "Nice model kick should be > 0.10"
+
+
+def test_seasonal_yarkovsky():
+    sy = SeasonalYarkovsky()
+    drift = sy.seasonal_drift_rate_au_myr(500.0, 2000.0, 2.5, 90.0)
+    assert drift < 0.0, "Seasonal Yarkovsky drift rate should be negative"
+
+
+def test_saturn_ring_lindblad():
+    lind = SaturnRingLindbladResonance()
+    torque = lind.lindblad_resonance_torque_nm(1.4e17, 1.3935e8)
+    assert torque > 1.0e8, "Lindblad ring torque should exceed 1.0e8 N m"

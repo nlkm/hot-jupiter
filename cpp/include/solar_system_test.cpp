@@ -57,6 +57,16 @@ int main() {
   std::cout << "--> Nice Model Ice Giant Eccentricity Kick: " << kick << std::endl;
   assert(kick > 0.10 && "Nice Model eccentricity kick out of range!");
 
+  hot_jupiter::SeasonalYarkovskyModel seasonal_model;
+  double drift = seasonal_model.seasonal_drift_rate_au_myr(500.0, 2000.0, 2.5, 90.0);
+  std::cout << "--> Seasonal Yarkovsky Drift Rate (90 deg obl): " << drift << " AU/Myr" << std::endl;
+  assert(drift < 0.0 && "Seasonal Yarkovsky drift rate should be negative!");
+
+  hot_jupiter::SaturnRingLindbladResonanceModel lindblad_model;
+  double torque = lindblad_model.lindblad_resonance_torque_nm(1.4e17, 1.3935e8);
+  std::cout << "--> Lindblad Ring Torque: " << torque << " N m" << std::endl;
+  assert(torque > 1.0e8 && "Lindblad torque should be positive and substantial!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

@@ -140,6 +140,42 @@ class NiceModelResonanceCrossing:
         return kick_base * np.exp(-delta_t_myr / 10.0)
 
 
+class SeasonalYarkovsky:
+
+    def seasonal_drift_rate_au_myr(self, radius_m, density_kg_m3, a_au,
+                                   obliquity_deg):
+        au = 1.495978707e11
+        m_sun = 1.98847e30
+        g = 6.67430e-11
+        mass = (4.0 / 3.0) * np.pi * radius_m**3 * density_kg_m3
+        l_sun = 3.828e26
+        c = 299792458.0
+        a_m = a_au * au
+        solar_flux = l_sun / (4.0 * np.pi * a_m**2)
+        cross_section = np.pi * radius_m**2
+        obl_rad = np.radians(obliquity_deg)
+        sin_obl = np.sin(obl_rad)
+        alpha_seasonal = 0.08
+        force = -(4.0 /
+                  9.0) * alpha_seasonal * cross_section * solar_flux / c * (
+                      sin_obl**2)
+        da_dt_m_s = (2.0 / (mass * np.sqrt(g * m_sun / a_m))) * force * a_m
+        return da_dt_m_s * (1.0 / au) * (1.0e6 * 365.25 * 86400.0)
+
+
+class SaturnRingLindbladResonance:
+
+    def lindblad_resonance_torque_nm(self,
+                                     m_satellite_kg,
+                                     a_satellite_m,
+                                     m_saturn_kg=5.683e26,
+                                     surface_density_kg_m2=400.0):
+        g = 6.67430e-11
+        n = np.sqrt(g * m_saturn_kg / a_satellite_m**3)
+        q = m_satellite_kg / m_saturn_kg
+        return np.pi**2 * surface_density_kg_m2 * a_satellite_m**4 * n**2 * q**2
+
+
 __all__ = [
     "AsteroidDynamics",
     "CometDynamics",
@@ -149,4 +185,6 @@ __all__ = [
     "PlanetNineSecular",
     "PlanetaryRings",
     "RelativisticPrecession",
+    "SaturnRingLindbladResonance",
+    "SeasonalYarkovsky",
 ]

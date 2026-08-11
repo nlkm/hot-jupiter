@@ -184,6 +184,40 @@ class NiceModelResonanceCrossing {
   }
 };
 
+// 10. Seasonal Yarkovsky Thermal Drift (Vokrouhlický et al. 2000)
+class SeasonalYarkovskyModel {
+ public:
+  // Seasonal Yarkovsky semi-major axis drift rate da/dt [AU/Myr]
+  double seasonal_drift_rate_au_myr(double radius_m, double density_kg_m3, double a_au, double obliquity_deg, double spin_period_hrs = 6.0) const {
+    double mass = (4.0 / 3.0) * M_PI * std::pow(radius_m, 3.0) * density_kg_m3;
+    double L_sun = 3.828e26;
+    double c = 299792458.0;
+    double a_m = a_au * AU;
+    double solar_flux = L_sun / (4.0 * M_PI * a_m * a_m);
+    double cross_section = M_PI * radius_m * radius_m;
+    double obl_rad = obliquity_deg * M_PI / 180.0;
+    double sin_obl = std::sin(obl_rad);
+    double alpha_seasonal = 0.08;
+    double force = -(4.0 / 9.0) * alpha_seasonal * cross_section * solar_flux / c * (sin_obl * sin_obl);
+    double da_dt_m_s = (2.0 / (mass * std::sqrt(G * M_SUN / a_m))) * force * a_m;
+    double au_per_m = 1.0 / AU;
+    double myr_per_s = (1.0e6 * 365.25 * 86400.0);
+    return da_dt_m_s * au_per_m * myr_per_s;
+  }
+};
+
+// 11. Saturn Ring Density Waves & Lindblad Torque (Goldreich & Tremaine 1978)
+class SaturnRingLindbladResonanceModel {
+ public:
+  // Lindblad resonance torque exerted by a satellite on Saturn's ring particles [N m]
+  double lindblad_resonance_torque_nm(double m_satellite_kg, double a_satellite_m, double m_saturn_kg = 5.683e26, double surface_density_kg_m2 = 400.0) const {
+    double n = std::sqrt(G * m_saturn_kg / std::pow(a_satellite_m, 3.0));
+    double q = m_satellite_kg / m_saturn_kg;
+    double torque = 3.14 * 3.14 * surface_density_kg_m2 * std::pow(a_satellite_m, 4.0) * n * n * q * q;
+    return torque;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
