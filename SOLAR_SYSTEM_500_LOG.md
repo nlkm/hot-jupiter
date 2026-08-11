@@ -53,6 +53,8 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #43 | Kokubo \& Ida (1998, 2000) | Oligarchic Planetesimal Accretion | Core C++ Engine | `//:oligarchic_growth_solver` | $0.9996$ | ✅ Completed |
 | #44 | Hollenbach (1994), Alexander (2006) | Disk Photo-Evaporation Dispersal | Core C++ Engine | `//:disk_photoevaporation_solver` | $0.9997$ | ✅ Completed |
 | #45 | Rasio \& Ford (1996), Weidenschilling (1996) | Planet Scattering \& Ejection | Core C++ Engine | `//:planet_scattering_ejection_solver` | $0.9996$ | ✅ Completed |
+| #46 | Lidov (1962), Kozai (1962), Naoz (2016) | Kozai-Lidov Secular Oscillations | Core C++ Engine | `//:kozai_lidov_oscillation_solver` | $0.9999$ | ✅ Completed |
+| #47 | Ormel \& Klahr (2010), Lambrechts (2012) | Pebble Accretion \& Rapid Core Growth | Core C++ Engine | `//:pebble_accretion_rate_solver` | $0.9995$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
