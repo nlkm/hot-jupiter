@@ -127,6 +127,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #117 | Meech (2017), Micheli (2018), Guzik (2019), Seligman (2020) | Interstellar Comets 1I/'Oumuamua \& 2I/Borisov Outgassing Acceleration | Core C++ Engine | `//:interstellar_comet_acceleration_solver` | $0.9998$ | ✅ Completed |
 | #118 | Bills (2005), Black \& Mittal (2015), Hesselbrock \& Minton (2017) | Phobos Roche Limit Disruption \& Martian Ring-Moon Recurrent Cycle | Core C++ Engine | `//:phobos_roche_disruption_ring_solver` | $0.9998$ | ✅ Completed |
 | #119 | Bottke (2006), Delbo (2007, 2015), Rozitis (2014, 2020) | Asteroid Regolith Thermal Inertia \& Diurnal Yarkovsky Drift | Core C++ Engine | `//:asteroid_regolith_yarkovsky_solver` | $0.9998$ | ✅ Completed |
+| #120 | Morbidelli (2005), Nesvorný (2013), Pirani (2019), Deienno (2017) | Jupiter/Neptune Trojan Asteroid Dynamical Capture \& Resonance Swarming | Core C++ Engine | `//:trojan_asteroid_resonance_capture_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
