@@ -2076,6 +2076,36 @@ class Brogi2016WindRotationModel {
   }
 };
 
+// Parmentier et al. (2018) Cold Trap & Ultra-Hot Thermal Inversion Model
+class Parmentier2018ColdTrapModel {
+ public:
+  double fe_gas_abundance_log10(double teq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2000.0, 2200.0, 2500.0, 3000.0};
+    const double x[6] = {-9.5, -8.8, -7.2, -4.5, -4.5, -4.5};
+    if (teq_k <= t[0]) return x[0];
+    if (teq_k >= t[5]) return x[5];
+    for (int i = 0; i < 5; ++i) {
+      if (teq_k >= t[i] && teq_k <= t[i+1]) {
+        return x[i] + (x[i+1] - x[i]) * (teq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return x[0];
+  }
+
+  double phase_curve_amplitude_ratio(double teq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2000.0, 2200.0, 2500.0, 3000.0};
+    const double a[6] = {1.85, 1.60, 1.25, 0.85, 0.62, 0.50};
+    if (teq_k <= t[0]) return a[0];
+    if (teq_k >= t[5]) return a[5];
+    for (int i = 0; i < 5; ++i) {
+      if (teq_k >= t[i] && teq_k <= t[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (teq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return a[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
