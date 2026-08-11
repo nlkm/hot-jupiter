@@ -988,6 +988,36 @@ class Parmentier2018UltraHotJupiterAtmosphere {
   }
 };
 
+// Arcangeli et al. (2018) H- Opacity WASP-18b Atmosphere Model
+class Arcangeli2018HMinerOpacityModel {
+ public:
+  double emission_spectrum_wasp18b_ppm(double wave_micron) const {
+    const double w[8] = {1.125, 1.200, 1.275, 1.350, 1.425, 1.500, 1.575, 1.650};
+    const double em[8] = {920.0, 950.0, 980.0, 970.0, 990.0, 1000.0, 1010.0, 1020.0};
+    if (wave_micron <= w[0]) return em[0];
+    if (wave_micron >= w[7]) return em[7];
+    for (int i = 0; i < 7; ++i) {
+      if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+        return em[i] + (em[i+1] - em[i]) * (wave_micron - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return em[0];
+  }
+
+  double temperature_k(double log10_p_bar) const {
+    const double p[6] = {-4.0, -3.0, -2.0, -1.0, 0.0, 1.0};
+    const double t[6] = {2900.0, 2850.0, 2700.0, 2500.0, 2400.0, 2350.0};
+    if (log10_p_bar <= p[0]) return t[0];
+    if (log10_p_bar >= p[5]) return t[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_p_bar >= p[i] && log10_p_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (log10_p_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
