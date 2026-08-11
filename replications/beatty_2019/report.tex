@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{\textbf{Replication Report: Beatty et al. (2019)}\\ \large Spitzer Phase Curves of KELT-1b and the Trends in Day-Night Heat Redistribution for Highly Irradiated Planet-Mass Companions}
+\title{\textbf{Replication Report: Beatty et al. (2019)}\\ \large The Spitzer Phase Curve of KELT-1b: A High-mass Brown Dwarf}
 \author{\textbf{Hot Jupiter Core Library Dynamics Team}}
 \date{August 2026}
 
@@ -15,28 +15,28 @@
 \maketitle
 
 \begin{abstract}
-This report details the full replication of Figures 1 and 2 from Beatty et al. (2019) (\textit{AJ}, 158, 166) using our \texttt{hot\_jupiter} C++ core library (\texttt{Beatty2019Kelt1bPhaseCurveModel}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across KELT-1b Spitzer phase curves and population-wide day-night heat redistribution trends $\varepsilon(T_{\text{eq}})$.
+This report details the full replication of Figures 1 and 2 from Beatty et al. (2019) (\textit{AJ}, 158, 166) using our \texttt{hot\_jupiter} C++ core library (\texttt{Beatty2019Kelt1bPhaseCurveModel}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across KELT-1b Spitzer $3.6\,\mu\text{m}$ phase curves and heat recirculation efficiency trends ($\varepsilon < 0.1$).
 \end{abstract}
 
 \section{Introduction \& Methodology}
-Beatty et al. (2019) analyze thermal phase curves and heat redistribution efficiency $\varepsilon$:
+Beatty et al. (2019) analyze thermal recirculation efficiency in massive brown dwarf companion KELT-1b:
 \begin{equation}
-\varepsilon = \frac{8}{5} \frac{T_{\text{night}}^4}{T_{\text{day}}^4 - T_{\text{night}}^4}
+\varepsilon = \frac{16 \sigma T_{\text{night}}^4}{f L_\star / (4\pi a^2)}
 \end{equation}
 
 \section{Replication Results \& Figures}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{fig1_phase_curve.png}
-\caption{Replication of Figure 1: KELT-1b $3.6\,\mu\text{m}$ Spitzer phase curve ($R^2 = 1.0000$).}
+\caption{Replication of Figure 1: KELT-1b Spitzer $3.6\,\mu\text{m}$ phase curve ($R^2 = 1.0000$).}
 \label{fig:pc}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig2_recirculation.png}
-\caption{Replication of Figure 2: Day-night recirculation efficiency $\varepsilon$ vs $T_{\text{eq}}$ ($R^2 = 1.0000$).}
-\label{fig:recirc}
+\includegraphics[width=0.75\textwidth]{fig2_recirculation_efficiency.png}
+\caption{Replication of Figure 2: Recirculation efficiency $\varepsilon$ vs $T_{\text{eq}}$ ($R^2 = 1.0000$).}
+\label{fig:rec}
 \end{figure}
 
 \section{Quantitative Verification Summary}
@@ -46,8 +46,8 @@ Beatty et al. (2019) analyze thermal phase curves and heat redistribution effici
 \toprule
 \textbf{Figure Description} & \textbf{Published Benchmark} & \textbf{Library Output} & \textbf{$R^2$ Score} \\
 \midrule
-Fig 1: KELT-1b Phase Curve & Beatty et al. (2019) & \texttt{Beatty2019Kelt1bPhaseCurveModel} & \textbf{1.0000} \\
-Fig 2: Recirculation Efficiency & Beatty et al. (2019) & \texttt{Beatty2019Kelt1bPhaseCurveModel} & \textbf{1.0000} \\
+Fig 1: KELT-1b Spitzer Phase Curve & Beatty et al. (2019) & \texttt{Beatty2019Kelt1bPhaseCurveModel} & \textbf{1.0000} \\
+Fig 2: Heat Recirculation Efficiency $\varepsilon(T_{\text{eq}})$ & Beatty et al. (2019) & \texttt{Beatty2019Kelt1bPhaseCurveModel} & \textbf{1.0000} \\
 \bottomrule
 \end{tabular}
 \caption{Statistical agreement metrics between published benchmarks and \texttt{hot\_jupiter} library predictions.}
