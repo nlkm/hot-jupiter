@@ -725,3 +725,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "wardenier2021_solver",
+    srcs = ["replications/wardenier_2021/wardenier2021_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)

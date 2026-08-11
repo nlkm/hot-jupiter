@@ -1709,6 +1709,36 @@ class Changeat2021Hd209458bModel {
   }
 };
 
+// Wardenier et al. (2021) 3D Limb Asymmetry & Thermal Profile Model
+class Wardenier2021LimbAsymmetryModel {
+ public:
+  double evening_limb_transit_depth(double wavelength_um) const {
+    const double w[9] = {0.35, 0.55, 0.85, 1.15, 1.40, 1.80, 2.50, 3.50, 5.00};
+    const double d[9] = {0.02480, 0.02450, 0.02420, 0.02390, 0.02460, 0.02370, 0.02360, 0.02350, 0.02340};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double evening_limb_temperature_k(double pressure_bar) const {
+    const double p[6] = {1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0};
+    const double t[6] = {2250.0, 2400.0, 2650.0, 2900.0, 2700.0, 2350.0};
+    if (pressure_bar <= p[0]) return t[0];
+    if (pressure_bar >= p[5]) return t[5];
+    for (int i = 0; i < 5; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
