@@ -1529,6 +1529,36 @@ class Carone2020VerticalJetModel {
   }
 };
 
+// Molaverdikhani et al. (2019) Dispersing Cloud Extinction Model
+class Molaverdikhani2019CloudModel {
+ public:
+  double transmission_transit_depth(double wavelength_um) const {
+    const double w[9] = {0.30, 0.50, 0.80, 1.15, 1.40, 1.80, 2.50, 3.50, 5.00};
+    const double d[9] = {0.01520, 0.01490, 0.01460, 0.01435, 0.01485, 0.01420, 0.01410, 0.01405, 0.01400};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double rayleigh_slope(double p_cloud_bar) const {
+    const double p[5] = {1e-4, 1e-3, 1e-2, 1e-1, 1e0};
+    const double s[5] = {-0.00010, -0.00035, -0.00085, -0.00160, -0.00220};
+    if (p_cloud_bar <= p[0]) return s[0];
+    if (p_cloud_bar >= p[4]) return s[4];
+    for (int i = 0; i < 4; ++i) {
+      if (p_cloud_bar >= p[i] && p_cloud_bar <= p[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (std::log10(p_cloud_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return s[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
