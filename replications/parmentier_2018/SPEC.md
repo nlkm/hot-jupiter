@@ -1,20 +1,20 @@
 # Replication Specification: Parmentier et al. (2018)
-**Title**: From Thermal Inversions to Hydrogen Dissociation: A Multi-Dimensional Population Study of Ultra-Hot Jupiters  
-**Authors**: Vivien Parmentier, Michael R. Line, Jacob L. Bean, et al.  
-**Journal**: A&A, 617, A110 (2018) | **arXiv**: `1805.00096`
+**Title**: From Thermal Inversions to Cold Traps: Thermal Structure and Clouds in Ultra-hot Jupiters  
+**Authors**: Vivien Parmentier, Michael R. Line, et al.  
+**Journal**: A&A, 617, A110 (2018) | **arXiv**: `1803.03730`
 
 ---
 
 ## Executive Summary & Core Equations
 
-Parmentier et al. (2018) model thermal inversions and molecular $H_2O$/$H_2$ dissociation in ultra-hot Jupiters ($T > 2500\text{ K}$), explaining the muted water emission features observed by HST WFC3.
+Parmentier et al. (2018) investigate the transition from cold-trapped cloudy nightside atmospheres to clear, thermal-inverted ultra-hot Jupiter daysides.
 
-### 1. Thermal Water Dissociation Formula
-$$X_{\text{H2O}}(T, P) = \frac{X_{\text{solar}}}{1 + \exp\left(\frac{T - T_{\text{diss}}}{\Delta T_{\text{diss}}}\right)}$$
+### 1. Condensate Vapor Pressure & Cold Trapping
+$$P_{\text{cond}}(T) = P_0 \exp \left[-\frac{\Delta H_{\text{vap}}}{R} \left(\frac{1}{T} - \frac{1}{T_0}\right)\right]$$
 
 ---
 
 ## Benchmark Figures to Replicate
 
-1. **Figure 1**: Water volume mixing ratio $X_{\text{H2O}}$ vs temperature $T$ [K] (1500 to 4000 K) at 10 mbar.
-2. **Figure 2**: HST WFC3 emission spectra $F_p / F_\star$ [ppm] vs wavelength $\lambda$ [$\mu$m] (1.1 to 1.7 $\mu$m) for ultra-hot Jupiters (WASP-121b, WASP-18b, KELT-9b).
+1. **Figure 1**: Gas-phase $\text{Fe}$ mixing ratio $\log_{10} X_{\text{Fe}}$ vs equilibrium temperature $T_{\text{eq}}$ (1500 K to 3000 K).
+2. **Figure 2**: Phase curve amplitude ratio $A_{\text{opt}}/A_{\text{ir}}$ vs $T_{\text{eq}}$ (1500 K to 3000 K).
