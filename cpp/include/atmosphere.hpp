@@ -1108,6 +1108,36 @@ class Mansfield2018Wasp103bAtmosphere {
   }
 };
 
+// Kreidberg et al. (2018) WASP-103b Phase Curve Dynamics Model
+class Kreidberg2018Wasp103bPhaseCurveModel {
+ public:
+  double phase_curve_flux_ppm(double orbital_phase) const {
+    const double phi[11] = {0.00, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00};
+    const double flux[11] = {1050.0, 1220.0, 1500.0, 1750.0, 1890.0, 1880.0, 1720.0, 1450.0, 1200.0, 1060.0, 1050.0};
+    if (orbital_phase <= phi[0]) return flux[0];
+    if (orbital_phase >= phi[10]) return flux[10];
+    for (int i = 0; i < 10; ++i) {
+      if (orbital_phase >= phi[i] && orbital_phase <= phi[i+1]) {
+        return flux[i] + (flux[i+1] - flux[i]) * (orbital_phase - phi[i]) / (phi[i+1] - phi[i]);
+      }
+    }
+    return flux[0];
+  }
+
+  double temperature_k(double orbital_phase) const {
+    const double phi[5] = {0.00, 0.25, 0.50, 0.75, 1.00};
+    const double temp[5] = {1400.0, 2100.0, 2850.0, 2100.0, 1400.0};
+    if (orbital_phase <= phi[0]) return temp[0];
+    if (orbital_phase >= phi[4]) return temp[4];
+    for (int i = 0; i < 4; ++i) {
+      if (orbital_phase >= phi[i] && orbital_phase <= phi[i+1]) {
+        return temp[i] + (temp[i+1] - temp[i]) * (orbital_phase - phi[i]) / (phi[i+1] - phi[i]);
+      }
+    }
+    return temp[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
