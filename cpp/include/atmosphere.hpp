@@ -663,6 +663,32 @@ class Fisher2018AnalyticalRetrieval {
   }
 };
 
+// Pinhas et al. (2019) H2O Abundances and Partial Cloud Retrieval Model for 10 Hot Jupiters
+class Pinhas2019WaterRetrieval {
+ public:
+  double wasp31b_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.55;
+    if (wave_micron <= 0.589) return 1.55 + (1.57 - 1.55) * (wave_micron - 0.35) / 0.239;
+    if (wave_micron <= 0.75) return 1.57 + (1.53 - 1.57) * (wave_micron - 0.589) / 0.161;
+    if (wave_micron <= 1.4) return 1.53 + (1.55 - 1.53) * (wave_micron - 0.75) / 0.65;
+    if (wave_micron <= 2.0) return 1.55 + (1.51 - 1.55) * (wave_micron - 1.4) / 0.60;
+    if (wave_micron <= 3.6) return 1.51 + (1.48 - 1.51) * (wave_micron - 2.0) / 1.60;
+    if (wave_micron <= 4.5) return 1.48 + (1.47 - 1.48) * (wave_micron - 3.6) / 0.90;
+    return 1.47;
+  }
+
+  double log10_h2o_abundance(double teq_k) const {
+    if (teq_k <= 800.0) return -4.5;
+    if (teq_k <= 1100.0) return -4.5 + (-4.8 - (-4.5)) * (teq_k - 800.0) / 300.0;
+    if (teq_k <= 1300.0) return -4.8 + (-5.2 - (-4.8)) * (teq_k - 1100.0) / 200.0;
+    if (teq_k <= 1550.0) return -5.2 + (-5.6 - (-5.2)) * (teq_k - 1300.0) / 250.0;
+    if (teq_k <= 1800.0) return -5.6 + (-5.0 - (-5.6)) * (teq_k - 1550.0) / 250.0;
+    if (teq_k <= 2000.0) return -5.0 + (-4.2 - (-5.0)) * (teq_k - 1800.0) / 200.0;
+    if (teq_k <= 2200.0) return -4.2 + (-3.5 - (-4.2)) * (teq_k - 2000.0) / 200.0;
+    return -3.5;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
