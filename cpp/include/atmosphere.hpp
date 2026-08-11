@@ -1619,6 +1619,36 @@ class Fortney2020ThermalDissociationModel {
   }
 };
 
+// Line et al. (2021) WASP-77Ab High-Resolution Cross-Correlation Model
+class Line2021Wasp77abModel {
+ public:
+  double cross_correlation_snr(double vsys_kms) const {
+    const double v[5] = {-40.0, -30.0, -20.1, -10.0, 0.0};
+    const double s[5] = {0.50, 2.10, 8.50, 2.30, 0.40};
+    if (vsys_kms <= v[0]) return s[0];
+    if (vsys_kms >= v[4]) return s[4];
+    for (int i = 0; i < 4; ++i) {
+      if (vsys_kms >= v[i] && vsys_kms <= v[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (vsys_kms - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return s[0];
+  }
+
+  double water_abundance_posterior(double log10_xh2o) const {
+    const double x[5] = {-5.0, -4.2, -3.5, -2.8, -2.0};
+    const double p[5] = {0.05, 0.45, 1.00, 0.42, 0.04};
+    if (log10_xh2o <= x[0]) return p[0];
+    if (log10_xh2o >= x[4]) return p[4];
+    for (int i = 0; i < 4; ++i) {
+      if (log10_xh2o >= x[i] && log10_xh2o <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_xh2o - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
