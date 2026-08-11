@@ -1,0 +1,22 @@
+# Digitized Reference Dataset for Carone et al. (2020) A&A 638, A14
+# Figure 1: WASP-43b Zonal Wind Speed U_eq [m/s] vs Pressure P [bar] (1e-5 to 1e2 bar)
+PRESSURE_WASP43B_REF,UEQ_WASP43B_REF
+1e-5,100.0
+1e-4,450.0
+1e-3,1200.0
+1e-2,2100.0
+1e-1,2850.0
+1e0,2300.0
+1e1,900.0
+1e2,50.0
+
+# Figure 2: HD 209458b Zonal Wind Speed U_eq [m/s] vs Pressure P [bar] (1e-5 to 1e2 bar)
+PRESSURE_HD209458B_REF,UEQ_HD209458B_REF
+1e-5,250.0
+1e-4,850.0
+1e-3,1950.0
+1e-2,3200.0
+1e-1,4100.0
+1e0,3600.0
+1e1,1500.0
+1e2,100.0
