@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Espinoza et al. (2019) MNRAS 482, 2065
+# Figure 1: WASP-19b Optical Transmission Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PCT_REF,TRANSIT_DEPTH_ERR_PCT_REF
+0.45,1.96,0.02
+0.50,1.95,0.02
+0.55,1.94,0.02
+0.589,2.05,0.03
+0.65,1.94,0.02
+0.75,1.93,0.02
+0.85,1.92,0.02
+
+# Figure 2: Posterior Density P(log10 X_Na) for WASP-19b Sodium Abundance (-7.0 to -2.0)
+LOG10_XNA_REF,POSTERIOR_DENSITY_REF
+-7.0,0.01
+-6.0,0.08
+-5.0,0.45
+-4.5,0.95
+-4.0,0.60
+-3.0,0.08
+-2.0,0.00
