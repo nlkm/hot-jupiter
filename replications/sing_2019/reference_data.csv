@@ -1,0 +1,22 @@
+# Digitized Reference Dataset for Sing et al. (2019) AJ 158, 91
+# Figure 1: WASP-121b Optical Transmission Spectrum (Rp/Rstar)^2 vs Wavelength Lambda [um] (0.3 to 1.0 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_REF
+0.35,0.02250
+0.45,0.02220
+0.54,0.02200
+0.589,0.02380
+0.64,0.02190
+0.72,0.02180
+0.767,0.02290
+0.85,0.02170
+0.98,0.02160
+
+# Figure 2: Exospheric Na Line Profile Excess Delta(Rp/Rstar)^2 vs Velocity Offset v [km/s] (-100 to +100 km/s)
+VELOCITY_KM_S_REF,LINE_EXCESS_REF
+-100.0,0.00005
+-60.0,0.00020
+-20.0,0.00085
+0.0,0.00180
++20.0,0.00080
++60.0,0.00018
++100.0,0.00004
