@@ -1649,6 +1649,36 @@ class Line2021Wasp77abModel {
   }
 };
 
+// Mansfield et al. (2021) WASP-33b Emission & Thermal Inversion Model
+class Mansfield2021Wasp33bModel {
+ public:
+  double emission_flux_ratio_ppm(double wavelength_um) const {
+    const double w[7] = {1.12, 1.20, 1.30, 1.40, 1.50, 1.60, 1.68};
+    const double f[7] = {1850.0, 2100.0, 2450.0, 3150.0, 2800.0, 2400.0, 2250.0};
+    if (wavelength_um <= w[0]) return f[0];
+    if (wavelength_um >= w[6]) return f[6];
+    for (int i = 0; i < 6; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double thermal_inversion_temperature_k(double pressure_bar) const {
+    const double p[5] = {1e-4, 1e-3, 1e-2, 1e-1, 1e0};
+    const double t[5] = {3550.0, 3400.0, 3100.0, 2650.0, 2350.0};
+    if (pressure_bar <= p[0]) return t[0];
+    if (pressure_bar >= p[4]) return t[4];
+    for (int i = 0; i < 4; ++i) {
+      if (pressure_bar >= p[i] && pressure_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (std::log10(pressure_bar) - std::log10(p[i])) / (std::log10(p[i+1]) - std::log10(p[i]));
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
