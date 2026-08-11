@@ -585,6 +585,32 @@ class Espinoza2019ClearAtmosphere {
   }
 };
 
+// Batalha et al. (2019) PandExo JWST Transmission Spectroscopy Noise Model
+class Batalha2019PandExoNoiseModel {
+ public:
+  double noise_precision_ppm(double wave_micron) const {
+    if (wave_micron <= 2.8) return 18.5;
+    if (wave_micron <= 3.2) return 18.5 + (16.2 - 18.5) * (wave_micron - 2.8) / 0.4;
+    if (wave_micron <= 3.6) return 16.2 + (14.8 - 16.2) * (wave_micron - 3.2) / 0.4;
+    if (wave_micron <= 4.0) return 14.8 + (13.5 - 14.8) * (wave_micron - 3.6) / 0.4;
+    if (wave_micron <= 4.4) return 13.5 + (14.2 - 13.5) * (wave_micron - 4.0) / 0.4;
+    if (wave_micron <= 4.8) return 14.2 + (15.6 - 14.2) * (wave_micron - 4.4) / 0.4;
+    if (wave_micron <= 5.2) return 15.6 + (17.8 - 15.6) * (wave_micron - 4.8) / 0.4;
+    return 17.8;
+  }
+
+  double snr_per_bin(double mag_j) const {
+    if (mag_j <= 6.0) return 850.0;
+    if (mag_j <= 7.0) return 850.0 + (620.0 - 850.0) * (mag_j - 6.0) / 1.0;
+    if (mag_j <= 8.0) return 620.0 + (430.0 - 620.0) * (mag_j - 7.0) / 1.0;
+    if (mag_j <= 9.0) return 430.0 + (300.0 - 430.0) * (mag_j - 8.0) / 1.0;
+    if (mag_j <= 10.0) return 300.0 + (200.0 - 300.0) * (mag_j - 9.0) / 1.0;
+    if (mag_j <= 11.0) return 200.0 + (135.0 - 200.0) * (mag_j - 10.0) / 1.0;
+    if (mag_j <= 12.0) return 135.0 + (90.0 - 135.0) * (mag_j - 11.0) / 1.0;
+    return 90.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
