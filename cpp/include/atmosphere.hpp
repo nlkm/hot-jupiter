@@ -1769,6 +1769,36 @@ class Showman2020UltraHotPhaseCurveModel {
   }
 };
 
+// Colón et al. (2020) WASP-52b Optical Transmission Spectrum Model
+class Colon2020Wasp52bModel {
+ public:
+  double optical_transit_depth(double wavelength_um) const {
+    const double w[9] = {0.42, 0.48, 0.54, 0.589, 0.64, 0.72, 0.767, 0.82, 0.88};
+    const double d[9] = {0.02720, 0.02690, 0.02670, 0.02840, 0.02650, 0.02640, 0.02760, 0.02630, 0.02620};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double na_abundance_posterior(double log10_xna) const {
+    const double x[6] = {-6.0, -5.2, -4.4, -3.8, -3.0, -2.0};
+    const double p[6] = {0.02, 0.25, 0.98, 1.00, 0.30, 0.01};
+    if (log10_xna <= x[0]) return p[0];
+    if (log10_xna >= x[5]) return p[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_xna >= x[i] && log10_xna <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_xna - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
