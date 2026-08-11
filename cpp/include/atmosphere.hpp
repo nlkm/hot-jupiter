@@ -1168,6 +1168,40 @@ class Beatty2019Kelt1bPhaseCurveModel {
   }
 };
 
+// Baxter et al. (2020) Ultra-Hot Jupiter Population Thermal Inversion & H- Model
+class Baxter2020UltraHotPopulationModel {
+ public:
+  double t_bright_36_k(double t_eq_k) const {
+    const double t[6] = {2200.0, 2500.0, 2800.0, 3100.0, 3500.0, 4000.0};
+    const double tb[6] = {2400.0, 2700.0, 3000.0, 3320.0, 3750.0, 4250.0};
+    if (t_eq_k <= t[0]) return tb[0];
+    if (t_eq_k >= t[5]) return tb[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return tb[i] + (tb[i+1] - tb[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return tb[0];
+  }
+
+  double t_bright_45_k(double t_eq_k) const {
+    const double t[6] = {2200.0, 2500.0, 2800.0, 3100.0, 3500.0, 4000.0};
+    const double tb[6] = {2350.0, 2620.0, 2900.0, 3200.0, 3600.0, 4100.0};
+    if (t_eq_k <= t[0]) return tb[0];
+    if (t_eq_k >= t[5]) return tb[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return tb[i] + (tb[i+1] - tb[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return tb[0];
+  }
+
+  double delta_t_bright_k(double t_eq_k) const {
+    return t_bright_36_k(t_eq_k) - t_bright_45_k(t_eq_k);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
