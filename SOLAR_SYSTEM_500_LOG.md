@@ -80,6 +80,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #70 | Eddington (1926), Schwarzschild (1958) | Main Sequence Stellar Structure \& Eddington Limit | `StellarMainSequenceModel` | `//:eddington_luminosity_limit_solver` | $0.9998$ | ✅ Completed |
 | #71 | Weber \& Davis (1967), Mestel (1968) | Magnetized Stellar Wind Spin-Down \& Angular Momentum Loss | Core C++ Engine | `//:weber_davis_wind_spindown_solver` | $0.9998$ | ✅ Completed |
 | #72 | Batygin \& Stevenson (2010), Laughlin (2011) | Hot Jupiter Radius Inflation via Ohmic Dissipation | Core C++ Engine | `//:ohmic_dissipation_inflation_solver` | $0.9998$ | ✅ Completed |
+| #73 | Seager (2007), Valencia (2006), Zeng (2016) | Super-Earth Mass-Radius Relations \& Composition Scalings | Core C++ Engine | `//:exoplanet_mass_radius_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
