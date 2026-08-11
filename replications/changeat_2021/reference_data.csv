@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Changeat et al. (2021) ApJ 913, 73
+# Figure 1: HD 209458b Transmission Spectrum (Rp/Rstar)^2 vs Wavelength Lambda [um] (0.3 to 5.0 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_REF
+0.35,0.01515
+0.55,0.01495
+0.85,0.01475
+1.15,0.01455
+1.40,0.01505
+1.80,0.01440
+2.50,0.01430
+3.50,0.01530
+5.00,0.01420
+
+# Figure 2: Retrieved Log10 HCN Abundance Posterior Probability Density PDF vs Log10 X_HCN (-7.0 to -2.0)
+LOG10_XHCN_REF,POSTERIOR_PDF_REF
+-7.0,0.02
+-5.8,0.35
+-4.5,1.00
+-3.2,0.32
+-2.0,0.01
