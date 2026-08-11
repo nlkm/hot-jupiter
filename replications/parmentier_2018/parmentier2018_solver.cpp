@@ -1,5 +1,5 @@
 // C++ Standalone Replication Solver for Parmentier et al. (2018) A&A 617, A110
-// Calls core library class hot_jupiter::Parmentier2018ThermalRegimes from atmosphere.hpp.
+// Calls core library class hot_jupiter::Parmentier2018UltraHotJupiterAtmosphere from atmosphere.hpp.
 
 #include <cmath>
 #include <fstream>
@@ -10,39 +10,38 @@
 
 namespace hot_jupiter {
 
-void run_thermal_profile_sweep(const std::string& output_csv) {
-  Parmentier2018ThermalRegimes model;
+void run_h2o_dissociation_sweep(const std::string& output_csv) {
+  Parmentier2018UltraHotJupiterAtmosphere model;
   std::ofstream out(output_csv);
-  out << "pressure_bar,temperature_k\n";
+  out << "temp_k,log10_xh2o\n";
 
-  for (double log_p = -4.0; log_p <= 1.0; log_p += 0.2) {
-    double p_bar = std::pow(10.0, log_p);
-    double temp_k = model.temperature_k(p_bar);
-    out << p_bar << "," << temp_k << "\n";
+  for (double temp = 1500.0; temp <= 4000.0; temp += 50.0) {
+    double log_x = model.log10_h2o_abundance(temp);
+    out << temp << "," << log_x << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Parmentier et al. (2018) Thermal Profile dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Parmentier et al. (2018) H2O Thermal Dissociation dataset to " << output_csv << std::endl;
 }
 
-void run_contrast_sweep(const std::string& output_csv) {
-  Parmentier2018ThermalRegimes model;
+void run_wasp121b_emission_sweep(const std::string& output_csv) {
+  Parmentier2018UltraHotJupiterAtmosphere model;
   std::ofstream out(output_csv);
-  out << "t_eq_k,delta_tb_k\n";
+  out << "wavelength_micron,emission_wasp121b_ppm\n";
 
-  for (double t_eq = 1000.0; t_eq <= 3000.0; t_eq += 50.0) {
-    double delta_tb = model.brightness_temperature_contrast_k(t_eq);
-    out << t_eq << "," << delta_tb << "\n";
+  for (double wave = 1.10; wave <= 1.70; wave += 0.005) {
+    double em = model.emission_spectrum_wasp121b_ppm(wave);
+    out << wave << "," << em << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Parmentier et al. (2018) Brightness Temperature Contrast dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Parmentier et al. (2018) WASP-121b Emission Spectrum dataset to " << output_csv << std::endl;
 }
 
 }  // namespace hot_jupiter
 
 int main() {
-  std::cout << "=== Parmentier et al. (2018) C++ Thermal Regimes Solver ===" << std::endl;
-  hot_jupiter::run_thermal_profile_sweep("replications/parmentier_2018/sim_thermal_profile.csv");
-  hot_jupiter::run_contrast_sweep("replications/parmentier_2018/sim_contrast.csv");
+  std::cout << "=== Parmentier et al. (2018) C++ Ultra-Hot Jupiter Solver ===" << std::endl;
+  hot_jupiter::run_h2o_dissociation_sweep("replications/parmentier_2018/sim_h2o_dissociation.csv");
+  hot_jupiter::run_wasp121b_emission_sweep("replications/parmentier_2018/sim_wasp121b_emission.csv");
   std::cout << "✅ Parmentier et al. (2018) C++ Datasets Generated Successfully!" << std::endl;
   return 0;
 }

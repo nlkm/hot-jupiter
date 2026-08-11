@@ -958,6 +958,36 @@ class Komacek2017PhaseCurvePopulationModel {
   }
 };
 
+// Parmentier et al. (2018) Ultra-Hot Jupiter Thermal Dissociation Model
+class Parmentier2018UltraHotJupiterAtmosphere {
+ public:
+  double log10_h2o_abundance(double temp_k) const {
+    const double t[7] = {1500.0, 2000.0, 2500.0, 2800.0, 3000.0, 3500.0, 4000.0};
+    const double log_x[7] = {-3.30, -3.32, -3.50, -4.10, -4.80, -6.50, -8.00};
+    if (temp_k <= t[0]) return log_x[0];
+    if (temp_k >= t[6]) return log_x[6];
+    for (int i = 0; i < 6; ++i) {
+      if (temp_k >= t[i] && temp_k <= t[i+1]) {
+        return log_x[i] + (log_x[i+1] - log_x[i]) * (temp_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return log_x[0];
+  }
+
+  double emission_spectrum_wasp121b_ppm(double wave_micron) const {
+    const double w[8] = {1.125, 1.200, 1.275, 1.350, 1.425, 1.500, 1.575, 1.650};
+    const double em[8] = {1150.0, 1180.0, 1220.0, 1210.0, 1230.0, 1240.0, 1250.0, 1260.0};
+    if (wave_micron <= w[0]) return em[0];
+    if (wave_micron >= w[7]) return em[7];
+    for (int i = 0; i < 7; ++i) {
+      if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+        return em[i] + (em[i+1] - em[i]) * (wave_micron - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return em[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
