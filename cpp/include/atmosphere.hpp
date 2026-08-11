@@ -689,6 +689,41 @@ class Pinhas2019WaterRetrieval {
   }
 };
 
+// Welbanks et al. (2019) Colossal Water Depletion & Mass-Metallicity Model for 19 Exoplanets
+class Welbanks2019WaterDepletion {
+ public:
+  double wasp127b_transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.35) return 1.90;
+    if (wave_micron <= 0.589) return 1.90 + (1.96 - 1.90) * (wave_micron - 0.35) / 0.239;
+    if (wave_micron <= 0.77) return 1.96 + (1.89 - 1.96) * (wave_micron - 0.589) / 0.181;
+    if (wave_micron <= 1.4) return 1.89 + (1.91 - 1.89) * (wave_micron - 0.77) / 0.63;
+    if (wave_micron <= 2.0) return 1.91 + (1.87 - 1.91) * (wave_micron - 1.4) / 0.60;
+    if (wave_micron <= 3.6) return 1.87 + (1.85 - 1.87) * (wave_micron - 2.0) / 1.60;
+    if (wave_micron <= 4.5) return 1.85 + (1.84 - 1.85) * (wave_micron - 3.6) / 0.90;
+    return 1.84;
+  }
+
+  double log10_h2o_relative_solar(double planet_mass_earth) const {
+    if (planet_mass_earth <= 10.0) return -1.0;
+    if (planet_mass_earth <= 19.0) return -1.0 + (-1.5 - (-1.0)) * (planet_mass_earth - 10.0) / 9.0;
+    if (planet_mass_earth <= 50.0) return -1.5 + (-2.0 - (-1.5)) * (planet_mass_earth - 19.0) / 31.0;
+    if (planet_mass_earth <= 95.0) return -2.0 + (-2.5 - (-2.0)) * (planet_mass_earth - 50.0) / 45.0;
+    if (planet_mass_earth <= 150.0) return -2.5 + (-2.8 - (-2.5)) * (planet_mass_earth - 95.0) / 55.0;
+    if (planet_mass_earth <= 300.0) return -2.8 + (-3.2 - (-2.8)) * (planet_mass_earth - 150.0) / 150.0;
+    return -3.2;
+  }
+
+  double log10_na_relative_solar(double planet_mass_earth) const {
+    if (planet_mass_earth <= 10.0) return 1.8;
+    if (planet_mass_earth <= 19.0) return 1.8 + (1.5 - 1.8) * (planet_mass_earth - 10.0) / 9.0;
+    if (planet_mass_earth <= 50.0) return 1.5 + (1.2 - 1.5) * (planet_mass_earth - 19.0) / 31.0;
+    if (planet_mass_earth <= 95.0) return 1.2 + (0.8 - 1.2) * (planet_mass_earth - 50.0) / 45.0;
+    if (planet_mass_earth <= 150.0) return 0.8 + (0.5 - 0.8) * (planet_mass_earth - 95.0) / 55.0;
+    if (planet_mass_earth <= 300.0) return 0.5 + (0.0 - 0.5) * (planet_mass_earth - 150.0) / 150.0;
+    return 0.0;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
