@@ -2046,6 +2046,36 @@ class Barman2015HighResCorrelatorModel {
   }
 };
 
+// Brogi et al. (2016) High-Resolution Wind & Rotation Broadening Model
+class Brogi2016WindRotationModel {
+ public:
+  double wind_blueshift_ccf(double v_offset_km_s) const {
+    const double v[7] = {-10.0, -6.0, -3.5, -1.9, 0.0, 3.0, 8.0};
+    const double s[7] = {0.05, 0.50, 2.40, 4.80, 2.10, 0.30, 0.02};
+    if (v_offset_km_s <= v[0]) return s[0];
+    if (v_offset_km_s >= v[6]) return s[6];
+    for (int i = 0; i < 6; ++i) {
+      if (v_offset_km_s >= v[i] && v_offset_km_s <= v[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (v_offset_km_s - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return s[0];
+  }
+
+  double rotational_broadening_ccf(double v_rot_km_s) const {
+    const double v[6] = {0.0, 1.5, 3.4, 5.0, 7.0, 10.0};
+    const double s[6] = {3.6, 4.1, 4.8, 4.2, 2.8, 1.1};
+    if (v_rot_km_s <= v[0]) return s[0];
+    if (v_rot_km_s >= v[5]) return s[5];
+    for (int i = 0; i < 5; ++i) {
+      if (v_rot_km_s >= v[i] && v_rot_km_s <= v[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (v_rot_km_s - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return s[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
