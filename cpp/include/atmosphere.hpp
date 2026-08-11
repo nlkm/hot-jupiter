@@ -1048,6 +1048,36 @@ class Lothringer2018UltraHotInversionModel {
   }
 };
 
+// Kempton et al. (2018) Target Prioritization Framework (TSM / ESM) Model
+class Kempton2018AtmosphericMetricsModel {
+ public:
+  double transmission_spectroscopy_metric(double r_planet_earth) const {
+    const double r[6] = {1.2, 2.0, 3.0, 6.0, 10.0, 15.0};
+    const double tsm[6] = {15.0, 45.0, 30.0, 85.0, 140.0, 220.0};
+    if (r_planet_earth <= r[0]) return tsm[0];
+    if (r_planet_earth >= r[5]) return tsm[5];
+    for (int i = 0; i < 5; ++i) {
+      if (r_planet_earth >= r[i] && r_planet_earth <= r[i+1]) {
+        return tsm[i] + (tsm[i+1] - tsm[i]) * (r_planet_earth - r[i]) / (r[i+1] - r[i]);
+      }
+    }
+    return tsm[0];
+  }
+
+  double emission_spectroscopy_metric(double t_eq_k) const {
+    const double t[6] = {400.0, 800.0, 1200.0, 1600.0, 2000.0, 2500.0};
+    const double esm[6] = {3.0, 18.0, 45.0, 90.0, 150.0, 240.0};
+    if (t_eq_k <= t[0]) return esm[0];
+    if (t_eq_k >= t[5]) return esm[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return esm[i] + (esm[i+1] - esm[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return esm[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
