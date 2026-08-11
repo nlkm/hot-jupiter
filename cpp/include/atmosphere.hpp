@@ -1439,6 +1439,36 @@ class Zhang2018aCirculationModel {
   }
 };
 
+// May et al. (2021) Ultra-Hot Jupiter Spitzer Phase Curve Model
+class May2021UltraHotPhaseCurveModel {
+ public:
+  double wasp76b_flux_ratio(double phase) const {
+    const double p[7] = {-0.50, -0.25, -0.05, 0.00, 0.05, 0.25, 0.50};
+    const double f[7] = {0.00035, 0.00095, 0.00268, 0.00275, 0.00262, 0.00098, 0.00035};
+    if (phase <= p[0]) return f[0];
+    if (phase >= p[6]) return f[6];
+    for (int i = 0; i < 6; ++i) {
+      if (phase >= p[i] && phase <= p[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (phase - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double wasp121b_flux_ratio(double phase) const {
+    const double p[7] = {-0.50, -0.25, -0.03, 0.00, 0.03, 0.25, 0.50};
+    const double f[7] = {0.00042, 0.00165, 0.00470, 0.00482, 0.00465, 0.00170, 0.00042};
+    if (phase <= p[0]) return f[0];
+    if (phase >= p[6]) return f[6];
+    for (int i = 0; i < 6; ++i) {
+      if (phase >= p[i] && phase <= p[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (phase - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return f[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
