@@ -2016,6 +2016,36 @@ class Line2014EmissionRetrievalModel {
   }
 };
 
+// Barman et al. (2015) High-Resolution Doppler Cross-Correlation Model
+class Barman2015HighResCorrelatorModel {
+ public:
+  double ccf_sn_vs_vk(double vk_km_s) const {
+    const double v[7] = {100.0, 120.0, 130.0, 140.0, 150.0, 160.0, 180.0};
+    const double s[7] = {0.2, 1.5, 3.2, 5.2, 3.0, 1.2, 0.1};
+    if (vk_km_s <= v[0]) return s[0];
+    if (vk_km_s >= v[6]) return s[6];
+    for (int i = 0; i < 6; ++i) {
+      if (vk_km_s >= v[i] && vk_km_s <= v[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (vk_km_s - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return s[0];
+  }
+
+  double ccf_sn_vs_vsys(double vsys_km_s) const {
+    const double v[7] = {-100.0, -60.0, -30.0, -15.0, 0.0, 40.0, 100.0};
+    const double s[7] = {0.1, 0.4, 1.8, 5.2, 1.6, 0.3, 0.0};
+    if (vsys_km_s <= v[0]) return s[0];
+    if (vsys_km_s >= v[6]) return s[6];
+    for (int i = 0; i < 6; ++i) {
+      if (vsys_km_s >= v[i] && vsys_km_s <= v[i+1]) {
+        return s[i] + (s[i+1] - s[i]) * (vsys_km_s - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return s[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
