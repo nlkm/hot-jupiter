@@ -1778,6 +1778,7 @@ class Colon2020Wasp52bModel {
     if (wavelength_um <= w[0]) return d[0];
     if (wavelength_um >= w[8]) return d[8];
     for (int i = 0; i < 8; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
       if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
         return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
       }
@@ -1796,6 +1797,37 @@ class Colon2020Wasp52bModel {
       }
     }
     return p[0];
+  }
+};
+
+// Sing et al. (2016) Cloud-Muffled Hot-Jupiter Transmission Continuum Model
+class Sing2016CloudContinuumModel {
+ public:
+  double transmission_spectrum(double wavelength_um) const {
+    const double w[9] = {0.35, 0.55, 0.85, 1.15, 1.40, 1.80, 2.50, 3.50, 5.00};
+    const double d[9] = {0.01460, 0.01450, 0.01445, 0.01440, 0.01455, 0.01438, 0.01435, 0.01430, 0.01425};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double water_amplitude_14um(double t_eq_k) const {
+    const double t[6] = {1000.0, 1300.0, 1600.0, 1900.0, 2200.0, 2500.0};
+    const double a[6] = {0.00015, 0.00028, 0.00045, 0.00062, 0.00078, 0.00085};
+    if (t_eq_k <= t[0]) return a[0];
+    if (t_eq_k >= t[5]) return a[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return a[0];
   }
 };
 
