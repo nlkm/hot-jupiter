@@ -1,0 +1,21 @@
+# Digitized Reference Dataset for Tsiaras et al. (2019) Nature Astronomy 3, 1086
+# Figure 1: K2-18b HST WFC3 Transmission Spectrum (R_p / R_star)^2 [%] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PCT_REF,TRANSIT_DEPTH_ERR_PCT_REF
+1.125,0.701,0.005
+1.200,0.702,0.005
+1.275,0.703,0.005
+1.350,0.718,0.006
+1.425,0.725,0.006
+1.500,0.710,0.005
+1.575,0.704,0.005
+1.650,0.702,0.005
+
+# Figure 2: Posterior Density P(mu) for K2-18b Mean Molecular Weight mu [g/mol] (2.3 to 18 g/mol)
+MU_G_MOL_REF,POSTERIOR_DENSITY_REF
+2.3,0.02
+3.0,0.35
+4.0,0.98
+5.0,0.60
+7.0,0.15
+10.0,0.05
+18.0,0.00
