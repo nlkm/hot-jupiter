@@ -1469,6 +1469,36 @@ class May2021UltraHotPhaseCurveModel {
   }
 };
 
+// Changeat et al. (2020) KELT-11b Water-Rich Inflation Retrieval Model
+class Changeat2020Kelt11bModel {
+ public:
+  double transmission_transit_depth(double wavelength_um) const {
+    const double w[10] = {1.12, 1.18, 1.24, 1.30, 1.36, 1.42, 1.48, 1.54, 1.60, 1.66};
+    const double d[10] = {0.01968, 0.01974, 0.01988, 0.02035, 0.02078, 0.02082, 0.02045, 0.02008, 0.01982, 0.01972};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[9]) return d[9];
+    for (int i = 0; i < 9; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double water_posterior_density(double log10_x_h2o) const {
+    const double x[7] = {-6.0, -5.0, -4.0, -3.3, -3.0, -2.0, -1.0};
+    const double p[7] = {0.02, 0.25, 0.78, 1.00, 0.85, 0.18, 0.01};
+    if (log10_x_h2o <= x[0]) return p[0];
+    if (log10_x_h2o >= x[6]) return p[6];
+    for (int i = 0; i < 6; ++i) {
+      if (log10_x_h2o >= x[i] && log10_x_h2o <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_x_h2o - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
