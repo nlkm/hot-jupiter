@@ -1,0 +1,23 @@
+# Digitized Reference Dataset for Changeat et al. (2020) AJ 160, 80
+# Figure 1: KELT-11b HST WFC3 Transmission Spectrum Transit Depth (Rp/Rstar)^2 vs Wavelength Lambda [um] (1.1 to 1.7 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_REF
+1.12,0.01968
+1.18,0.01974
+1.24,0.01988
+1.30,0.02035
+1.36,0.02078
+1.42,0.02082
+1.48,0.02045
+1.54,0.02008
+1.60,0.01982
+1.66,0.01972
+
+# Figure 2: Water Volume Mixing Ratio log10(X_H2O) Posterior Distribution Density (Normalized Peak)
+LOG10_XH2O_REF,POSTERIOR_DENSITY_REF
+-6.0,0.02
+-5.0,0.25
+-4.0,0.78
+-3.3,1.00
+-3.0,0.85
+-2.0,0.18
+-1.0,0.01
