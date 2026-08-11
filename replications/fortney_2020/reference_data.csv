@@ -1,0 +1,21 @@
+# Digitized Reference Dataset for Fortney et al. (2020) AJ 160, 288
+# Figure 1: H2 Dissociation Fraction alpha_dissoc vs Pressure P [bar] (1e-4 to 100 bar) for T = 3000 K
+P_BAR_REF,ALPHA_DISSOC_3000K_REF
+1e-4,0.995
+1e-3,0.982
+1e-2,0.940
+1e-1,0.820
+1e0,0.580
+1e1,0.280
+1e2,0.100
+
+# Figure 2: Temperature Profile T(P) [K] vs Pressure P [bar] (1e-5 to 100 bar) with H- Opacity
+P_BAR_TP_REF,T_K_WITH_HMINUS_REF
+1e-5,2850.0
+1e-4,2920.0
+1e-3,3080.0
+1e-2,3350.0
+1e-1,3100.0
+1e0,2650.0
+1e1,2400.0
+1e2,2300.0
