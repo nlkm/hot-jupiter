@@ -1276,6 +1276,49 @@ class Lothringer2019StellarSpectralTypeModel {
   }
 };
 
+// Gandhi & Madhusudhan (2019) Atmospheric Abundance & C/O Retrieval Model
+class Gandhi2019RetrievalModel {
+ public:
+  double log10_x_h2o(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double x[5] = {-3.30, -3.40, -3.80, -4.50, -5.20};
+    if (t_eq_k <= t[0]) return x[0];
+    if (t_eq_k >= t[4]) return x[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return x[i] + (x[i+1] - x[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return x[0];
+  }
+
+  double log10_x_co(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double x[5] = {-3.80, -3.50, -3.20, -3.00, -3.00};
+    if (t_eq_k <= t[0]) return x[0];
+    if (t_eq_k >= t[4]) return x[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return x[i] + (x[i+1] - x[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return x[0];
+  }
+
+  double co_ratio(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double co[5] = {0.55, 0.60, 0.75, 0.92, 0.98};
+    if (t_eq_k <= t[0]) return co[0];
+    if (t_eq_k >= t[4]) return co[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return co[i] + (co[i+1] - co[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return co[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
