@@ -1018,6 +1018,36 @@ class Arcangeli2018HMinerOpacityModel {
   }
 };
 
+// Lothringer et al. (2018) Extremely Irradiated Hot Jupiter Inversion Model
+class Lothringer2018UltraHotInversionModel {
+ public:
+  double temperature_k(double log10_p_bar) const {
+    const double p[7] = {-5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0};
+    const double t[7] = {3800.0, 3600.0, 3300.0, 2900.0, 2650.0, 2500.0, 2450.0};
+    if (log10_p_bar <= p[0]) return t[0];
+    if (log10_p_bar >= p[6]) return t[6];
+    for (int i = 0; i < 6; ++i) {
+      if (log10_p_bar >= p[i] && log10_p_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (log10_p_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return t[0];
+  }
+
+  double emission_spectrum_ppm(double wave_micron) const {
+    const double w[7] = {0.25, 0.35, 0.45, 0.60, 0.80, 1.20, 1.60};
+    const double em[7] = {120.0, 350.0, 580.0, 780.0, 950.0, 1200.0, 1350.0};
+    if (wave_micron <= w[0]) return em[0];
+    if (wave_micron >= w[6]) return em[6];
+    for (int i = 0; i < 6; ++i) {
+      if (wave_micron >= w[i] && wave_micron <= w[i+1]) {
+        return em[i] + (em[i+1] - em[i]) * (wave_micron - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return em[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
