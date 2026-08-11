@@ -2138,6 +2138,37 @@ class Mansfield2018Wasp12bEmissionModel {
   }
 };
 
+// Arcangeli et al. (2018) WASP-18b H- Opacity & Thermal Dissociation Model
+class Arcangeli2018HMinusOpacityModel {
+ public:
+  double emission_spectrum(double wavelength_um) const {
+    const double w[8] = {1.15, 1.22, 1.30, 1.38, 1.44, 1.52, 1.60, 1.68};
+    const double f[8] = {0.00098, 0.00099, 0.00101, 0.00100, 0.00101, 0.00102, 0.00103, 0.00104};
+    if (wavelength_um <= w[0]) return f[0];
+    if (wavelength_um >= w[7]) return f[7];
+    for (int i = 0; i < 7; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return f[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double h2_dissociation_fraction(double temp_k) const {
+    const double t[7] = {2000.0, 2300.0, 2600.0, 2900.0, 3200.0, 3500.0, 3800.0};
+    const double a[7] = {0.02, 0.08, 0.25, 0.58, 0.85, 0.96, 0.99};
+    if (temp_k <= t[0]) return a[0];
+    if (temp_k >= t[6]) return a[6];
+    for (int i = 0; i < 6; ++i) {
+      if (temp_k >= t[i] && temp_k <= t[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (temp_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return a[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP

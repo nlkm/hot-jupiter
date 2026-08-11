@@ -1,5 +1,5 @@
-// C++ Standalone Replication Solver for Arcangeli et al. (2018) ApJL 855, L30
-// Calls core library class hot_jupiter::Arcangeli2018HMinerOpacityModel from atmosphere.hpp.
+// C++ Standalone Replication Solver for Arcangeli et al. (2018) ApJ 855, L30
+// Calls core library class hot_jupiter::Arcangeli2018HMinusOpacityModel from atmosphere.hpp.
 
 #include <cmath>
 #include <fstream>
@@ -10,38 +10,38 @@
 
 namespace hot_jupiter {
 
-void run_wasp18b_emission_sweep(const std::string& output_csv) {
-  Arcangeli2018HMinerOpacityModel model;
+void run_emission_sweep(const std::string& output_csv) {
+  Arcangeli2018HMinusOpacityModel model;
   std::ofstream out(output_csv);
-  out << "wavelength_micron,emission_wasp18b_ppm\n";
+  out << "wavelength_um,flux_ratio\n";
 
-  for (double wave = 1.10; wave <= 1.70; wave += 0.005) {
-    double em = model.emission_spectrum_wasp18b_ppm(wave);
-    out << wave << "," << em << "\n";
+  for (double w = 1.10; w <= 1.70; w += 0.01) {
+    double f = model.emission_spectrum(w);
+    out << w << "," << f << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Arcangeli et al. (2018) WASP-18b Emission Spectrum dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Arcangeli et al. (2018) WASP-18b H- Emission Spectrum dataset to " << output_csv << std::endl;
 }
 
-void run_tp_profile_sweep(const std::string& output_csv) {
-  Arcangeli2018HMinerOpacityModel model;
+void run_dissociation_sweep(const std::string& output_csv) {
+  Arcangeli2018HMinusOpacityModel model;
   std::ofstream out(output_csv);
-  out << "log10_p_bar,temp_k\n";
+  out << "temp_k,dissociation_fraction\n";
 
-  for (double log_p = -4.0; log_p <= 1.0; log_p += 0.1) {
-    double temp = model.temperature_k(log_p);
-    out << log_p << "," << temp << "\n";
+  for (double t = 2000.0; t <= 3800.0; t += 25.0) {
+    double a = model.h2_dissociation_fraction(t);
+    out << t << "," << a << "\n";
   }
   out.close();
-  std::cout << "--> Wrote Arcangeli et al. (2018) WASP-18b T-P Profile dataset to " << output_csv << std::endl;
+  std::cout << "--> Wrote Arcangeli et al. (2018) Thermal Dissociation Fraction dataset to " << output_csv << std::endl;
 }
 
 }  // namespace hot_jupiter
 
 int main() {
-  std::cout << "=== Arcangeli et al. (2018) C++ H- Opacity Solver ===" << std::endl;
-  hot_jupiter::run_wasp18b_emission_sweep("replications/arcangeli_2018/sim_wasp18b_emission.csv");
-  hot_jupiter::run_tp_profile_sweep("replications/arcangeli_2018/sim_tp_profile.csv");
+  std::cout << "=== Arcangeli et al. (2018) C++ WASP-18b H- Opacity & Dissociation Solver ===" << std::endl;
+  hot_jupiter::run_emission_sweep("replications/arcangeli_2018/sim_emission.csv");
+  hot_jupiter::run_dissociation_sweep("replications/arcangeli_2018/sim_dissociation.csv");
   std::cout << "✅ Arcangeli et al. (2018) C++ Datasets Generated Successfully!" << std::endl;
   return 0;
 }
