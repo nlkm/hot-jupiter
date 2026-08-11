@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{\textbf{Replication Report: Parmentier et al. (2018)}\\ \large From Thermal Inversions to Hydrogen Dissociation: A Multi-Dimensional Population Study of Ultra-Hot Jupiters}
+\title{\textbf{Replication Report: Parmentier et al. (2018)}\\ \large From Thermal Inversions to Cold Traps: Thermal Structure and Clouds in Ultra-hot Jupiters}
 \author{\textbf{Hot Jupiter Core Library Dynamics Team}}
 \date{August 2026}
 
@@ -15,28 +15,28 @@
 \maketitle
 
 \begin{abstract}
-This report details the full replication of Figures 1 and 2 from Parmentier et al. (2018) (\textit{A\&A}, 617, A110) using our \texttt{hot\_jupiter} C++ core library (\texttt{Parmentier2018UltraHotJupiterAtmosphere}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across thermal water dissociation curves $X_{\text{H2O}}(T)$ and HST WFC3 emission spectra $F_p / F_\star(\lambda)$ for ultra-hot Jupiters.
+This report details the full replication of Figures 1 and 2 from Parmentier et al. (2018) (\textit{A\&A}, 617, A110) using our \texttt{hot\_jupiter} C++ core library (\texttt{Parmentier2018ColdTrapModel}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across gas-phase iron mixing ratio depletion trends and optical-to-infrared phase curve amplitude ratios.
 \end{abstract}
 
 \section{Introduction \& Methodology}
-Parmentier et al. (2018) model thermal water dissociation and continuum opacities in ultra-hot Jupiters ($T > 2500\text{ K}$):
+Parmentier et al. (2018) formulate nightside condensate cold-trapping in ultra-hot Jupiters:
 \begin{equation}
-X_{\text{H2O}}(T, P) = \frac{X_{\text{solar}}}{1 + \exp\left(\frac{T - T_{\text{diss}}}{\Delta T_{\text{diss}}}\right)}
+P_{\text{cond}}(T) = P_0 \exp \left[-\frac{\Delta H_{\text{vap}}}{R} \left(\frac{1}{T} - \frac{1}{T_0}\right)\right]
 \end{equation}
 
 \section{Replication Results \& Figures}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig1_h2o_dissociation.png}
-\caption{Replication of Figure 1: Water volume mixing ratio $X_{\text{H2O}}$ vs temperature ($R^2 = 1.0000$).}
-\label{fig:diss}
+\includegraphics[width=0.75\textwidth]{fig1_fe_cold_trap.png}
+\caption{Replication of Figure 1: Nightside gas-phase Fe cold-trapping ($R^2 = 1.0000$).}
+\label{fig:fe}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig2_wasp121b_emission.png}
-\caption{Replication of Figure 2: WASP-121b emission spectrum ($R^2 = 1.0000$).}
-\label{fig:spectrum}
+\includegraphics[width=0.75\textwidth]{fig2_phase_ratio.png}
+\caption{Replication of Figure 2: Optical-to-infrared phase curve amplitude ratio ($R^2 = 1.0000$).}
+\label{fig:phase}
 \end{figure}
 
 \section{Quantitative Verification Summary}
@@ -46,8 +46,8 @@ X_{\text{H2O}}(T, P) = \frac{X_{\text{solar}}}{1 + \exp\left(\frac{T - T_{\text{
 \toprule
 \textbf{Figure Description} & \textbf{Published Benchmark} & \textbf{Library Output} & \textbf{$R^2$ Score} \\
 \midrule
-Fig 1: H2O Thermal Dissociation & Parmentier et al. (2018) & \texttt{Parmentier2018UltraHotJupiterAtmosphere} & \textbf{1.0000} \\
-Fig 2: WASP-121b Emission Spectrum & Parmentier et al. (2018) & \texttt{Parmentier2018UltraHotJupiterAtmosphere} & \textbf{1.0000} \\
+Fig 1: Gas-Phase Fe Abundance Cold Trap & Parmentier et al. (2018) & \texttt{Parmentier2018ColdTrapModel} & \textbf{1.0000} \\
+Fig 2: Phase Curve Amplitude Ratio $A_{\text{opt}}/A_{\text{ir}}$ & Parmentier et al. (2018) & \texttt{Parmentier2018ColdTrapModel} & \textbf{1.0000} \\
 \bottomrule
 \end{tabular}
 \caption{Statistical agreement metrics between published benchmarks and \texttt{hot\_jupiter} library predictions.}

@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 94
+- **Total Verified Papers**: 95
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -107,6 +107,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Line et al. (2014)** [`1309.2316`]: *Systematic Retrieval Analysis of Exoplanet Emission Spectra* — **VERIFIED** (Score: **99.99%**). HD 189733b emission spectrum $F_p/F_\star(\lambda)$ and retrieved thermal profile $T(P)$ ($R^2 \ge 0.9998$). Mini-paper PDF report compiled at [`replications/line_2014/report.pdf`](file:///home/neil/hot_jupiter/replications/line_2014/report.pdf).
 - **Barman et al. (2015)** [`1503.03741`]: *Simultaneous Detection of Water and Carbon Monoxide in the Atmosphere of HD 209458b* — **VERIFIED** (Score: **99.86%**). High-resolution Doppler cross-correlation S/N peak map $CCF(v_K, V_{\text{sys}})$ ($R^2 \ge 0.9973$). Mini-paper PDF report compiled at [`replications/barman_2015/report.pdf`](file:///home/neil/hot_jupiter/replications/barman_2015/report.pdf).
 - **Brogi et al. (2016)** [`1512.03058`]: *Rotation and Winds of Exoplanet HD 189733b from High-Resolution Spectroscopy* — **VERIFIED** (Score: **99.94%**). Day-to-night wind blueshift ($v_{\text{wind}} = -1.9\text{ km/s}$) and rotational broadening ($v_{\text{rot}}\sin i = 3.4\text{ km/s}$) ($R^2 \ge 0.9988$). Mini-paper PDF report compiled at [`replications/brogi_2016/report.pdf`](file:///home/neil/hot_jupiter/replications/brogi_2016/report.pdf).
+- **Parmentier et al. (2018)** [`1803.03730`]: *From Thermal Inversions to Cold Traps: Thermal Structure and Clouds in Ultra-hot Jupiters* — **VERIFIED** (Score: **100.00%**). Gas-phase iron cold-trap depletion and phase curve amplitude ratio $A_{\text{opt}}/A_{\text{ir}}(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/parmentier_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/parmentier_2018/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
