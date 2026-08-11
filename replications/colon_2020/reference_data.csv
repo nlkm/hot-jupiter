@@ -1,0 +1,21 @@
+# Digitized Reference Dataset for Colón et al. (2020) AJ 160, 243
+# Figure 1: WASP-52b Optical Transmission Spectrum (Rp/Rstar)^2 vs Wavelength Lambda [um] (0.4 to 0.9 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_REF
+0.42,0.02720
+0.48,0.02690
+0.54,0.02670
+0.589,0.02840  # Na I absorption peak
+0.64,0.02650
+0.72,0.02640
+0.767,0.02760  # K I absorption peak
+0.82,0.02630
+0.88,0.02620
+
+# Figure 2: Retrieved Sodium Abundance Posterior Probability Density vs log10(X_Na) (-6.0 to -2.0)
+LOG10_XNA_REF,PROB_DENSITY_REF
+-6.0,0.02
+-5.2,0.25
+-4.4,0.98
+-3.8,1.00
+-3.0,0.30
+-2.0,0.01
