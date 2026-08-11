@@ -2106,6 +2106,38 @@ class Parmentier2018ColdTrapModel {
   }
 };
 
+// Mansfield et al. (2018) WASP-12b Thermal Emission Model
+class Mansfield2018Wasp12bEmissionModel {
+ public:
+  double emission_spectrum(double wavelength_um) const {
+    const double w[8] = {1.15, 1.22, 1.30, 1.38, 1.44, 1.52, 1.60, 1.68};
+    const double f[8] = {0.00175, 0.00178, 0.00182, 0.00171, 0.00168, 0.00180, 0.00184, 0.00185};
+    if (wavelength_um <= w[0]) return f[0];
+    if (wavelength_um >= w[7]) return f[7];
+    for (int i = 0; i < 7; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return f[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double brightness_temperature(double wavelength_um) const {
+    const double w[8] = {1.15, 1.22, 1.30, 1.38, 1.44, 1.52, 1.60, 1.68};
+    const double t[8] = {3020.0, 3050.0, 3090.0, 2910.0, 2860.0, 3000.0, 3060.0, 3080.0};
+    if (wavelength_um <= w[0]) return t[0];
+    if (wavelength_um >= w[7]) return t[7];
+    for (int i = 0; i < 7; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return t[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
