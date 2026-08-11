@@ -1409,6 +1409,36 @@ class Koll2016InversionModel {
   }
 };
 
+// Zhang & Showman (2018a) Wave-Driven Circulation & Superrotation Model
+class Zhang2018aCirculationModel {
+ public:
+  double equatorial_superrotation_ms(double t_eq_k) const {
+    const double t[6] = {400.0, 800.0, 1200.0, 1600.0, 2000.0, 2400.0};
+    const double u[6] = {250.0, 720.0, 1350.0, 1980.0, 2550.0, 3050.0};
+    if (t_eq_k <= t[0]) return u[0];
+    if (t_eq_k >= t[5]) return u[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return u[i] + (u[i+1] - u[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return u[0];
+  }
+
+  double day_night_contrast_amplitude(double tau_drag_s) const {
+    const double td[5] = {1e3, 1e4, 1e5, 1e6, 1e7};
+    const double a[5] = {0.92, 0.78, 0.48, 0.22, 0.08};
+    if (tau_drag_s <= td[0]) return a[0];
+    if (tau_drag_s >= td[4]) return a[4];
+    for (int i = 0; i < 4; ++i) {
+      if (tau_drag_s >= td[i] && tau_drag_s <= td[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (std::log10(tau_drag_s) - std::log10(td[i])) / (std::log10(td[i+1]) - std::log10(td[i]));
+      }
+    }
+    return a[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP

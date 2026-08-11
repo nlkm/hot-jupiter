@@ -655,3 +655,10 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_binary(
+    name = "zhang2018a_solver",
+    srcs = ["replications/zhang_2018a/zhang2018a_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
