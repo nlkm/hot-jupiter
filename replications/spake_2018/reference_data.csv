@@ -1,0 +1,19 @@
+# Digitized Reference Dataset for Spake et al. (2018) Nature 557, 68
+# Figure 1: WASP-107b 1083 nm Transmission Spectrum (Rp/Rstar)^2 vs Wavelength Lambda [um] (1.00 to 1.15 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_REF
+1.00,0.02050
+1.04,0.02040
+1.07,0.02045
+1.0833,0.02165
+1.095,0.02042
+1.12,0.02038
+1.15,0.02035
+
+# Figure 2: Retrieved Helium Mass Loss Rate log10(Mdot) [g/s] vs Helium Fraction y_He (0.05 to 0.20)
+HE_FRACTION_REF,LOG10_MDOT_G_S_REF
+0.05,10.1
+0.08,10.35
+0.10,10.50
+0.12,10.62
+0.15,10.78
+0.20,10.95
