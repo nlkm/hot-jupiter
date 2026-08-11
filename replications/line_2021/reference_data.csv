@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Line et al. (2021) Nature 598, 580
+# Figure 1: High-Resolution H2O+CO Cross-Correlation SNR vs System Velocity Vsys [km/s] (at Kp = 191 km/s)
+VSYS_KMS_REF,SNR_REF
+-40.0,0.50
+-30.0,2.10
+-20.1,8.50
+-10.0,2.30
+0.0,0.40
+
+# Figure 2: Retrieved Log10 H2O Abundance Posterior Probability Density PDF vs Log10 X_H2O (-5.0 to -2.0)
+LOG10_XH2O_REF,POSTERIOR_PDF_REF
+-5.0,0.05
+-4.2,0.45
+-3.5,1.00
+-2.8,0.42
+-2.0,0.04
