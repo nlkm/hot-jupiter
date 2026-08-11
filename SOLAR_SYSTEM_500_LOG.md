@@ -141,6 +141,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #131 | Postberg (2009, 2011), Waite (2017), Glein (2018), Sekine (2015) | Enceladus Ocean Salinity \& Hydrothermal Vent Geochemistry | Core C++ Engine | `//:enceladus_ocean_salinity_geochemistry_solver` | $0.9998$ | ✅ Completed |
 | #132 | Toon (1988), McKay (1991), Lorenz (2008), Schneider (2012), Turtle (2011) | Titan Methane-Ethane Cloud Microphysics \& Methane Rain Storms | Core C++ Engine | `//:titan_methane_cloud_rain_solver` | $0.9998$ | ✅ Completed |
 | #133 | Gladstone (2016), Gao (2017), Wong (2017), Lavvas (2021) | Pluto N2-CH4 Haze Microphysics \& Photochemical Tholin Production | Core C++ Engine | `//:pluto_haze_tholin_microphysics_solver` | $0.9998$ | ✅ Completed |
+| #134 | Stern (2019), Grundy (2020), McKinnon (2020), Marohnic (2021) | Arrokoth (486958) Contact Binary Formation \& Low-Velocity Accretion | Core C++ Engine | `//:arrokoth_contact_binary_accretion_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
