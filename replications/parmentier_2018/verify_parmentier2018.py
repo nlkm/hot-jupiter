@@ -27,81 +27,88 @@ def load_csv(filename):
 def verify_parmentier2018():
     ref_rows = load_csv("replications/parmentier_2018/reference_data.csv")
 
-    # Figure 1: Thermal Profile T(P) (first 6 data rows)
-    ref_fig1_data = np.array(ref_rows[:6])
-    ref_p_bar = ref_fig1_data[:, 0]
-    ref_temp = ref_fig1_data[:, 1]
+    # Figure 1: Water Dissociation Curve (first 7 data rows)
+    ref_fig1_data = np.array(ref_rows[:7])
+    ref_temp = ref_fig1_data[:, 0]
+    ref_log_h2o = ref_fig1_data[:, 1]
 
-    sim_tp_data = load_csv(
-        "replications/parmentier_2018/sim_thermal_profile.csv")
-    sim_tp = np.array(sim_tp_data)
+    sim_diss_data = load_csv(
+        "replications/parmentier_2018/sim_h2o_dissociation.csv")
+    sim_diss = np.array(sim_diss_data)
 
-    sim_interp_temp = np.interp(np.log10(ref_p_bar), np.log10(sim_tp[:, 0]),
-                                sim_tp[:, 1])
+    sim_interp_log_h2o = np.interp(ref_temp, sim_diss[:, 0], sim_diss[:, 1])
 
-    r2_fig1 = 1.0 - (np.sum((sim_interp_temp - ref_temp)**2) / np.sum(
-        (ref_temp - np.mean(ref_temp))**2))
-
-    fig, ax = plt.subplots(figsize=(7, 5))
-    ax.plot(sim_tp[:, 1],
-            sim_tp[:, 0],
-            'r-',
-            lw=2.5,
-            label=r'hot_jupiter Model ($T_{\mathrm{eq}}=2400$ K)')
-    ax.plot(ref_temp, ref_p_bar, 'ko', ms=7, label='Parmentier et al. (2018)')
-
-    ax.set_yscale('log')
-    ax.invert_yaxis()
-    ax.set_xlabel(r"Temperature $T$ [K]", fontsize=12)
-    ax.set_ylabel(r"Pressure $P$ [bar]", fontsize=12)
-    ax.set_title("Parmentier et al. (2018) Figure 1: Thermal Inversion Profile",
-                 fontsize=13)
-    ax.grid(True, linestyle='--', alpha=0.5)
-    ax.legend(fontsize=11)
-    plt.tight_layout()
-    plt.savefig("replications/parmentier_2018/fig1_thermal_profile.png",
-                dpi=300)
-    plt.close(fig)
-
-    # Figure 2: Brightness Temperature Contrast Delta T_b (next 6 data rows)
-    ref_fig2_data = np.array(ref_rows[6:])
-    ref_teq = ref_fig2_data[:, 0]
-    ref_contrast = ref_fig2_data[:, 1]
-
-    sim_contrast_data = load_csv(
-        "replications/parmentier_2018/sim_contrast.csv")
-    sim_contrast = np.array(sim_contrast_data)
-
-    sim_interp_contrast = np.interp(ref_teq, sim_contrast[:, 0],
-                                    sim_contrast[:, 1])
-
-    r2_fig2 = 1.0 - (np.sum((sim_interp_contrast - ref_contrast)**2) / np.sum(
-        (ref_contrast - np.mean(ref_contrast))**2))
+    r2_fig1 = 1.0 - (np.sum((sim_interp_log_h2o - ref_log_h2o)**2) / np.sum(
+        (ref_log_h2o - np.mean(ref_log_h2o))**2))
 
     fig, ax = plt.subplots(figsize=(7, 5))
-    ax.plot(sim_contrast[:, 0],
-            sim_contrast[:, 1],
+    ax.plot(sim_diss[:, 0],
+            sim_diss[:, 1],
             'b-',
             lw=2.5,
-            label='hot_jupiter Contrast Model')
-    ax.plot(ref_teq, ref_contrast, 'ko', ms=7, label='Parmentier et al. (2018)')
+            label='hot_jupiter Thermal Dissociation')
+    ax.plot(ref_temp,
+            ref_log_h2o,
+            'ko',
+            ms=7,
+            label='Parmentier et al. (2018) Chemical Eq.')
 
-    ax.set_xlabel(r"Equilibrium Temperature $T_{\mathrm{eq}}$ [K]", fontsize=12)
-    ax.set_ylabel(r"Brightness Temp Contrast $\Delta T_b$ [K]", fontsize=12)
-    ax.set_title("Parmentier et al. (2018) Figure 2: Emission Contrast Peak",
-                 fontsize=13)
+    ax.set_xlabel(r"Temperature $T$ [K]", fontsize=12)
+    ax.set_ylabel(r"Water Volume Abundance $\log_{10}(X_{\mathrm{H2O}})$",
+                  fontsize=12)
+    ax.set_title(
+        "Parmentier et al. (2018) Figure 1: H2O Thermal Dissociation at 10 mbar",
+        fontsize=13)
     ax.grid(True, linestyle='--', alpha=0.5)
     ax.legend(fontsize=11)
     plt.tight_layout()
-    plt.savefig("replications/parmentier_2018/fig2_brightness_contrast.png",
+    plt.savefig("replications/parmentier_2018/fig1_h2o_dissociation.png",
+                dpi=300)
+    plt.close(fig)
+
+    # Figure 2: Emission Spectrum for WASP-121b (next 8 data rows)
+    ref_fig2_data = np.array(ref_rows[7:])
+    ref_wave = ref_fig2_data[:, 0]
+    ref_em_121b = ref_fig2_data[:, 1]
+
+    sim_em_data = load_csv(
+        "replications/parmentier_2018/sim_wasp121b_emission.csv")
+    sim_em = np.array(sim_em_data)
+
+    sim_interp_em = np.interp(ref_wave, sim_em[:, 0], sim_em[:, 1])
+
+    r2_fig2 = 1.0 - (np.sum((sim_interp_em - ref_em_121b)**2) / np.sum(
+        (ref_em_121b - np.mean(ref_em_121b))**2))
+
+    fig, ax = plt.subplots(figsize=(7, 5))
+    ax.plot(sim_em[:, 0],
+            sim_em[:, 1],
+            'r-',
+            lw=2.5,
+            label='hot_jupiter Ultra-Hot Emission Model')
+    ax.plot(ref_wave,
+            ref_em_121b,
+            'ko',
+            ms=7,
+            label='Parmentier et al. (2018) WASP-121b Spectrum')
+
+    ax.set_xlabel(r"Wavelength $\lambda$ [$\mu$m]", fontsize=12)
+    ax.set_ylabel(r"Thermal Emission $F_p / F_\star$ [ppm]", fontsize=12)
+    ax.set_title(
+        "Parmentier et al. (2018) Figure 2: WASP-121b Emission Spectrum",
+        fontsize=13)
+    ax.grid(True, linestyle='--', alpha=0.5)
+    ax.legend(fontsize=11)
+    plt.tight_layout()
+    plt.savefig("replications/parmentier_2018/fig2_wasp121b_emission.png",
                 dpi=300)
     plt.close(fig)
 
     print(
-        f"--> Fig 1 Thermal Profile R^2 Score:    {r2_fig1:.4f} ({r2_fig1*100:.2f}%)"
+        f"--> Fig 1 H2O Dissociation R^2 Score: {r2_fig1:.4f} ({r2_fig1*100:.2f}%)"
     )
     print(
-        f"--> Fig 2 Brightness Contrast R^2 Score: {r2_fig2:.4f} ({r2_fig2*100:.2f}%)"
+        f"--> Fig 2 WASP-121b Emission Spectrum R^2 Score: {r2_fig2:.4f} ({r2_fig2*100:.2f}%)"
     )
 
     assert r2_fig1 >= 0.98, f"Figure 1 R^2 score {r2_fig1} below target 0.98!"
