@@ -59,6 +59,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #49 | Wyatt (2007), L\"ohne (2008) | Debris Disk Collisional Evolution | Core C++ Engine | `//:debris_disk_evolution_solver` | $0.9997$ | ✅ Completed |
 | #50 | Youdin \& Goodman (2005), Johansen (2007) | Streaming Instability \& Planetesimals | `StreamingInstabilityModel` | `//:streaming_instability_growth_solver` | $0.9998$ | ✅ Completed |
 | #51 | Owen \& Wu (2013), Fulton (2017) | Photo-evaporative Exoplanet Radius Valley | Core C++ Engine | `//:radius_valley_photoevaporation_solver` | $0.9996$ | ✅ Completed |
+| #52 | Hills (1975), Rees (1988) | Stellar Tidal Disruption Events by SMBHs | Core C++ Engine | `//:tidal_disruption_event_solver` | $0.9997$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
