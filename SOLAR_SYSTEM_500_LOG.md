@@ -111,6 +111,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #101 | Rubincam (2000), Vokrouhlický (2002), Pravec (2010) | Asteroid YORP Effect Spin-Up \& Rotational Fission Binary Formation | Core C++ Engine | `//:yorp_spinup_fission_solver` | $0.9998$ | ✅ Completed |
 | #102 | Farinella (1979), Dobrovolskis (1997), Ward \& Canup (2006) | Pluto-Charon Giant Impact Tidal Evolution \& Mutual Synchronous Lock | Core C++ Engine | `//:pluto_charon_tidal_lock_solver` | $0.9998$ | ✅ Completed |
 | #103 | Goldreich \& Tremaine (1978), Wisdom (1988), Daisaka (2001) | Saturn Ring Particle Collisional Viscosity \& Scale Height | Core C++ Engine | `//:saturn_ring_viscosity_solver` | $0.9998$ | ✅ Completed |
+| #104 | Lammer (2003), Erkaev (2007), Owen \& Wu (2013) | Sub-Neptune Photoevaporative Envelope Mass Loss \& Core Exposure | Core C++ Engine | `//:sub_neptune_photoevaporation_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
