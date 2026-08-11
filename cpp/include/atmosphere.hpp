@@ -865,6 +865,47 @@ class Showman2015CirculationModel {
   }
 };
 
+// Komacek & Showman (2016) Dayside-to-Nightside Thermal Contrast Scaling Model
+class Komacek2016ThermalContrastModel {
+ public:
+  double thermal_contrast_amplitude(double t_eq_k, double gamma_drag) const {
+    const double teq_ref[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double a_weak[5]  = {0.15, 0.32, 0.52, 0.68, 0.78};
+    const double a_interm[5]= {0.08, 0.18, 0.32, 0.48, 0.60};
+    const double a_strong[5]= {0.01, 0.02, 0.04, 0.07, 0.10};
+
+    int idx = 0;
+    if (t_eq_k >= 3000.0) {
+      idx = 3;
+    } else {
+      for (int i = 0; i < 4; ++i) {
+        if (t_eq_k >= teq_ref[i] && t_eq_k <= teq_ref[i+1]) {
+          idx = i;
+          break;
+        }
+      }
+    }
+
+    double frac_t = (t_eq_k - teq_ref[idx]) / (teq_ref[idx+1] - teq_ref[idx]);
+    if (frac_t < 0.0) frac_t = 0.0;
+    if (frac_t > 1.0) frac_t = 1.0;
+
+    double w = a_weak[idx] + frac_t * (a_weak[idx+1] - a_weak[idx]);
+    double m = a_interm[idx] + frac_t * (a_interm[idx+1] - a_interm[idx]);
+    double s = a_strong[idx] + frac_t * (a_strong[idx+1] - a_strong[idx]);
+
+    if (gamma_drag <= 0.01) return w;
+    if (gamma_drag >= 100.0) return s;
+    if (gamma_drag <= 1.0) {
+      double log_g = std::log10(gamma_drag);
+      return w + (m - w) * (log_g - (-2.0)) / (0.0 - (-2.0));
+    } else {
+      double log_g = std::log10(gamma_drag);
+      return m + (s - m) * (log_g - 0.0) / (2.0 - 0.0);
+    }
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
