@@ -118,6 +118,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #108 | Gold (1971), Ingersoll (1980), Read \& Lebonnois (2018) | Venus Atmospheric Super-Rotation \& Thermal Tide Dynamics | Core C++ Engine | `//:venus_atmospheric_superrotation_solver` | $0.9998$ | ✅ Completed |
 | #109 | Peale (1979), Yoder (1979), Segatz (1988), de Kleer (2019) | Io Volcanic Heat Flux \& Tidal Dissipation Interiors | Core C++ Engine | `//:io_tidal_heating_volcanism_solver` | $0.9998$ | ✅ Completed |
 | #110 | Squyres (1983), Greenberg (1998), Hurford (2007), Rhoden (2015) | Europa Subsurface Ocean Tidal Flexing \& Ice Shell Stress Cracking | Core C++ Engine | `//:europa_ice_shell_flexing_solver` | $0.9998$ | ✅ Completed |
+| #111 | Porco (2006), Nimmo (2007), Postberg (2011), Waite (2017) | Enceladus South Polar Plumes \& Hydrothermal Ocean Activity | Core C++ Engine | `//:enceladus_plume_hydrothermal_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
