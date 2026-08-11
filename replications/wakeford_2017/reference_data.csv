@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Wakeford et al. (2017) Science 356, 1150
+# Figure 1: HAT-P-26b Transmission Spectrum (R_p / R_star)^2 [ppm] vs Wavelength lambda [microns]
+WAVELENGTH_MICRON_REF,TRANSIT_DEPTH_PPM_REF,TRANSIT_DEPTH_ERR_PPM_REF
+0.50,4520.0,60.0
+0.65,4500.0,50.0
+0.80,4480.0,50.0
+1.15,4510.0,40.0
+1.40,4650.0,45.0
+1.65,4530.0,40.0
+3.60,4470.0,60.0
+4.50,4490.0,60.0
+
+# Figure 2: Mass-Metallicity Scaling log10[M/H] vs Planet Mass M_p [M_earth]
+PLANET_MASS_EARTH_REF,LOG10_METALLICITY_REF
+1.0,2.1
+14.5,1.9
+17.1,1.8
+19.0,0.68
+95.2,1.2
+317.8,0.0
