@@ -103,6 +103,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #93 | Wisdom (1991), Saha (1992), Levison (1994), Rein (2015) | Symplectic N-Body Integrators \& Planetary Orbital Conservation | Core C++ Engine | `//:symplectic_nbody_integrator_solver` | $0.9998$ | ✅ Completed |
 | #94 | Ghosh \& Lamb (1979), Koenigl (1991), Bouvier (2007) | Magnetospheric Accretion Truncation \& Inner Disk Cavity Radii | Core C++ Engine | `//:magnetospheric_truncation_radius_solver` | $0.9998$ | ✅ Completed |
 | #95 | Johansen (2007, 2009), Bai \& Stone (2010), Simon (2016) | Streaming Instability Hydrodynamic Particle Clustering | Core C++ Engine | `//:streaming_instability_imf_solver` | $0.9998$ | ✅ Completed |
+| #96 | Cox (1998), Cravens (2000), Koutroumpa (2007) | Solar Wind Charge Exchange X-Ray Emission \& Heliospheric Background | Core C++ Engine | `//:solar_wind_charge_exchange_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
