@@ -28,6 +28,36 @@ class TimeVaryingStellarLuminosity {
   }
 };
 
+// 3D Magnetohydrodynamic (MHD) Magnetic Drag & Damping Model
+class MHDMagneticDragModel {
+ public:
+  double compute_damped_wind_speed(double v_hydro, double B_field_gauss, double conductivity_sm, double density_kg_m3, double omega_rot) const {
+    double B_tesla = B_field_gauss * 1.0e-4;
+    double drag_frequency = (conductivity_sm * B_tesla * B_tesla) / std::max(1.0e-10, density_kg_m3);
+    double damping_factor = 1.0 / (1.0 + drag_frequency / std::max(1.0e-10, omega_rot));
+    return v_hydro * damping_factor;
+  }
+};
+
+// Mie Scattering Cloud Opacity & Grain Size Damping Model
+class MieScatteringCloudModel {
+ public:
+  double cloud_opacity(double wavelength_um, double grain_radius_um = 0.1, double power_law_index = 4.0) const {
+    double x = 2.0 * M_PI * grain_radius_um / std::max(0.01, wavelength_um);
+    double q_ext = (x < 1.0) ? std::pow(x, power_law_index - 2.0) : (2.0 - 1.0 / (1.0 + x));
+    return std::max(1.0e-5, q_ext);
+  }
+};
+
+// Non-LTE Photo-Evaporation & Thermal Dissociation Chemistry Model
+class NonLTEDissociationModel {
+ public:
+  double dissociation_fraction(double temp_k, double pressure_bar, double E_bind_ev = 4.5) const {
+    double k_p = 1.0e5 * std::exp(-E_bind_ev * EV / (KB * temp_k));
+    return 1.0 / (1.0 + 4.0 * pressure_bar / std::max(1.0e-10, k_p));
+  }
+};
+
 class GuillotAtmosphere {
  public:
   double gamma = 0.1;            // Opacity ratio kappa_vis / kappa_th
