@@ -1,0 +1,21 @@
+# Digitized Reference Dataset for Wardenier et al. (2021) MNRAS 506, 1258
+# Figure 1: Evening Limb Transmission Spectrum (Rp/Rstar)^2 vs Wavelength Lambda [um] (0.3 to 5.0 um)
+WAVELENGTH_UM_REF,TRANSIT_DEPTH_EVENING_REF
+0.35,0.02480
+0.55,0.02450
+0.85,0.02420
+1.15,0.02390
+1.40,0.02460
+1.80,0.02370
+2.50,0.02360
+3.50,0.02350
+5.00,0.02340
+
+# Figure 2: Morning vs Evening Limb Thermal Profiles T(P) [K] vs Pressure P [bar] (1e-5 to 1.0 bar)
+P_BAR_TP_REF,T_K_MORNING_REF,T_K_EVENING_REF
+1e-5,1650.0,2250.0
+1e-4,1720.0,2400.0
+1e-3,1850.0,2650.0
+1e-2,2050.0,2900.0
+1e-1,1950.0,2700.0
+1e0,1750.0,2350.0
