@@ -6,7 +6,7 @@ This running log records all paper replications, mathematical derivations, numer
 
 ## Catalog Summary Metrics
 - **Total Cataloged Papers**: 100
-- **Total Verified Papers**: 90
+- **Total Verified Papers**: 91
 - **Average Agreement Score**: 99.7%
 - **Last Updated**: 2026-08-09T21:22:00Z
 
@@ -103,6 +103,7 @@ This running log records all paper replications, mathematical derivations, numer
 - **Sing et al. (2019)** [`1905.07684`]: *The HST PanCET Program: Exospheric Na I and K I Absorption in WASP-121b* — **VERIFIED** (Score: **100.00%**). WASP-121b optical transmission spectrum $(R_p/R_\star)^2(\lambda)$ and exospheric sodium line excess $\Delta (R_p/R_\star)^2(v)$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/sing_2019/report.pdf`](file:///home/neil/hot_jupiter/replications/sing_2019/report.pdf).
 - **Benneke et al. (2019)** [`1907.00449`]: *Water Vapor and Clouds on the Sub-Neptune K2-18b* — **VERIFIED** (Score: **100.00%**). K2-18b HST WFC3 water transmission spectrum $(R_p/R_\star)^2(\lambda)$ and retrieved water abundance posterior ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/benneke_2019/report.pdf`](file:///home/neil/hot_jupiter/replications/benneke_2019/report.pdf).
 - **Kreidberg et al. (2014)** [`1401.0022`]: *Clouds in the Atmosphere of the Super-Earth GJ 1214b* — **VERIFIED** (Score: **100.00%**). GJ 1214b HST WFC3 flat transmission spectrum $(R_p/R_\star)^2(\lambda)$ and model rejection significance $\chi^2/\text{dof}$ vs cloud pressure ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/kreidberg_2014/report.pdf`](file:///home/neil/hot_jupiter/replications/kreidberg_2014/report.pdf).
+- **Madhusudhan et al. (2014)** [`1407.6054`]: *H2O Abundances and C/O Ratios in Hot Jupiter Atmospheres* — **VERIFIED** (Score: **99.95%**). HD 209458b water abundance posterior and C/O ratio probability density ($R^2 \ge 0.9989$). Mini-paper PDF report compiled at [`replications/madhusudhan_2014/report.pdf`](file:///home/neil/hot_jupiter/replications/madhusudhan_2014/report.pdf).
 - **Spiegel & Burrows (2012)** [`1108.5172`]: *Thermal Inversions and Cloud Stratification in Exoplanet Atmospheres* — **VERIFIED** (Score: **99.46%**). TiO/VO thermal inversions $T(P)$ and emergent emission spectra ($R^2 \ge 0.9946$). Mini-paper PDF report compiled at [`replications/spiegel_2012/report.pdf`](file:///home/neil/hot_jupiter/replications/spiegel_2012/report.pdf).
 - **Thorngren & Fortney (2018)** [`1804.02010`]: *Connecting Inflated Radii to Ohmic and Tidal Heating* — **VERIFIED** (Score: **98.57%**). Heating efficiency Gaussian peak $\eta(T_{\text{eq}})$ ($R^2 = 0.9857$). Mini-paper PDF report compiled at [`replications/thorngren_2018/report.pdf`](file:///home/neil/hot_jupiter/replications/thorngren_2018/report.pdf).
 - **Batygin & Stevenson (2010)** [`1002.3650`]: *Inflating Hot Jupiters with Ohmic Dissipation* — **VERIFIED** (Score: **100.00%**). Atmospheric conductivity $\sigma_{\text{elec}}(T)$ and Ohmic radius inflation $R_p(T_{\text{eq}})$ ($R^2 = 1.0000$). Mini-paper PDF report compiled at [`replications/batygin_2010/report.pdf`](file:///home/neil/hot_jupiter/replications/batygin_2010/report.pdf).
