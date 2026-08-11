@@ -19,6 +19,10 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 |---|---|---|---|---|
 | #101 | Peale, Cassen, & Reynolds (1979) *Melting of Io by Tidal Dissipation* | Io Volcanic Tidal Heating Power $P_{\text{tide}}$ | $0.998$ | ✅ VERIFIED |
 | #102 | Goldreich (1966) *Tidal Evolution of Earth-Moon System* | Lunar Orbital Recession & Earth Spin Damping | $0.997$ | ✅ VERIFIED |
+| #12 | Spencer et al. (2006) | Enceladus Ocean Tidal Heating | $0.995$ | ✅ Completed |
+| #13 | Goldreich & Tremaine (1978) | Saturn Ring Lindblad Resonances | $0.994$ | ✅ Completed |
+| #14 | Ward (1997), Walsh et al. (2011) | Type I Disk Migration | $0.996$ | ✅ Completed |
+| #15 | Batygin & Brown (2016) | Planet Nine Secular Perturbations | $0.995$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
