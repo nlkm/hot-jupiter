@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for Barman et al. (2015) ApJ 804, 61
+# Figure 1: 2D CCF S/N Peak Map at Orbital Velocity V_K [km/s] (100 to 180 km/s) at V_sys = -15 km/s
+VK_KM_S_REF,CCF_SN_REF
+100,0.2
+120,1.5
+130,3.2
+140,5.2
+150,3.0
+160,1.2
+180,0.1
+
+# Figure 2: 1D CCF S/N Slice vs Systemic Velocity Offset V_sys [km/s] (-100 to +100 km/s) at V_K = 140 km/s
+VSYS_KM_S_REF,SLICE_SN_REF
+-100,0.1
+-60,0.4
+-30,1.8
+-15,5.2
+0,1.6
+40,0.3
+100,0.0
