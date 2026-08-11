@@ -870,39 +870,91 @@ class Komacek2016ThermalContrastModel {
  public:
   double thermal_contrast_amplitude(double t_eq_k, double gamma_drag) const {
     const double teq_ref[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
-    const double a_weak[5]  = {0.15, 0.32, 0.52, 0.68, 0.78};
-    const double a_interm[5]= {0.08, 0.18, 0.32, 0.48, 0.60};
-    const double a_strong[5]= {0.01, 0.02, 0.04, 0.07, 0.10};
+    const double g_ref[5]   = {0.01, 0.1, 1.0, 10.0, 100.0};
 
-    int idx = 0;
+    // Matrix A[teq_idx][g_idx]
+    const double A[5][5] = {
+      {0.15, 0.14, 0.08, 0.03, 0.01},
+      {0.32, 0.30, 0.18, 0.06, 0.02},
+      {0.52, 0.50, 0.32, 0.10, 0.04},
+      {0.68, 0.65, 0.48, 0.18, 0.07},
+      {0.78, 0.75, 0.60, 0.25, 0.10}
+    };
+
+    int t_idx = 0;
     if (t_eq_k >= 3000.0) {
-      idx = 3;
+      t_idx = 3;
     } else {
       for (int i = 0; i < 4; ++i) {
         if (t_eq_k >= teq_ref[i] && t_eq_k <= teq_ref[i+1]) {
-          idx = i;
+          t_idx = i;
           break;
         }
       }
     }
 
-    double frac_t = (t_eq_k - teq_ref[idx]) / (teq_ref[idx+1] - teq_ref[idx]);
+    int g_idx = 0;
+    if (gamma_drag >= 100.0) {
+      g_idx = 3;
+    } else {
+      for (int j = 0; j < 4; ++j) {
+        if (gamma_drag >= g_ref[j] && gamma_drag <= g_ref[j+1]) {
+          g_idx = j;
+          break;
+        }
+      }
+    }
+
+    double frac_t = (t_eq_k - teq_ref[t_idx]) / (teq_ref[t_idx+1] - teq_ref[t_idx]);
     if (frac_t < 0.0) frac_t = 0.0;
     if (frac_t > 1.0) frac_t = 1.0;
 
-    double w = a_weak[idx] + frac_t * (a_weak[idx+1] - a_weak[idx]);
-    double m = a_interm[idx] + frac_t * (a_interm[idx+1] - a_interm[idx]);
-    double s = a_strong[idx] + frac_t * (a_strong[idx+1] - a_strong[idx]);
+    double log_g = std::log10(gamma_drag);
+    double log_g0 = std::log10(g_ref[g_idx]);
+    double log_g1 = std::log10(g_ref[g_idx+1]);
+    double frac_g = (log_g - log_g0) / (log_g1 - log_g0);
+    if (frac_g < 0.0) frac_g = 0.0;
+    if (frac_g > 1.0) frac_g = 1.0;
 
-    if (gamma_drag <= 0.01) return w;
-    if (gamma_drag >= 100.0) return s;
-    if (gamma_drag <= 1.0) {
-      double log_g = std::log10(gamma_drag);
-      return w + (m - w) * (log_g - (-2.0)) / (0.0 - (-2.0));
-    } else {
-      double log_g = std::log10(gamma_drag);
-      return m + (s - m) * (log_g - 0.0) / (2.0 - 0.0);
+    double a00 = A[t_idx][g_idx];
+    double a01 = A[t_idx][g_idx+1];
+    double a10 = A[t_idx+1][g_idx];
+    double a11 = A[t_idx+1][g_idx+1];
+
+    double a_t0 = a00 + frac_g * (a01 - a00);
+    double a_t1 = a10 + frac_g * (a11 - a10);
+
+    return a_t0 + frac_t * (a_t1 - a_t0);
+  }
+};
+
+// Komacek et al. (2017) Observational Phase Curve Population Model
+class Komacek2017PhaseCurvePopulationModel {
+ public:
+  double observed_phase_amplitude(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double a_obs[5] = {0.14, 0.28, 0.48, 0.65, 0.76};
+    if (t_eq_k <= t[0]) return a_obs[0];
+    if (t_eq_k >= t[4]) return a_obs[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return a_obs[i] + (a_obs[i+1] - a_obs[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
     }
+    return a_obs[0];
+  }
+
+  double phase_offset_deg(double t_eq_k) const {
+    const double t[5] = {1000.0, 1500.0, 2000.0, 2500.0, 3000.0};
+    const double offset[5] = {35.0, 22.0, 12.0, 6.0, 2.0};
+    if (t_eq_k <= t[0]) return offset[0];
+    if (t_eq_k >= t[4]) return offset[4];
+    for (int i = 0; i < 4; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return offset[i] + (offset[i+1] - offset[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return offset[0];
   }
 };
 
