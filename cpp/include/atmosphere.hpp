@@ -1893,6 +1893,37 @@ class Sing2019Wasp121bModel {
   }
 };
 
+// Benneke et al. (2019) K2-18b Sub-Neptune Water Vapor Spectrum Model
+class Benneke2019K218bModel {
+ public:
+  double transmission_spectrum(double wavelength_um) const {
+    const double w[8] = {1.15, 1.22, 1.30, 1.38, 1.44, 1.52, 1.60, 1.68};
+    const double d[8] = {0.00540, 0.00538, 0.00546, 0.00568, 0.00562, 0.00542, 0.00536, 0.00535};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[7]) return d[7];
+    for (int i = 0; i < 7; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double h2o_abundance_posterior(double log10_xh2o) const {
+    const double x[6] = {-4.0, -3.4, -2.8, -2.3, -1.7, -1.0};
+    const double p[6] = {0.01, 0.22, 0.95, 1.00, 0.32, 0.02};
+    if (log10_xh2o <= x[0]) return p[0];
+    if (log10_xh2o >= x[5]) return p[5];
+    for (int i = 0; i < 5; ++i) {
+      if (log10_xh2o >= x[i] && log10_xh2o <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_xh2o - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
