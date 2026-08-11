@@ -1,0 +1,20 @@
+# Digitized Reference Dataset for May et al. (2021) AJ 162, 158
+# Figure 1: WASP-76b 4.5um Phase Curve F_p / F_star (phi) vs Orbital Phase phi (-0.5 to +0.5)
+PHASE_WASP76B_REF,FLUX_RATIO_WASP76B_REF
+-0.50,0.00035
+-0.25,0.00095
+-0.05,0.00268
+0.00,0.00275
+0.05,0.00262
+0.25,0.00098
+0.50,0.00035
+
+# Figure 2: WASP-121b 4.5um Phase Curve F_p / F_star (phi) vs Orbital Phase phi (-0.5 to +0.5)
+PHASE_WASP121B_REF,FLUX_RATIO_WASP121B_REF
+-0.50,0.00042
+-0.25,0.00165
+-0.03,0.00470
+0.00,0.00482
+0.03,0.00465
+0.25,0.00170
+0.50,0.00042
