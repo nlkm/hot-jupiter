@@ -617,6 +617,13 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "magnetospheric_truncation_radius_solver",
+    srcs = ["replications_ss/paper_094/magnetospheric_truncation_radius_solver.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",
