@@ -122,6 +122,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #112 | Yung (1984), Lunine (1983), Atreya (2006), Hörst (2017) | Titan Methane Photochemistry \& Atmospheric Lifetime | Core C++ Engine | `//:titan_methane_photochemistry_solver` | $0.9998$ | ✅ Completed |
 | #113 | Mitri (2007), Lorenz (2008), Hayes (2008), Mastrogiuseppe (2014) | Titan Methane-Ethane Lake Evaporative Thermodynamics | Core C++ Engine | `//:titan_lake_thermodynamics_solver` | $0.9998$ | ✅ Completed |
 | #114 | Terrile (1981), Goertz \& Morfill (1983), Mitchell (2006) | Saturn Ring Spoke Formation \& Electrostatic Dust Levitation | Core C++ Engine | `//:saturn_ring_spokes_solver` | $0.9998$ | ✅ Completed |
+| #115 | McKinnon (2016), Trowbridge (2016), Howard (2016), Bertrand (2018) | Pluto Nitrogen Ice Glacier Flow \& Sputnik Planitia Convection Cells | Core C++ Engine | `//:pluto_sputnik_planitia_glacier_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
