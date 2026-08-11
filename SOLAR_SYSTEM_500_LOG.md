@@ -92,6 +92,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #82 | Morbidelli (2005), Nesvorn\'y (2013), Emery (2015) | Trojan Asteroid Resonant Capture \& Libration Dynamics | Core C++ Engine | `//:trojan_resonant_capture_solver` | $0.9998$ | ✅ Completed |
 | #83 | Goldreich (2002), Schlichting (2008), Nesvorn\'y (2010) | Kuiper Belt Binary Formation via Three-Body Capture | Core C++ Engine | `//:kuiper_belt_binary_formation_solver` | $0.9998$ | ✅ Completed |
 | #84 | Villaver \& Livio (2007), Mustill (2012), Adams (2013) | Post-MS Stellar Mass Loss \& Planetary Orbital Expansion | Core C++ Engine | `//:stellar_mass_loss_planet_orbit_solver` | $0.9998$ | ✅ Completed |
+| #85 | Vilhu (1984), Saar \& Linsky (1989), Wright (2011) | Stellar Dynamo Saturation \& X-Ray Emission in Fast Rotators | Core C++ Engine | `//:dynamo_saturation_fast_rotators_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
