@@ -559,6 +559,32 @@ class Wakeford2017PrimordialAtmosphere {
   }
 };
 
+// Espinoza et al. (2019) ACCESS Clear Atmosphere & Na Abundance Retrieval Model
+class Espinoza2019ClearAtmosphere {
+ public:
+  double transmission_depth_pct(double wave_micron) const {
+    if (wave_micron <= 0.45) return 1.96;
+    if (wave_micron <= 0.50) return 1.96 + (1.95 - 1.96) * (wave_micron - 0.45) / 0.05;
+    if (wave_micron <= 0.55) return 1.95 + (1.94 - 1.95) * (wave_micron - 0.50) / 0.05;
+    if (wave_micron <= 0.589) return 1.94 + (2.05 - 1.94) * (wave_micron - 0.55) / 0.039;
+    if (wave_micron <= 0.65) return 2.05 + (1.94 - 2.05) * (wave_micron - 0.589) / 0.061;
+    if (wave_micron <= 0.75) return 1.94 + (1.93 - 1.94) * (wave_micron - 0.65) / 0.10;
+    if (wave_micron <= 0.85) return 1.93 + (1.92 - 1.93) * (wave_micron - 0.75) / 0.10;
+    return 1.92;
+  }
+
+  double na_log_posterior_density(double log10_xna) const {
+    if (log10_xna <= -7.0) return 0.01;
+    if (log10_xna <= -6.0) return 0.01 + (0.08 - 0.01) * (log10_xna - (-7.0)) / 1.0;
+    if (log10_xna <= -5.0) return 0.08 + (0.45 - 0.08) * (log10_xna - (-6.0)) / 1.0;
+    if (log10_xna <= -4.5) return 0.45 + (0.95 - 0.45) * (log10_xna - (-5.0)) / 0.5;
+    if (log10_xna <= -4.0) return 0.95 + (0.60 - 0.95) * (log10_xna - (-4.5)) / 0.5;
+    if (log10_xna <= -3.0) return 0.60 + (0.08 - 0.60) * (log10_xna - (-4.0)) / 1.0;
+    if (log10_xna <= -2.0) return 0.08 + (0.00 - 0.08) * (log10_xna - (-3.0)) / 1.0;
+    return 0.00;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
