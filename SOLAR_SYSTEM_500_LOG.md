@@ -73,6 +73,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #63 | Hubeny (2003), Fortney (2007), Baraffe (2008) | Exoplanet Radiative-Convective Atmosphere & Inversion | Core C++ Engine | `//:exoplanet_atmosphere_structure_solver` | $0.9998$ | ✅ Completed |
 | #64 | Goldreich \& Tremaine (1978, 1982), Cuzzi (1984) | Resonant Ring-Moon Interactions \& Saturn Density Waves | `PlanetaryRingModel` | `//:saturn_ring_waves_solver` | $0.9997$ | ✅ Completed |
 | #65 | Hayashi (1961), Henyey (1955) | Pre-Main Sequence Contraction on Hayashi \& Henyey Tracks | `StellarMainSequenceModel` | `//:pms_hayashi_henyey_solver` | $0.9998$ | ✅ Completed |
+| #66 | Ghosh \& Lamb (1979), Koenigl (1991) | Magnetospheric Accretion \& Star-Disk Coupling | Core C++ Engine | `//:magnetospheric_accretion_solver` | $0.9997$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
