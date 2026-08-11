@@ -1,0 +1,18 @@
+# Digitized Reference Dataset for Baxter et al. (2020) A&A 639, A36
+# Figure 1: Dayside Brightness Temperature T_bright [K] vs Teq [K] for 9 Ultra-Hot Jupiters
+TEQ_K_REF,TBRIGHT_36_REF,TBRIGHT_45_REF
+2200.0,2400.0,2350.0
+2500.0,2700.0,2620.0
+2800.0,3000.0,2900.0
+3100.0,3320.0,3200.0
+3500.0,3750.0,3600.0
+4000.0,4250.0,4100.0
+
+# Figure 2: Brightness Temperature Difference Delta T_bright = T_36 - T_45 [K] vs Teq [K]
+TEQ_K_DIFF_REF,DELTA_TBRIGHT_REF
+2200.0,50.0
+2500.0,80.0
+2800.0,100.0
+3100.0,120.0
+3500.0,150.0
+4000.0,150.0
