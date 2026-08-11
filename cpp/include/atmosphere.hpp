@@ -1739,6 +1739,36 @@ class Wardenier2021LimbAsymmetryModel {
   }
 };
 
+// Showman et al. (2020) Ultra-Hot Jupiter Phase Curve Model
+class Showman2020UltraHotPhaseCurveModel {
+ public:
+  double phase_amplitude(double t_eq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2100.0, 2400.0, 2800.0, 3200.0};
+    const double a[6] = {0.35, 0.52, 0.72, 0.88, 0.95, 0.98};
+    if (t_eq_k <= t[0]) return a[0];
+    if (t_eq_k >= t[5]) return a[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return a[i] + (a[i+1] - a[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return a[0];
+  }
+
+  double hotspot_offset_deg(double t_eq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2100.0, 2400.0, 2800.0, 3200.0};
+    const double o[6] = {28.5, 22.0, 15.5, 9.0, 4.5, 2.0};
+    if (t_eq_k <= t[0]) return o[0];
+    if (t_eq_k >= t[5]) return o[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return o[i] + (o[i+1] - o[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return o[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
