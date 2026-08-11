@@ -1,21 +1,18 @@
 # Digitized Reference Dataset for Parmentier et al. (2018) A&A 617, A110
-# Figure 1: Water Volume Mixing Ratio Log10(X_H2O) vs Temperature T [K] at 10 mbar
-TEMP_K_REF,LOG10_XH2O_DISS_REF
-1500.0,-3.30
-2000.0,-3.32
-2500.0,-3.50
-2800.0,-4.10
-3000.0,-4.80
-3500.0,-6.50
-4000.0,-8.00
+# Figure 1: Gas-phase Fe Abundance log10(X_Fe) vs Equilibrium Temperature T_eq [K] (1500 to 3000 K)
+TEQ_K_REF,LOG10_XFE_REF
+1500,-9.5
+1800,-8.8
+2000,-7.2
+2200,-4.5
+2500,-4.5
+3000,-4.5
 
-# Figure 2: HST WFC3 Emission Spectra F_p / F_star [ppm] vs Wavelength lambda [microns] for Ultra-Hot Jupiters (WASP-121b & WASP-18b)
-WAVELENGTH_MICRON_REF,EMISSION_WASP121B_PPM_REF,EMISSION_WASP18B_PPM_REF
-1.125,1150.0,920.0
-1.200,1180.0,950.0
-1.275,1220.0,980.0
-1.350,1210.0,970.0
-1.425,1230.0,990.0
-1.500,1240.0,1000.0
-1.575,1250.0,1010.0
-1.650,1260.0,1020.0
+# Figure 2: Optical-to-Infrared Phase Curve Amplitude Ratio A_opt/A_ir vs T_eq [K] (1500 to 3000 K)
+TEQ_K_REF2,AMP_RATIO_REF
+1500,1.85
+1800,1.60
+2000,1.25
+2200,0.85
+2500,0.62
+3000,0.50
