@@ -218,6 +218,21 @@ class SaturnRingLindbladResonanceModel {
   }
 };
 
+// 12. Enceladus Subsurface Ocean Tidal Heating & Flexure (Spencer et al. 2006)
+class EnceladusTidalOceanModel {
+ public:
+  // Enceladus Subsurface Ocean Tidal Dissipation Power [GW]
+  double enceladus_tidal_power_gw(double eccentricity = 0.0047, double k2_over_Q = 0.001) const {
+    double M_saturn = 5.683e26;    // Saturn mass [kg]
+    double R_enc = 2.521e5;        // Enceladus radius [m]
+    double a_enc = 2.38e8;         // Semi-major axis [m]
+    double n = std::sqrt(G * M_saturn / (a_enc * a_enc * a_enc));
+    double factor = 10.5 * k2_over_Q * G * M_saturn * M_saturn * std::pow(R_enc, 5.0) * n / std::pow(a_enc, 6.0);
+    double power_watts = factor * eccentricity * eccentricity;
+    return power_watts / 1.0e9;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

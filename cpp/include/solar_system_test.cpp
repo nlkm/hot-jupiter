@@ -65,7 +65,12 @@ int main() {
   hot_jupiter::SaturnRingLindbladResonanceModel lindblad_model;
   double torque = lindblad_model.lindblad_resonance_torque_nm(1.4e17, 1.3935e8);
   std::cout << "--> Lindblad Ring Torque: " << torque << " N m" << std::endl;
-  assert(torque > 1.0e8 && "Lindblad torque should be positive and substantial!");
+  assert(torque > 1.0e8 && "Lindblad torque should be positive!");
+
+  hot_jupiter::EnceladusTidalOceanModel enceladus_model;
+  double power_gw = enceladus_model.enceladus_tidal_power_gw();
+  std::cout << "--> Enceladus Subsurface Ocean Tidal Heating: " << power_gw << " GW" << std::endl;
+  assert(power_gw > 0.1 && "Enceladus tidal power should be positive and of order GW!");
 
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;

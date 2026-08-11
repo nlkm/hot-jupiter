@@ -5,6 +5,7 @@ Unit tests for hot_jupiter.solar_system subpackage.
 from hot_jupiter.solar_system import (
     AsteroidDynamics,
     CometDynamics,
+    EnceladusTidalOcean,
     LaplaceLagrangeSecular,
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
@@ -82,3 +83,9 @@ def test_saturn_ring_lindblad():
     lind = SaturnRingLindbladResonance()
     torque = lind.lindblad_resonance_torque_nm(1.4e17, 1.3935e8)
     assert torque > 1.0e8, "Lindblad ring torque should exceed 1.0e8 N m"
+
+
+def test_enceladus_tidal_ocean():
+    enc = EnceladusTidalOcean()
+    power_gw = enc.enceladus_tidal_power_gw()
+    assert power_gw > 0.1, "Enceladus tidal power should exceed 0.1 GW"

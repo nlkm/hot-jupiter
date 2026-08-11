@@ -176,9 +176,23 @@ class SaturnRingLindbladResonance:
         return np.pi**2 * surface_density_kg_m2 * a_satellite_m**4 * n**2 * q**2
 
 
+class EnceladusTidalOcean:
+
+    def enceladus_tidal_power_gw(self, eccentricity=0.0047, k2_over_q=0.001):
+        g = 6.67430e-11
+        m_saturn = 5.683e26
+        r_enc = 2.521e5
+        a_enc = 2.38e8
+        n = np.sqrt(g * m_saturn / a_enc**3)
+        factor = 10.5 * k2_over_q * g * m_saturn**2 * r_enc**5 * n / a_enc**6
+        power_watts = factor * eccentricity**2
+        return power_watts / 1.0e9
+
+
 __all__ = [
     "AsteroidDynamics",
     "CometDynamics",
+    "EnceladusTidalOcean",
     "LaplaceLagrangeSecular",
     "MoonTidalDynamics",
     "NiceModelResonanceCrossing",
