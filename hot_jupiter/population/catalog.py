@@ -5,7 +5,11 @@ Curated Hot Jupiter Exoplanet Catalog and NASA Exoplanet Archive loader using SQ
 from dataclasses import dataclass
 
 from hot_jupiter.constants import AU, M_JUP, M_SUN, R_JUP, R_SUN
-from hot_jupiter.database import DEFAULT_DB_PATH, get_db_connection, seed_database_if_empty
+from hot_jupiter.database import (
+    DEFAULT_DB_PATH,
+    get_db_connection,
+    seed_database_if_empty,
+)
 
 
 @dataclass

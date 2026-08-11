@@ -10,7 +10,18 @@ import numpy as np
 from scipy.integrate import solve_ivp
 
 from hot_jupiter.atmosphere import BaseAtmosphere, GuillotAtmosphere
-from hot_jupiter.constants import AU, GYR, L_SUN, M_EARTH, M_JUP, M_SUN, R_JUP, R_SUN, YEAR, G
+from hot_jupiter.constants import (
+    AU,
+    GYR,
+    L_SUN,
+    M_EARTH,
+    M_JUP,
+    M_SUN,
+    R_JUP,
+    R_SUN,
+    YEAR,
+    G,
+)
 from hot_jupiter.eos import AnalyticalHHeEOS
 from hot_jupiter.heating import BaseHeatingSource, ZeroHeating
 from hot_jupiter.mass_loss import RocheLobeMassLoss

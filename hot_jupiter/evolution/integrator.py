@@ -362,7 +362,10 @@ class ThermalEvolutionIntegrator:
         Integrate full multi-planet system containing N planets simultaneously.
         Includes coupled 1D thermal contraction, tidal dissipation, and planet-planet secular perturbations.
         """
-        from hot_jupiter.orbit.multi_planet import MultiPlanetEvolutionResult, TidalOrbitalSpinRates
+        from hot_jupiter.orbit.multi_planet import (
+            MultiPlanetEvolutionResult,
+            TidalOrbitalSpinRates,
+        )
 
         N = len(system.planets)
         if N == 0:
