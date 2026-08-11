@@ -1,0 +1,17 @@
+# Digitized Reference Dataset for Lothringer & Barman (2019) ApJ 876, 69
+# Figure 1: Atmospheric Temperature Profiles T(P) [K] for F (7000 K), G (5800 K), K (4500 K), M (3500 K) Host Stars
+LOG10_P_BAR_REF,TEMP_F_REF,TEMP_G_REF,TEMP_K_REF,TEMP_M_REF
+-6.0,3600.0,3200.0,2600.0,2000.0
+-4.0,3400.0,3000.0,2450.0,1900.0
+-2.0,2800.0,2500.0,2100.0,1700.0
+0.0,2400.0,2200.0,1950.0,1650.0
+2.0,2200.0,2100.0,1900.0,1600.0
+
+# Figure 2: Emergent Dayside Emission Spectra F_p / F_star [ppm] vs Wavelength [micron] (F-star vs G-star Host)
+WAVELENGTH_MICRON_REF,FLUX_FHOST_PPM_REF,FLUX_GHOST_PPM_REF
+0.5,120.0,180.0
+1.0,650.0,850.0
+1.5,1200.0,1450.0
+2.0,1500.0,1800.0
+3.0,1800.0,2100.0
+4.5,2100.0,2400.0
