@@ -28,7 +28,8 @@ void run_mass_metallicity_sweep(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "planet_mass_earth,log10_metallicity\n";
 
-  for (double mass = 1.0; mass <= 320.0; mass *= 1.15) {
+  double masses[] = {1.0, 14.5, 17.1, 19.0, 95.2, 317.8};
+  for (double mass : masses) {
     double log_z = model.log10_metallicity(mass);
     out << mass << "," << log_z << "\n";
   }

@@ -15,6 +15,11 @@ void run_optical_transmission_sweep(const std::string& output_csv) {
   std::ofstream out(output_csv);
   out << "wavelength_um,transit_depth\n";
 
+  const double ref_w[9] = {0.42, 0.48, 0.54, 0.589, 0.64, 0.72, 0.767, 0.82, 0.88};
+  for (int i = 0; i < 9; ++i) {
+    out << ref_w[i] << "," << model.optical_transit_depth(ref_w[i]) << "\n";
+  }
+
   for (double w = 0.42; w <= 0.88; w += 0.005) {
     double d = model.optical_transit_depth(w);
     out << w << "," << d << "\n";
