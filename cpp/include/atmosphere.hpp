@@ -1985,6 +1985,37 @@ class Madhusudhan2014CoRatioModel {
   }
 };
 
+// Line et al. (2014) Systematic Emission Retrieval Model
+class Line2014EmissionRetrievalModel {
+ public:
+  double emission_spectrum(double wavelength_um) const {
+    const double w[6] = {1.15, 1.30, 1.60, 2.20, 3.60, 4.50};
+    const double f[6] = {0.00065, 0.00072, 0.00085, 0.00115, 0.00148, 0.00182};
+    if (wavelength_um <= w[0]) return f[0];
+    if (wavelength_um >= w[5]) return f[5];
+    for (int i = 0; i < 5; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return f[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return f[i] + (f[i+1] - f[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return f[0];
+  }
+
+  double temperature_at_pressure(double log10_p_bar) const {
+    const double p[7] = {-4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0};
+    const double t[7] = {1150.0, 1220.0, 1350.0, 1520.0, 1750.0, 1920.0, 2050.0};
+    if (log10_p_bar <= p[0]) return t[0];
+    if (log10_p_bar >= p[6]) return t[6];
+    for (int i = 0; i < 6; ++i) {
+      if (log10_p_bar >= p[i] && log10_p_bar <= p[i+1]) {
+        return t[i] + (t[i+1] - t[i]) * (log10_p_bar - p[i]) / (p[i+1] - p[i]);
+      }
+    }
+    return t[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
