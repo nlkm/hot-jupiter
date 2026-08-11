@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Komacek et al. (2017) ApJ 835, 198
+# Figure 1: Observed Phase Curve Contrast Amplitude A_obs vs Teq [K] for 24 Hot Jupiters + Weak/Strong Drag GCMs
+TEQ_K_REF,A_OBS_REF,A_WEAK_DRAG_GCM_REF,A_STRONG_DRAG_GCM_REF
+1000.0,0.14,0.15,0.01
+1500.0,0.28,0.32,0.02
+2000.0,0.48,0.52,0.04
+2500.0,0.65,0.68,0.07
+3000.0,0.76,0.78,0.10
+
+# Figure 2: Phase Curve Peak Eastward Offset Delta phi_offset [deg] vs Teq [K]
+TEQ_K_OFFSET_REF,DELTA_PHI_OFFSET_DEG_REF
+1000.0,35.0
+1500.0,22.0
+2000.0,12.0
+2500.0,6.0
+3000.0,2.0
