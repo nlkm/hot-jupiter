@@ -777,6 +777,33 @@ class Benneke2019SubNeptuneAtmosphere {
   }
 };
 
+// Fortney et al. (2010) Synthetic Transmission Grid for Irradiated Gas Giants
+class Fortney2010GasGiantGrid {
+ public:
+  double transmission_depth_pct(double wave_micron, double metallicity_solar, double p_cloud_mbar) const {
+    double base_depth = 1.515;
+    if (wave_micron <= 0.35) base_depth = 1.520;
+    else if (wave_micron <= 0.589) base_depth = 1.520 + (1.560 - 1.520) * (wave_micron - 0.35) / 0.239;
+    else if (wave_micron <= 0.770) base_depth = 1.560 + (1.545 - 1.560) * (wave_micron - 0.589) / 0.181;
+    else if (wave_micron <= 1.40) base_depth = 1.545 + (1.530 - 1.545) * (wave_micron - 0.770) / 0.63;
+    else if (wave_micron <= 2.70) base_depth = 1.530 + (1.515 - 1.530) * (wave_micron - 1.40) / 1.30;
+    else if (wave_micron <= 4.50) base_depth = 1.515 + (1.525 - 1.515) * (wave_micron - 2.70) / 1.80;
+
+    double z_shift = 0.0;
+    if (metallicity_solar > 1.0) {
+      z_shift = 0.015 * (metallicity_solar - 1.0) / 9.0;
+    }
+
+    double depth = base_depth + z_shift;
+
+    if (p_cloud_mbar > 0.0) {
+      double cloud_cap = 1.520 + 0.015 * (10.0 - std::min(10.0, p_cloud_mbar)) / 9.0;
+      if (depth > cloud_cap) depth = cloud_cap;
+    }
+    return depth;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
