@@ -1319,6 +1319,36 @@ class Gandhi2019RetrievalModel {
   }
 };
 
+// Welbanks et al. (2019) Mass-Metallicity & Water Depletion Model
+class Welbanks2019MassMetallicityModel {
+ public:
+  double log10_x_h2o(double mass_mjup) const {
+    const double m[7] = {0.01, 0.05, 0.10, 0.50, 1.00, 5.00, 10.00};
+    const double x[7] = {-1.50, -2.20, -2.70, -3.80, -4.30, -5.10, -5.60};
+    if (mass_mjup <= m[0]) return x[0];
+    if (mass_mjup >= m[6]) return x[6];
+    for (int i = 0; i < 6; ++i) {
+      if (mass_mjup >= m[i] && mass_mjup <= m[i+1]) {
+        return x[i] + (x[i+1] - x[i]) * (std::log10(mass_mjup) - std::log10(m[i])) / (std::log10(m[i+1]) - std::log10(m[i]));
+      }
+    }
+    return x[0];
+  }
+
+  double metallicity_solar(double mass_mjup) const {
+    const double m[7] = {0.01, 0.05, 0.10, 0.50, 1.00, 5.00, 10.00};
+    const double z[7] = {250.0, 80.0, 35.0, 5.0, 2.0, 0.5, 0.2};
+    if (mass_mjup <= m[0]) return z[0];
+    if (mass_mjup >= m[6]) return z[6];
+    for (int i = 0; i < 6; ++i) {
+      if (mass_mjup >= m[i] && mass_mjup <= m[i+1]) {
+        return z[i] * std::pow(mass_mjup / m[i], std::log10(z[i+1] / z[i]) / std::log10(m[i+1] / m[i]));
+      }
+    }
+    return z[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
