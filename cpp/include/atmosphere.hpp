@@ -1559,6 +1559,36 @@ class Molaverdikhani2019CloudModel {
   }
 };
 
+// Baxter et al. (2021) Ultra-Hot Jupiter Eclipse Transition Model
+class Baxter2021EclipseTransitionModel {
+ public:
+  double eclipse_depth_36um_ppm(double t_eq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2100.0, 2400.0, 2700.0, 3000.0};
+    const double d[6] = {650.0, 1050.0, 1620.0, 2650.0, 3780.0, 4650.0};
+    if (t_eq_k <= t[0]) return d[0];
+    if (t_eq_k >= t[5]) return d[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double eclipse_depth_45um_ppm(double t_eq_k) const {
+    const double t[6] = {1500.0, 1800.0, 2100.0, 2400.0, 2700.0, 3000.0};
+    const double d[6] = {780.0, 1220.0, 1850.0, 2980.0, 4120.0, 4980.0};
+    if (t_eq_k <= t[0]) return d[0];
+    if (t_eq_k >= t[5]) return d[5];
+    for (int i = 0; i < 5; ++i) {
+      if (t_eq_k >= t[i] && t_eq_k <= t[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (t_eq_k - t[i]) / (t[i+1] - t[i]);
+      }
+    }
+    return d[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
