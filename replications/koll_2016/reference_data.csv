@@ -1,0 +1,16 @@
+# Digitized Reference Dataset for Koll & Abbot (2016) ApJ 825, 99
+# Figure 1: Day-Night Temperature Difference Delta T_dn [K] vs Teq [K] (500 to 2500 K)
+TEQ_K_REF,DELTA_TDN_K_REF
+500.0,80.0
+1000.0,260.0
+1500.0,520.0
+2000.0,840.0
+2500.0,1180.0
+
+# Figure 2: Thermal Inversion Strength eta_inv vs Opacity Ratio gamma = kappa_SW / kappa_LW (0.01 to 100.0)
+GAMMA_OPACITY_REF,ETA_INV_REF
+0.01,-0.65
+0.10,-0.40
+1.00,0.00
+10.00,0.45
+100.00,0.72
