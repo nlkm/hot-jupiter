@@ -1,20 +1,20 @@
 # Replication Specification: Arcangeli et al. (2018)
 **Title**: H- Opacity and Hydrogen Dissociation in the Atmosphere of WASP-18b  
-**Authors**: J. Arcangeli, V. Parmentier, M. R. Line, et al.  
-**Journal**: ApJL, 855, L30 (2018) | **arXiv**: `1801.03479`
+**Authors**: Lorenzo Arcangeli, Kevin B. Stevenson, et al.  
+**Journal**: ApJ, 855, L30 (2018) | **arXiv**: `1801.02489`
 
 ---
 
 ## Executive Summary & Core Equations
 
-Arcangeli et al. (2018) demonstrate that $H^-$ continuum opacity shapes the HST WFC3 secondary eclipse spectrum of ultra-hot Jupiter WASP-18b.
+Arcangeli et al. (2018) prove that extreme thermal dissociation of $\text{H}_2\text{O}$ and $\text{H}^-$ continuum opacity mute spectral absorption features in ultra-hot Jupiters like WASP-18b.
 
-### 1. Thermal Emission & $H^-$ Opacity Formula
-$$\frac{F_p}{F_\star}(\lambda) = \frac{B_\lambda(T_{\text{day}})}{B_\lambda(T_\star)} \left(\frac{R_p}{R_\star}\right)^2$$
+### 1. Thermal Dissociation & H- Opacity
+$$\alpha_{\text{diss}}(T, P) = \frac{1}{1 + 4 \frac{P}{K_p(T)}}$$
 
 ---
 
 ## Benchmark Figures to Replicate
 
-1. **Figure 1**: HST WFC3 secondary eclipse spectrum $F_p / F_\star$ [ppm] vs wavelength $\lambda$ [$\mu$m] (1.1 to 1.7 $\mu$m) for WASP-18b.
-2. **Figure 2**: Dayside Temperature-Pressure profile $T(P)$ [K vs bar] (10^-4 to 10 bar) for WASP-18b with thermal inversion.
+1. **Figure 1**: WASP-18b HST WFC3 secondary eclipse spectrum $F_p/F_\star$ vs wavelength $\lambda$ (1.1 to 1.7 $\mu$m).
+2. **Figure 2**: Molecular dissociation fraction $\alpha_{\text{diss}}$ for $\text{H}_2\text{O}$ and $\text{H}_2$ vs temperature $T$ (2000 K to 3800 K).
