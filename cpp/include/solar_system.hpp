@@ -48,6 +48,14 @@ class TidalDissipationModel {
     double recession_cm_yr = 3.8 * std::pow(3.844e8 / a_moon_m, 5.5);
     return (recession_cm_yr * 0.01) / (365.25 * 86400.0);
   }
+
+  // Pseudosynchronous Spin Ratio for Eccentric Orbits (Hut 1981, Peale & Gold 1965)
+  double mercury_pseudosynchronous_spin_ratio(double eccentricity) const {
+    double e2 = eccentricity * eccentricity;
+    double num = 1.0 + 7.5 * e2 + 5.625 * e2 * e2 + 0.3125 * e2 * e2 * e2;
+    double den = std::pow(1.0 - e2, 1.5) * (1.0 + 3.0 * e2 + 0.375 * e2 * e2);
+    return num / den;
+  }
 };
 
 // Backward-compatibility alias
