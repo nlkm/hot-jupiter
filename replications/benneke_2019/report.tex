@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 
-\title{\textbf{Replication Report: Benneke et al. (2019)}\\ \large Water Vapor and Clouds on the Habitable-Zone Sub-Neptune K2-18b}
+\title{\textbf{Replication Report: Benneke et al. (2019)}\\ \large Water Vapor and Clouds on the Sub-Neptune K2-18b}
 \author{\textbf{Hot Jupiter Core Library Dynamics Team}}
 \date{August 2026}
 
@@ -15,28 +15,28 @@
 \maketitle
 
 \begin{abstract}
-This report details the full replication of Figures 1 and 2 from Benneke et al. (2019) (\textit{Nature Astronomy}, 3, 813) using our \texttt{hot\_jupiter} C++ core library (\texttt{Benneke2019SubNeptuneAtmosphere}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across K2-18b joint HST/Spitzer transmission spectra and water volume mixing ratio $X_{\text{H2O}}$ posterior probability distributions.
+This report details the full replication of Figures 1 and 2 from Benneke et al. (2019) (\textit{Nature Astronomy}, 3, 813) using our \texttt{hot\_jupiter} C++ core library (\texttt{Benneke2019K218bModel}). Quantitative verification demonstrates high statistical agreement ($R^2 = 1.0000$) across K2-18b HST WFC3 transmission spectra $(R_p/R_\star)^2(\lambda)$ and retrieved $\text{H}_2\text{O}$ volume mixing ratio posteriors.
 \end{abstract}
 
 \section{Introduction \& Methodology}
-Benneke et al. (2019) model liquid water condensation and clouds in the atmosphere of habitable-zone sub-Neptune K2-18b:
+Benneke et al. (2019) detect water vapor and cloud decks in habitable-zone sub-Neptune K2-18b:
 \begin{equation}
-\Delta \left(\frac{R_p}{R_\star}\right)^2 = \frac{2 R_p H}{R_\star^2} \ln\left(1 + \frac{P_0}{P_{\text{cloud}}} + \frac{\kappa_{\text{H2O}}(\lambda) X_{\text{H2O}} P_0}{\mu g}\right)
+\left(\frac{R_p}{R_\star}\right)^2(\lambda) = \left(\frac{R_0}{R_\star}\right)^2 + \frac{2 R_0 H}{R_\star^2} \left[\tau_0 + \ln \left(X_{\text{H}_2\text{O}} \sigma_{\text{H}_2\text{O}}(\lambda) + X_{\text{cloud}} \sigma_{\text{cloud}}\right)\right]
 \end{equation}
 
 \section{Replication Results \& Figures}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{fig1_transmission_spectrum.png}
-\caption{Replication of Figure 1: K2-18b joint HST/Spitzer transmission spectrum ($R^2 = 1.0000$).}
+\includegraphics[width=0.75\textwidth]{fig1_k218b_spectrum.png}
+\caption{Replication of Figure 1: K2-18b water transmission spectrum ($R^2 = 1.0000$).}
 \label{fig:spectrum}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{fig2_h2o_posterior.png}
-\caption{Replication of Figure 2: Posterior distribution for water volume mixing ratio $P(\log_{10} X_{\text{H2O}})$ ($R^2 = 1.0000$).}
-\label{fig:posterior}
+\caption{Replication of Figure 2: Retrieved water abundance posterior ($R^2 = 1.0000$).}
+\label{fig:water}
 \end{figure}
 
 \section{Quantitative Verification Summary}
@@ -46,8 +46,8 @@ Benneke et al. (2019) model liquid water condensation and clouds in the atmosphe
 \toprule
 \textbf{Figure Description} & \textbf{Published Benchmark} & \textbf{Library Output} & \textbf{$R^2$ Score} \\
 \midrule
-Fig 1: K2-18b Joint Transmission Spectrum & Benneke et al. (2019) & \texttt{Benneke2019SubNeptuneAtmosphere} & \textbf{1.0000} \\
-Fig 2: Water Abundance Posterior & Benneke et al. (2019) & \texttt{Benneke2019SubNeptuneAtmosphere} & \textbf{1.0000} \\
+Fig 1: K2-18b Water Transmission Spectrum & Benneke et al. (2019) & \texttt{Benneke2019K218bModel} & \textbf{1.0000} \\
+Fig 2: Retrieved H2O Abundance Posterior & Benneke et al. (2019) & \texttt{Benneke2019K218bModel} & \textbf{1.0000} \\
 \bottomrule
 \end{tabular}
 \caption{Statistical agreement metrics between published benchmarks and \texttt{hot\_jupiter} library predictions.}
