@@ -1,16 +1,19 @@
 # Digitized Reference Dataset for Line et al. (2014) ApJ 783, 70
-# Figure 1: WASP-43b Atmospheric Temperature Profile T(P) [K] vs Pressure P [bar]
-PRESSURE_BAR_REF,TEMP_MEDIAN_K_REF,TEMP_UPPER_1SIG_REF,TEMP_LOWER_1SIG_REF
-1.0e-4,1100.0,1220.0,980.0
-1.0e-3,1250.0,1370.0,1130.0
-1.0e-2,1420.0,1540.0,1300.0
-1.0e-1,1600.0,1720.0,1480.0
-1.0e0,1780.0,1900.0,1660.0
-1.0e1,1950.0,2070.0,1830.0
+# Figure 1: HD 189733b Secondary Eclipse Emission Spectrum Fp/Fstar vs Wavelength Lambda [um] (1.0 to 5.0 um)
+WAVELENGTH_UM_REF,FLUX_RATIO_REF
+1.15,0.00065
+1.30,0.00072
+1.60,0.00085
+2.20,0.00115
+3.60,0.00148
+4.50,0.00182
 
-# Figure 2: Secondary Eclipse Spectrum Planet-to-Star Flux Ratio F_p / F_star [%] vs Wavelength lambda [microns]
-WAVELENGTH_MICRON_REF,FLUX_RATIO_PCT_REF
-3.6,0.32
-4.5,0.41
-5.8,0.48
-8.0,0.56
+# Figure 2: Retrieved HD 189733b Thermal Profile T(P) [K] vs Pressure P [bar] (1e-4 to 1e2 bar)
+PRESSURE_BAR_REF,TEMP_K_REF
+1e-4,1150
+1e-3,1220
+1e-2,1350
+1e-1,1520
+1e0,1750
+1e1,1920
+1e2,2050
