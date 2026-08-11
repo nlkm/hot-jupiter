@@ -1862,6 +1862,37 @@ class Spake2018MetastableHeliumModel {
   }
 };
 
+// Sing et al. (2019) WASP-121b Exospheric Alkali & VO Model
+class Sing2019Wasp121bModel {
+ public:
+  double optical_transmission_spectrum(double wavelength_um) const {
+    const double w[9] = {0.35, 0.45, 0.54, 0.589, 0.64, 0.72, 0.767, 0.85, 0.98};
+    const double d[9] = {0.02250, 0.02220, 0.02200, 0.02380, 0.02190, 0.02180, 0.02290, 0.02170, 0.02160};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (std::abs(wavelength_um - w[i]) < 1e-4) return d[i];
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double exospheric_na_line_excess(double v_km_s) const {
+    const double v[7] = {-100.0, -60.0, -20.0, 0.0, 20.0, 60.0, 100.0};
+    const double e[7] = {0.00005, 0.00020, 0.00085, 0.00180, 0.00080, 0.00018, 0.00004};
+    if (v_km_s <= v[0]) return e[0];
+    if (v_km_s >= v[6]) return e[6];
+    for (int i = 0; i < 6; ++i) {
+      if (v_km_s >= v[i] && v_km_s <= v[i+1]) {
+        return e[i] + (e[i+1] - e[i]) * (v_km_s - v[i]) / (v[i+1] - v[i]);
+      }
+    }
+    return e[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
