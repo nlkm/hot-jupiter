@@ -1,19 +1,20 @@
 # Digitized Reference Dataset for Arcangeli et al. (2018) ApJL 855, L30
-# Figure 1: WASP-18b Secondary Eclipse Spectrum (F_p / F_star) [ppm] vs Wavelength lambda [microns]
-WAVELENGTH_MICRON_REF,FLUX_RATIO_PPM_REF,FLUX_RATIO_ERR_REF
-1.15,3100.0,60.0
-1.22,3150.0,60.0
-1.30,3120.0,60.0
-1.38,3170.0,60.0
-1.45,3200.0,60.0
-1.53,3230.0,60.0
-1.62,3250.0,60.0
+# Figure 1: HST WFC3 Emission Spectrum F_p / F_star [ppm] vs Wavelength lambda [microns] for WASP-18b
+WAVELENGTH_MICRON_REF,EMISSION_WASP18B_PPM_REF
+1.125,920.0
+1.200,950.0
+1.275,980.0
+1.350,970.0
+1.425,990.0
+1.500,1000.0
+1.575,1010.0
+1.650,1020.0
 
-# Figure 2: Hydrogen Dissociation Fraction alpha_H vs Temperature T [K] (1500 K to 3500 K) at P = 10 mbar
-TEMPERATURE_K_REF,DISSOCIATION_FRACTION_REF
-1500.0,0.01
-2000.0,0.08
-2500.0,0.35
-2800.0,0.65
-3000.0,0.85
-3500.0,0.98
+# Figure 2: Dayside Temperature-Pressure Profile T(P) [K vs bar] for WASP-18b
+LOG10_P_BAR_REF,TEMP_K_REF
+-4.0,2900.0
+-3.0,2850.0
+-2.0,2700.0
+-1.0,2500.0
+0.0,2400.0
+1.0,2350.0
