@@ -1679,6 +1679,36 @@ class Mansfield2021Wasp33bModel {
   }
 };
 
+// Changeat et al. (2021) HD 209458b HCN Opacity Model
+class Changeat2021Hd209458bModel {
+ public:
+  double transmission_transit_depth(double wavelength_um) const {
+    const double w[9] = {0.35, 0.55, 0.85, 1.15, 1.40, 1.80, 2.50, 3.50, 5.00};
+    const double d[9] = {0.01515, 0.01495, 0.01475, 0.01455, 0.01505, 0.01440, 0.01430, 0.01530, 0.01420};
+    if (wavelength_um <= w[0]) return d[0];
+    if (wavelength_um >= w[8]) return d[8];
+    for (int i = 0; i < 8; ++i) {
+      if (wavelength_um >= w[i] && wavelength_um <= w[i+1]) {
+        return d[i] + (d[i+1] - d[i]) * (wavelength_um - w[i]) / (w[i+1] - w[i]);
+      }
+    }
+    return d[0];
+  }
+
+  double hcn_abundance_posterior(double log10_xhcn) const {
+    const double x[5] = {-7.0, -5.8, -4.5, -3.2, -2.0};
+    const double p[5] = {0.02, 0.35, 1.00, 0.32, 0.01};
+    if (log10_xhcn <= x[0]) return p[0];
+    if (log10_xhcn >= x[4]) return p[4];
+    for (int i = 0; i < 4; ++i) {
+      if (log10_xhcn >= x[i] && log10_xhcn <= x[i+1]) {
+        return p[i] + (p[i+1] - p[i]) * (log10_xhcn - x[i]) / (x[i+1] - x[i]);
+      }
+    }
+    return p[0];
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_ATMOSPHERE_HPP
