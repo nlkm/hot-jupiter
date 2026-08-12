@@ -152,6 +152,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #142 | Yeomans (2000), Veverka (2000), Cheng (2002), Thomas (2002) | Near-Earth Asteroid 433 Eros Mass, Density, \& Regolith Migration | Core C++ Engine | `//:eros_density_regolith_migration_solver` | $0.9998$ | ✅ Completed |
 | #143 | Fujiwara (2006), Abe (2006), Scheeres (2007), Lowry (2014) | Asteroid 25143 Itokawa Low Mass, Rubble-Pile Porosity, \& YORP Spin Evolution | Core C++ Engine | `//:itokawa_rubble_pile_yorp_solver` | $0.9998$ | ✅ Completed |
 | #144 | Watanabe (2019), Sugita (2019), Jaumann (2019), Kitazato (2019) | Asteroid 162173 Ryugu C-type Hydrated Mineralogy \& High Porosity | Core C++ Engine | `//:ryugu_hydrated_porous_solver` | $0.9998$ | ✅ Completed |
+| #145 | Lauretta (2019), Scheeres (2019), Hergenrother (2019), Walsh (2019) | Asteroid 101955 Bennu Mass, Porosity, Particle Ejection, \& YORP | Core C++ Engine | `//:bennu_mass_porosity_ejection_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
