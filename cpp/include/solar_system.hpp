@@ -1150,6 +1150,31 @@ class WASP12bTidalDecayModel {
   }
 };
 
+// ============================================================================
+// 49. WASP-43b TIDAL CIRCULARIZATION & PLANETARY Q'_p DISSIPATION MODEL (Hellier 2011, Gillon 2012)
+// ============================================================================
+class WASP43bTidalCircularizationModel {
+ public:
+  // Tidal Eccentricity Circularization Timescale \tau_e [Myr]
+  double circularization_timescale_myr(double Q_p_prime = 2.95e6, double M_p_kg = 3.89e27, double M_star_kg = 1.426e30, double R_p_m = 7.4065e7, double a_m = 2.283e9, double P_days = 0.813475) const {
+    double P_sec = P_days * 86400.0;
+    double n_mean_motion = (2.0 * M_PI) / P_sec; // rad/s
+
+    double ratio_mass = M_p_kg / M_star_kg;
+    double ratio_radius = a_m / R_p_m;
+
+    // \tau_e = \frac{2}{21} \frac{Q'_p}{n} \left(\frac{M_p}{M_*}\right) \left(\frac{a}{R_p}\right)^5
+    double tau_sec = (2.0 / 21.0) * (Q_p_prime / n_mean_motion) * ratio_mass * std::pow(ratio_radius, 5.0);
+    return tau_sec / (31557600.0 * 1.0e6); // Myr
+  }
+
+  // Damped Orbital Eccentricity e(t)
+  double damped_eccentricity(double age_gyr = 1.0, double e_initial = 0.2, double tau_e_myr = 7.52) const {
+    double age_myr = age_gyr * 1000.0;
+    return e_initial * std::exp(-age_myr / tau_e_myr);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

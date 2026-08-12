@@ -345,6 +345,11 @@ int main() {
   std::cout << "--> WASP-12b Tidal Decay Rate = " << wasp12_pdot << " ms/year" << std::endl;
   assert(std::abs(wasp12_pdot - (-29.0)) < 2.0 && "WASP-12b period decay rate mismatch!");
 
+  hot_jupiter::WASP43bTidalCircularizationModel wasp43_test_model;
+  double wasp43_tau_e = wasp43_test_model.circularization_timescale_myr();
+  std::cout << "--> WASP-43b Circularization Timescale = " << wasp43_tau_e << " Myr" << std::endl;
+  assert(std::abs(wasp43_tau_e - 7.5) < 1.0 && "WASP-43b circularization timescale mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
