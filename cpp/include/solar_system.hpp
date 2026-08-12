@@ -491,6 +491,24 @@ class AZ84BinaryModel {
   }
 };
 
+// ============================================================================
+// 22. SCATTERED TNO BINARY (508869) 2002 VT130 DYNAMICS (Grundy et al. 2012)
+// ============================================================================
+class VT130BinaryModel {
+ public:
+  double orbital_period_days(double a_orb_km = 24900.0, double M_sys_kg = 1.09e18) const {
+    double a_m = a_orb_km * 1000.0;
+    double period_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G * M_sys_kg));
+    return period_sec / 86400.0;
+  }
+
+  double system_bulk_density_kg_m3(double M_sys_kg = 1.09e18, double r_primary_km = 110.0, double r_sec_km = 90.0) const {
+    double r_eq_m = std::pow(std::pow(r_primary_km * 1000.0, 3.0) + std::pow(r_sec_km * 1000.0, 3.0), 1.0 / 3.0);
+    double vol = (4.0 / 3.0) * M_PI * std::pow(r_eq_m, 3.0);
+    return M_sys_kg / vol;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

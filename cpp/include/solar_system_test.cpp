@@ -172,6 +172,13 @@ int main() {
   assert(std::abs(az84_p - 12.25) < 1.5 && "2003 AZ84 orbital period mismatch!");
   assert(std::abs(az84_rho - 870.0) < 30.0 && "2003 AZ84 density mismatch!");
 
+  hot_jupiter::VT130BinaryModel vt130_model;
+  double vt130_p = vt130_model.orbital_period_days();
+  double vt130_rho = vt130_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2002 VT130 Orbital Period: " << vt130_p << " days, Density: " << vt130_rho << " kg/m^3" << std::endl;
+  assert(std::abs(vt130_p - 1060.0) < 10.0 && "2002 VT130 orbital period mismatch!");
+  assert(std::abs(vt130_rho - 126.0) < 30.0 && "2002 VT130 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
