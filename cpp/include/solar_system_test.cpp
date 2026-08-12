@@ -295,6 +295,11 @@ int main() {
   std::cout << "--> Bennu Yarkovsky Drift: Rate = " << bennu_drift << " m/yr" << std::endl;
   assert(std::abs(bennu_drift - (-284.0)) < 5.0 && "Bennu Yarkovsky drift rate mismatch!");
 
+  hot_jupiter::RyuguYarkovskyModel ryugu_test_model;
+  double ryugu_drift = ryugu_test_model.yarkovsky_drift_m_yr();
+  std::cout << "--> Ryugu Yarkovsky Drift: Rate = " << ryugu_drift << " m/yr" << std::endl;
+  assert(std::abs(ryugu_drift - (-215.0)) < 5.0 && "Ryugu Yarkovsky drift rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

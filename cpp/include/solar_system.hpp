@@ -867,6 +867,30 @@ class BennuYarkovskyModel {
   }
 };
 
+// ============================================================================
+// 39. RYUGU YARKOVSKY DRIFT & THERMOPHYSICAL MODEL (Watanabe 2019, Sugita 2019)
+// ============================================================================
+class RyuguYarkovskyModel {
+ public:
+  // Diurnal Yarkovsky Drift Rate da/dt [m/yr] for Asteroid (162173) Ryugu
+  double yarkovsky_drift_m_yr(double diameter_m = 896.0, double density_kg_m3 = 1190.0, double a_AU = 1.1896, double obliquity_deg = 171.6, double thermal_inertia = 225.0) const {
+    double cos_gamma = std::cos(obliquity_deg * M_PI / 180.0);
+    double base_drift = -215.0; // m/yr base scale at 1.1896 AU
+
+    double density_ratio = 1190.0 / density_kg_m3;
+    double diameter_ratio = 896.0 / diameter_m;
+    double distance_ratio = std::pow(1.1896 / a_AU, 2.0);
+
+    return base_drift * (cos_gamma / std::cos(171.6 * M_PI / 180.0)) * density_ratio * diameter_ratio * distance_ratio * (thermal_inertia / 225.0);
+  }
+
+  // Drift rate in AU/Myr
+  double yarkovsky_drift_AU_Myr(double diameter_m = 896.0, double density_kg_m3 = 1190.0, double a_AU = 1.1896, double obliquity_deg = 171.6) const {
+    double drift_m_yr = yarkovsky_drift_m_yr(diameter_m, density_kg_m3, a_AU, obliquity_deg);
+    return (drift_m_yr * 1.0e6) / 1.495978707e11;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
