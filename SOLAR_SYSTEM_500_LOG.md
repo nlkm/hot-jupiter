@@ -157,6 +157,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #147 | Sierks (2015), Pätzold (2016), Jorda (2016), Hässig (2015) | Comet 67P/Churyumov-Gerasimenko Bilobate Shape, Mass, Density, \& Water Outgassing | Core C++ Engine | `//:comet_67p_bilobate_outgassing_solver` | $0.9998$ | ✅ Completed |
 | #148 | Keller (1986), Sagdeev (1986), Whipple (1986), Rickman (1986) | Comet 1P/Halley Nucleus Mass, Density, \& Water Outgassing Jet Dynamics | Core C++ Engine | `//:comet_halley_nucleus_outgassing_solver` | $0.9998$ | ✅ Completed |
 | #149 | Brownlee (2006), Zolensky (2006), McKeegan (2006), Hörz (2006) | Comet 81P/Wild 2 Refractory Crystalline Silicates \& Stardust Sample Return | Core C++ Engine | `//:comet_wild2_stardust_refractory_solver` | $0.9998$ | ✅ Completed |
+| #150 | A'Hearn (2005), Sunshine (2006), Richardson (2007), Groussin (2007) | Comet 9P/Tempel 1 Deep Impact Collision, Ejecta Excavation, \& Water Ice Content | Core C++ Engine | `//:comet_tempel1_deep_impact_excavation_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
