@@ -10,6 +10,7 @@ from hot_jupiter.solar_system import (
     EG138Binary,
     EnceladusTidalOcean,
     FB128Binary,
+    GZ31Binary,
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -206,3 +207,11 @@ def test_pd149_binary():
     rho_kg_m3 = pd149.system_bulk_density_kg_m3()
     assert abs(p_days - 1260.0) < 10.0, "2002 PD149 orbital period mismatch"
     assert abs(rho_kg_m3 - 340.0) < 30.0, "2002 PD149 bulk density mismatch"
+
+
+def test_gz31_binary():
+    gz31 = GZ31Binary()
+    p_days = gz31.orbital_period_days()
+    rho_kg_m3 = gz31.system_bulk_density_kg_m3()
+    assert abs(p_days - 1010.0) < 10.0, "2002 GZ31 orbital period mismatch"
+    assert abs(rho_kg_m3 - 238.0) < 30.0, "2002 GZ31 bulk density mismatch"
