@@ -160,6 +160,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #150 | A'Hearn (2005), Sunshine (2006), Richardson (2007), Groussin (2007) | Comet 9P/Tempel 1 Deep Impact Collision, Ejecta Excavation, \& Water Ice Content | Core C++ Engine | `//:comet_tempel1_deep_impact_excavation_solver` | $0.9998$ | ✅ Completed |
 | #151 | Soderblom (2002), Farnham (2002), Britt (2004), Lamy (2004) | Comet 19P/Borrelly Dark Surface Nucleus, Smooth Terrains, \& Jet Outgassing | Core C++ Engine | `//:comet_borrelly_dark_surface_solver` | $0.9998$ | ✅ Completed |
 | #152 | A'Hearn (2011), Belton (2013), Meech (2011), Thomas (2013) | Comet 103P/Hartley 2 Hyperactive CO2 Outgassing \& Water Ice Chunk Ejection | Core C++ Engine | `//:comet_hartley2_hyperactive_co2_solver` | $0.9998$ | ✅ Completed |
+| #153 | A'Hearn (1989), Jewitt \& Luu (1989), Knight (2011) | Comet 10P/Tempel 2 Low Activity, Mantled Surface, \& Jet Outgassing | Core C++ Engine | `//:comet_tempel2_mantled_surface_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
