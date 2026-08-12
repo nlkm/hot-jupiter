@@ -671,6 +671,28 @@ class UQ18BinaryModel {
   }
 };
 
+// ============================================================================
+// 32. SATURN RING RESONANCE ANALYSIS MODEL (Goldreich & Tremaine 1978, 1979)
+// ============================================================================
+class SaturnRingResonanceAnalysisModel {
+ public:
+  // Calculate Inner Lindblad Resonance (ILR) radius [km] with J2 oblateness correction
+  double inner_lindblad_resonance_km(double moon_a_km, int m_ring, int m_moon, double R_Saturn_km = 60268.0, double J2 = 0.01629) const {
+    double ratio = static_cast<double>(m_moon) / static_cast<double>(m_ring);
+    double r_kepler = moon_a_km * std::pow(ratio, 2.0 / 3.0);
+    // J2 oblateness shift: Delta r / r approx + (J2/2) * (R_S / r)^2
+    double j2_factor = 1.0 + 0.6 * J2 * std::pow(R_Saturn_km / r_kepler, 2.0);
+    return r_kepler * j2_factor;
+  }
+
+  // Calculate F-ring shepherd torque balance radius between Prometheus and Pandora [km]
+  double shepherd_torque_balance_km(double a_inner_km = 139380.0, double M_inner_kg = 1.595e17, double a_outer_km = 141720.0, double M_outer_kg = 1.371e17) const {
+    // Torque balance (M_in^2 / (r - a_in)^4 = M_out^2 / (a_out - r)^4)
+    double ratio = std::pow(M_inner_kg / M_outer_kg, 0.25);
+    return (a_inner_km + ratio * a_outer_km) / (1.0 + ratio);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

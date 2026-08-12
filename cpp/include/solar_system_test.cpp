@@ -242,6 +242,15 @@ int main() {
   assert(std::abs(uq18_p - 165.0) < 5.0 && "2001 UQ18 orbital period mismatch!");
   assert(std::abs(uq18_rho - 398.0) < 30.0 && "2001 UQ18 density mismatch!");
 
+  hot_jupiter::SaturnRingResonanceAnalysisModel saturn_ring_model;
+  double r_mimas21 = saturn_ring_model.inner_lindblad_resonance_km(185539.0, 2, 1);
+  double r_janus76 = saturn_ring_model.inner_lindblad_resonance_km(151460.0, 7, 6);
+  double r_fring = saturn_ring_model.shepherd_torque_balance_km();
+  std::cout << "--> Saturn Ring Resonances: Mimas 2:1 = " << r_mimas21 << " km, Janus 7:6 = " << r_janus76 << " km, F-Ring = " << r_fring << " km" << std::endl;
+  assert(std::abs(r_mimas21 - 117580.0) < 1000.0 && "Mimas 2:1 ILR mismatch!");
+  assert(std::abs(r_janus76 - 136770.0) < 500.0 && "Janus 7:6 ILR mismatch!");
+  assert(std::abs(r_fring - 140220.0) < 500.0 && "F-ring shepherd torque balance mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
