@@ -936,6 +936,24 @@ class PlutoCharonMutual:
         return m_charon_kg / m_pluto_kg
 
 
+class ErisDysnomia:
+
+    def orbital_period_days(self,
+                            a_km=37350.0,
+                            m_eris_kg=1.66e22,
+                            m_dysnomia_kg=1.0e20):
+        g_const = 6.67430e-11
+        a_m = a_km * 1000.0
+        m_total = m_eris_kg + m_dysnomia_kg
+        p_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g_const * m_total))
+        return p_sec / 86400.0
+
+    def eris_bulk_density_kg_m3(self, m_eris_kg=1.66e22, r_eris_km=1163.0):
+        r_m = r_eris_km * 1000.0
+        volume_m3 = (4.0 / 3.0) * np.pi * (r_m**3)
+        return m_eris_kg / volume_m3
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -948,6 +966,7 @@ __all__ = [
     "EG138Binary",
     "EnceladusTidalAnalysis",
     "EnceladusTidalOcean",
+    "ErisDysnomia",
     "FB128Binary",
     "FM185Binary",
     "GZ31Binary",

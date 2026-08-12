@@ -14,6 +14,7 @@ from hot_jupiter.solar_system import (
     EG138Binary,
     EnceladusTidalAnalysis,
     EnceladusTidalOcean,
+    ErisDysnomia,
     FB128Binary,
     FM185Binary,
     GZ31Binary,
@@ -411,3 +412,9 @@ def test_pluto_charon_mutual():
     pc = PlutoCharonMutual()
     period = pc.orbital_period_days()
     assert abs(period - 6.38723) < 0.001, "Pluto-Charon period mismatch"
+
+
+def test_eris_dysnomia():
+    ed = ErisDysnomia()
+    period = ed.orbital_period_days()
+    assert abs(period - 15.7232) < 0.01, "Eris-Dysnomia period mismatch"
