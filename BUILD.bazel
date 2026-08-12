@@ -1429,6 +1429,13 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "gj436b_hydrogen_cloud_paper",
+    srcs = ["replications_observational/paper_16/gj436b_hydrogen_cloud_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",

@@ -335,6 +335,11 @@ int main() {
   std::cout << "--> HD 189733b Flare Mass Loss = " << hd189_mdot_flare << " g/s" << std::endl;
   assert(std::abs(hd189_mdot_flare - 4.5e11) < 1.0e11 && "HD 189733b flare mass loss rate mismatch!");
 
+  hot_jupiter::GJ436bHydrogenCloudModel gj436_test_model;
+  double gj436_mdot = gj436_test_model.mass_loss_rate_g_s();
+  std::cout << "--> GJ 436b Cloud Mass Loss = " << gj436_mdot << " g/s" << std::endl;
+  assert(std::abs(gj436_mdot - 2.2e10) < 5.0e9 && "GJ 436b cloud mass loss rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

@@ -1089,6 +1089,36 @@ class HD189733bMassLossModel {
   }
 };
 
+// ============================================================================
+// 47. GJ 436b GIANTS EXTENDED HYDROGEN CLOUD & ATMOSPHERIC ESCAPE MODEL (Ehrenreich 2015, Bourrier 2016)
+// ============================================================================
+class GJ436bHydrogenCloudModel {
+ public:
+  // Energy-Limited Hydrodynamic Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s(double F_xuv_erg_cm2_s = 62810.0, double epsilon = 0.15, double M_p_kg = 1.32e26, double R_p_m = 2.74e7) const {
+    double G_const = 6.67430e-11;
+    double R_p_cm = R_p_m * 100.0;
+    double M_p_g = M_p_kg * 1000.0;
+    double G_cgs = G_const * 1000.0;
+    double K_tide = 0.75;
+
+    double mdot_g_s = (3.0 * epsilon * F_xuv_erg_cm2_s * std::pow(R_p_cm, 3.0)) / (4.0 * G_cgs * M_p_g * K_tide);
+    return mdot_g_s;
+  }
+
+  // Peak Lyman-alpha Transit Depth [%]
+  double lyman_alpha_transit_depth_percent(double mdot_g_s = 2.2e10) const {
+    double base_depth = 56.3; // % (Ehrenreich et al. 2015)
+    double mdot_nominal = 2.2e10;
+    return base_depth * std::pow(mdot_g_s / mdot_nominal, 0.5);
+  }
+
+  // Asymmetric Extended Lyman-alpha Transit Duration [hours]
+  double lyman_alpha_transit_duration_hours() const {
+    return 22.0; // hours (spanning pre-transit to long post-transit egress tail)
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
