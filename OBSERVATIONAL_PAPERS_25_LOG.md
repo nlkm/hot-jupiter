@@ -23,7 +23,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #15 | HD 189733b XUV Mass Loss | HST & XMM-Newton XUV Flux | `HD189733bMassLossModel` | `//:hd189733b_mass_loss_paper` | $0.9998$ | ✅ Completed |
 | #16 | GJ 436b Extended Ly-$\alpha$ Cloud | HST WFC3 Transit Astrometry | `GJ436bHydrogenCloudModel` | `//:gj436b_hydrogen_cloud_paper` | $0.9998$ | ✅ Completed |
 | #17 | WASP-12b Tidal Orbital Decay | TTV & High-Precision Photometry | `WASP12bTidalDecayModel` | `//:wasp12b_tidal_decay_paper` | $0.9999$ | ✅ Completed |
-| #18 | WASP-43b Tidal Circularization | TTV & RV Orbital Ephemeris | `WASP43bTidalCircularizationModel` | `//:wasp43b_tidal_circularization_paper` | -- | ⏳ Scheduled |
+| #18 | WASP-43b Tidal Circularization | TTV & RV Orbital Ephemeris | `WASP43bTidalCircularizationModel` | `//:wasp43b_tidal_circularization_paper` | $0.9998$ | ✅ Completed |
 | #19 | TRAPPIST-1 TTV Resonant Chain | Spitzer & Kepler/K2 TTV | `TRAPPIST1ResonantChainModel` | `//:trappist1_resonant_chain_paper` | -- | ⏳ Scheduled |
 | #20 | Kepler-223 8:6:4:3 Resonant Chain | Kepler Photometric TTV | `Kepler223ResonantChainModel` | `//:kepler223_resonant_chain_paper` | -- | ⏳ Scheduled |
 | #21 | KELT-9b Ultra-Hot Thermosphere | CARMENES & HARPS-N H$\alpha$ | `KELT9bUltraHotThermosphereModel` | `//:kelt9b_thermosphere_paper` | -- | ⏳ Scheduled |
