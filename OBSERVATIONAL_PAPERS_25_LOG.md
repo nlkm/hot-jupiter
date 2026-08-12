@@ -21,7 +21,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #13 | Haumea Triaxial Ellipsoid & Ring | Occultation & HST Astrometry | `HaumeaEllipsoidRingModel` | `//:haumea_ellipsoid_ring_paper` | $0.9998$ | ✅ Completed |
 | #14 | HD 209458b Hydrodynamic Escape | HST STIS Ly-$\alpha$ & H$\alpha$ | `HD209458bPhotoevaporationModel` | `//:hd209458b_photoevaporation_paper` | $0.9998$ | ✅ Completed |
 | #15 | HD 189733b XUV Mass Loss | HST & XMM-Newton XUV Flux | `HD189733bMassLossModel` | `//:hd189733b_mass_loss_paper` | $0.9998$ | ✅ Completed |
-| #16 | GJ 436b Extended Ly-$\alpha$ Cloud | HST WFC3 Transit Astrometry | `GJ436bHydrogenCloudModel` | `//:gj436b_hydrogen_cloud_paper` | -- | ⏳ Scheduled |
+| #16 | GJ 436b Extended Ly-$\alpha$ Cloud | HST WFC3 Transit Astrometry | `GJ436bHydrogenCloudModel` | `//:gj436b_hydrogen_cloud_paper` | $0.9998$ | ✅ Completed |
 | #17 | WASP-12b Tidal Orbital Decay | TTV & High-Precision Photometry | `WASP12bTidalDecayModel` | `//:wasp12b_tidal_decay_paper` | -- | ⏳ Scheduled |
 | #18 | WASP-43b Tidal Circularization | TTV & RV Orbital Ephemeris | `WASP43bTidalCircularizationModel` | `//:wasp43b_tidal_circularization_paper` | -- | ⏳ Scheduled |
 | #19 | TRAPPIST-1 TTV Resonant Chain | Spitzer & Kepler/K2 TTV | `TRAPPIST1ResonantChainModel` | `//:trappist1_resonant_chain_paper` | -- | ⏳ Scheduled |
