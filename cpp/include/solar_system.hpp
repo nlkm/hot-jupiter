@@ -891,6 +891,39 @@ class RyuguYarkovskyModel {
   }
 };
 
+// ============================================================================
+// 40. COMET 67P OUTGASSING & NON-GRAVITATIONAL MODEL (Godard 2017, Kramer 2017)
+// ============================================================================
+class Comet67POutgassingModel {
+ public:
+  // Marsden g(r_h) Sublimation Scaling Function normalized so g(1 AU) = 1.0
+  double marsden_g_function(double r_h_AU) const {
+    double r0 = 2.808;
+    double m = 2.15;
+    double n = 5.09;
+    double k = 4.614;
+    double alpha = 0.1113;
+
+    double ratio = r_h_AU / r0;
+    double g_unnorm = alpha * std::pow(ratio, -m) * std::pow(1.0 + std::pow(ratio, n), -k);
+
+    double ratio_1 = 1.0 / r0;
+    double g_1 = alpha * std::pow(ratio_1, -m) * std::pow(1.0 + std::pow(ratio_1, n), -k);
+
+    return g_unnorm / g_1;
+  }
+
+  // Radial Non-Gravitational Acceleration A1 * g(r_h) [AU/day^2]
+  double radial_acceleration_AU_day2(double r_h_AU = 1.243, double A1 = 3.25e-8) const {
+    return A1 * marsden_g_function(r_h_AU);
+  }
+
+  // Transverse Non-Gravitational Acceleration A2 * g(r_h) [AU/day^2]
+  double transverse_acceleration_AU_day2(double r_h_AU = 1.243, double A2 = 0.82e-8) const {
+    return A2 * marsden_g_function(r_h_AU);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

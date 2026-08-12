@@ -300,6 +300,11 @@ int main() {
   std::cout << "--> Ryugu Yarkovsky Drift: Rate = " << ryugu_drift << " m/yr" << std::endl;
   assert(std::abs(ryugu_drift - (-215.0)) < 5.0 && "Ryugu Yarkovsky drift rate mismatch!");
 
+  hot_jupiter::Comet67POutgassingModel comet_test_model;
+  double a1_val = comet_test_model.radial_acceleration_AU_day2(1.0);
+  std::cout << "--> Comet 67P Outgassing: A1 * g(1 AU) = " << a1_val << " AU/day^2" << std::endl;
+  assert(std::abs(a1_val - 3.25e-8) < 1.0e-9 && "Comet 67P outgassing acceleration mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
