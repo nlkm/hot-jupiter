@@ -7,6 +7,7 @@ from hot_jupiter.solar_system import (
     AsteroidDynamics,
     CetoPhorcysBinary,
     CometDynamics,
+    EG138Binary,
     EnceladusTidalOcean,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -143,3 +144,11 @@ def test_oj67_binary():
     rho_kg_m3 = oj67.system_bulk_density_kg_m3()
     assert abs(p_days - 380.0) < 10.0, "2000 OJ67 orbital period mismatch"
     assert abs(rho_kg_m3 - 450.0) < 30.0, "2000 OJ67 bulk density mismatch"
+
+
+def test_eg138_binary():
+    eg138 = EG138Binary()
+    p_days = eg138.orbital_period_days()
+    rho_kg_m3 = eg138.system_bulk_density_kg_m3()
+    assert abs(p_days - 360.0) < 45.0, "2000 EG138 orbital period mismatch"
+    assert abs(rho_kg_m3 - 450.0) < 30.0, "2000 EG138 bulk density mismatch"
