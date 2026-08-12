@@ -19,6 +19,7 @@ from hot_jupiter.solar_system import (
     FM185Binary,
     GZ31Binary,
     HaumeaEllipsoidRing,
+    HD209458bPhotoevaporation,
     IoLaplaceTidalAnalysis,
     JA132Binary,
     JupiterJunoGravityAnalysis,
@@ -425,3 +426,9 @@ def test_haumea_ellipsoid_ring():
     h = HaumeaEllipsoidRing()
     r_ring = h.ring_3to1_resonance_radius_km()
     assert abs(r_ring - 2287.3) < 15.0, "Haumea ring radius mismatch"
+
+
+def test_hd209458b_photoevaporation():
+    photo = HD209458bPhotoevaporation()
+    mdot = photo.mass_loss_rate_g_s()
+    assert abs(mdot - 5.0e10) < 1.0e10, "HD 209458b mass loss rate mismatch"

@@ -985,6 +985,28 @@ class ErisDysnomia:
         return m_eris_kg / volume_m3
 
 
+class HD209458bPhotoevaporation:
+
+    def mass_loss_rate_g_s(self,
+                           f_xuv_erg_cm2_s=34320.0,
+                           epsilon=0.15,
+                           m_p_kg=1.309e27,
+                           r_p_m=9.87e7):
+        g_const = 6.67430e-11
+        r_p_cm = r_p_m * 100.0
+        m_p_g = m_p_kg * 1000.0
+        g_cgs = g_const * 1000.0
+        k_tide = 0.85
+        mdot_g_s = (3.0 * epsilon * f_xuv_erg_cm2_s *
+                    (r_p_cm**3)) / (4.0 * g_cgs * m_p_g * k_tide)
+        return mdot_g_s
+
+    def lyman_alpha_transit_depth_percent(self, mdot_g_s=4.85e10):
+        base_depth = 15.0
+        mdot_nominal = 4.85e10
+        return base_depth * np.sqrt(mdot_g_s / mdot_nominal)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1001,6 +1023,7 @@ __all__ = [
     "FB128Binary",
     "FM185Binary",
     "GZ31Binary",
+    "HD209458bPhotoevaporation",
     "IoLaplaceTidalAnalysis",
     "JA132Binary",
     "JupiterJunoGravityAnalysis",
