@@ -1253,6 +1253,31 @@ class KELT9bUltraHotThermosphereModel {
   }
 };
 
+// ============================================================================
+// 53. HAT-P-11b METASTABLE HELIUM He I 10830A ESCAPE MODEL (Spake 2018, Mansfield 2018, Allart 2018)
+// ============================================================================
+class HATP11bHeliumEscapeModel {
+ public:
+  // Photoevaporative Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s(double F_euv_erg_s_cm2 = 1.2e4, double M_p_kg = 1.54e26, double R_p_m = 3.02e7) const {
+    double base_loss = 2.50e10; // g/s (Mansfield et al. 2018)
+    double nominal_flux = 1.2e4;
+    return base_loss * (F_euv_erg_s_cm2 / nominal_flux);
+  }
+
+  // Metastable Helium He I 10830A Excess Absorption Depth [%]
+  double hei_10830_excess_depth_percent(double F_euv_erg_s_cm2 = 1.2e4) const {
+    double base_depth = 1.08; // % (HST WFC3 / Keck HIRES)
+    double nominal_flux = 1.2e4;
+    return base_depth * (F_euv_erg_s_cm2 / nominal_flux);
+  }
+
+  // Escaping Helium Cloud Outer Tail Radius [R_p]
+  double helium_tail_radius_rp() const {
+    return 2.5; // R_p (Allart et al. 2018)
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

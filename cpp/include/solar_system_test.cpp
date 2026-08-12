@@ -365,6 +365,11 @@ int main() {
   std::cout << "--> KELT-9b H-alpha Excess Depth = " << kelt_depth << " %" << std::endl;
   assert(std::abs(kelt_depth - 1.15) < 0.2 && "KELT-9b H-alpha absorption depth mismatch!");
 
+  hot_jupiter::HATP11bHeliumEscapeModel hat_test_model;
+  double hat_depth = hat_test_model.hei_10830_excess_depth_percent();
+  std::cout << "--> HAT-P-11b He I 10830A Excess Depth = " << hat_depth << " %" << std::endl;
+  assert(std::abs(hat_depth - 1.08) < 0.2 && "HAT-P-11b helium absorption depth mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
