@@ -1025,6 +1025,33 @@ class HaumeaEllipsoidRingModel {
   }
 };
 
+// ============================================================================
+// 45. HD 209458b HYDRODYNAMIC ESCAPE & PHOTOEVAPORATION MODEL (Vidal-Madjar 2003, Murray-Clay 2009)
+// ============================================================================
+class HD209458bPhotoevaporationModel {
+ public:
+  // Energy-Limited Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s(double F_xuv_erg_cm2_s = 34320.0, double epsilon = 0.15, double M_p_kg = 1.309e27, double R_p_m = 9.87e7) const {
+    double G_const = 6.67430e-11;
+    double R_p_cm = R_p_m * 100.0;
+    double M_p_g = M_p_kg * 1000.0;
+    double G_cgs = G_const * 1000.0; // cm^3 / (g s^2)
+
+    // Tidal correction K_tide ~ 0.85 for HD 209458b at 0.047 AU
+    double K_tide = 0.85;
+    double mdot_g_s = (3.0 * epsilon * F_xuv_erg_cm2_s * std::pow(R_p_cm, 3.0)) / (4.0 * G_cgs * M_p_g * K_tide);
+    return mdot_g_s;
+  }
+
+  // STIS Lyman-alpha Transit Depth [%]
+  double lyman_alpha_transit_depth_percent(double mdot_g_s = 4.85e10) const {
+    // Calibration against HST STIS observations
+    double base_depth = 15.0; // %
+    double mdot_nominal = 4.85e10;
+    return base_depth * std::pow(mdot_g_s / mdot_nominal, 0.5);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

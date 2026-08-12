@@ -325,6 +325,11 @@ int main() {
   std::cout << "--> Haumea Ellipsoid & Ring: Ring Radius = " << r_ring << " km" << std::endl;
   assert(std::abs(r_ring - 2287.3) < 10.0 && "Haumea ring radius mismatch!");
 
+  hot_jupiter::HD209458bPhotoevaporationModel photo_test_model;
+  double photo_mdot = photo_test_model.mass_loss_rate_g_s();
+  std::cout << "--> HD 209458b Photoevaporation: Mass Loss = " << photo_mdot << " g/s" << std::endl;
+  assert(std::abs(photo_mdot - 5.0e10) < 1.0e10 && "HD 209458b mass loss rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
