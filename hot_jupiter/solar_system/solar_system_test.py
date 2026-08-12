@@ -33,6 +33,7 @@ from hot_jupiter.solar_system import (
     QY297Binary,
     RelativisticPrecession,
     RN43Binary,
+    SaturnCassiniGravityAnalysis,
     SaturnRingLindbladResonance,
     SaturnRingResonances,
     SeasonalYarkovsky,
@@ -358,3 +359,13 @@ def test_jupiter_juno_gravity_analysis():
     assert abs(j2 - 14696.57) < 50.0, "Jupiter J2 mismatch"
     assert abs(j4 - (-586.61)) < 5.0, "Jupiter J4 mismatch"
     assert abs(j6 - 34.20) < 1.0, "Jupiter J6 mismatch"
+
+
+def test_saturn_cassini_gravity_analysis():
+    sg = SaturnCassiniGravityAnalysis()
+    j2 = sg.j2_harmonic_1e6()
+    j4 = sg.j4_harmonic_1e6()
+    j6 = sg.j6_harmonic_1e6()
+    assert abs(j2 - 16290.71) < 50.0, "Saturn J2 mismatch"
+    assert abs(j4 - (-935.83)) < 5.0, "Saturn J4 mismatch"
+    assert abs(j6 - 86.14) < 1.0, "Saturn J6 mismatch"

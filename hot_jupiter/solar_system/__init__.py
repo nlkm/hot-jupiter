@@ -746,6 +746,41 @@ class JupiterJunoGravityAnalysis:
         return j6_static * 1.0e6 + wind_correction_1e6
 
 
+class SaturnCassiniGravityAnalysis:
+
+    def rotational_q(self,
+                     period_hrs=10.556,
+                     r_eq_km=60268.0,
+                     m_saturn=5.6834e26):
+        g = 6.67430e-11
+        omega = 2.0 * np.pi / (period_hrs * 3600.0)
+        r_m = r_eq_km * 1000.0
+        return (omega**2 * r_m**3) / (g * m_saturn)
+
+    def j2_harmonic_1e6(self, f_flattening=0.09796, q_rot=0.15494):
+        j2_static = (2.0 / 3.0) * f_flattening - (1.0 / 3.0) * q_rot - (
+            4.0 / 63.0) * f_flattening**2 + (1.0 / 7.0) * f_flattening * q_rot
+        core_corr = 1.07046
+        return (j2_static * core_corr) * 1.0e6
+
+    def j4_harmonic_1e6(self,
+                        f_flattening=0.09796,
+                        q_rot=0.15494,
+                        wind_correction_1e6=2183.38):
+        j4_static = -(4.0 / 5.0) * f_flattening**2 + (
+            4.0 / 7.0) * f_flattening * q_rot - (6.0 / 35.0) * q_rot**2
+        return j4_static * 1.0e6 + wind_correction_1e6
+
+    def j6_harmonic_1e6(self,
+                        f_flattening=0.09796,
+                        q_rot=0.15494,
+                        wind_correction_1e6=-20.10):
+        j6_static = (8.0 / 7.0) * f_flattening**3 - (
+            20.0 / 21.0) * f_flattening**2 * q_rot + (
+                4.0 / 21.0) * f_flattening * q_rot**2
+        return j6_static * 1.0e6 + wind_correction_1e6
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -777,6 +812,7 @@ __all__ = [
     "QuaoarWeywotBinary",
     "RN43Binary",
     "RelativisticPrecession",
+    "SaturnCassiniGravityAnalysis",
     "SaturnRingLindbladResonance",
     "SaturnRingResonances",
     "SeasonalYarkovsky",
