@@ -34,6 +34,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    UQ18Binary,
     UX10Binary,
     VT130Binary,
     WC19Binary,
@@ -306,3 +307,11 @@ def test_ca101_binary():
     rho_kg_m3 = ca101.system_bulk_density_kg_m3()
     assert abs(p_days - 345.0) < 10.0, "2000 CA101 orbital period mismatch"
     assert abs(rho_kg_m3 - 613.0) < 40.0, "2000 CA101 bulk density mismatch"
+
+
+def test_uq18_binary():
+    uq18 = UQ18Binary()
+    p_days = uq18.orbital_period_days()
+    rho_kg_m3 = uq18.system_bulk_density_kg_m3()
+    assert abs(p_days - 165.0) < 5.0, "2001 UQ18 orbital period mismatch"
+    assert abs(rho_kg_m3 - 398.0) < 30.0, "2001 UQ18 bulk density mismatch"
