@@ -1223,6 +1223,21 @@ class WASP121bDeformabilityRLOF:
         return 1200.0
 
 
+class LTT9779bUltraHotNeptune:
+
+    def geometric_albedo(self):
+        return 0.80
+
+    def secondary_eclipse_depth_ppm(self):
+        return 225.0
+
+    def mass_loss_rate_g_s(self):
+        return 1.80e10
+
+    def day_side_temperature_k(self):
+        return 2300.0
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1251,6 +1266,7 @@ __all__ = [
     "KP76Binary",
     "KS38Binary",
     "Kepler223ResonantChain",
+    "LTT9779bUltraHotNeptune",
     "LaplaceLagrangeSecular",
     "MercuryRelativisticPrecession",
     "MoonTidalDynamics",

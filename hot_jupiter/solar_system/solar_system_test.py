@@ -31,6 +31,7 @@ from hot_jupiter.solar_system import (
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
+    LTT9779bUltraHotNeptune,
     MercuryRelativisticPrecession,
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
@@ -503,3 +504,9 @@ def test_wasp121b_deformability_rlof():
     w = WASP121bDeformabilityRLOF()
     depth = w.nuv_fe_ii_excess_depth_percent()
     assert abs(depth - 0.85) < 0.2, "WASP-121b Fe II NUV depth mismatch"
+
+
+def test_ltt9779b_ultra_hot_neptune():
+    l = LTT9779bUltraHotNeptune()
+    albedo = l.geometric_albedo()
+    assert abs(albedo - 0.80) < 0.1, "LTT 9779b geometric albedo mismatch"
