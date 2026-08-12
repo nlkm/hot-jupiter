@@ -95,6 +95,13 @@ int main() {
   assert(std::abs(teh_p - 828.7) < 5.0 && "Teharonhiawako orbital period mismatch!");
   assert(std::abs(teh_rho - 620.0) < 30.0 && "Teharonhiawako density mismatch!");
 
+  hot_jupiter::KS38BinaryModel ks38_model;
+  double ks38_p = ks38_model.orbital_period_days();
+  double ks38_rho = ks38_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2000 KS38 Orbital Period: " << ks38_p << " days, Density: " << ks38_rho << " kg/m^3" << std::endl;
+  assert(std::abs(ks38_p - 450.0) < 3.0 && "2000 KS38 orbital period mismatch!");
+  assert(std::abs(ks38_rho - 375.0) < 30.0 && "2000 KS38 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
