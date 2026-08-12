@@ -25,6 +25,7 @@ from hot_jupiter.solar_system import (
     IoLaplaceTidalAnalysis,
     JA132Binary,
     JupiterJunoGravityAnalysis,
+    KELT9bUltraHotThermosphere,
     Kepler223ResonantChain,
     KP76Binary,
     KS38Binary,
@@ -475,3 +476,9 @@ def test_kepler223_resonant_chain():
     k = Kepler223ResonantChain()
     ttv = k.ttv_chopping_amplitude_minutes()
     assert abs(ttv - 14.2) < 1.0, "Kepler-223 TTV chopping amplitude mismatch"
+
+
+def test_kelt9b_ultra_hot_thermosphere():
+    k = KELT9bUltraHotThermosphere()
+    depth = k.halpha_excess_depth_percent()
+    assert abs(depth - 1.15) < 0.2, "KELT-9b H-alpha excess depth mismatch"

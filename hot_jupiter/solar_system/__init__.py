@@ -1144,6 +1144,25 @@ class Kepler223ResonantChain:
         return base_mass * (ttv_amp_min / nominal_amp)
 
 
+class KELT9bUltraHotThermosphere:
+
+    def scale_height_km(self, t_therm_k=10000.0, mu_amu=0.5, g_ms2=20.0):
+        k_b = 1.380649e-23
+        m_u = 1.660539e-27
+        h_m = (k_b * t_therm_k) / (mu_amu * m_u * g_ms2)
+        return h_m / 1000.0
+
+    def thermosphere_radius_ratio(self, t_therm_k=10000.0):
+        base_ratio = 1.32
+        nominal_t = 10000.0
+        return 1.0 + (base_ratio - 1.0) * (t_therm_k / nominal_t)
+
+    def halpha_excess_depth_percent(self, t_therm_k=10000.0):
+        base_depth = 1.15
+        nominal_t = 10000.0
+        return base_depth * (t_therm_k / nominal_t)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1167,6 +1186,7 @@ __all__ = [
     "JA132Binary",
     "JupiterJunoGravityAnalysis",
     "KBOBinary",
+    "KELT9bUltraHotThermosphere",
     "KP76Binary",
     "KS38Binary",
     "Kepler223ResonantChain",
