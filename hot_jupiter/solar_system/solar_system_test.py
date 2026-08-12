@@ -8,6 +8,7 @@ from hot_jupiter.solar_system import (
     CetoPhorcysBinary,
     CometDynamics,
     EnceladusTidalOcean,
+    KS38Binary,
     LaplaceLagrangeSecular,
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
@@ -125,3 +126,11 @@ def test_teharonhiawako_binary():
     rho_kg_m3 = teh.system_bulk_density_kg_m3()
     assert abs(p_days - 828.7) < 5.0, "Teharonhiawako orbital period mismatch"
     assert abs(rho_kg_m3 - 620.0) < 30.0, "Teharonhiawako bulk density mismatch"
+
+
+def test_ks38_binary():
+    ks38 = KS38Binary()
+    p_days = ks38.orbital_period_days()
+    rho_kg_m3 = ks38.system_bulk_density_kg_m3()
+    assert abs(p_days - 450.0) < 3.0, "2000 KS38 orbital period mismatch"
+    assert abs(rho_kg_m3 - 375.0) < 30.0, "2000 KS38 bulk density mismatch"
