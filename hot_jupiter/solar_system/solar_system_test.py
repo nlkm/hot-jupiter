@@ -15,6 +15,7 @@ from hot_jupiter.solar_system import (
     FB128Binary,
     FM185Binary,
     GZ31Binary,
+    IoLaplaceTidalAnalysis,
     JA132Binary,
     KP76Binary,
     KS38Binary,
@@ -338,3 +339,11 @@ def test_enceladus_tidal_analysis():
                15.8) < 1.0, "Enceladus tidal dissipation power mismatch"
     assert abs(q_cond_gw -
                29.3) < 2.0, "Enceladus conductive heat flux mismatch"
+
+
+def test_io_laplace_tidal_analysis():
+    io = IoLaplaceTidalAnalysis()
+    p_tw = io.io_tidal_power_tw()
+    f_w_m2 = io.surface_heat_flux_w_m2(p_tw)
+    assert abs(p_tw - 105.0) < 1.0, "Io tidal power mismatch"
+    assert abs(f_w_m2 - 2.52) < 0.1, "Io surface heat flux mismatch"

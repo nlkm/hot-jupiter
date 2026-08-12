@@ -685,6 +685,28 @@ class EnceladusTidalAnalysis:
         return (flux_w_m2 * area_m2) / 1.0e9
 
 
+class IoLaplaceTidalAnalysis:
+
+    def io_tidal_power_tw(self,
+                          im_k2=0.016876,
+                          e_io=0.0041,
+                          a_io_km=421700.0,
+                          m_jupiter=1.89813e27,
+                          r_io_km=1821.6):
+        g = 6.67430e-11
+        a_m = a_io_km * 1000.0
+        r_m = r_io_km * 1000.0
+        n = np.sqrt(g * m_jupiter / (a_m**3))
+        power_w = (21.0 / 2.0) * im_k2 * (n * g * (m_jupiter**2) * (r_m**5) *
+                                          (e_io**2)) / (a_m**6)
+        return power_w / 1.0e12
+
+    def surface_heat_flux_w_m2(self, power_tw=105.0, r_io_km=1821.6):
+        r_m = r_io_km * 1000.0
+        area_m2 = 4.0 * np.pi * (r_m**2)
+        return (power_tw * 1.0e12) / area_m2
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -698,6 +720,7 @@ __all__ = [
     "FB128Binary",
     "FM185Binary",
     "GZ31Binary",
+    "IoLaplaceTidalAnalysis",
     "JA132Binary",
     "KP76Binary",
     "KS38Binary",
