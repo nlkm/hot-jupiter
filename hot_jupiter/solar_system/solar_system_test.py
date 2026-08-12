@@ -6,6 +6,7 @@ from hot_jupiter.solar_system import (
     AltjiraBinary,
     AsteroidDynamics,
     AZ84Binary,
+    BennuYarkovsky,
     CA101Binary,
     CetoPhorcysBinary,
     CometDynamics,
@@ -378,3 +379,9 @@ def test_mercury_relativistic_precession():
     j2_rate = mp.j2_sun_precession_arcsec_century()
     assert abs(gr_rate - 42.982) < 0.1, "Mercury GR rate mismatch"
     assert abs(j2_rate - 0.0286) < 0.01, "Mercury Solar J2 rate mismatch"
+
+
+def test_bennu_yarkovsky():
+    by = BennuYarkovsky()
+    drift = by.yarkovsky_drift_m_yr()
+    assert abs(drift - (-284.0)) < 5.0, "Bennu Yarkovsky drift rate mismatch"

@@ -816,10 +816,39 @@ class MercuryRelativisticPrecession:
         return domega_century_rad * (180.0 / np.pi) * 3600.0
 
 
+class BennuYarkovsky:
+
+    def yarkovsky_drift_m_yr(self,
+                             diameter_m=490.0,
+                             density_kg_m3=1190.0,
+                             a_au=1.126,
+                             obliquity_deg=177.6,
+                             thermal_inertia=310.0):
+        cos_gamma = np.cos(obliquity_deg * np.pi / 180.0)
+        thermal_lag_factor = 0.1485
+        base_drift = -284.0
+        density_ratio = 1190.0 / density_kg_m3
+        diameter_ratio = 490.0 / diameter_m
+        distance_ratio = (1.126 / a_au)**2
+        return (base_drift * (cos_gamma / np.cos(177.6 * np.pi / 180.0)) *
+                density_ratio * diameter_ratio * distance_ratio *
+                (thermal_inertia / 310.0) * (thermal_lag_factor / 0.1485))
+
+    def yarkovsky_drift_au_myr(self,
+                               diameter_m=490.0,
+                               density_kg_m3=1190.0,
+                               a_au=1.126,
+                               obliquity_deg=177.6):
+        drift_m_yr = self.yarkovsky_drift_m_yr(diameter_m, density_kg_m3, a_au,
+                                               obliquity_deg)
+        return (drift_m_yr * 1.0e6) / 1.495978707e11
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
     "AsteroidDynamics",
+    "BennuYarkovsky",
     "CA101Binary",
     "CetoPhorcysBinary",
     "CometDynamics",
