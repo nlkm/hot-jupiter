@@ -59,6 +59,7 @@ from hot_jupiter.solar_system import (
     VT130Binary,
     WASP12bTidalDecay,
     WASP43bTidalCircularization,
+    WASP121bDeformabilityRLOF,
     WC19Binary,
     YN81Binary,
 )
@@ -496,3 +497,9 @@ def test_toi560b_sub_neptune_escape():
     t = TOI560bSubNeptuneEscape()
     depth = t.hei_10830_excess_depth_percent()
     assert abs(depth - 0.68) < 0.2, "TOI-560b helium absorption depth mismatch"
+
+
+def test_wasp121b_deformability_rlof():
+    w = WASP121bDeformabilityRLOF()
+    depth = w.nuv_fe_ii_excess_depth_percent()
+    assert abs(depth - 0.85) < 0.2, "WASP-121b Fe II NUV depth mismatch"

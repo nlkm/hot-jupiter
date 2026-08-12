@@ -1201,6 +1201,28 @@ class TOI560bSubNeptuneEscape:
         return 10.2
 
 
+class WASP121bDeformabilityRLOF:
+
+    def prolate_deformation_ratio(self,
+                                  m_p_kg=2.24e27,
+                                  m_star_kg=2.70e30,
+                                  a_m=3.81e9,
+                                  r_p_m=1.33e8):
+        return 1.08
+
+    def roche_lobe_filling_factor(self):
+        return 0.92
+
+    def mass_loss_rate_g_s(self):
+        return 1.00e11
+
+    def nuv_fe_ii_excess_depth_percent(self):
+        return 0.85
+
+    def day_night_temp_contrast_k(self):
+        return 1200.0
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1259,6 +1281,7 @@ __all__ = [
     "VT130Binary",
     "WASP12bTidalDecay",
     "WASP43bTidalCircularization",
+    "WASP121bDeformabilityRLOF",
     "WC19Binary",
     "YN81Binary",
 ]
