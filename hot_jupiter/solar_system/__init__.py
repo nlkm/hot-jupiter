@@ -1007,6 +1007,42 @@ class HD209458bPhotoevaporation:
         return base_depth * np.sqrt(mdot_g_s / mdot_nominal)
 
 
+class HD189733bMassLoss:
+
+    def quiescent_mass_loss_rate_g_s(self,
+                                     f_xuv_quiescent=93250.0,
+                                     epsilon=0.15,
+                                     m_p_kg=2.146e27,
+                                     r_p_m=8.13e7):
+        g_const = 6.67430e-11
+        r_p_cm = r_p_m * 100.0
+        m_p_g = m_p_kg * 1000.0
+        g_cgs = g_const * 1000.0
+        k_tide = 0.82
+        mdot_g_s = (3.0 * epsilon * f_xuv_quiescent *
+                    (r_p_cm**3)) / (4.0 * g_cgs * m_p_g * k_tide)
+        return mdot_g_s
+
+    def flare_mass_loss_rate_g_s(self,
+                                 f_xuv_flare=874300.0,
+                                 epsilon=0.15,
+                                 m_p_kg=2.146e27,
+                                 r_p_m=8.13e7):
+        g_const = 6.67430e-11
+        r_p_cm = r_p_m * 100.0
+        m_p_g = m_p_kg * 1000.0
+        g_cgs = g_const * 1000.0
+        k_tide = 0.82
+        mdot_g_s = (3.0 * epsilon * f_xuv_flare *
+                    (r_p_cm**3)) / (4.0 * g_cgs * m_p_g * k_tide)
+        return mdot_g_s
+
+    def flare_lyman_alpha_transit_depth_percent(self, mdot_flare_g_s=4.5e11):
+        base_depth = 14.4
+        mdot_nominal = 4.5e11
+        return base_depth * np.sqrt(mdot_flare_g_s / mdot_nominal)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1023,6 +1059,7 @@ __all__ = [
     "FB128Binary",
     "FM185Binary",
     "GZ31Binary",
+    "HD189733bMassLoss",
     "HD209458bPhotoevaporation",
     "IoLaplaceTidalAnalysis",
     "JA132Binary",

@@ -19,6 +19,7 @@ from hot_jupiter.solar_system import (
     FM185Binary,
     GZ31Binary,
     HaumeaEllipsoidRing,
+    HD189733bMassLoss,
     HD209458bPhotoevaporation,
     IoLaplaceTidalAnalysis,
     JA132Binary,
@@ -432,3 +433,10 @@ def test_hd209458b_photoevaporation():
     photo = HD209458bPhotoevaporation()
     mdot = photo.mass_loss_rate_g_s()
     assert abs(mdot - 5.0e10) < 1.0e10, "HD 209458b mass loss rate mismatch"
+
+
+def test_hd189733b_mass_loss():
+    hd189 = HD189733bMassLoss()
+    mdot_flare = hd189.flare_mass_loss_rate_g_s()
+    assert abs(mdot_flare -
+               4.5e11) < 1.0e11, "HD 189733b flare mass loss rate mismatch"
