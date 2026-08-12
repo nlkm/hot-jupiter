@@ -940,6 +940,32 @@ class Comet67POutgassingModel {
   }
 };
 
+// ============================================================================
+// 42. PLUTO-CHARON MUTUAL BINARY & DENSITY MODEL (Stern 2015, Nimmo 2017)
+// ============================================================================
+class PlutoCharonMutualModel {
+ public:
+  // Orbital Period of Binary System [days]
+  double orbital_period_days(double a_km = 19596.0, double M_pluto_kg = 1.303e22, double M_charon_kg = 1.586e21) const {
+    double G_const = 6.67430e-11;
+    double a_m = a_km * 1000.0;
+    double M_total = M_pluto_kg + M_charon_kg;
+
+    double P_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G_const * M_total));
+    return P_sec / 86400.0;
+  }
+
+  // Barycenter Distance from Pluto Center [km]
+  double barycenter_distance_km(double a_km = 19596.0, double M_pluto_kg = 1.303e22, double M_charon_kg = 1.586e21) const {
+    return a_km * (M_charon_kg / (M_pluto_kg + M_charon_kg));
+  }
+
+  // Binary Mass Ratio M_charon / M_pluto
+  double mass_ratio(double M_pluto_kg = 1.303e22, double M_charon_kg = 1.586e21) const {
+    return M_charon_kg / M_pluto_kg;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

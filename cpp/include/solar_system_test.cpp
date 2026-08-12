@@ -310,6 +310,11 @@ int main() {
   std::cout << "--> Planet Nine Secular: Angle = " << p9_angle << " deg" << std::endl;
   assert(std::abs(p9_angle - 180.0) < 5.0 && "Planet Nine secular perihelion clustering mismatch!");
 
+  hot_jupiter::PlutoCharonMutualModel pc_test_model;
+  double pc_period = pc_test_model.orbital_period_days();
+  std::cout << "--> Pluto-Charon Mutual: Period = " << pc_period << " days" << std::endl;
+  assert(std::abs(pc_period - 6.38723) < 0.001 && "Pluto-Charon period mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
