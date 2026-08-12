@@ -12,6 +12,7 @@ from hot_jupiter.solar_system import (
     LaplaceLagrangeSecular,
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
+    OJ67Binary,
     PlanetaryRings,
     PlanetNineSecular,
     RelativisticPrecession,
@@ -134,3 +135,11 @@ def test_ks38_binary():
     rho_kg_m3 = ks38.system_bulk_density_kg_m3()
     assert abs(p_days - 450.0) < 3.0, "2000 KS38 orbital period mismatch"
     assert abs(rho_kg_m3 - 375.0) < 30.0, "2000 KS38 bulk density mismatch"
+
+
+def test_oj67_binary():
+    oj67 = OJ67Binary()
+    p_days = oj67.orbital_period_days()
+    rho_kg_m3 = oj67.system_bulk_density_kg_m3()
+    assert abs(p_days - 380.0) < 10.0, "2000 OJ67 orbital period mismatch"
+    assert abs(rho_kg_m3 - 450.0) < 30.0, "2000 OJ67 bulk density mismatch"
