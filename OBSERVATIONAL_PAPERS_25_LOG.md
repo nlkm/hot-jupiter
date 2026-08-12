@@ -17,7 +17,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #9 | Comet 67P Non-Gravitational Acceleration | Rosetta OSIRIS & RSI Tracking | `Comet67POutgassingModel` | `//:comet67p_outgassing_paper` | $0.9997$ | ✅ Completed |
 | #10 | Planet Nine KBO Clustering | Minor Planet Center E-TNO Data | `PlanetNineSecularModel` | `//:planet_nine_kbo_paper` | $0.9995$ | ✅ Completed |
 | #11 | Pluto-Charon Mutual Orbit & Density | New Horizons LORRI & HST | `PlutoCharonMutualModel` | `//:pluto_charon_mutual_paper` | $0.9999$ | ✅ Completed |
-| #12 | Eris-Dysnomia Mutual Orbit & Mass | ALMA & HST Astrometry | `ErisDysnomiaModel` | `//:eris_dysnomia_paper` | -- | ⏳ Scheduled |
+| #12 | Eris-Dysnomia Mutual Orbit & Mass | ALMA & HST Astrometry | `ErisDysnomiaModel` | `//:eris_dysnomia_paper` | $0.9998$ | ✅ Completed |
 | #13 | Haumea Triaxial Ellipsoid & Ring | Occultation & HST Astrometry | `HaumeaEllipsoidRingModel` | `//:haumea_ellipsoid_ring_paper` | -- | ⏳ Scheduled |
 | #14 | HD 209458b Hydrodynamic Escape | HST STIS Ly-$\alpha$ & H$\alpha$ | `HD209458bPhotoevaporationModel` | `//:hd209458b_photoevaporation_paper` | -- | ⏳ Scheduled |
 | #15 | HD 189733b XUV Mass Loss | HST & XMM-Newton XUV Flux | `HD189733bMassLossModel` | `//:hd189733b_mass_loss_paper` | -- | ⏳ Scheduled |
