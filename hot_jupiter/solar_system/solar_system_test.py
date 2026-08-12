@@ -17,6 +17,7 @@ from hot_jupiter.solar_system import (
     SaturnRingLindbladResonance,
     SeasonalYarkovsky,
     SilaNunamBinary,
+    TeharonhiawakoBinary,
 )
 
 
@@ -116,3 +117,11 @@ def test_sila_nunam_binary():
     rho_kg_m3 = sila.system_bulk_density_kg_m3()
     assert abs(p_days - 12.51) < 0.1, "Sila-Nunam orbital period mismatch"
     assert abs(rho_kg_m3 - 720.0) < 30.0, "Sila-Nunam bulk density mismatch"
+
+
+def test_teharonhiawako_binary():
+    teh = TeharonhiawakoBinary()
+    p_days = teh.orbital_period_days()
+    rho_kg_m3 = teh.system_bulk_density_kg_m3()
+    assert abs(p_days - 828.7) < 5.0, "Teharonhiawako orbital period mismatch"
+    assert abs(rho_kg_m3 - 620.0) < 30.0, "Teharonhiawako bulk density mismatch"
