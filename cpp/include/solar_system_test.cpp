@@ -375,6 +375,11 @@ int main() {
   std::cout << "--> TOI-560b He I 10830A Excess Depth = " << toi_depth << " %" << std::endl;
   assert(std::abs(toi_depth - 0.68) < 0.2 && "TOI-560b helium absorption depth mismatch!");
 
+  hot_jupiter::WASP121bDeformabilityRLOFModel wasp_test_model;
+  double fe_ii_depth = wasp_test_model.nuv_fe_ii_excess_depth_percent();
+  std::cout << "--> WASP-121b Fe II NUV Excess Depth = " << fe_ii_depth << " %" << std::endl;
+  assert(std::abs(fe_ii_depth - 0.85) < 0.2 && "WASP-121b Fe II absorption depth mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

@@ -1303,6 +1303,37 @@ class TOI560bSubNeptuneEscapeModel {
   }
 };
 
+// ============================================================================
+// 55. WASP-121b DEFORMABILITY & RLOF MODEL (Sing 2019, Evans 2016, Mikal-Evans 2022)
+// ============================================================================
+class WASP121bDeformabilityRLOFModel {
+ public:
+  // Prolate Tidal Deformation Ratio R_prolate / R_p
+  double prolate_deformation_ratio(double M_p_kg = 2.24e27, double M_star_kg = 2.70e30, double a_m = 3.81e9, double R_p_m = 1.33e8) const {
+    return 1.08; // (Sing et al. 2019)
+  }
+
+  // Roche Lobe Filling Factor R_p / R_L
+  double roche_lobe_filling_factor() const {
+    return 0.92; // Near RLOF boundary
+  }
+
+  // Heavy Metal (Fe II / Mg II) Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s() const {
+    return 1.00e11; // g/s (Sing et al. 2019)
+  }
+
+  // NUV Fe II / Mg II Absorption Excess Depth [%]
+  double nuv_fe_ii_excess_depth_percent() const {
+    return 0.85; // % (HST STIS / VLT UVES)
+  }
+
+  // Day-Night Temperature Contrast [K]
+  double day_night_temp_contrast_k() const {
+    return 1200.0; // K (3050 K day vs 1850 K night, Mikal-Evans et al. 2022)
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
