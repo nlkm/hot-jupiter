@@ -258,6 +258,13 @@ int main() {
   assert(std::abs(p_diss_gw - 15.8) < 1.0 && "Enceladus tidal dissipation power mismatch!");
   assert(std::abs(q_cond_gw - 29.3) < 2.0 && "Enceladus conductive heat loss mismatch!");
 
+  hot_jupiter::IoLaplaceTidalAnalysisModel io_model;
+  double io_power_tw = io_model.io_tidal_power_tw();
+  double io_flux_w_m2 = io_model.surface_heat_flux_w_m2(io_power_tw);
+  std::cout << "--> Io Laplace Tidal Analysis: Power = " << io_power_tw << " TW, Heat Flux = " << io_flux_w_m2 << " W/m^2" << std::endl;
+  assert(std::abs(io_power_tw - 105.0) < 1.0 && "Io tidal dissipation power mismatch!");
+  assert(std::abs(io_flux_w_m2 - 2.52) < 0.1 && "Io surface heat flux mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

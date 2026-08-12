@@ -717,6 +717,28 @@ class EnceladusTidalAnalysisModel {
   }
 };
 
+// ============================================================================
+// 34. IO TIDAL HEATING & LAPLACE RESONANCE MODEL (Peale 1979, Spencer 2000)
+// ============================================================================
+class IoLaplaceTidalAnalysisModel {
+ public:
+  // Calculate Io tidal dissipation heat power [TW]
+  double io_tidal_power_tw(double Im_k2 = 0.016876, double e_Io = 0.0041, double a_Io_km = 421700.0, double M_Jupiter = 1.89813e27, double R_Io_km = 1821.6) const {
+    double a_m = a_Io_km * 1000.0;
+    double R_m = R_Io_km * 1000.0;
+    double n = std::sqrt(G * M_Jupiter / std::pow(a_m, 3.0));
+    double power_w = (21.0 / 2.0) * Im_k2 * (n * G * std::pow(M_Jupiter, 2.0) * std::pow(R_m, 5.0) * std::pow(e_Io, 2.0)) / std::pow(a_m, 6.0);
+    return power_w / 1.0e12;
+  }
+
+  // Calculate surface average thermal heat flux [W/m^2]
+  double surface_heat_flux_w_m2(double power_tw = 105.0, double R_Io_km = 1821.6) const {
+    double R_m = R_Io_km * 1000.0;
+    double area_m2 = 4.0 * M_PI * R_m * R_m;
+    return (power_tw * 1.0e12) / area_m2;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
