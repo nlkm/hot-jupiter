@@ -26,7 +26,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #18 | WASP-43b Tidal Circularization | TTV & RV Orbital Ephemeris | `WASP43bTidalCircularizationModel` | `//:wasp43b_tidal_circularization_paper` | $0.9998$ | ✅ Completed |
 | #19 | TRAPPIST-1 TTV Resonant Chain | Spitzer & Kepler/K2 TTV | `TRAPPIST1ResonantChainModel` | `//:trappist1_resonant_chain_paper` | $0.9999$ | ✅ Completed |
 | #20 | Kepler-223 8:6:4:3 Resonant Chain | Kepler Photometric TTV | `Kepler223ResonantChainModel` | `//:kepler223_resonant_chain_paper` | $0.9998$ | ✅ Completed |
-| #21 | KELT-9b Ultra-Hot Thermosphere | CARMENES & HARPS-N H$\alpha$ | `KELT9bUltraHotThermosphereModel` | `//:kelt9b_thermosphere_paper` | -- | ⏳ Scheduled |
+| #21 | KELT-9b Ultra-Hot Thermosphere | CARMENES & HARPS-N H$\alpha$ | `KELT9bUltraHotThermosphereModel` | `//:kelt9b_thermosphere_paper` | $0.9998$ | ✅ Completed |
 | #22 | HAT-P-11b He I 10830Å Escape | HST & Keck HIRES Spectroscopy | `HATP11bHeliumEscapeModel` | `//:hatp11b_helium_escape_paper` | -- | ⏳ Scheduled |
 | #23 | TOI-560b Young Sub-Neptune Escape | JWST NIRSpec & Keck HIRES | `TOI560bSubNeptuneEscapeModel` | `//:toi560b_sub_neptune_paper` | -- | ⏳ Scheduled |
 | #24 | WASP-121b Deformability & RLOF | HST & JWST Phase Curves | `WASP121bDeformabilityRLOFModel` | `//:wasp121b_deformability_paper` | -- | ⏳ Scheduled |
