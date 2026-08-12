@@ -151,6 +151,13 @@ int main() {
   assert(std::abs(rn43_p - 14.80) < 1.0 && "2005 RN43 orbital period mismatch!");
   assert(std::abs(rn43_rho - 635.0) < 30.0 && "2005 RN43 density mismatch!");
 
+  hot_jupiter::PD149BinaryModel pd149_model;
+  double pd149_p = pd149_model.orbital_period_days();
+  double pd149_rho = pd149_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2002 PD149 Orbital Period: " << pd149_p << " days, Density: " << pd149_rho << " kg/m^3" << std::endl;
+  assert(std::abs(pd149_p - 1260.0) < 10.0 && "2002 PD149 orbital period mismatch!");
+  assert(std::abs(pd149_rho - 340.0) < 30.0 && "2002 PD149 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

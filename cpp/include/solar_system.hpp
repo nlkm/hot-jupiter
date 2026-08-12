@@ -437,6 +437,24 @@ class RN43BinaryModel {
   }
 };
 
+// ============================================================================
+// 19. SCATTERED TNO BINARY (160256) 2002 PD149 DYNAMICS (Grundy et al. 2012)
+// ============================================================================
+class PD149BinaryModel {
+ public:
+  double orbital_period_days(double a_orb_km = 24400.0, double M_sys_kg = 7.25e17) const {
+    double a_m = a_orb_km * 1000.0;
+    double period_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G * M_sys_kg));
+    return period_sec / 86400.0;
+  }
+
+  double system_bulk_density_kg_m3(double M_sys_kg = 7.25e17, double r_primary_km = 70.0, double r_sec_km = 55.0) const {
+    double r_eq_m = std::pow(std::pow(r_primary_km * 1000.0, 3.0) + std::pow(r_sec_km * 1000.0, 3.0), 1.0 / 3.0);
+    double vol = (4.0 / 3.0) * M_PI * std::pow(r_eq_m, 3.0);
+    return M_sys_kg / vol;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
