@@ -19,6 +19,7 @@ from hot_jupiter.solar_system import (
     PlanetaryRings,
     PlanetNineSecular,
     RelativisticPrecession,
+    RN43Binary,
     SaturnRingLindbladResonance,
     SeasonalYarkovsky,
     SilaNunamBinary,
@@ -188,3 +189,11 @@ def test_fb128_binary():
     rho_kg_m3 = fb128.system_bulk_density_kg_m3()
     assert abs(p_days - 1660.0) < 10.0, "2003 FB128 orbital period mismatch"
     assert abs(rho_kg_m3 - 498.0) < 30.0, "2003 FB128 bulk density mismatch"
+
+
+def test_rn43_binary():
+    rn43 = RN43Binary()
+    p_days = rn43.orbital_period_days()
+    rho_kg_m3 = rn43.system_bulk_density_kg_m3()
+    assert abs(p_days - 14.80) < 1.0, "2005 RN43 orbital period mismatch"
+    assert abs(rho_kg_m3 - 635.0) < 30.0, "2005 RN43 bulk density mismatch"
