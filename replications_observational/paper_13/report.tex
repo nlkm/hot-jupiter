@@ -1,11 +1,13 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{amsmath,amssymb,graphicx,booktabs,hyperref,xcolor,float}
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.75in]{geometry}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=navyblue,
-    citecolor=darkred,urlcolor=blue
+    citecolor=darkred,
+    urlcolor=blue,
+    hypertexnames=false
 }
 \definecolor{navyblue}{RGB}{0,32,96}
 \definecolor{darkred}{RGB}{139,0,0}
@@ -17,56 +19,60 @@
 \begin{document}
 \maketitle
 
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{center}
 \rule{\textwidth}{1.5pt}
 \end{center}
 
 % ============================================================================
-% PAGE 1: LAYMAN LEVEL - INSPIRING PHOTO, EXECUTIVE SUMMARY & NON-TECHNICAL ESSAY
+% PAGE 1: PURE LAYMAN LEVEL
 % ============================================================================
 \section*{Page 1: A Layman's Guide to the Football-Shaped Ringed World Haumea}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{fig_object.jpg}
+\includegraphics[height=0.26\textheight,keepaspectratio]{fig_object.jpg}
 \caption{\textbf{High-resolution Astronomical Rendering of Haumea, Its Ring, and Moons}. Spinning once every 3.9 hours, Haumea's hyper-rapid rotation deforms it into an elongated triaxial ellipsoid encircled by a dense ring and two outer moons, Hi'iaka and Namaka.}
 \label{fig:layman_photo}
 \end{figure}
 
 \subsection*{What We Know \& What Analysis Can Be Performed}
-Deep in the Kuiper Belt beyond Neptune orbits Haumea, one of the most unusual objects in the Solar System. While most dwarf planets are nearly perfect spheres, Haumea spins at a dizzying speed—completing a full rotation in just $3.9154\text{ hours}$. This hyper-rapid spin creates immense centrifugal force, stretching the icy planet into a three-axis ellipsoid shaped like a football! 
+Deep in the Kuiper Belt beyond Neptune orbits Haumea, one of the most unusual objects in the Solar System. While most dwarf planets are nearly perfect spheres, Haumea spins at a dizzying speed---completing a full rotation in just $3.9154\text{ hours}$. This hyper-rapid spin creates immense centrifugal force, stretching the icy planet into a three-axis ellipsoid shaped like a football! 
 
-In 2017, astronomers observed Haumea pass in front of a distant star (a stellar occultation) and discovered a narrow, dense ring encircling the planet—the first ring ever found around a Trans-Neptunian Object. In this paper, we construct a first-principles hydrostatic and orbital model to analyze Haumea's shape, ring location, and moon orbits.
+In 2017, astronomers observed Haumea pass in front of a distant star (a stellar occultation) and discovered a narrow, dense ring encircling the planet---the first ring ever found around a Trans-Neptunian Object. In this paper, we construct a first-principles hydrostatic and orbital model to analyze Haumea's shape, ring location, and moon orbits.
 
 \subsection*{Non-Technical Essay: The Cosmic Football Spinning in the Dark}
 Imagine holding a soft ball of clay and spinning it around rapidly on a pencil. As you spin it faster and faster, centrifugal force pushes the equator outwards, flattening the top and bottom. If you spin it at extreme speeds, the equator itself stretches unevenly, turning the sphere into an elongated oval. 
 
 This is precisely what happened to Haumea. A massive catastrophic collision billions of years ago spun Haumea up to its current 3.9-hour day. Self-gravity and fluid pressure reached a delicate equilibrium, locking Haumea into a triaxial Jacobi ellipsoid ($1,161\text{ km} \times 852\text{ km} \times 513\text{ km}$). 
 
-The collision also blasted debris into orbit, forming two moons—Hi'iaka and Namaka—and a icy ring system. Surprisingly, Haumea's ring sits at $2,287\text{ kilometers}$ from the planet's center. At this precise distance, a ring particle takes exactly $11.7\text{ hours}$ to orbit Haumea—three times longer than Haumea's spin period! This 3:1 spin-orbit resonance creates constructive gravitational nudges from Haumea's spinning ends that keep the ring stable against fading away.
+The collision also blasted debris into orbit, forming two moons---Hi'iaka and Namaka---and an icy ring system. Surprisingly, Haumea's ring sits at $2,287\text{ kilometers}$ from the planet's center. At this precise distance, a ring particle takes exactly $11.7\text{ hours}$ to orbit Haumea---three times longer than Haumea's spin period! This 3:1 spin-orbit resonance creates constructive gravitational nudges from Haumea's spinning ends that keep the ring stable against fading away.
 
 \newpage
 
 % ============================================================================
-% PAGE 2: MAGAZINE / TEXTBOOK STYLE OVERVIEW OF OBSERVATIONS & MODELING
+% PAGE 2: MAGAZINE / BOOK SCIENCE OVERVIEW
 % ============================================================================
 \section*{Page 2: Wow, Look at This Cool System! Observations \& Modeling}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_diagram.pdf}
-\caption{\textbf{Schematic Model Geometry of the Haumea System}. Illustrating Haumea's triaxial axes ($a \times b \times c$), spin vector $\vec{\omega}_{\text{rot}}$, 3:1 spin-orbit resonant ring radius ($R_{\text{ring}} = 2287\text{ km}$), and moon orbits.}
-\label{fig:magazine_diagram}
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_diagram.pdf}
+\hfill
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_model_choices.pdf}
+\caption{\textbf{Haumea System Configuration \& Model Choice Sensitivity}. Left: Schematic geometry showing triaxial axes ($a \times b \times c$), spin vector $\vec{\omega}_{\text{rot}}$, 3:1 resonant ring ($R_{\text{ring}} = 2287\text{ km}$), and moons. Right: Resonant radius and Satellite period vs. mass and spin.}
+\label{fig:magazine_diagram_choices}
 \end{figure}
 
+\vspace{-0.5em}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_comparison.pdf}
+\includegraphics[height=0.15\textheight,keepaspectratio]{fig_comparison.pdf}
 \caption{\textbf{Stellar Occultation \& HST Astrometry Data vs. C++ Model Fits}. Left: 3:1 Spin-orbit resonance ring radius matching occultation observations. Right: Orbital period matching for Hi'iaka and Namaka ($R^2 = 0.9998$).}
 \label{fig:magazine_obs}
 \end{figure}
 
+\vspace{-0.5em}
 \subsection*{Key Physical Equations Governing Triaxial Shape \& Ring Dynamics}
 To model Haumea's non-spherical potential, fluid equilibrium, and ring stability, we apply Jacobi ellipsoid potential integrals and Keplerian resonance equations.
 
@@ -106,17 +112,17 @@ Evaluating these equations using our C++ Bazel target \texttt{//:haumea\_ellipso
 We perform a quantitative astrophysical analysis of dwarf planet (136108) Haumea using multi-station stellar occultation chord observations (Ortiz et al. 2017) and Hubble Space Telescope (HST) astrometry of satellites Hi'iaka and Namaka (Ragozzine \& Brown 2009, Dunham et al. 2019). We construct a C++ numerical solver target \texttt{//:haumea\_ellipsoid\_ring\_paper} based on Jacobi triaxial fluid equilibrium and non-spherical gravitational potential resonances. For primary mass $M_{\text{Haumea}} = 4.006 \times 10^{21}\text{ kg}$ and semi-axes $a \times b \times c = 1161 \times 852 \times 513\text{ km}$, the model yields a mean bulk density $\rho_{\text{model}} = 1884.66\text{ kg/m}^3$ ($\rho_{\text{obs}} = 1885 \pm 50\text{ kg/m}^3$, relative agreement $99.98\%$, $R^2 = 0.9998$). Furthermore, we establish that Haumea's ring ($R_{\text{ring, obs}} = 2287.3 \pm 4.0\text{ km}$) is trapped in the 3:1 spin-orbit resonance ($R_{\text{3:1, model}} = 2296.42\text{ km}$, relative error $0.39\%$).
 \end{abstract}
 
-\subsection{Introduction \& Astrophysical Context}
+\subsection*{1. Introduction \& Astrophysical Context}
 (136108) Haumea is a major trans-Neptunian object in the classical Kuiper Belt ($a = 43.1\text{ AU}$, $e = 0.19$, $i = 28.2^\circ$). Haumea is distinguished by hyper-rapid rotation ($P_{\text{rot}} = 3.9154\text{ hours}$), a high geometric albedo ($p_V \approx 0.51$), a surface dominated by crystalline water ice, and a dynamical family of icy collisional fragments.
 
 The 2017 discovery of a narrow ring around Haumea provided the first opportunity to study ring dynamics around a strongly non-spherical rotating dwarf planet.
 
-\subsection{Computational Methodology \& Model Architecture}
+\subsection*{2. Computational Methodology \& Model Architecture}
 We construct a C++ analytical and numerical engine in \texttt{cpp/include/solar\_system.hpp} within \texttt{HaumeaEllipsoidRingModel}. The module integrates Jacobi ellipsoid potential functions $A_1, A_2, A_3$, calculates gravitational harmonics $J_2, C_{22}$, and computes resonant radii $R_{m:n}$ for spin-orbit interactions.
 
 The Bazel target \texttt{//:haumea\_ellipsoid\_ring\_paper} runs grid sweeps across rotational period $P_{\text{rot}}$ and axis dimensions, comparing predicted ring locations against occultation chords.
 
-\subsection{Quantitative Model Execution \& Data Fitting}
+\subsection*{3. Quantitative Model Execution \& Data Fitting}
 We evaluate model predictions against multi-station occultation chords and HST satellite orbital elements:
 
 \begin{table}[H]
@@ -140,14 +146,14 @@ Hi'iaka Orbital Period $P_{\text{H}}$ & $49.462 \pm 0.050\text{ d}$ & $49.545\te
 
 The total model-data coefficient of determination is $R^2 = 0.9998$.
 
-\subsection{Scientific Discussion}
+\subsection*{4. Scientific Discussion}
 Our model confirms that Haumea's ring location ($2287.3\text{ km}$) corresponds to the 3:1 spin-orbit resonance. For a non-axisymmetric primary, the gravitational potential contains a significant $C_{22}$ quadrupole term:
 \begin{equation}
 V(r, \phi) = -\frac{GM}{r} \left[ 1 - J_2 \left(\frac{R_{eq}}{r}\right)^2 + 3 C_{22} \left(\frac{R_{eq}}{r}\right)^2 \cos 2(\phi - \Omega_{\text{rot}} t) \right]
 \end{equation}
 This azimuthal perturbation forces resonant torque spikes at orbital frequencies $n = \frac{1}{3} \Omega_{\text{rot}}$, preventing particle diffusion and maintaining a sharp ring width ($\Delta R \approx 70\text{ km}$).
 
-\subsection{Conclusions \& Future Outlook}
+\subsection*{5. Conclusions \& Future Outlook}
 1. Haumea is a Jacobi triaxial ellipsoid in hydrostatic equilibrium with a mean bulk density $\rho = 1884.66\text{ kg/m}^3$.
 2. The ring system is stabilized by the 3:1 spin-orbit resonance with Haumea's triaxial gravitational field.
 3. \textbf{Future Work}: High-angular-resolution observations with JWST NIRCam/NIRSpec to search for ring composition variations and fine structure in the Hi'iaka-Namaka mutual node precession.
@@ -164,11 +170,11 @@ This azimuthal perturbation forces resonant torque spikes at orbital frequencies
 \newpage
 
 % ============================================================================
-% PART III: COMPREHENSIVE TECHNICAL APPENDIX
+% PART III: TECHNICAL APPENDIX
 % ============================================================================
 \section*{Part III: Technical Appendix}
 
-\subsection*{Appendix A: Undergraduate Derivation of Jacobi Ellipsoid Mechanics \& Spin-Orbit Resonances}
+\subsection*{Appendix A: Undergraduate First-Principles Derivation of All Formulas}
 
 \subsubsection*{1. Hydrostatic Equilibrium of Jacobi Triaxial Ellipsoids}
 For a self-gravitating liquid mass rotating with constant angular velocity $\mathbf{\Omega} = \Omega \hat{z}$, the condition for hydrostatic equilibrium in the rotating frame is:
@@ -205,7 +211,7 @@ R_{\text{3:1}} = \left( \frac{G M P_{\text{ring}}^2}{4\pi^2} \right)^{1/3} = \le
 \end{equation}
 This matches Haumea's observed ring radius ($2287.3\text{ km}$) within $0.39\%$.
 
-\subsection*{Appendix B: Primer on Astronomical Observational Techniques}
+\subsection*{Appendix B: Primer on Astronomical Observational Techniques \& Instrumentation}
 
 \subsubsection*{1. Multi-Station Stellar Occultation Shadow Profiling}
 When a distant solar system body passes in front of a star, its shadow travels across Earth at speeds of $10--30\text{ km/s}$. By deploying dozens of stationary telescopes along the shadow path and recording light curves at high temporal resolution ($>20\text{ Hz}$), astronomers reconstruct precise chord profiles. Inverting these chords determines the 3D triaxial ellipsoid dimensions without spatial resolution limitations of ground-based imaging.
