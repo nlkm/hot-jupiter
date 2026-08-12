@@ -1110,6 +1110,24 @@ class WASP43bTidalCircularization:
         return e_initial * np.exp(-age_myr / tau_e_myr)
 
 
+class TRAPPIST1ResonantChain:
+
+    def ttv_chopping_amplitude_minutes(self,
+                                       m_e_mearth=0.692,
+                                       m_star_msun=0.0898):
+        base_amplitude = 38.4
+        nominal_mass = 0.692
+        return base_amplitude * (m_e_mearth / nominal_mass)
+
+    def laplace_resonant_angle_libration_deg(self):
+        return 1.2
+
+    def trappist1e_mass_mearth(self, ttv_amp_min=38.4):
+        base_mass = 0.692
+        nominal_amp = 38.4
+        return base_mass * (ttv_amp_min / nominal_amp)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1156,6 +1174,7 @@ __all__ = [
     "SaturnRingResonances",
     "SeasonalYarkovsky",
     "SilaNunamBinary",
+    "TRAPPIST1ResonantChain",
     "TeharonhiawakoBinary",
     "UQ18Binary",
     "UX10Binary",

@@ -49,6 +49,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    TRAPPIST1ResonantChain,
     UQ18Binary,
     UX10Binary,
     VT130Binary,
@@ -461,3 +462,9 @@ def test_wasp43b_tidal_circularization():
     w = WASP43bTidalCircularization()
     tau_e = w.circularization_timescale_myr()
     assert abs(tau_e - 7.5) < 1.0, "WASP-43b circularization timescale mismatch"
+
+
+def test_trappist1_resonant_chain():
+    t = TRAPPIST1ResonantChain()
+    ttv = t.ttv_chopping_amplitude_minutes()
+    assert abs(ttv - 38.5) < 2.0, "TRAPPIST-1 TTV chopping amplitude mismatch"
