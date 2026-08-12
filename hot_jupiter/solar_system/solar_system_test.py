@@ -9,6 +9,7 @@ from hot_jupiter.solar_system import (
     CometDynamics,
     EG138Binary,
     EnceladusTidalOcean,
+    FB128Binary,
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -179,3 +180,11 @@ def test_kp76_binary():
     rho_kg_m3 = kp76.system_bulk_density_kg_m3()
     assert abs(p_days - 240.0) < 30.0, "2001 KP76 orbital period mismatch"
     assert abs(rho_kg_m3 - 460.0) < 30.0, "2001 KP76 bulk density mismatch"
+
+
+def test_fb128_binary():
+    fb128 = FB128Binary()
+    p_days = fb128.orbital_period_days()
+    rho_kg_m3 = fb128.system_bulk_density_kg_m3()
+    assert abs(p_days - 1660.0) < 10.0, "2003 FB128 orbital period mismatch"
+    assert abs(rho_kg_m3 - 498.0) < 30.0, "2003 FB128 bulk density mismatch"
