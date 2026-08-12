@@ -165,6 +165,13 @@ int main() {
   assert(std::abs(gz31_p - 1010.0) < 10.0 && "2002 GZ31 orbital period mismatch!");
   assert(std::abs(gz31_rho - 238.0) < 30.0 && "2002 GZ31 density mismatch!");
 
+  hot_jupiter::AZ84BinaryModel az84_model;
+  double az84_p = az84_model.orbital_period_days();
+  double az84_rho = az84_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2003 AZ84 Orbital Period: " << az84_p << " days, Density: " << az84_rho << " kg/m^3" << std::endl;
+  assert(std::abs(az84_p - 12.25) < 1.5 && "2003 AZ84 orbital period mismatch!");
+  assert(std::abs(az84_rho - 870.0) < 30.0 && "2003 AZ84 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
