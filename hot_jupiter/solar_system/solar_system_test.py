@@ -9,6 +9,7 @@ from hot_jupiter.solar_system import (
     CometDynamics,
     EG138Binary,
     EnceladusTidalOcean,
+    KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
     MoonTidalDynamics,
@@ -170,3 +171,11 @@ def test_wc19_binary():
     rho_kg_m3 = wc19.system_bulk_density_kg_m3()
     assert abs(p_days - 8.40) < 0.1, "2002 WC19 orbital period mismatch"
     assert abs(rho_kg_m3 - 638.0) < 30.0, "2002 WC19 bulk density mismatch"
+
+
+def test_kp76_binary():
+    kp76 = KP76Binary()
+    p_days = kp76.orbital_period_days()
+    rho_kg_m3 = kp76.system_bulk_density_kg_m3()
+    assert abs(p_days - 240.0) < 30.0, "2001 KP76 orbital period mismatch"
+    assert abs(rho_kg_m3 - 460.0) < 30.0, "2001 KP76 bulk density mismatch"
