@@ -189,8 +189,27 @@ class EnceladusTidalOcean:
         return power_watts / 1.0e9
 
 
+class CetoPhorcysBinary:
+
+    def orbital_period_days(self, a_orb_km=1840.0, m_sys_kg=5.41e18):
+        g = 6.67430e-11
+        a_m = a_orb_km * 1000.0
+        period_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g * m_sys_kg))
+        return period_sec / 86400.0
+
+    def system_bulk_density_kg_m3(self,
+                                  m_sys_kg=5.41e18,
+                                  r_ceto_km=87.0,
+                                  r_phorcys_km=66.0):
+        r_eq_m = ((r_ceto_km * 1000.0)**3 + (r_phorcys_km * 1000.0)**3)**(1.0 /
+                                                                          3.0)
+        vol = (4.0 / 3.0) * np.pi * r_eq_m**3
+        return m_sys_kg / vol
+
+
 __all__ = [
     "AsteroidDynamics",
+    "CetoPhorcysBinary",
     "CometDynamics",
     "EnceladusTidalOcean",
     "LaplaceLagrangeSecular",

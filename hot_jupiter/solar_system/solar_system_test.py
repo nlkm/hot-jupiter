@@ -4,6 +4,7 @@ Unit tests for hot_jupiter.solar_system subpackage.
 
 from hot_jupiter.solar_system import (
     AsteroidDynamics,
+    CetoPhorcysBinary,
     CometDynamics,
     EnceladusTidalOcean,
     LaplaceLagrangeSecular,
@@ -89,3 +90,11 @@ def test_enceladus_tidal_ocean():
     enc = EnceladusTidalOcean()
     power_gw = enc.enceladus_tidal_power_gw()
     assert power_gw > 0.1, "Enceladus tidal power should exceed 0.1 GW"
+
+
+def test_ceto_phorcys_binary():
+    ceto = CetoPhorcysBinary()
+    p_days = ceto.orbital_period_days()
+    rho_kg_m3 = ceto.system_bulk_density_kg_m3()
+    assert abs(p_days - 9.554) < 0.05, "Ceto orbital period mismatch"
+    assert abs(rho_kg_m3 - 1370.0) < 50.0, "Ceto bulk density mismatch"
