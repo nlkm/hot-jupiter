@@ -1225,6 +1225,34 @@ class Kepler223ResonantChainModel {
   }
 };
 
+// ============================================================================
+// 52. KELT-9b ULTRA-HOT THERMOSPHERE & H\alpha ABSORPTION MODEL (Yan 2018, Hoeijmakers 2018)
+// ============================================================================
+class KELT9bUltraHotThermosphereModel {
+ public:
+  // Thermospheric Scale Height H [km]
+  double scale_height_km(double T_therm_k = 10000.0, double mu_amu = 0.5, double g_ms2 = 20.0) const {
+    double k_b = 1.380649e-23; // J/K
+    double m_u = 1.660539e-27; // kg
+    double H_m = (k_b * T_therm_k) / (mu_amu * m_u * g_ms2);
+    return H_m / 1000.0; // km
+  }
+
+  // Thermospheric Radius Ratio R_therm / R_p
+  double thermosphere_radius_ratio(double T_therm_k = 10000.0) const {
+    double base_ratio = 1.32; // Yan & Henning 2018
+    double nominal_T = 10000.0;
+    return 1.0 + (base_ratio - 1.0) * (T_therm_k / nominal_T);
+  }
+
+  // H\alpha Balmer Absorption Line Excess Transit Depth [%]
+  double halpha_excess_depth_percent(double T_therm_k = 10000.0) const {
+    double base_depth = 1.15; // % (CARMENES / HARPS-N)
+    double nominal_T = 10000.0;
+    return base_depth * (T_therm_k / nominal_T);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

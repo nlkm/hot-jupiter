@@ -360,6 +360,11 @@ int main() {
   std::cout << "--> Kepler-223b TTV Chopping Amplitude = " << kep_ttv << " minutes" << std::endl;
   assert(std::abs(kep_ttv - 14.2) < 1.0 && "Kepler-223 TTV chopping amplitude mismatch!");
 
+  hot_jupiter::KELT9bUltraHotThermosphereModel kelt_test_model;
+  double kelt_depth = kelt_test_model.halpha_excess_depth_percent();
+  std::cout << "--> KELT-9b H-alpha Excess Depth = " << kelt_depth << " %" << std::endl;
+  assert(std::abs(kelt_depth - 1.15) < 0.2 && "KELT-9b H-alpha absorption depth mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
