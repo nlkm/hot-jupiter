@@ -6,6 +6,7 @@ from hot_jupiter.solar_system import (
     AltjiraBinary,
     AsteroidDynamics,
     AZ84Binary,
+    CA101Binary,
     CetoPhorcysBinary,
     CometDynamics,
     EG138Binary,
@@ -297,3 +298,11 @@ def test_qy297_binary():
     rho_kg_m3 = qy297.system_bulk_density_kg_m3()
     assert abs(p_days - 138.1) < 5.0, "2001 QY297 orbital period mismatch"
     assert abs(rho_kg_m3 - 471.0) < 30.0, "2001 QY297 bulk density mismatch"
+
+
+def test_ca101_binary():
+    ca101 = CA101Binary()
+    p_days = ca101.orbital_period_days()
+    rho_kg_m3 = ca101.system_bulk_density_kg_m3()
+    assert abs(p_days - 345.0) < 10.0, "2000 CA101 orbital period mismatch"
+    assert abs(rho_kg_m3 - 613.0) < 40.0, "2000 CA101 bulk density mismatch"
