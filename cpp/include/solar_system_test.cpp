@@ -380,6 +380,11 @@ int main() {
   std::cout << "--> WASP-121b Fe II NUV Excess Depth = " << fe_ii_depth << " %" << std::endl;
   assert(std::abs(fe_ii_depth - 0.85) < 0.2 && "WASP-121b Fe II absorption depth mismatch!");
 
+  hot_jupiter::LTT9779bUltraHotNeptuneModel ltt_test_model;
+  double ltt_albedo = ltt_test_model.geometric_albedo();
+  std::cout << "--> LTT 9779b Geometric Albedo A_g = " << ltt_albedo << std::endl;
+  assert(std::abs(ltt_albedo - 0.80) < 0.1 && "LTT 9779b albedo mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

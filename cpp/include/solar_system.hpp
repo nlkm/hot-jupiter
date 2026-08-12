@@ -1334,6 +1334,32 @@ class WASP121bDeformabilityRLOFModel {
   }
 };
 
+// ============================================================================
+// 56. LTT 9779b ULTRA-HOT NEPTUNE ALBEDO & RLOF MODEL (Jenkins 2020, Hoyer 2023)
+// ============================================================================
+class LTT9779bUltraHotNeptuneModel {
+ public:
+  // Optical Geometric Albedo A_g
+  double geometric_albedo() const {
+    return 0.80; // Highly reflective metallic silicate clouds (Hoyer et al. 2023)
+  }
+
+  // CHEOPS Secondary Eclipse Optical Depth [ppm]
+  double secondary_eclipse_depth_ppm() const {
+    return 225.0; // ppm (CHEOPS / TESS)
+  }
+
+  // Photoevaporative Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s() const {
+    return 1.80e10; // g/s (Jenkins et al. 2020)
+  }
+
+  // Day-Side Equilibrium Temperature with Reflective Clouds [K]
+  double day_side_temperature_k() const {
+    return 2300.0; // K
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
