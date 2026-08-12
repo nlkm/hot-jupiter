@@ -265,6 +265,15 @@ int main() {
   assert(std::abs(io_power_tw - 105.0) < 1.0 && "Io tidal dissipation power mismatch!");
   assert(std::abs(io_flux_w_m2 - 2.52) < 0.1 && "Io surface heat flux mismatch!");
 
+  hot_jupiter::JupiterJunoGravityAnalysisModel jupiter_gravity;
+  double j2_val = jupiter_gravity.j2_harmonic_1e6();
+  double j4_val = jupiter_gravity.j4_harmonic_1e6();
+  double j6_val = jupiter_gravity.j6_harmonic_1e6();
+  std::cout << "--> Jupiter Juno Gravity Analysis: J2 = " << j2_val << ", J4 = " << j4_val << ", J6 = " << j6_val << std::endl;
+  assert(std::abs(j2_val - 14696.57) < 50.0 && "Jupiter J2 harmonic mismatch!");
+  assert(std::abs(j4_val - (-586.61)) < 5.0 && "Jupiter J4 harmonic mismatch!");
+  assert(std::abs(j6_val - 34.20) < 1.0 && "Jupiter J6 harmonic mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

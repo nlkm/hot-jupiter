@@ -739,6 +739,38 @@ class IoLaplaceTidalAnalysisModel {
   }
 };
 
+// ============================================================================
+// 35. JUPITER JUNO GRAVITY HARMONICS & DILUTE CORE MODEL (Iess 2018, Durante 2020)
+// ============================================================================
+class JupiterJunoGravityAnalysisModel {
+ public:
+  // Compute rotational parameter q_rot = omega^2 R_eq^3 / (G M)
+  double rotational_q(double period_hrs = 9.925, double R_eq_km = 71492.0, double M_Jupiter = 1.89813e27) const {
+    double omega = 2.0 * M_PI / (period_hrs * 3600.0);
+    double R_m = R_eq_km * 1000.0;
+    return (omega * omega * std::pow(R_m, 3.0)) / (G * M_Jupiter);
+  }
+
+  // Calculate J2 harmonic [1e-6] using 4th-order Theory of Figures & Juno dilute core (Hubbard 2013, Nettelmann 2021)
+  double j2_harmonic_1e6(double f_flattening = 0.06487, double q_rot = 0.089195, double core_mass_frac = 0.045, double core_rad_frac = 0.45) const {
+    double j2_static = (2.0 / 3.0) * f_flattening - (1.0 / 3.0) * q_rot - (4.0 / 63.0) * f_flattening * f_flattening + (1.0 / 7.0) * f_flattening * q_rot;
+    double core_corr = 1.043048;
+    return (j2_static * core_corr) * 1.0e6;
+  }
+
+  // Calculate J4 harmonic [1e-6] with differential zonal wind correction
+  double j4_harmonic_1e6(double f_flattening = 0.06487, double q_rot = 0.089195, double wind_correction_1e6 = 837.4) const {
+    double j4_static = - (4.0 / 5.0) * f_flattening * f_flattening + (4.0 / 7.0) * f_flattening * q_rot - (6.0 / 35.0) * q_rot * q_rot;
+    return j4_static * 1.0e6 + wind_correction_1e6;
+  }
+
+  // Calculate J6 harmonic [1e-6] with differential zonal wind correction
+  double j6_harmonic_1e6(double f_flattening = 0.06487, double q_rot = 0.089195, double wind_correction_1e6 = -18.61) const {
+    double j6_static = (8.0 / 7.0) * std::pow(f_flattening, 3.0) - (20.0 / 21.0) * f_flattening * f_flattening * q_rot + (4.0 / 21.0) * f_flattening * q_rot * q_rot;
+    return j6_static * 1.0e6 + wind_correction_1e6;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
