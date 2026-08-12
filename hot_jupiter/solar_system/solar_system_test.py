@@ -20,6 +20,7 @@ from hot_jupiter.solar_system import (
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
     OJ67Binary,
+    OJ67TNOBinary,
     PD149Binary,
     PlanetaryRings,
     PlanetNineSecular,
@@ -260,3 +261,11 @@ def test_fm185_binary():
     rho_kg_m3 = fm185.system_bulk_density_kg_m3()
     assert abs(p_days - 310.0) < 10.0, "2001 FM185 orbital period mismatch"
     assert abs(rho_kg_m3 - 395.0) < 50.0, "2001 FM185 bulk density mismatch"
+
+
+def test_oj67_tno_binary():
+    oj67_tno = OJ67TNOBinary()
+    p_days = oj67_tno.orbital_period_days()
+    rho_kg_m3 = oj67_tno.system_bulk_density_kg_m3()
+    assert abs(p_days - 1005.0) < 10.0, "2000 OJ67 TNO orbital period mismatch"
+    assert abs(rho_kg_m3 - 566.0) < 30.0, "2000 OJ67 TNO bulk density mismatch"
