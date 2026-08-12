@@ -1068,6 +1068,26 @@ class HD189733bMassLoss:
         return base_depth * np.sqrt(mdot_flare_g_s / mdot_nominal)
 
 
+class WASP12bTidalDecay:
+
+    def period_decay_rate_ms_yr(self, q_star_prime=1.8e5):
+        nominal_pdot = -29.27
+        nominal_q = 1.8e5
+        return nominal_pdot * (nominal_q / q_star_prime)
+
+    def ttv_omc_minutes(self, epoch_n, pdot_ms_yr=-29.27, p_days=1.09142):
+        epochs_per_yr = 365.25 / p_days
+        pdot_sec_per_epoch = (pdot_ms_yr / 1000.0) / epochs_per_yr
+        omc_sec = 0.5 * pdot_sec_per_epoch * (epoch_n**2)
+        return omc_sec / 60.0
+
+    def remaining_lifetime_myr(self, p_days=1.09142, pdot_ms_yr=-29.27):
+        pdot_yr_yr = (pdot_ms_yr / 1000.0) / (p_days * 86400.0)
+        tau_decay_yr = (2.0 / 13.0) * (p_days * 86400.0) / np.abs(
+            pdot_yr_yr * (p_days * 86400.0))
+        return tau_decay_yr / 1.0e6
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1118,6 +1138,7 @@ __all__ = [
     "UQ18Binary",
     "UX10Binary",
     "VT130Binary",
+    "WASP12bTidalDecay",
     "WC19Binary",
     "YN81Binary",
 ]

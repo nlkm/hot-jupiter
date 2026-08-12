@@ -52,6 +52,7 @@ from hot_jupiter.solar_system import (
     UQ18Binary,
     UX10Binary,
     VT130Binary,
+    WASP12bTidalDecay,
     WC19Binary,
     YN81Binary,
 )
@@ -447,3 +448,9 @@ def test_gj436b_hydrogen_cloud():
     gj = GJ436bHydrogenCloud()
     mdot = gj.mass_loss_rate_g_s()
     assert abs(mdot - 2.2e10) < 5.0e9, "GJ 436b cloud mass loss rate mismatch"
+
+
+def test_wasp12b_tidal_decay():
+    w = WASP12bTidalDecay()
+    pdot = w.period_decay_rate_ms_yr()
+    assert abs(pdot - (-29.0)) < 2.0, "WASP-12b period decay rate mismatch"
