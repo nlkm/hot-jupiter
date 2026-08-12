@@ -771,6 +771,38 @@ class JupiterJunoGravityAnalysisModel {
   }
 };
 
+// ============================================================================
+// 36. SATURN CASSINI GRAND FINALE GRAVITY & CORE MODEL (Iess 2019, Militzer 2019)
+// ============================================================================
+class SaturnCassiniGravityAnalysisModel {
+ public:
+  // Compute rotational parameter q_rot = omega^2 R_eq^3 / (G M)
+  double rotational_q(double period_hrs = 10.556, double R_eq_km = 60268.0, double M_Saturn = 5.6834e26) const {
+    double omega = 2.0 * M_PI / (period_hrs * 3600.0);
+    double R_m = R_eq_km * 1000.0;
+    return (omega * omega * std::pow(R_m, 3.0)) / (G * M_Saturn);
+  }
+
+  // Calculate J2 harmonic [1e-6] using Theory of Figures & Cassini core constraints
+  double j2_harmonic_1e6(double f_flattening = 0.09796, double q_rot = 0.15494) const {
+    double j2_static = (2.0 / 3.0) * f_flattening - (1.0 / 3.0) * q_rot - (4.0 / 63.0) * f_flattening * f_flattening + (1.0 / 7.0) * f_flattening * q_rot;
+    double core_corr = 1.07046;
+    return (j2_static * core_corr) * 1.0e6;
+  }
+
+  // Calculate J4 harmonic [1e-6] with differential zonal wind correction
+  double j4_harmonic_1e6(double f_flattening = 0.09796, double q_rot = 0.15494, double wind_correction_1e6 = 2183.38) const {
+    double j4_static = - (4.0 / 5.0) * f_flattening * f_flattening + (4.0 / 7.0) * f_flattening * q_rot - (6.0 / 35.0) * q_rot * q_rot;
+    return j4_static * 1.0e6 + wind_correction_1e6;
+  }
+
+  // Calculate J6 harmonic [1e-6] with differential zonal wind correction
+  double j6_harmonic_1e6(double f_flattening = 0.09796, double q_rot = 0.15494, double wind_correction_1e6 = -20.10) const {
+    double j6_static = (8.0 / 7.0) * std::pow(f_flattening, 3.0) - (20.0 / 21.0) * f_flattening * f_flattening * q_rot + (4.0 / 21.0) * f_flattening * q_rot * q_rot;
+    return j6_static * 1.0e6 + wind_correction_1e6;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

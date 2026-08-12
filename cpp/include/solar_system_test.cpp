@@ -274,6 +274,15 @@ int main() {
   assert(std::abs(j4_val - (-586.61)) < 5.0 && "Jupiter J4 harmonic mismatch!");
   assert(std::abs(j6_val - 34.20) < 1.0 && "Jupiter J6 harmonic mismatch!");
 
+  hot_jupiter::SaturnCassiniGravityAnalysisModel saturn_gravity;
+  double sat_j2 = saturn_gravity.j2_harmonic_1e6();
+  double sat_j4 = saturn_gravity.j4_harmonic_1e6();
+  double sat_j6 = saturn_gravity.j6_harmonic_1e6();
+  std::cout << "--> Saturn Cassini Gravity Analysis: J2 = " << sat_j2 << ", J4 = " << sat_j4 << ", J6 = " << sat_j6 << std::endl;
+  assert(std::abs(sat_j2 - 16290.71) < 50.0 && "Saturn J2 harmonic mismatch!");
+  assert(std::abs(sat_j4 - (-935.83)) < 5.0 && "Saturn J4 harmonic mismatch!");
+  assert(std::abs(sat_j6 - 86.14) < 1.0 && "Saturn J6 harmonic mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
