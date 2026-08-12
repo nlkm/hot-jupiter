@@ -3,6 +3,7 @@ Unit tests for hot_jupiter.solar_system subpackage.
 """
 
 from hot_jupiter.solar_system import (
+    AltjiraBinary,
     AsteroidDynamics,
     CetoPhorcysBinary,
     CometDynamics,
@@ -98,3 +99,11 @@ def test_ceto_phorcys_binary():
     rho_kg_m3 = ceto.system_bulk_density_kg_m3()
     assert abs(p_days - 9.554) < 0.05, "Ceto orbital period mismatch"
     assert abs(rho_kg_m3 - 1370.0) < 50.0, "Ceto bulk density mismatch"
+
+
+def test_altjira_binary():
+    altjira = AltjiraBinary()
+    p_days = altjira.orbital_period_days()
+    rho_kg_m3 = altjira.system_bulk_density_kg_m3()
+    assert abs(p_days - 139.6) < 2.0, "Altjira orbital period mismatch"
+    assert abs(rho_kg_m3 - 510.0) < 30.0, "Altjira bulk density mismatch"
