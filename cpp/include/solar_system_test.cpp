@@ -200,6 +200,13 @@ int main() {
   assert(std::abs(fm185_p - 310.0) < 10.0 && "2001 FM185 orbital period mismatch!");
   assert(std::abs(fm185_rho - 395.0) < 50.0 && "2001 FM185 density mismatch!");
 
+  hot_jupiter::OJ67TNOBinaryModel oj67_tno_model;
+  double oj67_tno_p = oj67_tno_model.orbital_period_days();
+  double oj67_tno_rho = oj67_tno_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2000 OJ67 TNO Orbital Period: " << oj67_tno_p << " days, Density: " << oj67_tno_rho << " kg/m^3" << std::endl;
+  assert(std::abs(oj67_tno_p - 1005.0) < 10.0 && "2000 OJ67 TNO orbital period mismatch!");
+  assert(std::abs(oj67_tno_rho - 566.0) < 30.0 && "2000 OJ67 TNO density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

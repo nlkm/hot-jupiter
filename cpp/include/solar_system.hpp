@@ -563,6 +563,24 @@ class FM185BinaryModel {
   }
 };
 
+// ============================================================================
+// 26. SCATTERED TNO BINARY (134860) 2000 OJ67 DYNAMICS (Grundy et al. 2012)
+// ============================================================================
+class OJ67TNOBinaryModel {
+ public:
+  double orbital_period_days(double a_orb_km = 22700.0, double M_sys_kg = 9.18e17) const {
+    double a_m = a_orb_km * 1000.0;
+    double period_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G * M_sys_kg));
+    return period_sec / 86400.0;
+  }
+
+  double system_bulk_density_kg_m3(double M_sys_kg = 9.18e17, double r_primary_km = 64.0, double r_sec_km = 50.0) const {
+    double r_eq_m = std::pow(std::pow(r_primary_km * 1000.0, 3.0) + std::pow(r_sec_km * 1000.0, 3.0), 1.0 / 3.0);
+    double vol = (4.0 / 3.0) * M_PI * std::pow(r_eq_m, 3.0);
+    return M_sys_kg / vol;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
