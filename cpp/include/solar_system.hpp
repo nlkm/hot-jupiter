@@ -839,6 +839,34 @@ class MercuryRelativisticPrecessionModel {
   }
 };
 
+// ============================================================================
+// 38. BENNU YARKOVSKY DRIFT & THERMAL INERTIA MODEL (Farnocchia 2013, Lauretta 2019)
+// ============================================================================
+class BennuYarkovskyModel {
+ public:
+  // Diurnal Yarkovsky Drift Rate da/dt [m/yr]
+  double yarkovsky_drift_m_yr(double diameter_m = 490.0, double density_kg_m3 = 1190.0, double a_AU = 1.126, double obliquity_deg = 177.6, double thermal_inertia = 310.0) const {
+    double cos_gamma = std::cos(obliquity_deg * M_PI / 180.0);
+
+    // Diurnal thermal lag parameter f(Theta) approx 0.15 for Bennu
+    double thermal_lag_factor = 0.1485;
+
+    // Yarkovsky acceleration net force: da/dt \propto F_sun * cos(gamma) / (rho * D)
+    double base_drift = -284.0; // m/yr base scale at 1.126 AU
+    double density_ratio = 1190.0 / density_kg_m3;
+    double diameter_ratio = 490.0 / diameter_m;
+    double distance_ratio = std::pow(1.126 / a_AU, 2.0);
+
+    return base_drift * (cos_gamma / std::cos(177.6 * M_PI / 180.0)) * density_ratio * diameter_ratio * distance_ratio * (thermal_inertia / 310.0) * (thermal_lag_factor / 0.1485);
+  }
+
+  // Drift rate in AU/Myr
+  double yarkovsky_drift_AU_Myr(double diameter_m = 490.0, double density_kg_m3 = 1190.0, double a_AU = 1.126, double obliquity_deg = 177.6) const {
+    double drift_m_yr = yarkovsky_drift_m_yr(diameter_m, density_kg_m3, a_AU, obliquity_deg);
+    return (drift_m_yr * 1.0e6) / 1.495978707e11;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

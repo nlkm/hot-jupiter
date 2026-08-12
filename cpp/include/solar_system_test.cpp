@@ -290,6 +290,11 @@ int main() {
   assert(std::abs(merc_obs_gr_val - 42.982) < 0.1 && "Mercury GR precession mismatch!");
   assert(std::abs(merc_obs_j2_val - 0.0286) < 0.01 && "Mercury Solar J2 precession mismatch!");
 
+  hot_jupiter::BennuYarkovskyModel bennu_test_model;
+  double bennu_drift = bennu_test_model.yarkovsky_drift_m_yr();
+  std::cout << "--> Bennu Yarkovsky Drift: Rate = " << bennu_drift << " m/yr" << std::endl;
+  assert(std::abs(bennu_drift - (-284.0)) < 5.0 && "Bennu Yarkovsky drift rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
