@@ -180,6 +180,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #170 | Grundy (2007), Santos-Sanz (2012), Stansberry (2008) | Scattered Disc TNO (65489) Ceto \& Satellite Phorcys Mutual Orbit | Core C++ Engine | `//:ceto_phorcys_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #171 | Grundy (2012), Thirouin (2014), Stansberry (2008) | Classical TNO (148780) Altjira Mutual Orbit \& Low Density | Core C++ Engine | `//:altjira_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #172 | Grundy (2012), Thirouin (2014), Stansberry (2008) | Classical TNO (79360) Sila--Nunam Mutual Orbit \& Low Density | Core C++ Engine | `//:sila_nunam_binary_orbit_solver` | $0.9998$ | ✅ Completed |
+| #173 | Grundy (2019), Thirouin (2014), Stansberry (2008) | Resonant TNO (88611) Teharonhiawako--Sawiskera Mutual Orbit | Core C++ Engine | `//:teharonhiawako_sawiskera_binary_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
