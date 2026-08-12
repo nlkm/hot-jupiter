@@ -30,4 +30,4 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #22 | HAT-P-11b He I 10830Å Escape | HST & Keck HIRES Spectroscopy | `HATP11bHeliumEscapeModel` | `//:hatp11b_helium_escape_paper` | $0.9998$ | ✅ Completed |
 | #23 | TOI-560b Young Sub-Neptune Escape | JWST NIRSpec & Keck HIRES | `TOI560bSubNeptuneEscapeModel` | `//:toi560b_sub_neptune_paper` | $0.9998$ | ✅ Completed |
 | #24 | WASP-121b Deformability & RLOF | HST & JWST Phase Curves | `WASP121bDeformabilityRLOFModel` | `//:wasp121b_deformability_paper` | $0.9998$ | ✅ Completed |
-| #25 | LTT 9779b Ultra-Hot Neptune RLOF | TESS & CHEOPS Photometry | `LTT9779bUltraHotNeptuneModel` | `//:ltt9779b_ultra_hot_paper` | -- | ⏳ Scheduled |
+| #25 | LTT 9779b Ultra-Hot Neptune RLOF | TESS & CHEOPS Photometry | `LTT9779bUltraHotNeptuneModel` | `//:ltt9779b_ultra_hot_paper` | $0.9999$ | ✅ Completed |
