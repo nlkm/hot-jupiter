@@ -21,6 +21,7 @@ from hot_jupiter.solar_system import (
     PD149Binary,
     PlanetaryRings,
     PlanetNineSecular,
+    QY90Binary,
     RelativisticPrecession,
     RN43Binary,
     SaturnRingLindbladResonance,
@@ -233,3 +234,11 @@ def test_vt130_binary():
     rho_kg_m3 = vt130.system_bulk_density_kg_m3()
     assert abs(p_days - 1060.0) < 10.0, "2002 VT130 orbital period mismatch"
     assert abs(rho_kg_m3 - 126.0) < 30.0, "2002 VT130 bulk density mismatch"
+
+
+def test_qy90_binary():
+    qy90 = QY90Binary()
+    p_days = qy90.orbital_period_days()
+    rho_kg_m3 = qy90.system_bulk_density_kg_m3()
+    assert abs(p_days - 320.0) < 30.0, "2003 QY90 orbital period mismatch"
+    assert abs(rho_kg_m3 - 740.0) < 30.0, "2003 QY90 bulk density mismatch"

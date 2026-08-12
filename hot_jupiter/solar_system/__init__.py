@@ -472,6 +472,24 @@ class VT130Binary:
         return m_sys_kg / vol
 
 
+class QY90Binary:
+
+    def orbital_period_days(self, a_orb_km=8550.0, m_sys_kg=4.10e17):
+        g = 6.67430e-11
+        a_m = a_orb_km * 1000.0
+        period_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g * m_sys_kg))
+        return period_sec / 86400.0
+
+    def system_bulk_density_kg_m3(self,
+                                  m_sys_kg=4.10e17,
+                                  r_primary_km=41.0,
+                                  r_sec_km=40.0):
+        r_eq_m = ((r_primary_km * 1000.0)**3 + (r_sec_km * 1000.0)**3)**(1.0 /
+                                                                         3.0)
+        vol = (4.0 / 3.0) * np.pi * r_eq_m**3
+        return m_sys_kg / vol
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -491,6 +509,7 @@ __all__ = [
     "PD149Binary",
     "PlanetNineSecular",
     "PlanetaryRings",
+    "QY90Binary",
     "RN43Binary",
     "RelativisticPrecession",
     "SaturnRingLindbladResonance",
