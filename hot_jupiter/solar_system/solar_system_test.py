@@ -26,6 +26,7 @@ from hot_jupiter.solar_system import (
     PlanetNineSecular,
     QuaoarWeywotBinary,
     QY90Binary,
+    QY297Binary,
     RelativisticPrecession,
     RN43Binary,
     SaturnRingLindbladResonance,
@@ -288,3 +289,11 @@ def test_ux10_binary():
     rho_kg_m3 = ux10.system_bulk_density_kg_m3()
     assert abs(p_days - 122.0) < 5.0, "2004 UX10 orbital period mismatch"
     assert abs(rho_kg_m3 - 1164.0) < 50.0, "2004 UX10 bulk density mismatch"
+
+
+def test_qy297_binary():
+    qy297 = QY297Binary()
+    p_days = qy297.orbital_period_days()
+    rho_kg_m3 = qy297.system_bulk_density_kg_m3()
+    assert abs(p_days - 138.1) < 5.0, "2001 QY297 orbital period mismatch"
+    assert abs(rho_kg_m3 - 471.0) < 30.0, "2001 QY297 bulk density mismatch"
