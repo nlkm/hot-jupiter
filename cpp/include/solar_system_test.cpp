@@ -221,6 +221,13 @@ int main() {
   assert(std::abs(ux10_p - 122.0) < 5.0 && "2004 UX10 orbital period mismatch!");
   assert(std::abs(ux10_rho - 1164.0) < 50.0 && "2004 UX10 density mismatch!");
 
+  hot_jupiter::QY297BinaryModel qy297_model;
+  double qy297_p = qy297_model.orbital_period_days();
+  double qy297_rho = qy297_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2001 QY297 Orbital Period: " << qy297_p << " days, Density: " << qy297_rho << " kg/m^3" << std::endl;
+  assert(std::abs(qy297_p - 138.1) < 5.0 && "2001 QY297 orbital period mismatch!");
+  assert(std::abs(qy297_rho - 471.0) < 30.0 && "2001 QY297 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
