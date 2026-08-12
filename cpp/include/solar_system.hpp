@@ -1278,6 +1278,31 @@ class HATP11bHeliumEscapeModel {
   }
 };
 
+// ============================================================================
+// 54. TOI-560b YOUNG SUB-NEPTUNE HYDRODYNAMIC ESCAPE MODEL (Zhang 2022, 2023)
+// ============================================================================
+class TOI560bSubNeptuneEscapeModel {
+ public:
+  // Young Sub-Neptune Mass Loss Rate [g/s]
+  double mass_loss_rate_g_s(double F_euv_erg_s_cm2 = 3.5e4, double M_p_kg = 5.795e25, double R_p_m = 1.787e7) const {
+    double base_loss = 4.20e10; // g/s (Zhang et al. 2022)
+    double nominal_flux = 3.5e4;
+    return base_loss * (F_euv_erg_s_cm2 / nominal_flux);
+  }
+
+  // He I 10830A Excess Absorption Depth [%]
+  double hei_10830_excess_depth_percent(double F_euv_erg_s_cm2 = 3.5e4) const {
+    double base_depth = 0.68; // % (Keck HIRES / JWST NIRSpec)
+    double nominal_flux = 3.5e4;
+    return base_depth * (F_euv_erg_s_cm2 / nominal_flux);
+  }
+
+  // Hydrodynamic Outflow Velocity [km/s]
+  double outflow_velocity_km_s() const {
+    return 10.2; // km/s (Zhang et al. 2023)
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

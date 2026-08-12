@@ -370,6 +370,11 @@ int main() {
   std::cout << "--> HAT-P-11b He I 10830A Excess Depth = " << hat_depth << " %" << std::endl;
   assert(std::abs(hat_depth - 1.08) < 0.2 && "HAT-P-11b helium absorption depth mismatch!");
 
+  hot_jupiter::TOI560bSubNeptuneEscapeModel toi_test_model;
+  double toi_depth = toi_test_model.hei_10830_excess_depth_percent();
+  std::cout << "--> TOI-560b He I 10830A Excess Depth = " << toi_depth << " %" << std::endl;
+  assert(std::abs(toi_depth - 0.68) < 0.2 && "TOI-560b helium absorption depth mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

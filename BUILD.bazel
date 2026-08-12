@@ -1478,6 +1478,13 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "toi560b_sub_neptune_paper",
+    srcs = ["replications_observational/paper_23/toi560b_sub_neptune_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",
