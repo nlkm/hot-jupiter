@@ -11,6 +11,7 @@ from hot_jupiter.solar_system import (
     EG138Binary,
     EnceladusTidalOcean,
     FB128Binary,
+    FM185Binary,
     GZ31Binary,
     JA132Binary,
     KP76Binary,
@@ -251,3 +252,11 @@ def test_ja132_binary():
     rho_kg_m3 = ja132.system_bulk_density_kg_m3()
     assert abs(p_days - 515.0) < 10.0, "1999 JA132 orbital period mismatch"
     assert abs(rho_kg_m3 - 224.0) < 50.0, "1999 JA132 bulk density mismatch"
+
+
+def test_fm185_binary():
+    fm185 = FM185Binary()
+    p_days = fm185.orbital_period_days()
+    rho_kg_m3 = fm185.system_bulk_density_kg_m3()
+    assert abs(p_days - 310.0) < 10.0, "2001 FM185 orbital period mismatch"
+    assert abs(rho_kg_m3 - 395.0) < 50.0, "2001 FM185 bulk density mismatch"
