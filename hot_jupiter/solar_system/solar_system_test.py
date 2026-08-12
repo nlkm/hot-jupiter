@@ -31,6 +31,7 @@ from hot_jupiter.solar_system import (
     PD149Binary,
     PlanetaryRings,
     PlanetNineSecular,
+    PlutoCharonMutual,
     QuaoarWeywotBinary,
     QY90Binary,
     QY297Binary,
@@ -404,3 +405,9 @@ def test_comet67p_outgassing():
     a1_val = co.radial_acceleration_au_day2(1.0)
     assert abs(a1_val -
                3.25e-8) < 1.0e-9, "Comet 67P outgassing acceleration mismatch"
+
+
+def test_pluto_charon_mutual():
+    pc = PlutoCharonMutual()
+    period = pc.orbital_period_days()
+    assert abs(period - 6.38723) < 0.001, "Pluto-Charon period mismatch"

@@ -914,6 +914,28 @@ class Comet67POutgassing:
         return a2 * self.marsden_g_function(r_h_au)
 
 
+class PlutoCharonMutual:
+
+    def orbital_period_days(self,
+                            a_km=19596.0,
+                            m_pluto_kg=1.303e22,
+                            m_charon_kg=1.586e21):
+        g_const = 6.67430e-11
+        a_m = a_km * 1000.0
+        m_total = m_pluto_kg + m_charon_kg
+        p_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g_const * m_total))
+        return p_sec / 86400.0
+
+    def barycenter_distance_km(self,
+                               a_km=19596.0,
+                               m_pluto_kg=1.303e22,
+                               m_charon_kg=1.586e21):
+        return a_km * (m_charon_kg / (m_pluto_kg + m_charon_kg))
+
+    def mass_ratio(self, m_pluto_kg=1.303e22, m_charon_kg=1.586e21):
+        return m_charon_kg / m_pluto_kg
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -943,6 +965,7 @@ __all__ = [
     "PD149Binary",
     "PlanetNineSecular",
     "PlanetaryRings",
+    "PlutoCharonMutual",
     "QY90Binary",
     "QY297Binary",
     "QuaoarWeywotBinary",
