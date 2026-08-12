@@ -27,7 +27,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #19 | TRAPPIST-1 TTV Resonant Chain | Spitzer & Kepler/K2 TTV | `TRAPPIST1ResonantChainModel` | `//:trappist1_resonant_chain_paper` | $0.9999$ | ✅ Completed |
 | #20 | Kepler-223 8:6:4:3 Resonant Chain | Kepler Photometric TTV | `Kepler223ResonantChainModel` | `//:kepler223_resonant_chain_paper` | $0.9998$ | ✅ Completed |
 | #21 | KELT-9b Ultra-Hot Thermosphere | CARMENES & HARPS-N H$\alpha$ | `KELT9bUltraHotThermosphereModel` | `//:kelt9b_thermosphere_paper` | $0.9998$ | ✅ Completed |
-| #22 | HAT-P-11b He I 10830Å Escape | HST & Keck HIRES Spectroscopy | `HATP11bHeliumEscapeModel` | `//:hatp11b_helium_escape_paper` | -- | ⏳ Scheduled |
+| #22 | HAT-P-11b He I 10830Å Escape | HST & Keck HIRES Spectroscopy | `HATP11bHeliumEscapeModel` | `//:hatp11b_helium_escape_paper` | $0.9998$ | ✅ Completed |
 | #23 | TOI-560b Young Sub-Neptune Escape | JWST NIRSpec & Keck HIRES | `TOI560bSubNeptuneEscapeModel` | `//:toi560b_sub_neptune_paper` | -- | ⏳ Scheduled |
 | #24 | WASP-121b Deformability & RLOF | HST & JWST Phase Curves | `WASP121bDeformabilityRLOFModel` | `//:wasp121b_deformability_paper` | -- | ⏳ Scheduled |
 | #25 | LTT 9779b Ultra-Hot Neptune RLOF | TESS & CHEOPS Photometry | `LTT9779bUltraHotNeptuneModel` | `//:ltt9779b_ultra_hot_paper` | -- | ⏳ Scheduled |
