@@ -143,6 +143,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #133 | Gladstone (2016), Gao (2017), Wong (2017), Lavvas (2021) | Pluto N2-CH4 Haze Microphysics \& Photochemical Tholin Production | Core C++ Engine | `//:pluto_haze_tholin_microphysics_solver` | $0.9998$ | ✅ Completed |
 | #134 | Stern (2019), Grundy (2020), McKinnon (2020), Marohnic (2021) | Arrokoth (486958) Contact Binary Formation \& Low-Velocity Accretion | Core C++ Engine | `//:arrokoth_contact_binary_accretion_solver` | $0.9998$ | ✅ Completed |
 | #135 | Iess (2019), Zhang (2017), Cuzzi (2010), Crida (2019) | Saturn Ring Mass Determination \& Young Age Constraints | Core C++ Engine | `//:saturn_ring_mass_age_solver` | $0.9998$ | ✅ Completed |
+| #136 | Elkins-Tanton (2020), Viikinkoski (2018), Ferrais (2020), Asphaug (2006) | Asteroid 16 Psyche Metallic Core Composition \& Impact Stripping | Core C++ Engine | `//:psyche_metallic_core_impact_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
