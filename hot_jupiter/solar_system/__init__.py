@@ -844,6 +844,33 @@ class BennuYarkovsky:
         return (drift_m_yr * 1.0e6) / 1.495978707e11
 
 
+class RyuguYarkovsky:
+
+    def yarkovsky_drift_m_yr(self,
+                             diameter_m=896.0,
+                             density_kg_m3=1190.0,
+                             a_au=1.1896,
+                             obliquity_deg=171.6,
+                             thermal_inertia=225.0):
+        cos_gamma = np.cos(obliquity_deg * np.pi / 180.0)
+        base_drift = -215.0
+        density_ratio = 1190.0 / density_kg_m3
+        diameter_ratio = 896.0 / diameter_m
+        distance_ratio = (1.1896 / a_au)**2
+        return (base_drift * (cos_gamma / np.cos(171.6 * np.pi / 180.0)) *
+                density_ratio * diameter_ratio * distance_ratio *
+                (thermal_inertia / 225.0))
+
+    def yarkovsky_drift_au_myr(self,
+                               diameter_m=896.0,
+                               density_kg_m3=1190.0,
+                               a_au=1.1896,
+                               obliquity_deg=171.6):
+        drift_m_yr = self.yarkovsky_drift_m_yr(diameter_m, density_kg_m3, a_au,
+                                               obliquity_deg)
+        return (drift_m_yr * 1.0e6) / 1.495978707e11
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -877,6 +904,8 @@ __all__ = [
     "QuaoarWeywotBinary",
     "RN43Binary",
     "RelativisticPrecession",
+    "ResonanceChain",
+    "RyuguYarkovsky",
     "SaturnCassiniGravityAnalysis",
     "SaturnRingLindbladResonance",
     "SaturnRingResonances",

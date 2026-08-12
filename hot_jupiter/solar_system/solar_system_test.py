@@ -35,6 +35,7 @@ from hot_jupiter.solar_system import (
     QY297Binary,
     RelativisticPrecession,
     RN43Binary,
+    RyuguYarkovsky,
     SaturnCassiniGravityAnalysis,
     SaturnRingLindbladResonance,
     SaturnRingResonances,
@@ -385,3 +386,9 @@ def test_bennu_yarkovsky():
     by = BennuYarkovsky()
     drift = by.yarkovsky_drift_m_yr()
     assert abs(drift - (-284.0)) < 5.0, "Bennu Yarkovsky drift rate mismatch"
+
+
+def test_ryugu_yarkovsky():
+    ry = RyuguYarkovsky()
+    drift = ry.yarkovsky_drift_m_yr()
+    assert abs(drift - (-215.0)) < 5.0, "Ryugu Yarkovsky drift rate mismatch"
