@@ -1088,6 +1088,28 @@ class WASP12bTidalDecay:
         return tau_decay_yr / 1.0e6
 
 
+class WASP43bTidalCircularization:
+
+    def circularization_timescale_myr(self,
+                                      q_p_prime=2.95e6,
+                                      m_p_kg=3.89e27,
+                                      m_star_kg=1.426e30,
+                                      r_p_m=7.4065e7,
+                                      a_m=2.283e9,
+                                      p_days=0.813475):
+        p_sec = p_days * 86400.0
+        n_mean_motion = (2.0 * np.pi) / p_sec
+        ratio_mass = m_p_kg / m_star_kg
+        ratio_radius = a_m / r_p_m
+        tau_sec = (2.0 / 21.0) * (q_p_prime / n_mean_motion) * ratio_mass * (
+            ratio_radius**5)
+        return tau_sec / (31557600.0 * 1.0e6)
+
+    def damped_eccentricity(self, age_gyr=1.0, e_initial=0.2, tau_e_myr=7.52):
+        age_myr = age_gyr * 1000.0
+        return e_initial * np.exp(-age_myr / tau_e_myr)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1139,6 +1161,7 @@ __all__ = [
     "UX10Binary",
     "VT130Binary",
     "WASP12bTidalDecay",
+    "WASP43bTidalCircularization",
     "WC19Binary",
     "YN81Binary",
 ]

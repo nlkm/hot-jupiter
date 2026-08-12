@@ -53,6 +53,7 @@ from hot_jupiter.solar_system import (
     UX10Binary,
     VT130Binary,
     WASP12bTidalDecay,
+    WASP43bTidalCircularization,
     WC19Binary,
     YN81Binary,
 )
@@ -454,3 +455,9 @@ def test_wasp12b_tidal_decay():
     w = WASP12bTidalDecay()
     pdot = w.period_decay_rate_ms_yr()
     assert abs(pdot - (-29.0)) < 2.0, "WASP-12b period decay rate mismatch"
+
+
+def test_wasp43b_tidal_circularization():
+    w = WASP43bTidalCircularization()
+    tau_e = w.circularization_timescale_myr()
+    assert abs(tau_e - 7.5) < 1.0, "WASP-43b circularization timescale mismatch"
