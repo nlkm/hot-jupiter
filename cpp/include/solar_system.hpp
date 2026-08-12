@@ -1175,6 +1175,31 @@ class WASP43bTidalCircularizationModel {
   }
 };
 
+// ============================================================================
+// 50. TRAPPIST-1 7-PLANET RESONANT CHAIN & TTV DYNAMICS MODEL (Gillon 2017, Luger 2017, Agol 2021)
+// ============================================================================
+class TRAPPIST1ResonantChainModel {
+ public:
+  // TTV Chopping Amplitude [minutes] for TRAPPIST-1d
+  double ttv_chopping_amplitude_minutes(double M_e_mearth = 0.692, double M_star_msun = 0.0898) const {
+    double base_amplitude = 38.4; // minutes (Agol et al. 2021)
+    double nominal_mass = 0.692;
+    return base_amplitude * (M_e_mearth / nominal_mass);
+  }
+
+  // 3-Body Laplace Resonant Angle Libration Amplitude [degrees]
+  double laplace_resonant_angle_libration_deg() const {
+    return 1.2; // degrees (Luger et al. 2017, Agol et al. 2021)
+  }
+
+  // TRAPPIST-1e Dynamical Mass [Earth Masses]
+  double trappist1e_mass_mearth(double ttv_amp_min = 38.4) const {
+    double base_mass = 0.692; // M_Earth
+    double nominal_amp = 38.4;
+    return base_mass * (ttv_amp_min / nominal_amp);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

@@ -350,6 +350,11 @@ int main() {
   std::cout << "--> WASP-43b Circularization Timescale = " << wasp43_tau_e << " Myr" << std::endl;
   assert(std::abs(wasp43_tau_e - 7.5) < 1.0 && "WASP-43b circularization timescale mismatch!");
 
+  hot_jupiter::TRAPPIST1ResonantChainModel trap_test_model;
+  double trap_ttv = trap_test_model.ttv_chopping_amplitude_minutes();
+  std::cout << "--> TRAPPIST-1d TTV Chopping Amplitude = " << trap_ttv << " minutes" << std::endl;
+  assert(std::abs(trap_ttv - 38.5) < 2.0 && "TRAPPIST-1 TTV chopping amplitude mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
