@@ -17,6 +17,7 @@ from hot_jupiter.solar_system import (
     GZ31Binary,
     IoLaplaceTidalAnalysis,
     JA132Binary,
+    JupiterJunoGravityAnalysis,
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -347,3 +348,13 @@ def test_io_laplace_tidal_analysis():
     f_w_m2 = io.surface_heat_flux_w_m2(p_tw)
     assert abs(p_tw - 105.0) < 1.0, "Io tidal power mismatch"
     assert abs(f_w_m2 - 2.52) < 0.1, "Io surface heat flux mismatch"
+
+
+def test_jupiter_juno_gravity_analysis():
+    jg = JupiterJunoGravityAnalysis()
+    j2 = jg.j2_harmonic_1e6()
+    j4 = jg.j4_harmonic_1e6()
+    j6 = jg.j6_harmonic_1e6()
+    assert abs(j2 - 14696.57) < 50.0, "Jupiter J2 mismatch"
+    assert abs(j4 - (-586.61)) < 5.0, "Jupiter J4 mismatch"
+    assert abs(j6 - 34.20) < 1.0, "Jupiter J6 mismatch"

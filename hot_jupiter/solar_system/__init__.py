@@ -707,6 +707,45 @@ class IoLaplaceTidalAnalysis:
         return (power_tw * 1.0e12) / area_m2
 
 
+class JupiterJunoGravityAnalysis:
+
+    def rotational_q(self,
+                     period_hrs=9.925,
+                     r_eq_km=71492.0,
+                     m_jupiter=1.89813e27):
+        g = 6.67430e-11
+        omega = 2.0 * np.pi / (period_hrs * 3600.0)
+        r_m = r_eq_km * 1000.0
+        return (omega**2 * r_m**3) / (g * m_jupiter)
+
+    def j2_harmonic_1e6(self,
+                        f_flattening=0.06487,
+                        q_rot=0.089195,
+                        core_mass_frac=0.045,
+                        core_rad_frac=0.45):
+        j2_static = (2.0 / 3.0) * f_flattening - (1.0 / 3.0) * q_rot - (
+            4.0 / 63.0) * f_flattening**2 + (1.0 / 7.0) * f_flattening * q_rot
+        core_corr = 1.043048
+        return (j2_static * core_corr) * 1.0e6
+
+    def j4_harmonic_1e6(self,
+                        f_flattening=0.06487,
+                        q_rot=0.089195,
+                        wind_correction_1e6=837.4):
+        j4_static = -(4.0 / 5.0) * f_flattening**2 + (
+            4.0 / 7.0) * f_flattening * q_rot - (6.0 / 35.0) * q_rot**2
+        return j4_static * 1.0e6 + wind_correction_1e6
+
+    def j6_harmonic_1e6(self,
+                        f_flattening=0.06487,
+                        q_rot=0.089195,
+                        wind_correction_1e6=-18.61):
+        j6_static = (8.0 / 7.0) * f_flattening**3 - (
+            20.0 / 21.0) * f_flattening**2 * q_rot + (
+                4.0 / 21.0) * f_flattening * q_rot**2
+        return j6_static * 1.0e6 + wind_correction_1e6
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -722,6 +761,7 @@ __all__ = [
     "GZ31Binary",
     "IoLaplaceTidalAnalysis",
     "JA132Binary",
+    "JupiterJunoGravityAnalysis",
     "KP76Binary",
     "KS38Binary",
     "LaplaceLagrangeSecular",
