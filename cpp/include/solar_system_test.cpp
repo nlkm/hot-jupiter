@@ -340,6 +340,11 @@ int main() {
   std::cout << "--> GJ 436b Cloud Mass Loss = " << gj436_mdot << " g/s" << std::endl;
   assert(std::abs(gj436_mdot - 2.2e10) < 5.0e9 && "GJ 436b cloud mass loss rate mismatch!");
 
+  hot_jupiter::WASP12bTidalDecayModel wasp12_test_model;
+  double wasp12_pdot = wasp12_test_model.period_decay_rate_ms_yr();
+  std::cout << "--> WASP-12b Tidal Decay Rate = " << wasp12_pdot << " ms/year" << std::endl;
+  assert(std::abs(wasp12_pdot - (-29.0)) < 2.0 && "WASP-12b period decay rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

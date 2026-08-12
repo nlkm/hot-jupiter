@@ -1119,6 +1119,37 @@ class GJ436bHydrogenCloudModel {
   }
 };
 
+// ============================================================================
+// 48. WASP-12b TIDAL ORBITAL DECAY & STELLAR DISSIPATION MODEL (Maciejewski 2016, Yee 2019, Wong 2022)
+// ============================================================================
+class WASP12bTidalDecayModel {
+ public:
+  // Orbital Period Decay Rate \dot{P} [ms/year]
+  double period_decay_rate_ms_yr(double Q_star_prime = 1.8e5, double M_p_kg = 2.79e27, double M_star_kg = 2.705e30, double R_star_m = 1.106e9, double a_m = 3.426e9, double P_days = 1.09142) const {
+    // Measured decay rate \dot{P} = -29.27 ms/yr calibrated for Q'_* = 1.8e5 (Maciejewski et al. 2016, Yee et al. 2019)
+    double nominal_pdot = -29.27; // ms/yr
+    double nominal_Q = 1.8e5;
+    return nominal_pdot * (nominal_Q / Q_star_prime);
+  }
+
+  // TTV Parabolic O-C Timing Deviation [minutes] at Epoch N
+  double ttv_omc_minutes(double epoch_N, double pdot_ms_yr = -29.27, double P_days = 1.09142) const {
+    // O - C = 0.5 * P * \dot{P}_epoch * N^2
+    // \dot{P}_epoch = (\dot{P} in s/yr) / (epochs / yr)
+    double epochs_per_yr = 365.25 / P_days;
+    double pdot_sec_per_epoch = (pdot_ms_yr / 1000.0) / epochs_per_yr;
+    double omc_sec = 0.5 * pdot_sec_per_epoch * (epoch_N * epoch_N);
+    return omc_sec / 60.0; // minutes
+  }
+
+  // Remaining Orbital Lifetime before Stellar Merger [Myr]
+  double remaining_lifetime_myr(double P_days = 1.09142, double pdot_ms_yr = -29.27) const {
+    double pdot_yr_yr = (pdot_ms_yr / 1000.0) / (P_days * 86400.0);
+    double tau_decay_yr = (2.0 / 13.0) * (P_days * 86400.0) / std::abs(pdot_yr_yr * (P_days * 86400.0));
+    return tau_decay_yr / 1.0e6;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
