@@ -1163,6 +1163,25 @@ class KELT9bUltraHotThermosphere:
         return base_depth * (t_therm_k / nominal_t)
 
 
+class HATP11bHeliumEscape:
+
+    def mass_loss_rate_g_s(self,
+                           f_euv_erg_s_cm2=1.2e4,
+                           m_p_kg=1.54e26,
+                           r_p_m=3.02e7):
+        base_loss = 2.50e10
+        nominal_flux = 1.2e4
+        return base_loss * (f_euv_erg_s_cm2 / nominal_flux)
+
+    def hei_10830_excess_depth_percent(self, f_euv_erg_s_cm2=1.2e4):
+        base_depth = 1.08
+        nominal_flux = 1.2e4
+        return base_depth * (f_euv_erg_s_cm2 / nominal_flux)
+
+    def helium_tail_radius_rp(self):
+        return 2.5
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1180,6 +1199,7 @@ __all__ = [
     "FM185Binary",
     "GJ436bHydrogenCloud",
     "GZ31Binary",
+    "HATP11bHeliumEscape",
     "HD189733bMassLoss",
     "HD209458bPhotoevaporation",
     "IoLaplaceTidalAnalysis",

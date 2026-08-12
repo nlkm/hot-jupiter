@@ -19,6 +19,7 @@ from hot_jupiter.solar_system import (
     FM185Binary,
     GJ436bHydrogenCloud,
     GZ31Binary,
+    HATP11bHeliumEscape,
     HaumeaEllipsoidRing,
     HD189733bMassLoss,
     HD209458bPhotoevaporation,
@@ -482,3 +483,9 @@ def test_kelt9b_ultra_hot_thermosphere():
     k = KELT9bUltraHotThermosphere()
     depth = k.halpha_excess_depth_percent()
     assert abs(depth - 1.15) < 0.2, "KELT-9b H-alpha excess depth mismatch"
+
+
+def test_hatp11b_helium_escape():
+    h = HATP11bHeliumEscape()
+    depth = h.hei_10830_excess_depth_percent()
+    assert abs(depth - 1.08) < 0.2, "HAT-P-11b helium absorption depth mismatch"
