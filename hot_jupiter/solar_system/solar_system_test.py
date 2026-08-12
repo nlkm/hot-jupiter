@@ -9,6 +9,7 @@ from hot_jupiter.solar_system import (
     BennuYarkovsky,
     CA101Binary,
     CetoPhorcysBinary,
+    Comet67POutgassing,
     CometDynamics,
     EG138Binary,
     EnceladusTidalAnalysis,
@@ -392,3 +393,10 @@ def test_ryugu_yarkovsky():
     ry = RyuguYarkovsky()
     drift = ry.yarkovsky_drift_m_yr()
     assert abs(drift - (-215.0)) < 5.0, "Ryugu Yarkovsky drift rate mismatch"
+
+
+def test_comet67p_outgassing():
+    co = Comet67POutgassing()
+    a1_val = co.radial_acceleration_au_day2(1.0)
+    assert abs(a1_val -
+               3.25e-8) < 1.0e-9, "Comet 67P outgassing acceleration mismatch"

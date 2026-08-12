@@ -871,6 +871,30 @@ class RyuguYarkovsky:
         return (drift_m_yr * 1.0e6) / 1.495978707e11
 
 
+class Comet67POutgassing:
+
+    def marsden_g_function(self, r_h_au):
+        r0 = 2.808
+        m = 2.15
+        n = 5.09
+        k = 4.614
+        alpha = 0.1113
+
+        ratio = r_h_au / r0
+        g_unnorm = alpha * (ratio**(-m)) * ((1.0 + ratio**n)**(-k))
+
+        ratio_1 = 1.0 / r0
+        g_1 = alpha * (ratio_1**(-m)) * ((1.0 + ratio_1**n)**(-k))
+
+        return g_unnorm / g_1
+
+    def radial_acceleration_au_day2(self, r_h_au=1.243, a1=3.25e-8):
+        return a1 * self.marsden_g_function(r_h_au)
+
+    def transverse_acceleration_au_day2(self, r_h_au=1.243, a2=0.82e-8):
+        return a2 * self.marsden_g_function(r_h_au)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -878,6 +902,7 @@ __all__ = [
     "BennuYarkovsky",
     "CA101Binary",
     "CetoPhorcysBinary",
+    "Comet67POutgassing",
     "CometDynamics",
     "EG138Binary",
     "EnceladusTidalAnalysis",
