@@ -1007,6 +1007,31 @@ class HD209458bPhotoevaporation:
         return base_depth * np.sqrt(mdot_g_s / mdot_nominal)
 
 
+class GJ436bHydrogenCloud:
+
+    def mass_loss_rate_g_s(self,
+                           f_xuv_erg_cm2_s=62810.0,
+                           epsilon=0.15,
+                           m_p_kg=1.32e26,
+                           r_p_m=2.74e7):
+        g_const = 6.67430e-11
+        r_p_cm = r_p_m * 100.0
+        m_p_g = m_p_kg * 1000.0
+        g_cgs = g_const * 1000.0
+        k_tide = 0.75
+        mdot_g_s = (3.0 * epsilon * f_xuv_erg_cm2_s *
+                    (r_p_cm**3)) / (4.0 * g_cgs * m_p_g * k_tide)
+        return mdot_g_s
+
+    def lyman_alpha_transit_depth_percent(self, mdot_g_s=2.2e10):
+        base_depth = 56.3
+        mdot_nominal = 2.2e10
+        return base_depth * np.sqrt(mdot_g_s / mdot_nominal)
+
+    def lyman_alpha_transit_duration_hours(self):
+        return 22.0
+
+
 class HD189733bMassLoss:
 
     def quiescent_mass_loss_rate_g_s(self,
@@ -1058,6 +1083,7 @@ __all__ = [
     "ErisDysnomia",
     "FB128Binary",
     "FM185Binary",
+    "GJ436bHydrogenCloud",
     "GZ31Binary",
     "HD189733bMassLoss",
     "HD209458bPhotoevaporation",

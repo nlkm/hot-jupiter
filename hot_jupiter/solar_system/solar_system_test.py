@@ -17,6 +17,7 @@ from hot_jupiter.solar_system import (
     ErisDysnomia,
     FB128Binary,
     FM185Binary,
+    GJ436bHydrogenCloud,
     GZ31Binary,
     HaumeaEllipsoidRing,
     HD189733bMassLoss,
@@ -440,3 +441,9 @@ def test_hd189733b_mass_loss():
     mdot_flare = hd189.flare_mass_loss_rate_g_s()
     assert abs(mdot_flare -
                4.5e11) < 1.0e11, "HD 189733b flare mass loss rate mismatch"
+
+
+def test_gj436b_hydrogen_cloud():
+    gj = GJ436bHydrogenCloud()
+    mdot = gj.mass_loss_rate_g_s()
+    assert abs(mdot - 2.2e10) < 5.0e9, "GJ 436b cloud mass loss rate mismatch"
