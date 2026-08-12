@@ -25,6 +25,7 @@ from hot_jupiter.solar_system import (
     IoLaplaceTidalAnalysis,
     JA132Binary,
     JupiterJunoGravityAnalysis,
+    Kepler223ResonantChain,
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -468,3 +469,9 @@ def test_trappist1_resonant_chain():
     t = TRAPPIST1ResonantChain()
     ttv = t.ttv_chopping_amplitude_minutes()
     assert abs(ttv - 38.5) < 2.0, "TRAPPIST-1 TTV chopping amplitude mismatch"
+
+
+def test_kepler223_resonant_chain():
+    k = Kepler223ResonantChain()
+    ttv = k.ttv_chopping_amplitude_minutes()
+    assert abs(ttv - 14.2) < 1.0, "Kepler-223 TTV chopping amplitude mismatch"

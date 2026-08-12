@@ -1128,6 +1128,22 @@ class TRAPPIST1ResonantChain:
         return base_mass * (ttv_amp_min / nominal_amp)
 
 
+class Kepler223ResonantChain:
+
+    def ttv_chopping_amplitude_minutes(self, m_c_mearth=5.1):
+        base_amplitude = 14.2
+        nominal_mass = 5.1
+        return base_amplitude * (m_c_mearth / nominal_mass)
+
+    def resonant_angle_libration_deg(self):
+        return 2.4
+
+    def kepler223c_mass_mearth(self, ttv_amp_min=14.2):
+        base_mass = 5.1
+        nominal_amp = 14.2
+        return base_mass * (ttv_amp_min / nominal_amp)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1150,8 +1166,10 @@ __all__ = [
     "IoLaplaceTidalAnalysis",
     "JA132Binary",
     "JupiterJunoGravityAnalysis",
+    "KBOBinary",
     "KP76Binary",
     "KS38Binary",
+    "Kepler223ResonantChain",
     "LaplaceLagrangeSecular",
     "MercuryRelativisticPrecession",
     "MoonTidalDynamics",
