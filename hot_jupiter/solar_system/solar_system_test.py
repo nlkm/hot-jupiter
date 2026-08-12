@@ -27,6 +27,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    VT130Binary,
     WC19Binary,
     YN81Binary,
 )
@@ -224,3 +225,11 @@ def test_az84_binary():
     rho_kg_m3 = az84.system_bulk_density_kg_m3()
     assert abs(p_days - 12.25) < 1.5, "2003 AZ84 orbital period mismatch"
     assert abs(rho_kg_m3 - 870.0) < 30.0, "2003 AZ84 bulk density mismatch"
+
+
+def test_vt130_binary():
+    vt130 = VT130Binary()
+    p_days = vt130.orbital_period_days()
+    rho_kg_m3 = vt130.system_bulk_density_kg_m3()
+    assert abs(p_days - 1060.0) < 10.0, "2002 VT130 orbital period mismatch"
+    assert abs(rho_kg_m3 - 126.0) < 30.0, "2002 VT130 bulk density mismatch"
