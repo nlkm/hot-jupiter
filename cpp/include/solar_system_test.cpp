@@ -315,6 +315,11 @@ int main() {
   std::cout << "--> Pluto-Charon Mutual: Period = " << pc_period << " days" << std::endl;
   assert(std::abs(pc_period - 6.38723) < 0.001 && "Pluto-Charon period mismatch!");
 
+  hot_jupiter::ErisDysnomiaModel ed_test_model;
+  double ed_period = ed_test_model.orbital_period_days();
+  std::cout << "--> Eris-Dysnomia Mutual: Period = " << ed_period << " days" << std::endl;
+  assert(std::abs(ed_period - 15.7232) < 0.01 && "Eris-Dysnomia period mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

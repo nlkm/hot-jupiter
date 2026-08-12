@@ -966,6 +966,29 @@ class PlutoCharonMutualModel {
   }
 };
 
+// ============================================================================
+// 43. ERIS-DYSNOMIA MUTUAL BINARY & DENSITY MODEL (Brown 2007, Holler 2021)
+// ============================================================================
+class ErisDysnomiaModel {
+ public:
+  // Orbital Period of Binary System [days]
+  double orbital_period_days(double a_km = 37350.0, double M_eris_kg = 1.66e22, double M_dysnomia_kg = 1.0e20) const {
+    double G_const = 6.67430e-11;
+    double a_m = a_km * 1000.0;
+    double M_total = M_eris_kg + M_dysnomia_kg;
+
+    double P_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G_const * M_total));
+    return P_sec / 86400.0;
+  }
+
+  // Bulk Density of Eris [kg/m^3]
+  double eris_bulk_density_kg_m3(double M_eris_kg = 1.66e22, double R_eris_km = 1163.0) const {
+    double R_m = R_eris_km * 1000.0;
+    double volume_m3 = (4.0 / 3.0) * M_PI * std::pow(R_m, 3.0);
+    return M_eris_kg / volume_m3;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
