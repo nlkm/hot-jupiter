@@ -1182,6 +1182,25 @@ class HATP11bHeliumEscape:
         return 2.5
 
 
+class TOI560bSubNeptuneEscape:
+
+    def mass_loss_rate_g_s(self,
+                           f_euv_erg_s_cm2=3.5e4,
+                           m_p_kg=5.795e25,
+                           r_p_m=1.787e7):
+        base_loss = 4.20e10
+        nominal_flux = 3.5e4
+        return base_loss * (f_euv_erg_s_cm2 / nominal_flux)
+
+    def hei_10830_excess_depth_percent(self, f_euv_erg_s_cm2=3.5e4):
+        base_depth = 0.68
+        nominal_flux = 3.5e4
+        return base_depth * (f_euv_erg_s_cm2 / nominal_flux)
+
+    def outflow_velocity_km_s(self):
+        return 10.2
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1232,6 +1251,7 @@ __all__ = [
     "SaturnRingResonances",
     "SeasonalYarkovsky",
     "SilaNunamBinary",
+    "TOI560bSubNeptuneEscape",
     "TRAPPIST1ResonantChain",
     "TeharonhiawakoBinary",
     "UQ18Binary",

@@ -52,6 +52,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    TOI560bSubNeptuneEscape,
     TRAPPIST1ResonantChain,
     UQ18Binary,
     UX10Binary,
@@ -489,3 +490,9 @@ def test_hatp11b_helium_escape():
     h = HATP11bHeliumEscape()
     depth = h.hei_10830_excess_depth_percent()
     assert abs(depth - 1.08) < 0.2, "HAT-P-11b helium absorption depth mismatch"
+
+
+def test_toi560b_sub_neptune_escape():
+    t = TOI560bSubNeptuneEscape()
+    depth = t.hei_10830_excess_depth_percent()
+    assert abs(depth - 0.68) < 0.2, "TOI-560b helium absorption depth mismatch"
