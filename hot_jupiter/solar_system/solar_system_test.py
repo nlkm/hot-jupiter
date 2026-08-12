@@ -24,6 +24,7 @@ from hot_jupiter.solar_system import (
     PD149Binary,
     PlanetaryRings,
     PlanetNineSecular,
+    QuaoarWeywotBinary,
     QY90Binary,
     RelativisticPrecession,
     RN43Binary,
@@ -269,3 +270,12 @@ def test_oj67_tno_binary():
     rho_kg_m3 = oj67_tno.system_bulk_density_kg_m3()
     assert abs(p_days - 1005.0) < 10.0, "2000 OJ67 TNO orbital period mismatch"
     assert abs(rho_kg_m3 - 566.0) < 30.0, "2000 OJ67 TNO bulk density mismatch"
+
+
+def test_quaoar_weywot_binary():
+    quaoar = QuaoarWeywotBinary()
+    p_days = quaoar.orbital_period_days()
+    rho_kg_m3 = quaoar.system_bulk_density_kg_m3()
+    assert abs(p_days - 12.438) < 0.5, "Quaoar / Weywot orbital period mismatch"
+    assert abs(rho_kg_m3 -
+               1640.0) < 50.0, "Quaoar / Weywot bulk density mismatch"
