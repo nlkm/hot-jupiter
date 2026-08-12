@@ -130,6 +130,13 @@ int main() {
   assert(std::abs(wc19_p - 8.40) < 0.1 && "2002 WC19 orbital period mismatch!");
   assert(std::abs(wc19_rho - 638.0) < 30.0 && "2002 WC19 density mismatch!");
 
+  hot_jupiter::KP76BinaryModel kp76_model;
+  double kp76_p = kp76_model.orbital_period_days();
+  double kp76_rho = kp76_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2001 KP76 Orbital Period: " << kp76_p << " days, Density: " << kp76_rho << " kg/m^3" << std::endl;
+  assert(std::abs(kp76_p - 240.0) < 30.0 && "2001 KP76 orbital period mismatch!");
+  assert(std::abs(kp76_rho - 460.0) < 30.0 && "2001 KP76 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
