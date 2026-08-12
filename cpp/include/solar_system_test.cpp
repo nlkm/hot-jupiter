@@ -207,6 +207,13 @@ int main() {
   assert(std::abs(oj67_tno_p - 1005.0) < 10.0 && "2000 OJ67 TNO orbital period mismatch!");
   assert(std::abs(oj67_tno_rho - 566.0) < 30.0 && "2000 OJ67 TNO density mismatch!");
 
+  hot_jupiter::QuaoarWeywotBinaryModel quaoar_model;
+  double quaoar_p = quaoar_model.orbital_period_days();
+  double quaoar_rho = quaoar_model.system_bulk_density_kg_m3();
+  std::cout << "--> Quaoar / Weywot Orbital Period: " << quaoar_p << " days, Density: " << quaoar_rho << " kg/m^3" << std::endl;
+  assert(std::abs(quaoar_p - 12.438) < 0.5 && "Quaoar / Weywot orbital period mismatch!");
+  assert(std::abs(quaoar_rho - 1640.0) < 50.0 && "Quaoar / Weywot density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
