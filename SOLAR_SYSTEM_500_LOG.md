@@ -146,6 +146,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #136 | Elkins-Tanton (2020), Viikinkoski (2018), Ferrais (2020), Asphaug (2006) | Asteroid 16 Psyche Metallic Core Composition \& Impact Stripping | Core C++ Engine | `//:psyche_metallic_core_impact_solver` | $0.9998$ | ✅ Completed |
 | #137 | Vernazza (2019), Hanuš (2020), Ševeček (2021) | Asteroid 10 Hygiea Spherical Equilibrium Shape \& Impact Origin | Core C++ Engine | `//:hygiea_spherical_equilibrium_solver` | $0.9998$ | ✅ Completed |
 | #138 | Weiss (2012), Vernazza (2011), Sierks (2011), Schulz (2012) | Asteroid 21 Lutetia Differentiated Core \& Primitive Crust | Core C++ Engine | `//:lutetia_differentiated_core_solver` | $0.9998$ | ✅ Completed |
+| #139 | Yeomans (1997), Housen (1999), Asphaug (2002) | Asteroid 253 Mathilde Low Density \& Porous Impact Shock Dampening | Core C++ Engine | `//:mathilde_porous_impact_dampening_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
