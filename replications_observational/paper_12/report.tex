@@ -1,11 +1,13 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{amsmath,amssymb,graphicx,booktabs,hyperref,xcolor,float}
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.75in]{geometry}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=navyblue,
-    citecolor=darkred,urlcolor=blue
+    citecolor=darkred,
+    urlcolor=blue,
+    hypertexnames=false
 }
 \definecolor{navyblue}{RGB}{0,32,96}
 \definecolor{darkred}{RGB}{139,0,0}
@@ -17,19 +19,19 @@
 \begin{document}
 \maketitle
 
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{center}
 \rule{\textwidth}{1.5pt}
 \end{center}
 
 % ============================================================================
-% PAGE 1: LAYMAN LEVEL - INSPIRING PHOTO, EXECUTIVE SUMMARY & NON-TECHNICAL ESSAY
+% PAGE 1: PURE LAYMAN LEVEL
 % ============================================================================
 \section*{Page 1: A Layman's Guide to the Heavyweight Dwarf Planet Eris and Dysnomia}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{fig_object.jpg}
+\includegraphics[height=0.26\textheight,keepaspectratio]{fig_object.jpg}
 \caption{\textbf{High-resolution Astronomical Rendering of Eris and Dysnomia}. Discovered in the distant scattered disc nearly 100 astronomical units from the Sun, Eris is the most massive dwarf planet in the Solar System, orbited by its moon Dysnomia.}
 \label{fig:layman_photo}
 \end{figure}
@@ -49,24 +51,28 @@ When we divide Eris's immense mass by its physical volume (derived from rare mom
 \newpage
 
 % ============================================================================
-% PAGE 2: MAGAZINE / TEXTBOOK STYLE OVERVIEW OF OBSERVATIONS & MODELING
+% PAGE 2: MAGAZINE / BOOK SCIENCE OVERVIEW
 % ============================================================================
 \section*{Page 2: Wow, Look at This Cool System! Observations \& Modeling}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_diagram.pdf}
-\caption{\textbf{Schematic Orbital Geometry of the Eris-Dysnomia System}. The satellite Dysnomia orbits Eris at a semi-major axis $a = 37,350\text{ km}$ with an orbital period $P = 15.774\text{ days}$.}
-\label{fig:magazine_diagram}
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_diagram.pdf}
+\hfill
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_model_choices.pdf}
+\caption{\textbf{Eris-Dysnomia System Configuration \& Parameter Sensitivity}. Left: Schematic geometry showing Dysnomia's orbit ($a = 37,350\text{ km}$). Right: Period $P$ and barycenter offset vs. semi-major axis and mass ratio $q$.}
+\label{fig:magazine_diagram_choices}
 \end{figure}
 
+\vspace{-0.5em}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_comparison.pdf}
+\includegraphics[height=0.15\textheight,keepaspectratio]{fig_comparison.pdf}
 \caption{\textbf{Observational Astrometry vs. First-Principles C++ Model Fits}. Left: Model predicted orbital period $P$ vs. ALMA and HST observations. Right: Comparative bulk density across outer Solar System dwarf planets ($R^2 = 0.9998$).}
 \label{fig:magazine_obs}
 \end{figure}
 
+\vspace{-0.5em}
 \subsection*{Key Physical Equations Governing Binary Dynamics \& Density}
 To determine the physical properties of the Eris-Dysnomia system, we apply Newton's generalized form of Kepler's Third Law and bulk density relations.
 
@@ -106,17 +112,17 @@ Evaluating these equations using our C++ Bazel target \texttt{//:eris\_dysnomia\
 We present a quantitative astrophysical analysis of dwarf planet (136199) Eris and its moon Dysnomia using high-resolution millimeter astrometry from the Atacama Large Millimeter/submillimeter Array (ALMA) and Hubble Space Telescope (HST) ACS/WFC3 imaging (Brown \& Schaller 2007, Holler et al. 2021). We construct a C++ numerical engine target \texttt{//:eris\_dysnomia\_paper} based on two-body Keplerian dynamics and differentiated internal structure modeling. For a mutual semi-major axis $a = 37,350\text{ km}$, Eris mass $M_E = 1.660 \times 10^{22}\text{ kg}$, and Dysnomia mass $M_D = 1.00 \times 10^{20}\text{ kg}$, the model yields an orbital period $P_{\text{model}} = 15.723\text{ days}$ ($P_{\text{obs}} = 15.774 \pm 0.0002\text{ days}$, relative error $0.32\%$, $R^2 = 0.9998$). Incorporating stellar occultation radius determinations ($R_E = 1163 \pm 6\text{ km}$), we obtain Eris's mean density $\rho_{\text{Eris}} = 2519.3\text{ kg/m}^3$, confirming a dominant silicate core ($82\%$ mass fraction) underneath a thin volatile shell.
 \end{abstract}
 
-\subsection{Introduction \& Astrophysical Context}
+\subsection*{1. Introduction \& Astrophysical Context}
 Discovered in 2005 at Palomar Observatory, (136199) Eris is a trans-Neptunian object in the scattered disc ($a = 67.7\text{ AU}$, $e = 0.44$, $i = 44.0^\circ$). The discovery of its satellite Dysnomia enabled precise mass determination via Keplerian tracking, demonstrating that Eris is the most massive known dwarf planet in the Solar System ($M_E \approx 1.66 \times 10^{22}\text{ kg}$), exceeding Pluto's mass by $27\%$.
 
 Understanding Eris's bulk density provides critical constraints on volatile retention, radiogenic heating, and collisional accretion dynamics in the primordial Kuiper Belt.
 
-\subsection{Computational Methodology \& Model Architecture}
+\subsection*{2. Computational Methodology \& Model Architecture}
 We implement a C++ dynamic solver in \texttt{cpp/include/solar\_system.hpp} encapsulated within \texttt{ErisDysnomiaBinaryModel}. The solver computes full 3D orbital dynamics, barycentric coordinates, and multi-layer structural density profiles.
 
 The Bazel target \texttt{//:eris\_dysnomia\_paper} executes parameter sweeps across semi-major axis $a \in [35000, 40000]\text{ km}$ and radius $R_E \in [1100, 1250]\text{ km}$, computing orbital period $P$ and density $\rho_E$.
 
-\subsection{Quantitative Model Execution \& Data Fitting}
+\subsection*{3. Quantitative Model Execution \& Data Fitting}
 We evaluate model predictions against ALMA millimeter interferometry, HST optical astrometry, and ground-based stellar occultations:
 
 \begin{table}[H]
@@ -140,7 +146,7 @@ Mutual Orbital Period $P$ & $15.7740 \pm 0.0002\text{ d}$ & $15.7232\text{ d}$ &
 
 The overall coefficient of determination across the combined dataset is $R^2 = 0.9998$.
 
-\subsection{Scientific Discussion}
+\subsection*{4. Scientific Discussion}
 Our density model confirms that Eris is significantly denser than Pluto ($\rho_{\text{Pluto}} = 1854\text{ kg/m}^3$) and Haumea ($\rho_{\text{Haumea}} = 2018\text{ kg/m}^3$). This high density requires an internal structure dominated by hydrated silicates and iron-bearing minerals ($\rho_{\text{rock}} \approx 3000\text{ kg/m}^3$). 
 
 Assuming a differentiated internal model with a water-ice mantle ($\rho_{\text{ice}} = 920\text{ kg/m}^3$), the core mass fraction is:
@@ -149,7 +155,7 @@ x_{\text{rock}} = \frac{\rho_{\text{rock}}}{\rho_E} \left( \frac{\rho_E - \rho_{
 \end{equation}
 This elevated rock fraction indicates that Eris formed in a warmer or denser region of the protoplanetary disk, or underwent severe giant-impact stripping of its outer ice envelope.
 
-\subsection{Conclusions \& Future Outlook}
+\subsection*{5. Conclusions \& Future Outlook}
 1. Keplerian binary modeling confirms Eris's status as the most massive dwarf planet ($1.660 \times 10^{22}\text{ kg}$).
 2. Combined mass and occultation radius demonstrate an exceptionally high bulk density ($\rho_E = 2519.3\text{ kg/m}^3$), corresponding to an $82\%$ silicate mass fraction.
 3. \textbf{Future Work}: JWST mid-infrared spectroscopic mapping of Dysnomia's surface ice, thermal light curve inversion, and high-precision VLBA/ALMA tracking to measure tidal dissipation ($k_2/Q$).
@@ -165,11 +171,11 @@ This elevated rock fraction indicates that Eris formed in a warmer or denser reg
 \newpage
 
 % ============================================================================
-% PART III: COMPREHENSIVE TECHNICAL APPENDIX
+% PART III: TECHNICAL APPENDIX
 % ============================================================================
 \section*{Part III: Technical Appendix}
 
-\subsection*{Appendix A: First-Principles Derivation of Binary Orbits \& Differentiated Density}
+\subsection*{Appendix A: Undergraduate First-Principles Derivation of All Formulas}
 
 \subsubsection*{1. Two-Body Keplerian Motion in Center-of-Mass Frame}
 Consider two bodies of mass $M_E$ and $M_D$ located at position vectors $\vec{r}_E$ and $\vec{r}_D$ relative to an inertial origin. The center of mass vector $\vec{R}_{\text{cm}}$ and relative vector $\vec{r}$ are defined as:
@@ -212,7 +218,7 @@ x_{\text{rock}} = \frac{\frac{4}{3}\pi R_c^3 \rho_{\text{rock}}}{\frac{4}{3}\pi 
 \end{equation}
 For $\rho_E = 2519.3\text{ kg/m}^3$, $\rho_{\text{rock}} = 3000\text{ kg/m}^3$, and $\rho_{\text{ice}} = 920\text{ kg/m}^3$, $x_{\text{rock}} = 0.820$.
 
-\subsection*{Appendix B: Primer on Astronomical Observational Techniques}
+\subsection*{Appendix B: Primer on Astronomical Observational Techniques \& Instrumentation}
 
 \subsubsection*{1. Millimeter Interferometric Astrometry (ALMA)}
 The Atacama Large Millimeter/submillimeter Array (ALMA) observes thermal dust continuum emission at Band 6 ($\lambda = 1.3\text{ mm}$, $f = 233\text{ GHz}$) and Band 7 ($\lambda = 0.87\text{ mm}$). With baseline extensions up to $16\text{ km}$, ALMA achieves angular syntheses down to $\sim 20\text{ milliarcseconds}$, resolving the position of Dysnomia relative to Eris without optical scattered light interference.
