@@ -5,6 +5,7 @@ Unit tests for hot_jupiter.solar_system subpackage.
 from hot_jupiter.solar_system import (
     AltjiraBinary,
     AsteroidDynamics,
+    AZ84Binary,
     CetoPhorcysBinary,
     CometDynamics,
     EG138Binary,
@@ -215,3 +216,11 @@ def test_gz31_binary():
     rho_kg_m3 = gz31.system_bulk_density_kg_m3()
     assert abs(p_days - 1010.0) < 10.0, "2002 GZ31 orbital period mismatch"
     assert abs(rho_kg_m3 - 238.0) < 30.0, "2002 GZ31 bulk density mismatch"
+
+
+def test_az84_binary():
+    az84 = AZ84Binary()
+    p_days = az84.orbital_period_days()
+    rho_kg_m3 = az84.system_bulk_density_kg_m3()
+    assert abs(p_days - 12.25) < 1.5, "2003 AZ84 orbital period mismatch"
+    assert abs(rho_kg_m3 - 870.0) < 30.0, "2003 AZ84 bulk density mismatch"
