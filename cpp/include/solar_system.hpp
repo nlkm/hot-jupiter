@@ -693,6 +693,30 @@ class SaturnRingResonanceAnalysisModel {
   }
 };
 
+// ============================================================================
+// 33. ENCELADUS TIDAL DISSIPATION & ICE SHELL MODEL (Spencer 2006, Tobie 2008)
+// ============================================================================
+class EnceladusTidalAnalysisModel {
+ public:
+  // Calculate tidal dissipation power [GW] (Segatz 1988, Tobie 2008)
+  double tidal_dissipation_power_gw(double Im_k2 = 0.0107, double e = 0.0047, double a_km = 238037.0, double M_Saturn = 5.6834e26, double R_Enceladus_km = 252.1) const {
+    double a_m = a_km * 1000.0;
+    double R_m = R_Enceladus_km * 1000.0;
+    double n = std::sqrt(G * M_Saturn / std::pow(a_m, 3.0));
+    double power_w = (21.0 / 2.0) * Im_k2 * (n * G * std::pow(M_Saturn, 2.0) * std::pow(R_m, 5.0) * std::pow(e, 2.0)) / std::pow(a_m, 6.0);
+    return power_w / 1.0e9;
+  }
+
+  // Calculate conductive heat flux through ice shell [GW]
+  double conductive_heat_flux_gw(double d_shell_km, double A_conduct = 567.0, double T_base = 273.15, double T_surf = 75.0, double R_Enceladus_km = 252.1) const {
+    double d_m = d_shell_km * 1000.0;
+    double R_m = R_Enceladus_km * 1000.0;
+    double flux_w_m2 = (A_conduct * std::log(T_base / T_surf)) / d_m;
+    double area_m2 = 4.0 * M_PI * R_m * R_m;
+    return (flux_w_m2 * area_m2) / 1.0e9;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

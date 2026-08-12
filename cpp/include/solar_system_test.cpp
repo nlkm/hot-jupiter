@@ -251,6 +251,13 @@ int main() {
   assert(std::abs(r_janus76 - 136770.0) < 500.0 && "Janus 7:6 ILR mismatch!");
   assert(std::abs(r_fring - 140220.0) < 500.0 && "F-ring shepherd torque balance mismatch!");
 
+  hot_jupiter::EnceladusTidalAnalysisModel enceladus_model;
+  double p_diss_gw = enceladus_model.tidal_dissipation_power_gw();
+  double q_cond_gw = enceladus_model.conductive_heat_flux_gw(20.0);
+  std::cout << "--> Enceladus Tidal Analysis: Dissipation Power = " << p_diss_gw << " GW, Conductive Heat Loss = " << q_cond_gw << " GW" << std::endl;
+  assert(std::abs(p_diss_gw - 15.8) < 1.0 && "Enceladus tidal dissipation power mismatch!");
+  assert(std::abs(q_cond_gw - 29.3) < 2.0 && "Enceladus conductive heat loss mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
