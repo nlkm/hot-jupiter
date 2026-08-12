@@ -21,6 +21,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    WC19Binary,
     YN81Binary,
 )
 
@@ -161,3 +162,11 @@ def test_yn81_binary():
     rho_kg_m3 = yn81.system_bulk_density_kg_m3()
     assert abs(p_days - 410.0) < 30.0, "2000 YN81 orbital period mismatch"
     assert abs(rho_kg_m3 - 470.0) < 30.0, "2000 YN81 bulk density mismatch"
+
+
+def test_wc19_binary():
+    wc19 = WC19Binary()
+    p_days = wc19.orbital_period_days()
+    rho_kg_m3 = wc19.system_bulk_density_kg_m3()
+    assert abs(p_days - 8.40) < 0.1, "2002 WC19 orbital period mismatch"
+    assert abs(rho_kg_m3 - 638.0) < 30.0, "2002 WC19 bulk density mismatch"
