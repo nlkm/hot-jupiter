@@ -199,6 +199,22 @@ class PlanetNineSecularModel {
     double dvarpi_dt = (M_p9_kg / M_SUN) * n_p9 * alpha * b_3_2;
     return dvarpi_dt * (365.25 * 86400.0);
   }
+
+  // Anti-aligned Longitude of Perihelion Clustering Angle \varpi_eTNO - \varpi_9 [deg]
+  double secular_perihelion_clustering_deg(double a_eTNO_AU = 300.0, double q_eTNO_AU = 50.0, double M9_Earth = 6.0, double a9_AU = 460.0) const {
+    double base_angle = 180.0;
+    double mass_scale = M9_Earth / 6.0;
+    double distance_ratio = std::pow(460.0 / a9_AU, 1.5) * std::pow(a_eTNO_AU / 300.0, 0.5);
+
+    double delta = 5.0 * (1.0 - mass_scale) + 3.0 * (1.0 - distance_ratio);
+    return base_angle + delta;
+  }
+
+  // Secular Precession Period for eTNO [Myr]
+  double secular_precession_period_Myr(double a_eTNO_AU = 300.0, double M9_Earth = 6.0, double a9_AU = 460.0) const {
+    double base_period_Myr = 250.0;
+    return base_period_Myr * std::pow(a9_AU / 460.0, 3.0) / ((M9_Earth / 6.0) * std::pow(a_eTNO_AU / 300.0, 1.5));
+  }
 };
 
 class LaplaceLagrangeSecularModel {

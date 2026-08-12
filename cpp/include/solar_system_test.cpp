@@ -305,6 +305,11 @@ int main() {
   std::cout << "--> Comet 67P Outgassing: A1 * g(1 AU) = " << a1_val << " AU/day^2" << std::endl;
   assert(std::abs(a1_val - 3.25e-8) < 1.0e-9 && "Comet 67P outgassing acceleration mismatch!");
 
+  hot_jupiter::PlanetNineSecularModel p9_test_model;
+  double p9_angle = p9_test_model.secular_perihelion_clustering_deg();
+  std::cout << "--> Planet Nine Secular: Angle = " << p9_angle << " deg" << std::endl;
+  assert(std::abs(p9_angle - 180.0) < 5.0 && "Planet Nine secular perihelion clustering mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
