@@ -31,6 +31,7 @@ from hot_jupiter.solar_system import (
     RelativisticPrecession,
     RN43Binary,
     SaturnRingLindbladResonance,
+    SaturnRingResonances,
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
@@ -315,3 +316,14 @@ def test_uq18_binary():
     rho_kg_m3 = uq18.system_bulk_density_kg_m3()
     assert abs(p_days - 165.0) < 5.0, "2001 UQ18 orbital period mismatch"
     assert abs(rho_kg_m3 - 398.0) < 30.0, "2001 UQ18 bulk density mismatch"
+
+
+def test_saturn_ring_resonances():
+    saturn_ring = SaturnRingResonances()
+    r_mimas21 = saturn_ring.inner_lindblad_resonance_km(185539.0, 2, 1)
+    r_janus76 = saturn_ring.inner_lindblad_resonance_km(151460.0, 7, 6)
+    r_fring = saturn_ring.shepherd_torque_balance_km()
+    assert abs(r_mimas21 - 117580.0) < 1000.0, "Mimas 2:1 ILR mismatch"
+    assert abs(r_janus76 - 136770.0) < 500.0, "Janus 7:6 ILR mismatch"
+    assert abs(r_fring -
+               140220.0) < 500.0, "F-ring shepherd torque balance mismatch"

@@ -634,6 +634,28 @@ class UQ18Binary:
         return m_sys_kg / vol
 
 
+class SaturnRingResonances:
+
+    def inner_lindblad_resonance_km(self,
+                                    moon_a_km,
+                                    m_ring,
+                                    m_moon,
+                                    r_saturn_km=60268.0,
+                                    j2=0.01629):
+        ratio = float(m_moon) / float(m_ring)
+        r_kepler = moon_a_km * (ratio**(2.0 / 3.0))
+        j2_factor = 1.0 + 0.6 * j2 * ((r_saturn_km / r_kepler)**2)
+        return r_kepler * j2_factor
+
+    def shepherd_torque_balance_km(self,
+                                   a_inner_km=139380.0,
+                                   m_inner_kg=1.595e17,
+                                   a_outer_km=141720.0,
+                                   m_outer_kg=1.371e17):
+        ratio = (m_inner_kg / m_outer_kg)**0.25
+        return (a_inner_km + ratio * a_outer_km) / (1.0 + ratio)
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -663,6 +685,7 @@ __all__ = [
     "RN43Binary",
     "RelativisticPrecession",
     "SaturnRingLindbladResonance",
+    "SaturnRingResonances",
     "SeasonalYarkovsky",
     "SilaNunamBinary",
     "TeharonhiawakoBinary",
