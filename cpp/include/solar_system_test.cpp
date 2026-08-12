@@ -186,6 +186,13 @@ int main() {
   assert(std::abs(qy90_p - 320.0) < 30.0 && "2003 QY90 orbital period mismatch!");
   assert(std::abs(qy90_rho - 740.0) < 30.0 && "2003 QY90 density mismatch!");
 
+  hot_jupiter::JA132BinaryModel ja132_model;
+  double ja132_p = ja132_model.orbital_period_days();
+  double ja132_rho = ja132_model.system_bulk_density_kg_m3();
+  std::cout << "--> 1999 JA132 Orbital Period: " << ja132_p << " days, Density: " << ja132_rho << " kg/m^3" << std::endl;
+  assert(std::abs(ja132_p - 515.0) < 10.0 && "1999 JA132 orbital period mismatch!");
+  assert(std::abs(ja132_rho - 224.0) < 50.0 && "1999 JA132 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
