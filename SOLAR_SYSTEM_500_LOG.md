@@ -154,6 +154,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #144 | Watanabe (2019), Sugita (2019), Jaumann (2019), Kitazato (2019) | Asteroid 162173 Ryugu C-type Hydrated Mineralogy \& High Porosity | Core C++ Engine | `//:ryugu_hydrated_porous_solver` | $0.9998$ | ✅ Completed |
 | #145 | Lauretta (2019), Scheeres (2019), Hergenrother (2019), Walsh (2019) | Asteroid 101955 Bennu Mass, Porosity, Particle Ejection, \& YORP | Core C++ Engine | `//:bennu_mass_porosity_ejection_solver` | $0.9998$ | ✅ Completed |
 | #146 | Thomas (2023), Daly (2023), Cheng (2023), Agrusa (2021) | Asteroid 65803 Didymos \& Dimorphos DART Impact Kinetic Deflection | Core C++ Engine | `//:didymos_dart_impact_deflection_solver` | $0.9998$ | ✅ Completed |
+| #147 | Sierks (2015), Pätzold (2016), Jorda (2016), Hässig (2015) | Comet 67P/Churyumov-Gerasimenko Bilobate Shape, Mass, Density, \& Water Outgassing | Core C++ Engine | `//:comet_67p_bilobate_outgassing_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
