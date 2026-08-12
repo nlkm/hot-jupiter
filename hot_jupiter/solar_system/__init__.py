@@ -781,6 +781,41 @@ class SaturnCassiniGravityAnalysis:
         return j6_static * 1.0e6 + wind_correction_1e6
 
 
+class MercuryRelativisticPrecession:
+
+    def gr_precession_arcsec_century(self,
+                                     a_au=0.387098,
+                                     e=0.205630,
+                                     period_days=87.969):
+        c = 2.99792458e8
+        m_sun = 1.98847e30
+        g = 6.67430e-11
+        a_m = a_au * 1.495978707e11
+        p_sec = period_days * 86400.0
+        orbits_per_century = (100.0 * 365.25 * 86400.0) / p_sec
+
+        domega_per_orbit_rad = (6.0 * np.pi * g * m_sun) / (a_m *
+                                                            (1.0 - e**2) * c**2)
+        domega_century_rad = domega_per_orbit_rad * orbits_per_century
+        return domega_century_rad * (180.0 / np.pi) * 3600.0
+
+    def j2_sun_precession_arcsec_century(self,
+                                         a_au=0.387098,
+                                         e=0.205630,
+                                         period_days=87.969,
+                                         j2_sun=2.25e-7,
+                                         r_sun_km=696342.0):
+        a_m = a_au * 1.495978707e11
+        r_sun_m = r_sun_km * 1000.0
+        p_sec = period_days * 86400.0
+        orbits_per_century = (100.0 * 365.25 * 86400.0) / p_sec
+
+        domega_per_orbit_rad = (3.0 * np.pi * j2_sun *
+                                r_sun_m**2) / (a_m**2 * (1.0 - e**2)**2)
+        domega_century_rad = domega_per_orbit_rad * orbits_per_century
+        return domega_century_rad * (180.0 / np.pi) * 3600.0
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -800,6 +835,7 @@ __all__ = [
     "KP76Binary",
     "KS38Binary",
     "LaplaceLagrangeSecular",
+    "MercuryRelativisticPrecession",
     "MoonTidalDynamics",
     "NiceModelResonanceCrossing",
     "OJ67Binary",

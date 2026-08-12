@@ -21,6 +21,7 @@ from hot_jupiter.solar_system import (
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
+    MercuryRelativisticPrecession,
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
     OJ67Binary,
@@ -369,3 +370,11 @@ def test_saturn_cassini_gravity_analysis():
     assert abs(j2 - 16290.71) < 50.0, "Saturn J2 mismatch"
     assert abs(j4 - (-935.83)) < 5.0, "Saturn J4 mismatch"
     assert abs(j6 - 86.14) < 1.0, "Saturn J6 mismatch"
+
+
+def test_mercury_relativistic_precession():
+    mp = MercuryRelativisticPrecession()
+    gr_rate = mp.gr_precession_arcsec_century()
+    j2_rate = mp.j2_sun_precession_arcsec_century()
+    assert abs(gr_rate - 42.982) < 0.1, "Mercury GR rate mismatch"
+    assert abs(j2_rate - 0.0286) < 0.01, "Mercury Solar J2 rate mismatch"
