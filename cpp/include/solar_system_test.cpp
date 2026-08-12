@@ -214,6 +214,13 @@ int main() {
   assert(std::abs(quaoar_p - 12.438) < 0.5 && "Quaoar / Weywot orbital period mismatch!");
   assert(std::abs(quaoar_rho - 1640.0) < 50.0 && "Quaoar / Weywot density mismatch!");
 
+  hot_jupiter::UX10BinaryModel ux10_model;
+  double ux10_p = ux10_model.orbital_period_days();
+  double ux10_rho = ux10_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2004 UX10 Orbital Period: " << ux10_p << " days, Density: " << ux10_rho << " kg/m^3" << std::endl;
+  assert(std::abs(ux10_p - 122.0) < 5.0 && "2004 UX10 orbital period mismatch!");
+  assert(std::abs(ux10_rho - 1164.0) < 50.0 && "2004 UX10 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
