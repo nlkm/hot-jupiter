@@ -10,7 +10,7 @@
 \maketitle
 
 \begin{abstract}
-We present a first-principles replication of Grundy et al. (2015), Thirouin et al. (2014), and Souami et al. (2020) modeling Hubble Space Telescope (HST) astrometric mutual orbit determination and thermal lightcurve observations of classical Kuiper Belt Object (174567) Varda ($R_{\text{Varda}} = 360 \pm 15\text{ km}$) and its satellite Ilmarë ($R_{\text{Ilmar\ddot{e}}} = 163 \pm 10\text{ km}$). Astrometric orbital fitting yields a near-circular mutual orbit with semi-major axis $a_{\text{orb}} = 4800 \pm 40\text{ km}$, eccentricity $e = 0.0215$, and orbital period $P_{\text{orb}} = 5.751\text{ days}$. The system total mass is $M_{\text{sys}} = (2.664 \pm 0.04) \times 10^{20}\text{ kg}$, which combined with radiometric size determinations yields a high bulk density $\rho_{\text{bulk}} = 1250 \pm 150\text{ kg/m}^3$. This elevated density requires a rock-dominated interior shell ($>60\%$ silicate fraction), contrasting with lower-density icy KBO binaries. Using our C++ solver engine, we compute Keplerian orbital periods, system masses, and bulk densities. Calculated periods match Grundy et al. (2015) observations with $R^2 \ge 0.999$.
+We present a first-principles replication of Grundy et al. (2015), Thirouin et al. (2014), and Souami et al. (2020) modeling Hubble Space Telescope (HST) astrometric mutual orbit determination and thermal lightcurve observations of classical Kuiper Belt Object (174567) Varda ($R_{\text{Varda}} = 360 \pm 15\text{ km}$) and its satellite Ilmarë ($R_{\text{Ilmar\"e}} = 163 \pm 10\text{ km}$). Astrometric orbital fitting yields a near-circular mutual orbit with semi-major axis $a_{\text{orb}} = 4800 \pm 40\text{ km}$, eccentricity $e = 0.0215$, and orbital period $P_{\text{orb}} = 5.751\text{ days}$. The system total mass is $M_{\text{sys}} = (2.664 \pm 0.04) \times 10^{20}\text{ kg}$, which combined with radiometric size determinations yields a high bulk density $\rho_{\text{bulk}} = 1250 \pm 150\text{ kg/m}^3$. This elevated density requires a rock-dominated interior shell ($>60\%$ silicate fraction), contrasting with lower-density icy KBO binaries. Using our C++ solver engine, we compute Keplerian orbital periods, system masses, and bulk densities. Calculated periods match Grundy et al. (2015) observations with $R^2 \ge 0.999$.
 \end{abstract}
 
 \section{Core Physical Equations}
@@ -20,7 +20,7 @@ P_{\text{orb}} = 2\pi \sqrt{\frac{a_{\text{orb}}^3}{G M_{\text{sys}}}} \approx 5
 \end{equation}
 System bulk density $\rho_{\text{bulk}}$:
 \begin{equation}
-\rho_{\text{bulk}} = \frac{M_{\text{sys}}}{\frac{4}{3}\pi (R_{\text{Varda}}^3 + R_{\text{Ilmar\ddot{e}}}^3)} \approx 1250\text{ kg/m}^3
+\rho_{\text{bulk}} = \frac{M_{\text{sys}}}{\frac{4}{3}\pi (R_{\text{Varda}}^3 + R_{\text{Ilmar\"e}}^3)} \approx 1250\text{ kg/m}^3
 \end{equation}
 
 \section{Replication Results}
