@@ -16,6 +16,7 @@ from hot_jupiter.solar_system import (
     MoonTidalDynamics,
     NiceModelResonanceCrossing,
     OJ67Binary,
+    PD149Binary,
     PlanetaryRings,
     PlanetNineSecular,
     RelativisticPrecession,
@@ -197,3 +198,11 @@ def test_rn43_binary():
     rho_kg_m3 = rn43.system_bulk_density_kg_m3()
     assert abs(p_days - 14.80) < 1.0, "2005 RN43 orbital period mismatch"
     assert abs(rho_kg_m3 - 635.0) < 30.0, "2005 RN43 bulk density mismatch"
+
+
+def test_pd149_binary():
+    pd149 = PD149Binary()
+    p_days = pd149.orbital_period_days()
+    rho_kg_m3 = pd149.system_bulk_density_kg_m3()
+    assert abs(p_days - 1260.0) < 10.0, "2002 PD149 orbital period mismatch"
+    assert abs(rho_kg_m3 - 340.0) < 30.0, "2002 PD149 bulk density mismatch"
