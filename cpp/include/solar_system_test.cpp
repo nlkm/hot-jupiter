@@ -123,6 +123,13 @@ int main() {
   assert(std::abs(yn81_p - 410.0) < 30.0 && "2000 YN81 orbital period mismatch!");
   assert(std::abs(yn81_rho - 470.0) < 30.0 && "2000 YN81 density mismatch!");
 
+  hot_jupiter::WC19BinaryModel wc19_model;
+  double wc19_p = wc19_model.orbital_period_days();
+  double wc19_rho = wc19_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2002 WC19 Orbital Period: " << wc19_p << " days, Density: " << wc19_rho << " kg/m^3" << std::endl;
+  assert(std::abs(wc19_p - 8.40) < 0.1 && "2002 WC19 orbital period mismatch!");
+  assert(std::abs(wc19_rho - 638.0) < 30.0 && "2002 WC19 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
