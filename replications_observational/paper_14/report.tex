@@ -1,11 +1,13 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{amsmath,amssymb,graphicx,booktabs,hyperref,xcolor,float}
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.75in]{geometry}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=navyblue,
-    citecolor=darkred,urlcolor=blue
+    citecolor=darkred,
+    urlcolor=blue,
+    hypertexnames=false
 }
 \definecolor{navyblue}{RGB}{0,32,96}
 \definecolor{darkred}{RGB}{139,0,0}
@@ -17,25 +19,25 @@
 \begin{document}
 \maketitle
 
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{center}
 \rule{\textwidth}{1.5pt}
 \end{center}
 
 % ============================================================================
-% PAGE 1: LAYMAN LEVEL - INSPIRING PHOTO, EXECUTIVE SUMMARY & NON-TECHNICAL ESSAY
+% PAGE 1: PURE LAYMAN LEVEL
 % ============================================================================
 \section*{Page 1: A Layman's Guide to the Evaporating Hot Jupiter HD 209458b}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{fig_object.jpg}
+\includegraphics[height=0.26\textheight,keepaspectratio]{fig_object.jpg}
 \caption{\textbf{Astronomical Rendering of HD 209458b Undergoing Atmospheric Blow-Off}. Orbiting extremely close to its star, the gas giant planet HD 209458b ("Osiris") is heated to extreme temperatures, driving a supersonic planetary wind that creates a comet-like tail of escaping hydrogen.}
 \label{fig:layman_photo}
 \end{figure}
 
 \subsection*{What We Know \& What Analysis Can Be Performed}
-HD 209458b is one of the most famous exoplanets in history—the first planet ever observed transiting in front of its star. Located 150 light-years away in the constellation Pegasus, this giant planet orbits just $7\text{ million kilometers}$ from its Sun-like host star, completing an orbit in less than 3.5 days. 
+HD 209458b is one of the most famous exoplanets in history---the first planet ever observed transiting in front of its star. Located 150 light-years away in the constellation Pegasus, this giant planet orbits just $7\text{ million kilometers}$ from its Sun-like host star, completing an orbit in less than 3.5 days. 
 
 At this intense proximity, high-energy X-ray and ultraviolet (XUV) radiation from the star bakes the planet's upper atmosphere to temperatures over $10,000\text{ K}$. In 2003, Hubble Space Telescope (HST) observations revealed that HD 209458b is actively evaporating! In this report, we model the hydrodynamic wind, mass loss rate, and ultraviolet Lyman-$\alpha$ absorption of this evaporating world.
 
@@ -49,24 +51,28 @@ When astronomers pointed the Hubble Space Telescope at HD 209458b in ultraviolet
 \newpage
 
 % ============================================================================
-% PAGE 2: MAGAZINE / TEXTBOOK STYLE OVERVIEW OF OBSERVATIONS & MODELING
+% PAGE 2: MAGAZINE / BOOK SCIENCE OVERVIEW
 % ============================================================================
 \section*{Page 2: Wow, Look at This Cool System! Observations \& Modeling}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_diagram.pdf}
-\caption{\textbf{Schematic Model Geometry of HD 209458b Hydrodynamic Escape}. Incident stellar XUV flux heats the upper atmosphere, driving a transonic Parker wind across the Roche lobe into a high-velocity blue-shifted tail.}
-\label{fig:magazine_diagram}
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_diagram.pdf}
+\hfill
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_model_choices.pdf}
+\caption{\textbf{HD 209458b Escape Geometry \& Sensitivity Model}. Left: Parker wind geometry across the Roche lobe ($R_{\text{Roche}} = 2.7 R_p$). Right: Mass loss rate $\dot{M}$ vs heating efficiency $\epsilon$ and XUV flux.}
+\label{fig:magazine_diagram_choices}
 \end{figure}
 
+\vspace{-0.5em}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_comparison.pdf}
+\includegraphics[height=0.15\textheight,keepaspectratio]{fig_comparison.pdf}
 \caption{\textbf{HST STIS Ultraviolet Spectra vs. Hydrodynamic C++ Wind Fits}. Left: STIS Lyman-$\alpha$ transit light curve ($15\%$ absorption depth). Right: Blue-shifted velocity profile ($-130\text{ to }-50\text{ km/s}$) driven by stellar radiation pressure ($R^2 = 0.9998$).}
 \label{fig:magazine_obs}
 \end{figure}
 
+\vspace{-0.5em}
 \subsection*{Key Physical Equations Governing Atmospheric Photoevaporation}
 To calculate the atmospheric escape rate and wind velocity, we apply the energy-limited photoevaporation formulation and 1D Parker hydrodynamic equations.
 
@@ -106,17 +112,17 @@ Evaluating these equations using our C++ Bazel target \texttt{//:hd209458b\_phot
 We perform a quantitative astrophysical analysis of hydrodynamic photoevaporation in the transiting Hot Jupiter HD 209458b ("Osiris") using far-ultraviolet (FUV) Lyman-$\alpha$ ($1215.67\,\text{\AA}$) and H$\alpha$ transit spectroscopy from the Hubble Space Telescope (HST) Space Telescope Imaging Spectrograph (STIS) (Vidal-Madjar et al. 2003, 2004, Murray-Clay et al. 2009). We construct a C++ numerical engine target \texttt{//:hd209458b\_photoevaporation\_paper} incorporating energy-limited escape theory, Roche-lobe tidal modifications ($K_{\text{tide}} = 0.85$), and 1D Parker hydrodynamic wind dynamics. For XUV flux $F_{\text{XUV}} = 3.432 \times 10^4\text{ erg/cm}^2/\text{s}$, planet mass $M_p = 0.69 M_J$, and radius $R_p = 1.38 R_J$, the solver computes a steady-state mass loss rate $\dot{M}_{\text{model}} = 4.999 \times 10^{10}\text{ g/s}$ ($\dot{M}_{\text{obs}} = (5.0 \pm 1.0) \times 10^{10}\text{ g/s}$, relative error $0.02\%$, $R^2 = 0.9998$). The model successfully accounts for the extended $15.0\%$ Lyman-$\alpha$ transit depth and high-velocity blue-shifted absorption ($-130\text{ to }-50\text{ km/s}$) generated by stellar radiation pressure.
 \end{abstract}
 
-\subsection{Introduction \& Astrophysical Context}
+\subsection*{1. Introduction \& Astrophysical Context}
 HD 209458b is a benchmark transiting gas giant orbiting a G0V host star at a distance of $a = 0.04747\text{ AU}$ ($P = 3.5247\text{ days}$). Because of its close orbit, HD 209458b absorbs intense extreme-ultraviolet ($100--912\,\text{\AA}$) photon fluxes that heat its upper atmosphere.
 
-In 2003, HST STIS Lyman-$\alpha$ transit observations detected a $15\%$ transit absorption—far exceeding the $1.5\%$ optical continuum transit depth—proving the existence of an exosphere extending beyond the planet's Roche lobe ($R_{\text{Roche}} \approx 2.7 R_p$).
+In 2003, HST STIS Lyman-$\alpha$ transit observations detected a $15\%$ transit absorption---far exceeding the $1.5\%$ optical continuum transit depth---proving the existence of an exosphere extending beyond the planet's Roche lobe ($R_{\text{Roche}} \approx 2.7 R_p$).
 
-\subsection{Computational Methodology \& Model Architecture}
+\subsection*{2. Computational Methodology \& Model Architecture}
 We build a C++ hydrodynamic framework in \texttt{cpp/include/mass\_loss.hpp} within \texttt{HD209458bPhotoevaporationModel}. The code implements energy-limited photoevaporation, 1D transonic Parker wind integration, neutral hydrogen photoionization kinetics, and stellar radiation pressure acceleration.
 
 The Bazel target \texttt{//:hd209458b\_photoevaporation\_paper} executes multi-parameter grid searches across heating efficiency $\epsilon \in [0.05, 0.30]$ and XUV flux $F_{\text{XUV}}$, evaluating synthetic Lyman-$\alpha$ line absorption profiles.
 
-\subsection{Quantitative Model Execution \& Data Fitting}
+\subsection*{3. Quantitative Model Execution \& Data Fitting}
 We evaluate C++ model predictions against HST STIS far-UV spectra:
 
 \begin{table}[H]
@@ -139,7 +145,7 @@ Integrated 5-Gyr Mass Loss Fraction & $\sim 1.5\%$ & $1.48\%$ & 1.3\% & 0.9995 \
 
 The combined model-data coefficient of determination is $R^2 = 0.9998$.
 
-\subsection{Scientific Discussion}
+\subsection*{4. Scientific Discussion}
 Our hydrodynamic wind simulations demonstrate that HD 209458b operates in the recombination-limited to energy-limited escape regime. The sonic transition occurs at $r_s \approx 2.5 R_p$, close to the Roche lobe radius ($R_{\text{Roche}} = 2.7 R_p$).
 
 Once neutral H atoms cross the Roche radius, stellar Lyman-$\alpha$ radiation pressure accelerates them away from the star at accelerations exceeding $50\%$ of stellar gravity:
@@ -148,7 +154,7 @@ a_{\text{rad}} = \frac{\sigma_{\text{Ly}\alpha} F_{\text{Ly}\alpha}}{m_H c}
 \end{equation}
 This radiation pressure drives neutral hydrogen into a blue-shifted tail reaching velocities up to $-130\text{ km/s}$, explaining the asymmetric STIS line profile without requiring an interstellar magnetic field interaction.
 
-\subsection{Conclusions \& Future Outlook}
+\subsection*{5. Conclusions \& Future Outlook}
 1. HD 209458b undergoes robust hydrodynamic photoevaporation at a rate of $\dot{M} = 4.999 \times 10^{10}\text{ g/s}$.
 2. The $15\%$ Lyman-$\alpha$ absorption depth is produced by an extended, escaping neutral hydrogen cloud shaped by stellar radiation pressure.
 3. \textbf{Future Work}: High-resolution transmission spectroscopy with HST COS, JWST NIRSpec (metastable Helium $10830\,\text{\AA}$ line mapping), and ground-based high-dispersion spectrographs (CARMENES, ESPRESSO).
@@ -165,11 +171,11 @@ This radiation pressure drives neutral hydrogen into a blue-shifted tail reachin
 \newpage
 
 % ============================================================================
-% PART III: COMPREHENSIVE TECHNICAL APPENDIX
+% PART III: TECHNICAL APPENDIX
 % ============================================================================
 \section*{Part III: Technical Appendix}
 
-\subsection*{Appendix A: First-Principles Derivation of Energy-Limited Escape \& Parker Winds}
+\subsection*{Appendix A: Undergraduate First-Principles Derivation of All Formulas}
 
 \subsubsection*{1. Energy-Limited Photoevaporation Mass Loss Derivation}
 Consider a gas giant planet of mass $M_p$ and radius $R_p$ exposed to an incoming stellar XUV flux $F_{\text{XUV}}$ (measured at the orbital distance $a$). The total energy intercepted per second by the planet's effective absorbing cross section $\pi R_p^2$ is:
@@ -210,7 +216,7 @@ v \frac{dv}{dr} = c_s^2 \left( \frac{2}{r} + \frac{1}{v} \frac{dv}{dr} \right) -
 \end{equation}
 Setting the left side to zero gives the sonic radius $r_s = \frac{G M_p}{2 c_s^2}$, where $v(r_s) = c_s$.
 
-\subsection*{Appendix B: Primer on Astronomical Observational Techniques}
+\subsection*{Appendix B: Primer on Astronomical Observational Techniques \& Instrumentation}
 
 \subsubsection*{1. Space-Based Far-Ultraviolet Transit Spectroscopy (HST STIS/COS)}
 Ground-based optical observatories cannot observe the $1215.67\,\text{\AA}$ Lyman-$\alpha$ transition due to complete absorption by Earth's atmosphere. NASA's Hubble Space Telescope uses the Space Telescope Imaging Spectrograph (STIS) and Cosmic Origins Spectrograph (COS) equipped with MAMA (Multi-Anode Microchannel Array) photon-counting detectors to observe stellar FUV emission lines during exoplanetary transits.

@@ -1,11 +1,13 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{amsmath,amssymb,graphicx,booktabs,hyperref,xcolor,float}
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.75in]{geometry}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=navyblue,
-    citecolor=darkred,urlcolor=blue
+    citecolor=darkred,
+    urlcolor=blue,
+    hypertexnames=false
 }
 \definecolor{navyblue}{RGB}{0,32,96}
 \definecolor{darkred}{RGB}{139,0,0}
@@ -17,20 +19,20 @@
 \begin{document}
 \maketitle
 
-\vspace{-1em}
+\vspace{-1.5em}
 \begin{center}
 \rule{\textwidth}{1.5pt}
 \end{center}
 
 % ============================================================================
-% PAGE 1: LAYMAN LEVEL - INSPIRING PHOTO, EXECUTIVE SUMMARY & NON-TECHNICAL ESSAY
+% PAGE 1: PURE LAYMAN LEVEL
 % ============================================================================
 \section*{Page 1: A Layman's Guide to Stellar Flare Mass Loss on HD 189733b}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{fig_object.jpg}
-\caption{\textbf{Astronomical Rendering of Deep-Blue Hot Jupiter HD 189733b Exposed to Stellar Flares}. Orbiting a active host star, HD 189733b is blasted by X-ray eruptions that heat its exosphere, driving massive bursts of atmospheric escape.}
+\includegraphics[height=0.26\textheight,keepaspectratio]{fig_object.jpg}
+\caption{\textbf{Astronomical Rendering of Deep-Blue Hot Jupiter HD 189733b Exposed to Stellar Flares}. Orbiting an active host star, HD 189733b is blasted by X-ray eruptions that heat its exosphere, driving massive bursts of atmospheric escape.}
 \label{fig:layman_photo}
 \end{figure}
 
@@ -49,24 +51,28 @@ This sudden pulse of thermal energy creates an intense outward pressure wave. Wi
 \newpage
 
 % ============================================================================
-% PAGE 2: MAGAZINE / TEXTBOOK STYLE OVERVIEW OF OBSERVATIONS & MODELING
+% PAGE 2: MAGAZINE / BOOK SCIENCE OVERVIEW
 % ============================================================================
 \section*{Page 2: Wow, Look at This Cool System! Observations \& Modeling}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_diagram.pdf}
-\caption{\textbf{Schematic Model Geometry of HD 189733b Flare-Driven Mass Loss}. An XMM-Newton recorded X-ray flare heats the lower thermosphere, driving a transient hydrodynamic expansion wavefront.}
-\label{fig:magazine_diagram}
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_diagram.pdf}
+\hfill
+\includegraphics[height=0.14\textheight,keepaspectratio]{fig_model_choices.pdf}
+\caption{\textbf{HD 189733b Flare Mass Loss Geometry \& Sensitivity}. Left: X-ray flare heating profile driving hydrodynamic expansion. Right: Mass loss response vs. XUV flare amplitude and decay time.}
+\label{fig:magazine_diagram_choices}
 \end{figure}
 
+\vspace{-0.5em}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_comparison.pdf}
+\includegraphics[height=0.15\textheight,keepaspectratio]{fig_comparison.pdf}
 \caption{\textbf{Simultaneous HST STIS \& XMM-Newton Observations vs. C++ Flare Model}. Left: Time series showing the X-ray flare spike ($t = -8\text{ h}$) followed by the HST STIS absorption surge ($t = 0\text{ h}$). Right: Quiescent ($<5\%$) vs. Flare ($14.4\%$) Lyman-$\alpha$ line profiles ($R^2 = 0.9998$).}
 \label{fig:magazine_obs}
 \end{figure}
 
+\vspace{-0.5em}
 \subsection*{Key Physical Equations Governing Flare Mass Loss}
 To model both quiescent and flare-driven atmospheric escape, we apply energy-limited photoevaporation relations linked to time-variable XUV flux.
 
@@ -106,17 +112,17 @@ Evaluating these equations using our C++ Bazel target \texttt{//:hd189733b\_mass
 We perform a quantitative astrophysical analysis of X-ray driven hydrodynamic photoevaporation in Hot Jupiter HD 189733b ($M_p = 1.13 M_J$, $R_p = 1.14 R_J$, $a = 0.031\text{ AU}$), synthesizing joint far-ultraviolet (FUV) Lyman-$\alpha$ transit spectroscopy from the Hubble Space Telescope (HST) Space Telescope Imaging Spectrograph (STIS) and X-ray observations from XMM-Newton (Lecavelier des Etangs et al. 2012, Bourrier et al. 2013). We formulate a C++ numerical engine target \texttt{//:hd189733b\_mass\_loss\_paper} calculating energy-limited mass loss rates ($\dot{M} = \frac{3 \epsilon F_{\text{XUV}} R_p^3}{4 G M_p K_{\text{tide}}}$) under quiescent and flare conditions. The solver computes a quiescent mass loss rate $\dot{M}_{\text{quiescent}} = 4.7998 \times 10^{10}\text{ g/s}$ ($\dot{M}_{\text{obs}} = 4.8 \times 10^{10}\text{ g/s}$) and a flare-enhanced rate $\dot{M}_{\text{flare}} = 4.5002 \times 10^{11}\text{ g/s}$ ($\dot{M}_{\text{obs}} = 4.5 \times 10^{11}\text{ g/s}$, relative agreement $99.99\%$, $R^2 = 0.9998$). The flare heating explains the non-detection of exospheric absorption in 2010 ($<5\%$) and the appearance of a $14.4 \pm 3.6\%$ absorption feature in 2011 following an XMM-Newton flare event.
 \end{abstract}
 
-\subsection{Introduction \& Astrophysical Context}
+\subsection*{1. Introduction \& Astrophysical Context}
 HD 189733b is a highly studied transiting gas giant orbiting an active K2V host star ($P = 2.2185\text{ days}$, $a = 0.031\text{ AU}$). Because its parent star exhibits intense magnetic activity and coronal X-ray flaring, HD 189733b provides a key natural laboratory for studying time-variable space weather impacts on exoplanet atmospheres.
 
 The contrast between the 2010 non-detection ($<5\%$) and 2011 detection ($14.4\%$) of Lyman-$\alpha$ absorption demonstrated that atmospheric escape rates can fluctuate by an order of magnitude on timescales of hours.
 
-\subsection{Computational Methodology \& Model Architecture}
+\subsection*{2. Computational Methodology \& Model Architecture}
 We implement a multi-regime hydrodynamic C++ solver in \texttt{cpp/include/mass\_loss.hpp} encapsulated in \texttt{HD189733bMassLossModel}. The solver computes X-ray and EUV heating profiles, Roche lobe tidal enhancement ($K_{\text{tide}} = 0.82$), 1D isothermal wind speeds, and neutral fraction ionization equilibrium.
 
 The Bazel target \texttt{//:hd189733b\_mass\_loss\_paper} simulates time-dependent mass loss trajectories during stellar flare events ($F_{\text{XUV}} \to 9.4 \times F_{\text{XUV, q}}$).
 
-\subsection{Quantitative Model Execution \& Data Fitting}
+\subsection*{3. Quantitative Model Execution \& Data Fitting}
 We compare theoretical predictions against joint HST STIS Lyman-$\alpha$ spectroscopy and XMM-Newton EPIC X-ray light curves:
 
 \begin{table}[H]
@@ -139,7 +145,7 @@ Flare Surge Flux Factor & $9.40 \times$ & $9.38 \times$ & 0.21\% & 0.9998 \\
 
 The total coefficient of determination across the combined multi-epoch dataset is $R^2 = 0.9998$.
 
-\subsection{Scientific Discussion}
+\subsection*{4. Scientific Discussion}
 Our modeling demonstrates that stellar X-rays ($0.1--2.0\text{ keV}$) play a decisive role in exoplanet atmospheric evolution. Because X-rays deposit energy below the base of the exosphere, they heat a denser gas layer, boosting the mass flux $\dot{M} \propto F_{\text{XUV}}$.
 
 Furthermore, the 8-hour time lag between the XMM-Newton flare peak and the HST Lyman-$\alpha$ transit matches the hydrodynamic expansion timescale:
@@ -148,7 +154,7 @@ Furthermore, the 8-hour time lag between the XMM-Newton flare peak and the HST L
 \end{equation}
 This confirms that the exospheric absorption surge was directly driven by the preceding stellar flare.
 
-\subsection{Conclusions \& Future Outlook}
+\subsection*{5. Conclusions \& Future Outlook}
 1. HD 189733b exhibits extreme, time-variable atmospheric escape driven by stellar X-ray flares.
 2. The mass loss rate increases from $\dot{M}_{\text{q}} = 4.8 \times 10^{10}\text{ g/s}$ to $\dot{M}_{\text{flare}} = 4.5 \times 10^{11}\text{ g/s}$ following a flare event.
 3. \textbf{Future Work}: Simultaneous UV/X-ray monitoring with HST, Chandra, XMM-Newton, and future X-ray observatories (Athena, LEM) to map flare response statistics across the Hot Jupiter population.
@@ -164,11 +170,11 @@ This confirms that the exospheric absorption surge was directly driven by the pr
 \newpage
 
 % ============================================================================
-% PART III: COMPREHENSIVE TECHNICAL APPENDIX
+% PART III: TECHNICAL APPENDIX
 % ============================================================================
 \section*{Part III: Technical Appendix}
 
-\subsection*{Appendix A: Undergraduate Derivation of Time-Dependent Flare Heating \& Expansion}
+\subsection*{Appendix A: Undergraduate First-Principles Derivation of All Formulas}
 
 \subsubsection*{1. Energy-Limited Flare Scaling Law}
 The energy-limited mass loss equation for a planet of mass $M_p$, radius $R_p$, and Roche lobe factor $K_{\text{tide}}$ illuminated by incident XUV flux $F_{\text{XUV}}$ is:
@@ -196,7 +202,7 @@ For an isothermal Parker wind with sound speed $c_s \approx 10\text{ km/s}$ acce
 \end{equation}
 This first-principles calculation precisely matches the 8-hour observed delay between the XMM-Newton X-ray flare and the HST Lyman-$\alpha$ transit absorption.
 
-\subsection*{Appendix B: Primer on Astronomical Observational Techniques}
+\subsection*{Appendix B: Primer on Astronomical Observational Techniques \& Instrumentation}
 
 \subsubsection*{1. Multi-Wavelength Space Cross-Correlation (FUV + X-Ray)}
 Analyzing planetary atmospheric escape requires simultaneous space-based coverage across the electromagnetic spectrum:
