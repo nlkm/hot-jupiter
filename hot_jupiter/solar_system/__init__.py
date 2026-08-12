@@ -936,6 +936,37 @@ class PlutoCharonMutual:
         return m_charon_kg / m_pluto_kg
 
 
+class HaumeaEllipsoidRing:
+
+    def rotation_period_hours(self):
+        return 3.9154
+
+    def ring_3to1_resonance_radius_km(self,
+                                      m_haumea_kg=4.006e21,
+                                      p_rot_hours=3.9154):
+        g_const = 6.67430e-11
+        p_rot_sec = p_rot_hours * 3600.0
+        p_ring_sec = 3.0 * p_rot_sec
+        a_m = (g_const * m_haumea_kg * (p_ring_sec**2) /
+               (4.0 * np.pi**2))**(1.0 / 3.0)
+        return a_m / 1000.0
+
+    def hiiaka_period_days(self, a_km=49880.0, m_haumea_kg=4.006e21):
+        g_const = 6.67430e-11
+        a_m = a_km * 1000.0
+        p_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g_const * m_haumea_kg))
+        return p_sec / 86400.0
+
+    def haumea_bulk_density_kg_m3(self,
+                                  m_haumea_kg=4.006e21,
+                                  a_km=1161.0,
+                                  b_km=852.0,
+                                  c_km=513.0):
+        volume_m3 = (4.0 / 3.0) * np.pi * (a_km * 1000.0) * (b_km * 1000.0) * (
+            c_km * 1000.0)
+        return m_haumea_kg / volume_m3
+
+
 class ErisDysnomia:
 
     def orbital_period_days(self,

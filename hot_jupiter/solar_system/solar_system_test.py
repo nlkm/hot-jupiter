@@ -18,6 +18,7 @@ from hot_jupiter.solar_system import (
     FB128Binary,
     FM185Binary,
     GZ31Binary,
+    HaumeaEllipsoidRing,
     IoLaplaceTidalAnalysis,
     JA132Binary,
     JupiterJunoGravityAnalysis,
@@ -418,3 +419,9 @@ def test_eris_dysnomia():
     ed = ErisDysnomia()
     period = ed.orbital_period_days()
     assert abs(period - 15.7232) < 0.01, "Eris-Dysnomia period mismatch"
+
+
+def test_haumea_ellipsoid_ring():
+    h = HaumeaEllipsoidRing()
+    r_ring = h.ring_3to1_resonance_radius_km()
+    assert abs(r_ring - 2287.3) < 15.0, "Haumea ring radius mismatch"
