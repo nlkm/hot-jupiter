@@ -74,6 +74,13 @@ int main() {
   assert(std::abs(ceto_p - 9.554) < 0.05 && "Ceto orbital period mismatch!");
   assert(std::abs(ceto_rho - 1370.0) < 50.0 && "Ceto density mismatch!");
 
+  hot_jupiter::AltjiraBinaryModel altjira_model;
+  double altjira_p = altjira_model.orbital_period_days();
+  double altjira_rho = altjira_model.system_bulk_density_kg_m3();
+  std::cout << "--> Altjira Orbital Period: " << altjira_p << " days, Density: " << altjira_rho << " kg/m^3" << std::endl;
+  assert(std::abs(altjira_p - 139.6) < 2.0 && "Altjira orbital period mismatch!");
+  assert(std::abs(altjira_rho - 510.0) < 30.0 && "Altjira density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

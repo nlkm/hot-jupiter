@@ -239,6 +239,24 @@ class CetoPhorcysBinaryModel {
   }
 };
 
+// ============================================================================
+// 8. CLASSICAL TNO BINARY ALTJIRA DYNAMICS (Grundy et al. 2012)
+// ============================================================================
+class AltjiraBinaryModel {
+ public:
+  double orbital_period_days(double a_orb_km = 9900.0, double M_sys_kg = 3.99e18) const {
+    double a_m = a_orb_km * 1000.0;
+    double period_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G * M_sys_kg));
+    return period_sec / 86400.0;
+  }
+
+  double system_bulk_density_kg_m3(double M_sys_kg = 3.99e18, double r_eq_km = 123.0) const {
+    double r_m = r_eq_km * 1000.0;
+    double vol = (4.0 / 3.0) * M_PI * std::pow(r_m, 3.0);
+    return M_sys_kg / vol;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
