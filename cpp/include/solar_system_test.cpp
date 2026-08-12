@@ -320,6 +320,11 @@ int main() {
   std::cout << "--> Eris-Dysnomia Mutual: Period = " << ed_period << " days" << std::endl;
   assert(std::abs(ed_period - 15.7232) < 0.01 && "Eris-Dysnomia period mismatch!");
 
+  hot_jupiter::HaumeaEllipsoidRingModel h_test_model;
+  double r_ring = h_test_model.ring_3to1_resonance_radius_km();
+  std::cout << "--> Haumea Ellipsoid & Ring: Ring Radius = " << r_ring << " km" << std::endl;
+  assert(std::abs(r_ring - 2287.3) < 10.0 && "Haumea ring radius mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

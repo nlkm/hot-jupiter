@@ -989,6 +989,42 @@ class ErisDysnomiaModel {
   }
 };
 
+// ============================================================================
+// 44. HAUMEA TRIAXIAL ELLIPSOID & RING DYNAMICS MODEL (Ortiz 2017, Ragozzine 2009)
+// ============================================================================
+class HaumeaEllipsoidRingModel {
+ public:
+  // Rotation Period [hours] from Jacobi Ellipsoid equilibrium
+  double rotation_period_hours() const {
+    return 3.9154; // hours
+  }
+
+  // 3:1 Spin-Orbit Resonance Ring Radius [km]
+  double ring_3to1_resonance_radius_km(double M_haumea_kg = 4.006e21, double P_rot_hours = 3.9154) const {
+    double G_const = 6.67430e-11;
+    double P_rot_sec = P_rot_hours * 3600.0;
+    double P_ring_sec = 3.0 * P_rot_sec;
+
+    // a_ring = (G * M * P_ring^2 / (4 * pi^2))^(1/3)
+    double a_m = std::pow((G_const * M_haumea_kg * std::pow(P_ring_sec, 2.0)) / (4.0 * M_PI * M_PI), 1.0 / 3.0);
+    return a_m / 1000.0;
+  }
+
+  // Satellite Hi'iaka Orbital Period [days]
+  double hiiaka_period_days(double a_km = 49880.0, double M_haumea_kg = 4.006e21) const {
+    double G_const = 6.67430e-11;
+    double a_m = a_km * 1000.0;
+    double P_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G_const * M_haumea_kg));
+    return P_sec / 86400.0;
+  }
+
+  // Bulk Density [kg/m^3] from Triaxial Ellipsoid (a=1161, b=852, c=513 km)
+  double haumea_bulk_density_kg_m3(double M_haumea_kg = 4.006e21, double a_km = 1161.0, double b_km = 852.0, double c_km = 513.0) const {
+    double volume_m3 = (4.0 / 3.0) * M_PI * (a_km * 1000.0) * (b_km * 1000.0) * (c_km * 1000.0);
+    return M_haumea_kg / volume_m3;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
