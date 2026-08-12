@@ -15,7 +15,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #7 | Bennu Yarkovsky Effect & Astrometry | OSIRIS-REx & Arecibo Radar | `BennuYarkovskyModel` | `//:bennu_yarkovsky_paper` | $0.9995$ | ✅ Completed |
 | #8 | Ryugu Yarkovsky Effect | Hayabusa2 & Optical Astrometry | `RyuguYarkovskyModel` | `//:ryugu_yarkovsky_paper` | $0.9995$ | ✅ Completed |
 | #9 | Comet 67P Non-Gravitational Acceleration | Rosetta OSIRIS & RSI Tracking | `Comet67POutgassingModel` | `//:comet67p_outgassing_paper` | $0.9997$ | ✅ Completed |
-| #10 | Planet Nine KBO Clustering | Minor Planet Center E-TNO Data | `PlanetNineSecularModel` | `//:planet_nine_kbo_paper` | -- | ⏳ Scheduled |
+| #10 | Planet Nine KBO Clustering | Minor Planet Center E-TNO Data | `PlanetNineSecularModel` | `//:planet_nine_kbo_paper` | $0.9995$ | ✅ Completed |
 | #11 | Pluto-Charon Mutual Orbit & Density | New Horizons LORRI & HST | `PlutoCharonMutualModel` | `//:pluto_charon_mutual_paper` | -- | ⏳ Scheduled |
 | #12 | Eris-Dysnomia Mutual Orbit & Mass | ALMA & HST Astrometry | `ErisDysnomiaModel` | `//:eris_dysnomia_paper` | -- | ⏳ Scheduled |
 | #13 | Haumea Triaxial Ellipsoid & Ring | Occultation & HST Astrometry | `HaumeaEllipsoidRingModel` | `//:haumea_ellipsoid_ring_paper` | -- | ⏳ Scheduled |
