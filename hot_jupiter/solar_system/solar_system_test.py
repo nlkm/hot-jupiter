@@ -12,6 +12,7 @@ from hot_jupiter.solar_system import (
     EnceladusTidalOcean,
     FB128Binary,
     GZ31Binary,
+    JA132Binary,
     KP76Binary,
     KS38Binary,
     LaplaceLagrangeSecular,
@@ -242,3 +243,11 @@ def test_qy90_binary():
     rho_kg_m3 = qy90.system_bulk_density_kg_m3()
     assert abs(p_days - 320.0) < 30.0, "2003 QY90 orbital period mismatch"
     assert abs(rho_kg_m3 - 740.0) < 30.0, "2003 QY90 bulk density mismatch"
+
+
+def test_ja132_binary():
+    ja132 = JA132Binary()
+    p_days = ja132.orbital_period_days()
+    rho_kg_m3 = ja132.system_bulk_density_kg_m3()
+    assert abs(p_days - 515.0) < 10.0, "1999 JA132 orbital period mismatch"
+    assert abs(rho_kg_m3 - 224.0) < 50.0, "1999 JA132 bulk density mismatch"
