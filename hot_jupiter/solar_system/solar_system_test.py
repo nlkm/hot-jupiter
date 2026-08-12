@@ -32,6 +32,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    UX10Binary,
     VT130Binary,
     WC19Binary,
     YN81Binary,
@@ -279,3 +280,11 @@ def test_quaoar_weywot_binary():
     assert abs(p_days - 12.438) < 0.5, "Quaoar / Weywot orbital period mismatch"
     assert abs(rho_kg_m3 -
                1640.0) < 50.0, "Quaoar / Weywot bulk density mismatch"
+
+
+def test_ux10_binary():
+    ux10 = UX10Binary()
+    p_days = ux10.orbital_period_days()
+    rho_kg_m3 = ux10.system_bulk_density_kg_m3()
+    assert abs(p_days - 122.0) < 5.0, "2004 UX10 orbital period mismatch"
+    assert abs(rho_kg_m3 - 1164.0) < 50.0, "2004 UX10 bulk density mismatch"
