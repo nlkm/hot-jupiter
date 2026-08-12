@@ -656,6 +656,35 @@ class SaturnRingResonances:
         return (a_inner_km + ratio * a_outer_km) / (1.0 + ratio)
 
 
+class EnceladusTidalAnalysis:
+
+    def tidal_dissipation_power_gw(self,
+                                   im_k2=0.0107,
+                                   e=0.0047,
+                                   a_km=238037.0,
+                                   m_saturn=5.6834e26,
+                                   r_enceladus_km=252.1):
+        g = 6.67430e-11
+        a_m = a_km * 1000.0
+        r_m = r_enceladus_km * 1000.0
+        n = np.sqrt(g * m_saturn / (a_m**3))
+        power_w = (21.0 / 2.0) * im_k2 * (n * g * (m_saturn**2) * (r_m**5) *
+                                          (e**2)) / (a_m**6)
+        return power_w / 1.0e9
+
+    def conductive_heat_flux_gw(self,
+                                d_shell_km,
+                                a_conduct=567.0,
+                                t_base=273.15,
+                                t_surf=75.0,
+                                r_enceladus_km=252.1):
+        d_m = d_shell_km * 1000.0
+        r_m = r_enceladus_km * 1000.0
+        flux_w_m2 = (a_conduct * np.log(t_base / t_surf)) / d_m
+        area_m2 = 4.0 * np.pi * (r_m**2)
+        return (flux_w_m2 * area_m2) / 1.0e9
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -664,6 +693,7 @@ __all__ = [
     "CetoPhorcysBinary",
     "CometDynamics",
     "EG138Binary",
+    "EnceladusTidalAnalysis",
     "EnceladusTidalOcean",
     "FB128Binary",
     "FM185Binary",

@@ -10,6 +10,7 @@ from hot_jupiter.solar_system import (
     CetoPhorcysBinary,
     CometDynamics,
     EG138Binary,
+    EnceladusTidalAnalysis,
     EnceladusTidalOcean,
     FB128Binary,
     FM185Binary,
@@ -327,3 +328,13 @@ def test_saturn_ring_resonances():
     assert abs(r_janus76 - 136770.0) < 500.0, "Janus 7:6 ILR mismatch"
     assert abs(r_fring -
                140220.0) < 500.0, "F-ring shepherd torque balance mismatch"
+
+
+def test_enceladus_tidal_analysis():
+    enceladus = EnceladusTidalAnalysis()
+    p_diss_gw = enceladus.tidal_dissipation_power_gw()
+    q_cond_gw = enceladus.conductive_heat_flux_gw(20.0)
+    assert abs(p_diss_gw -
+               15.8) < 1.0, "Enceladus tidal dissipation power mismatch"
+    assert abs(q_cond_gw -
+               29.3) < 2.0, "Enceladus conductive heat flux mismatch"
