@@ -81,6 +81,13 @@ int main() {
   assert(std::abs(altjira_p - 139.6) < 2.0 && "Altjira orbital period mismatch!");
   assert(std::abs(altjira_rho - 510.0) < 30.0 && "Altjira density mismatch!");
 
+  hot_jupiter::SilaNunamBinaryModel sila_model;
+  double sila_p = sila_model.orbital_period_days();
+  double sila_rho = sila_model.system_bulk_density_kg_m3();
+  std::cout << "--> Sila-Nunam Orbital Period: " << sila_p << " days, Density: " << sila_rho << " kg/m^3" << std::endl;
+  assert(std::abs(sila_p - 12.51) < 0.1 && "Sila-Nunam orbital period mismatch!");
+  assert(std::abs(sila_rho - 720.0) < 30.0 && "Sila-Nunam density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
