@@ -803,6 +803,42 @@ class SaturnCassiniGravityAnalysisModel {
   }
 };
 
+// ============================================================================
+// 37. MERCURY RELATIVISTIC PRECESSION & SOLAR J2 MODEL (Park 2017, Genova 2019)
+// ============================================================================
+class MercuryRelativisticPrecessionModel {
+ public:
+  // General Relativity Pericenter Precession [arcsec/century]
+  double gr_precession_arcsec_century(double a_AU = 0.387098, double e = 0.205630, double period_days = 87.969) const {
+    double c = 2.99792458e8;
+    double M_Sun = 1.98847e30;
+    double a_m = a_AU * 1.495978707e11;
+    double P_sec = period_days * 86400.0;
+    double orbits_per_century = (100.0 * 365.25 * 86400.0) / P_sec;
+
+    double domega_per_orbit_rad = (6.0 * M_PI * G * M_Sun) / (a_m * (1.0 - e * e) * c * c);
+    double domega_century_rad = domega_per_orbit_rad * orbits_per_century;
+    return domega_century_rad * (180.0 / M_PI) * 3600.0;
+  }
+
+  // Solar Quadrupole J2 Precession Contribution [arcsec/century]
+  double j2_sun_precession_arcsec_century(double a_AU = 0.387098, double e = 0.205630, double period_days = 87.969, double J2_sun = 2.25e-7, double R_sun_km = 696342.0) const {
+    double a_m = a_AU * 1.495978707e11;
+    double R_sun_m = R_sun_km * 1000.0;
+    double P_sec = period_days * 86400.0;
+    double orbits_per_century = (100.0 * 365.25 * 86400.0) / P_sec;
+
+    double domega_per_orbit_rad = (3.0 * M_PI * J2_sun * R_sun_m * R_sun_m) / (a_m * a_m * std::pow(1.0 - e * e, 2.0));
+    double domega_century_rad = domega_per_orbit_rad * orbits_per_century;
+    return domega_century_rad * (180.0 / M_PI) * 3600.0;
+  }
+
+  // Total Precession including Planetary Perturbations [arcsec/century]
+  double total_precession_arcsec_century(double planetary_precession_arcsec = 531.63) const {
+    return gr_precession_arcsec_century() + j2_sun_precession_arcsec_century() + planetary_precession_arcsec;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

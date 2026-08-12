@@ -283,6 +283,13 @@ int main() {
   assert(std::abs(sat_j4 - (-935.83)) < 5.0 && "Saturn J4 harmonic mismatch!");
   assert(std::abs(sat_j6 - 86.14) < 1.0 && "Saturn J6 harmonic mismatch!");
 
+  hot_jupiter::MercuryRelativisticPrecessionModel mercury_obs_model;
+  double merc_obs_gr_val = mercury_obs_model.gr_precession_arcsec_century();
+  double merc_obs_j2_val = mercury_obs_model.j2_sun_precession_arcsec_century();
+  std::cout << "--> Mercury Relativistic Precession: GR = " << merc_obs_gr_val << ", Solar J2 = " << merc_obs_j2_val << std::endl;
+  assert(std::abs(merc_obs_gr_val - 42.982) < 0.1 && "Mercury GR precession mismatch!");
+  assert(std::abs(merc_obs_j2_val - 0.0286) < 0.01 && "Mercury Solar J2 precession mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
