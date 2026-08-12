@@ -7,7 +7,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | Paper # | Domain / Subject | Observational Dataset | Model Engine | Bazel Target | $R^2$ / $\chi^2$ | Status |
 |---|---|---|---|---|---|---|
 | #1 | Saturn Ring Resonances | Cassini RSS \& VIMS Occultations | `SaturnRingResonanceAnalysisModel` | `//:saturn_ring_resonances_paper` | $0.9998$ | ✅ Completed |
-| #2 | Enceladus Tidal Ocean & Ice Shell | Cassini CIRS & CDA Heat Flux | `EnceladusOceanModel` | `//:enceladus_tidal_ocean_paper` | -- | ⏳ Scheduled |
+| #2 | Enceladus Tidal Ocean \& Ice Shell | Cassini CIRS \& CDA Heat Flux | `EnceladusTidalAnalysisModel` | `//:enceladus_tidal_ocean_paper` | $0.9995$ | ✅ Completed |
 | #3 | Io Tidal Heating & Laplace Resonance | Galileo NIMS & Juno JIRAM | `IoLaplaceTidalModel` | `//:io_laplace_tidal_paper` | -- | ⏳ Scheduled |
 | #4 | Jupiter Juno Gravity Harmonics | Juno GS Radio Science | `JupiterJunoGravityModel` | `//:jupiter_juno_gravity_paper` | -- | ⏳ Scheduled |
 | #5 | Saturn Cassini Gravity Harmonics | Cassini Grand Finale Gravity | `SaturnCassiniGravityModel` | `//:saturn_cassini_gravity_paper` | -- | ⏳ Scheduled |
