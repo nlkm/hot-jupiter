@@ -88,6 +88,13 @@ int main() {
   assert(std::abs(sila_p - 12.51) < 0.1 && "Sila-Nunam orbital period mismatch!");
   assert(std::abs(sila_rho - 720.0) < 30.0 && "Sila-Nunam density mismatch!");
 
+  hot_jupiter::TeharonhiawakoBinaryModel teh_model;
+  double teh_p = teh_model.orbital_period_days();
+  double teh_rho = teh_model.system_bulk_density_kg_m3();
+  std::cout << "--> Teharonhiawako Orbital Period: " << teh_p << " days, Density: " << teh_rho << " kg/m^3" << std::endl;
+  assert(std::abs(teh_p - 828.7) < 5.0 && "Teharonhiawako orbital period mismatch!");
+  assert(std::abs(teh_rho - 620.0) < 30.0 && "Teharonhiawako density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
