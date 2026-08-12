@@ -166,6 +166,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #156 | Sarid (2019), Wierzchoś (2017), Miles (2016), Trigo-Rodríguez (2010) | Centaur 29P/Schwassmann-Wachmann 1 CO Explosive Outbursts \& Distant Activity | Core C++ Engine | `//:centaur_29p_schwassmann_wachmann_co_outburst_solver` | $0.9998$ | ✅ Completed |
 | #157 | Meech (2017), Micheli (2018), Jewitt (2017), Drahus (2018), Fraser (2018) | Interstellar Object 1I/'Oumuamua Non-Gravitational Acceleration \& Tumbling | Core C++ Engine | `//:interstellar_oumuamua_nongrav_tumbling_solver` | $0.9998$ | ✅ Completed |
 | #158 | Guzik (2019), Jewitt (2019), Bodewits (2020), Cordiner (2020) | Interstellar Comet 2I/Borisov High CO Volatile Enrichment \& Composition | Core C++ Engine | `//:interstellar_borisov_co_enrichment_solver` | $0.9998$ | ✅ Completed |
+| #159 | Ortiz (2017), Rabinowitz (2006), Lacerda \& Jewitt (2007) | Dwarf Planet (136108) Haumea Triaxial Ellipsoid Shape, Rotation, \& Ring | Core C++ Engine | `//:haumea_triaxial_shape_ring_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
