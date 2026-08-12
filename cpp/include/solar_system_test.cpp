@@ -137,6 +137,13 @@ int main() {
   assert(std::abs(kp76_p - 240.0) < 30.0 && "2001 KP76 orbital period mismatch!");
   assert(std::abs(kp76_rho - 460.0) < 30.0 && "2001 KP76 density mismatch!");
 
+  hot_jupiter::FB128BinaryModel fb128_model;
+  double fb128_p = fb128_model.orbital_period_days();
+  double fb128_rho = fb128_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2003 FB128 Orbital Period: " << fb128_p << " days, Density: " << fb128_rho << " kg/m^3" << std::endl;
+  assert(std::abs(fb128_p - 1660.0) < 10.0 && "2003 FB128 orbital period mismatch!");
+  assert(std::abs(fb128_rho - 498.0) < 30.0 && "2003 FB128 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
