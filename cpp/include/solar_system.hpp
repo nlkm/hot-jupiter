@@ -1052,6 +1052,43 @@ class HD209458bPhotoevaporationModel {
   }
 };
 
+// ============================================================================
+// 46. HD 189733b X-RAY MASS LOSS & STELLAR FLARE MODEL (Lecavelier 2012, Bourrier 2013)
+// ============================================================================
+class HD189733bMassLossModel {
+ public:
+  // Quiescent Hydrodynamic Mass Loss Rate [g/s]
+  double quiescent_mass_loss_rate_g_s(double F_xuv_quiescent = 93250.0, double epsilon = 0.15, double M_p_kg = 2.146e27, double R_p_m = 8.13e7) const {
+    double G_const = 6.67430e-11;
+    double R_p_cm = R_p_m * 100.0;
+    double M_p_g = M_p_kg * 1000.0;
+    double G_cgs = G_const * 1000.0;
+    double K_tide = 0.82;
+
+    double mdot_g_s = (3.0 * epsilon * F_xuv_quiescent * std::pow(R_p_cm, 3.0)) / (4.0 * G_cgs * M_p_g * K_tide);
+    return mdot_g_s;
+  }
+
+  // Flare-Enhanced Hydrodynamic Mass Loss Rate [g/s]
+  double flare_mass_loss_rate_g_s(double F_xuv_flare = 874300.0, double epsilon = 0.15, double M_p_kg = 2.146e27, double R_p_m = 8.13e7) const {
+    double G_const = 6.67430e-11;
+    double R_p_cm = R_p_m * 100.0;
+    double M_p_g = M_p_kg * 1000.0;
+    double G_cgs = G_const * 1000.0;
+    double K_tide = 0.82;
+
+    double mdot_g_s = (3.0 * epsilon * F_xuv_flare * std::pow(R_p_cm, 3.0)) / (4.0 * G_cgs * M_p_g * K_tide);
+    return mdot_g_s;
+  }
+
+  // Flare Lyman-alpha Transit Depth [%]
+  double flare_lyman_alpha_transit_depth_percent(double mdot_flare_g_s = 4.5e11) const {
+    double base_depth = 14.4; // %
+    double mdot_nominal = 4.5e11;
+    return base_depth * std::pow(mdot_flare_g_s / mdot_nominal, 0.5);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

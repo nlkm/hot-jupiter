@@ -1422,6 +1422,13 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "hd189733b_mass_loss_paper",
+    srcs = ["replications_observational/paper_15/hd189733b_mass_loss_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",

@@ -330,6 +330,11 @@ int main() {
   std::cout << "--> HD 209458b Photoevaporation: Mass Loss = " << photo_mdot << " g/s" << std::endl;
   assert(std::abs(photo_mdot - 5.0e10) < 1.0e10 && "HD 209458b mass loss rate mismatch!");
 
+  hot_jupiter::HD189733bMassLossModel hd189_test_model;
+  double hd189_mdot_flare = hd189_test_model.flare_mass_loss_rate_g_s();
+  std::cout << "--> HD 189733b Flare Mass Loss = " << hd189_mdot_flare << " g/s" << std::endl;
+  assert(std::abs(hd189_mdot_flare - 4.5e11) < 1.0e11 && "HD 189733b flare mass loss rate mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
