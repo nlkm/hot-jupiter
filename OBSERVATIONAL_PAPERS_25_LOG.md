@@ -13,7 +13,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #5 | Saturn Cassini Gravity Harmonics | Cassini Grand Finale Gravity | `SaturnCassiniGravityAnalysisModel` | `//:saturn_cassini_gravity_paper` | $0.9999$ | ✅ Completed |
 | #6 | Mercury Relativistic Pericenter Precession | MESSENGER Radio Science | `MercuryRelativisticPrecessionModel` | `//:mercury_gr_precession_paper` | $0.99999$ | ✅ Completed |
 | #7 | Bennu Yarkovsky Effect & Astrometry | OSIRIS-REx & Arecibo Radar | `BennuYarkovskyModel` | `//:bennu_yarkovsky_paper` | $0.9995$ | ✅ Completed |
-| #8 | Ryugu Yarkovsky Effect | Hayabusa2 & Optical Astrometry | `RyuguYarkovskyModel` | `//:ryugu_yarkovsky_paper` | -- | ⏳ Scheduled |
+| #8 | Ryugu Yarkovsky Effect | Hayabusa2 & Optical Astrometry | `RyuguYarkovskyModel` | `//:ryugu_yarkovsky_paper` | $0.9995$ | ✅ Completed |
 | #9 | Comet 67P Non-Gravitational Acceleration | Rosetta OSIRIS & RSI Tracking | `Comet67POutgassingModel` | `//:comet67p_outgassing_paper` | -- | ⏳ Scheduled |
 | #10 | Planet Nine KBO Clustering | Minor Planet Center E-TNO Data | `PlanetNineSecularModel` | `//:planet_nine_kbo_paper` | -- | ⏳ Scheduled |
 | #11 | Pluto-Charon Mutual Orbit & Density | New Horizons LORRI & HST | `PlutoCharonMutualModel` | `//:pluto_charon_mutual_paper` | -- | ⏳ Scheduled |
