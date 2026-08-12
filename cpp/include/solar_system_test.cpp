@@ -235,6 +235,13 @@ int main() {
   assert(std::abs(ca101_p - 345.0) < 10.0 && "2000 CA101 orbital period mismatch!");
   assert(std::abs(ca101_rho - 613.0) < 40.0 && "2000 CA101 density mismatch!");
 
+  hot_jupiter::UQ18BinaryModel uq18_model;
+  double uq18_p = uq18_model.orbital_period_days();
+  double uq18_rho = uq18_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2001 UQ18 Orbital Period: " << uq18_p << " days, Density: " << uq18_rho << " kg/m^3" << std::endl;
+  assert(std::abs(uq18_p - 165.0) < 5.0 && "2001 UQ18 orbital period mismatch!");
+  assert(std::abs(uq18_rho - 398.0) < 30.0 && "2001 UQ18 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
