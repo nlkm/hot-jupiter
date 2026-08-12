@@ -148,6 +148,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #138 | Weiss (2012), Vernazza (2011), Sierks (2011), Schulz (2012) | Asteroid 21 Lutetia Differentiated Core \& Primitive Crust | Core C++ Engine | `//:lutetia_differentiated_core_solver` | $0.9998$ | ✅ Completed |
 | #139 | Yeomans (1997), Housen (1999), Asphaug (2002) | Asteroid 253 Mathilde Low Density \& Porous Impact Shock Dampening | Core C++ Engine | `//:mathilde_porous_impact_dampening_solver` | $0.9998$ | ✅ Completed |
 | #140 | Belton (1995, 1996), Chapman (1996), Petit (1997) | Asteroid 243 Ida \& Dactyl Binary Orbit \& S-type Composition | Core C++ Engine | `//:ida_dactyl_binary_orbit_solver` | $0.9998$ | ✅ Completed |
+| #141 | Belton (1992), Veverka (1994), Greenberg (1994), Bottke (1994) | Asteroid 951 Gaspra S-type Composition, Regolith, \& Age | Core C++ Engine | `//:gaspra_regolith_cratering_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
