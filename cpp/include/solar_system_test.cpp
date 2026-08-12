@@ -355,6 +355,11 @@ int main() {
   std::cout << "--> TRAPPIST-1d TTV Chopping Amplitude = " << trap_ttv << " minutes" << std::endl;
   assert(std::abs(trap_ttv - 38.5) < 2.0 && "TRAPPIST-1 TTV chopping amplitude mismatch!");
 
+  hot_jupiter::Kepler223ResonantChainModel kep_test_model;
+  double kep_ttv = kep_test_model.ttv_chopping_amplitude_minutes();
+  std::cout << "--> Kepler-223b TTV Chopping Amplitude = " << kep_ttv << " minutes" << std::endl;
+  assert(std::abs(kep_ttv - 14.2) < 1.0 && "Kepler-223 TTV chopping amplitude mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

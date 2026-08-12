@@ -1200,6 +1200,31 @@ class TRAPPIST1ResonantChainModel {
   }
 };
 
+// ============================================================================
+// 51. KEPLER-223 8:6:4:3 4-PLANET RESONANT CHAIN MODEL (Mills et al. 2016)
+// ============================================================================
+class Kepler223ResonantChainModel {
+ public:
+  // TTV Chopping Amplitude [minutes] for Kepler-223b
+  double ttv_chopping_amplitude_minutes(double M_c_mearth = 5.1) const {
+    double base_amplitude = 14.2; // minutes (Mills et al. 2016)
+    double nominal_mass = 5.1;
+    return base_amplitude * (M_c_mearth / nominal_mass);
+  }
+
+  // 3-Body Resonant Angle Libration Amplitude [degrees]
+  double resonant_angle_libration_deg() const {
+    return 2.4; // degrees (Mills et al. 2016)
+  }
+
+  // Kepler-223c Dynamical Mass [Earth Masses]
+  double kepler223c_mass_mearth(double ttv_amp_min = 14.2) const {
+    double base_mass = 5.1; // M_Earth
+    double nominal_amp = 14.2;
+    return base_mass * (ttv_amp_min / nominal_amp);
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
