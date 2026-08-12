@@ -228,6 +228,13 @@ int main() {
   assert(std::abs(qy297_p - 138.1) < 5.0 && "2001 QY297 orbital period mismatch!");
   assert(std::abs(qy297_rho - 471.0) < 30.0 && "2001 QY297 density mismatch!");
 
+  hot_jupiter::CA101BinaryModel ca101_model;
+  double ca101_p = ca101_model.orbital_period_days();
+  double ca101_rho = ca101_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2000 CA101 Orbital Period: " << ca101_p << " days, Density: " << ca101_rho << " kg/m^3" << std::endl;
+  assert(std::abs(ca101_p - 345.0) < 10.0 && "2000 CA101 orbital period mismatch!");
+  assert(std::abs(ca101_rho - 613.0) < 40.0 && "2000 CA101 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
