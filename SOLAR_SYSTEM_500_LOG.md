@@ -169,6 +169,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #159 | Ortiz (2017), Rabinowitz (2006), Lacerda \& Jewitt (2007) | Dwarf Planet (136108) Haumea Triaxial Ellipsoid Shape, Rotation, \& Ring | Core C++ Engine | `//:haumea_triaxial_shape_ring_solver` | $0.9998$ | ✅ Completed |
 | #160 | Braga-Ribas (2014), Sicardy (2014), El Moutamid (2014) | Centaur (10199) Chariklo Double Dense Ring System \& Shepherd Dynamics | Core C++ Engine | `//:chariklo_double_ring_system_solver` | $0.9998$ | ✅ Completed |
 | #161 | Ruprecht (2015), Ortiz (2015), Bus (1996), Elliot (1995) | Centaur (2060) Chiron Dense Ring System, Comet Activity, \& Outbursts | Core C++ Engine | `//:chiron_ring_cometary_activity_solver` | $0.9998$ | ✅ Completed |
+| #162 | Morgado (2023), Pereira (2023), Braga-Ribas (2013) | Trans-Neptunian Object (50000) Quaoar Equatorial Ring Beyond Roche Limit | Core C++ Engine | `//:quaoar_dense_ring_weywot_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
