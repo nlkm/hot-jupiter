@@ -10,7 +10,7 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #2 | Enceladus Tidal Ocean \& Ice Shell | Cassini CIRS \& CDA Heat Flux | `EnceladusTidalAnalysisModel` | `//:enceladus_tidal_ocean_paper` | $0.9995$ | ✅ Completed |
 | #3 | Io Tidal Heating \& Laplace Resonance | Galileo NIMS \& Juno JIRAM | `IoLaplaceTidalAnalysisModel` | `//:io_laplace_tidal_paper` | $0.9999$ | ✅ Completed |
 | #4 | Jupiter Juno Gravity Harmonics | Juno GS Radio Science | `JupiterJunoGravityAnalysisModel` | `//:jupiter_juno_gravity_paper` | $0.9999$ | ✅ Completed |
-| #5 | Saturn Cassini Gravity Harmonics | Cassini Grand Finale Gravity | `SaturnCassiniGravityModel` | `//:saturn_cassini_gravity_paper` | -- | ⏳ Scheduled |
+| #5 | Saturn Cassini Gravity Harmonics | Cassini Grand Finale Gravity | `SaturnCassiniGravityAnalysisModel` | `//:saturn_cassini_gravity_paper` | $0.9999$ | ✅ Completed |
 | #6 | Mercury GR Pericenter Precession | MESSENGER Radio Science | `MercuryRelativisticPrecessionModel` | `//:mercury_gr_precession_paper` | -- | ⏳ Scheduled |
 | #7 | Bennu Yarkovsky Effect & Astrometry | OSIRIS-REx & Arecibo Radar | `BennuYarkovskyModel` | `//:bennu_yarkovsky_paper` | -- | ⏳ Scheduled |
 | #8 | Ryugu Yarkovsky Effect | Hayabusa2 & Optical Astrometry | `RyuguYarkovskyModel` | `//:ryugu_yarkovsky_paper` | -- | ⏳ Scheduled |
