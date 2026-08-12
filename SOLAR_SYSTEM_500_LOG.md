@@ -188,6 +188,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #178 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Trans-Neptunian Binary (119979) 2002 WC19 Mutual Orbit \& Low Density | Core C++ Engine | `//:wc19_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #179 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Scattered TNO Binary (119067) 2001 KP76 Mutual Orbit \& Low Density | Core C++ Engine | `//:kp76_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #180 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Scattered TNO Binary (133067) 2003 FB128 Mutual Orbit \& Low Density | Core C++ Engine | `//:fb128_binary_orbit_solver` | $0.9998$ | ✅ Completed |
+| #181 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Scattered TNO Binary (145452) 2005 RN43 Mutual Orbit \& Low Density | Core C++ Engine | `//:rn43_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
