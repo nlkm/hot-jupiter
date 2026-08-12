@@ -221,6 +221,24 @@ class NiceModelResonanceCrossing {
   }
 };
 
+// ============================================================================
+// 7. TRANS-NEPTUNIAN BINARY CETO-PHORCYS DYNAMICS (Grundy et al. 2007)
+// ============================================================================
+class CetoPhorcysBinaryModel {
+ public:
+  double orbital_period_days(double a_orb_km = 1840.0, double M_sys_kg = 5.41e18) const {
+    double a_m = a_orb_km * 1000.0;
+    double period_sec = 2.0 * M_PI * std::sqrt(std::pow(a_m, 3.0) / (G * M_sys_kg));
+    return period_sec / 86400.0;
+  }
+
+  double system_bulk_density_kg_m3(double M_sys_kg = 5.41e18, double r_ceto_km = 87.0, double r_phorcys_km = 66.0) const {
+    double r_eq_m = std::pow(std::pow(r_ceto_km * 1000.0, 3.0) + std::pow(r_phorcys_km * 1000.0, 3.0), 1.0 / 3.0);
+    double vol = (4.0 / 3.0) * M_PI * std::pow(r_eq_m, 3.0);
+    return M_sys_kg / vol;
+  }
+};
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

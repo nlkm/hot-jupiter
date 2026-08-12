@@ -67,10 +67,12 @@ int main() {
   std::cout << "--> Lindblad Ring Torque: " << torque << " N m" << std::endl;
   assert(torque > 1.0e8 && "Lindblad torque should be positive!");
 
-  hot_jupiter::EnceladusTidalOceanModel enceladus_model;
-  double power_gw = enceladus_model.enceladus_tidal_power_gw();
-  std::cout << "--> Enceladus Subsurface Ocean Tidal Heating: " << power_gw << " GW" << std::endl;
-  assert(power_gw > 0.1 && "Enceladus tidal power should be positive and of order GW!");
+  hot_jupiter::CetoPhorcysBinaryModel ceto_model;
+  double ceto_p = ceto_model.orbital_period_days();
+  double ceto_rho = ceto_model.system_bulk_density_kg_m3();
+  std::cout << "--> Ceto-Phorcys Orbital Period: " << ceto_p << " days, Density: " << ceto_rho << " kg/m^3" << std::endl;
+  assert(std::abs(ceto_p - 9.554) < 0.05 && "Ceto orbital period mismatch!");
+  assert(std::abs(ceto_rho - 1370.0) < 50.0 && "Ceto density mismatch!");
 
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
