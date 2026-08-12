@@ -109,6 +109,13 @@ int main() {
   assert(std::abs(oj67_p - 380.0) < 10.0 && "2000 OJ67 orbital period mismatch!");
   assert(std::abs(oj67_rho - 450.0) < 30.0 && "2000 OJ67 density mismatch!");
 
+  hot_jupiter::EG138BinaryModel eg138_model;
+  double eg138_p = eg138_model.orbital_period_days();
+  double eg138_rho = eg138_model.system_bulk_density_kg_m3();
+  std::cout << "--> 2000 EG138 Orbital Period: " << eg138_p << " days, Density: " << eg138_rho << " kg/m^3" << std::endl;
+  assert(std::abs(eg138_p - 360.0) < 45.0 && "2000 EG138 orbital period mismatch!");
+  assert(std::abs(eg138_rho - 450.0) < 30.0 && "2000 EG138 density mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
