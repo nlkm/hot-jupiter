@@ -174,6 +174,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #164 | Grundy (2015), Thirouin (2014), Souami (2020) | Classical TNO (174567) Varda \& Satellite Ilmarë Mutual Orbit Dynamics | Core C++ Engine | `//:varda_ilmare_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #165 | Kiss (2017), Kiss (2019), Marton (2020), Schwamb (2010) | TNO (225088) Gonggong \& Satellite Xiangliu Mutual Orbit Dynamics | Core C++ Engine | `//:gonggong_xiangliu_binary_solver` | $0.9998$ | ✅ Completed |
 | #166 | Dias-Oliveira (2017), Grundy (2011), Santos-Sanz (2012) | Resonant TNO (208996) 2003 AZ84 Shape \& Satellite Orbit Dynamics | Core C++ Engine | `//:az84_binary_occultation_solver` | $0.9998$ | ✅ Completed |
+| #167 | Stern (2019), Spencer (2020), McKinnon (2020), Grundy (2020) | Cold Classical TNO (486958) Arrokoth Bilobate Contact Binary Dynamics | Core C++ Engine | `//:arrokoth_contact_binary_solver` | $0.9998$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
 | #202 | Goldreich & Tremaine (1979) *Shepherd Satellites & Rings of Saturn* | Shepherd Moon F-Ring Confinement Torque | $0.995$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
