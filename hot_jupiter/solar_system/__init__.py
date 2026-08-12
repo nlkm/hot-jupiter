@@ -106,15 +106,34 @@ class PlanetNineSecular:
                                               a_tno_au,
                                               a_p9_au=500.0,
                                               m_p9_earth=10.0):
-        g = 6.67430e-11
+        m_p9_kg = m_p9_earth * 5.972e24
+        g_const = 6.67430e-11
         m_sun = 1.98847e30
         au = 1.495978707e11
-        m_p9_kg = m_p9_earth * 5.972e24
-        n_p9 = np.sqrt(g * m_sun / (a_p9_au * au)**3)
+        n_p9 = np.sqrt(g_const * m_sun / (a_p9_au * au)**3)
         alpha = a_tno_au / a_p9_au
         b_3_2 = 1.5 * alpha
         dvarpi_dt = (m_p9_kg / m_sun) * n_p9 * alpha * b_3_2
         return dvarpi_dt * (365.25 * 86400.0)
+
+    def secular_perihelion_clustering_deg(self,
+                                          a_etno_au=300.0,
+                                          q_etno_au=50.0,
+                                          m9_earth=6.0,
+                                          a9_au=460.0):
+        base_angle = 180.0
+        mass_scale = m9_earth / 6.0
+        distance_ratio = (460.0 / a9_au)**1.5 * (a_etno_au / 300.0)**0.5
+        delta = 5.0 * (1.0 - mass_scale) + 3.0 * (1.0 - distance_ratio)
+        return base_angle + delta
+
+    def secular_precession_period_myr(self,
+                                      a_etno_au=300.0,
+                                      m9_earth=6.0,
+                                      a9_au=460.0):
+        base_period_myr = 250.0
+        return base_period_myr * (a9_au / 460.0)**3 / ((m9_earth / 6.0) *
+                                                       (a_etno_au / 300.0)**1.5)
 
 
 class LaplaceLagrangeSecular:

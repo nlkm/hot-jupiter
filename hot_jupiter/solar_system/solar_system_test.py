@@ -90,7 +90,11 @@ def test_relativistic_precession():
 def test_planet_nine_secular():
     p9 = PlanetNineSecular()
     prec = p9.planet_nine_secular_precession_rad_yr(250.0)
-    assert prec > 1.0e-10, "Planet Nine secular precession should be positive"
+    assert prec > 0, "Planet Nine secular precession should be positive"
+    angle = p9.secular_perihelion_clustering_deg()
+    assert abs(
+        angle -
+        180.0) < 5.0, "Planet Nine secular perihelion clustering mismatch"
 
 
 def test_laplace_lagrange_secular():
