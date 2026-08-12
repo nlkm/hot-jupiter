@@ -16,6 +16,7 @@ from hot_jupiter.solar_system import (
     RelativisticPrecession,
     SaturnRingLindbladResonance,
     SeasonalYarkovsky,
+    SilaNunamBinary,
 )
 
 
@@ -107,3 +108,11 @@ def test_altjira_binary():
     rho_kg_m3 = altjira.system_bulk_density_kg_m3()
     assert abs(p_days - 139.6) < 2.0, "Altjira orbital period mismatch"
     assert abs(rho_kg_m3 - 510.0) < 30.0, "Altjira bulk density mismatch"
+
+
+def test_sila_nunam_binary():
+    sila = SilaNunamBinary()
+    p_days = sila.orbital_period_days()
+    rho_kg_m3 = sila.system_bulk_density_kg_m3()
+    assert abs(p_days - 12.51) < 0.1, "Sila-Nunam orbital period mismatch"
+    assert abs(rho_kg_m3 - 720.0) < 30.0, "Sila-Nunam bulk density mismatch"
