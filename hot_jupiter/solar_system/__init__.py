@@ -310,6 +310,24 @@ class EG138Binary:
         return m_sys_kg / vol
 
 
+class YN81Binary:
+
+    def orbital_period_days(self, a_orb_km=12800.0, m_sys_kg=1.12e18):
+        g = 6.67430e-11
+        a_m = a_orb_km * 1000.0
+        period_sec = 2.0 * np.pi * np.sqrt(a_m**3 / (g * m_sys_kg))
+        return period_sec / 86400.0
+
+    def system_bulk_density_kg_m3(self,
+                                  m_sys_kg=1.12e18,
+                                  r_primary_km=72.0,
+                                  r_sec_km=59.0):
+        r_eq_m = ((r_primary_km * 1000.0)**3 + (r_sec_km * 1000.0)**3)**(1.0 /
+                                                                         3.0)
+        vol = (4.0 / 3.0) * np.pi * r_eq_m**3
+        return m_sys_kg / vol
+
+
 __all__ = [
     "AltjiraBinary",
     "AsteroidDynamics",
@@ -329,4 +347,5 @@ __all__ = [
     "SeasonalYarkovsky",
     "SilaNunamBinary",
     "TeharonhiawakoBinary",
+    "YN81Binary",
 ]

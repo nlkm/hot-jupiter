@@ -21,6 +21,7 @@ from hot_jupiter.solar_system import (
     SeasonalYarkovsky,
     SilaNunamBinary,
     TeharonhiawakoBinary,
+    YN81Binary,
 )
 
 
@@ -152,3 +153,11 @@ def test_eg138_binary():
     rho_kg_m3 = eg138.system_bulk_density_kg_m3()
     assert abs(p_days - 360.0) < 45.0, "2000 EG138 orbital period mismatch"
     assert abs(rho_kg_m3 - 450.0) < 30.0, "2000 EG138 bulk density mismatch"
+
+
+def test_yn81_binary():
+    yn81 = YN81Binary()
+    p_days = yn81.orbital_period_days()
+    rho_kg_m3 = yn81.system_bulk_density_kg_m3()
+    assert abs(p_days - 410.0) < 30.0, "2000 YN81 orbital period mismatch"
+    assert abs(rho_kg_m3 - 470.0) < 30.0, "2000 YN81 bulk density mismatch"
