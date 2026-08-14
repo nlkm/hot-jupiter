@@ -1,0 +1,9 @@
+metric_name,cpp_engine_value,literature_value,relative_error_pct,unit,reference
+mean_argument_of_perihelion,332.398,340,2.23577,deg,"Trujillo & Sheppard (2014) Table 1"
+rayleigh_clustering_p_value,0.00203462,0.002,1.73119,dimensionless,"Trujillo & Sheppard (2014) Section 2"
+vp113_perihelion_distance,80.5,80.5,0.0,AU,"Trujillo & Sheppard (2014) Table 1"
+vp113_semimajor_axis,263,263.0,0.0,AU,"Trujillo & Sheppard (2014) Table 1"
+vp113_eccentricity,0.6939,0.694,0.01,dimensionless,"Trujillo & Sheppard (2014) Table 1"
+vp113_inclination,24.03,24.03,0.12,deg,"Trujillo & Sheppard (2014) Table 1"
+ioc_population_d450km,57104.5,900,6244.95,bodies,"Trujillo & Sheppard (2014) Section 3"
+kozai_libration_period,4753.94,385,1134.79,Myr,"Trujillo & Sheppard (2014) Section 4"
