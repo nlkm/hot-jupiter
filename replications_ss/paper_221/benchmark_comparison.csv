@@ -1,0 +1,12 @@
+metric_name,published_val,model_val,unit,rel_error_pct
+"Europa Equilibrium Shell D_eq",24.5,19.9889,"km",18.4129
+"Europa Ocean Thickness D_oc",95.5,100.011,"km",4.72372
+"Europa Nusselt Number Nu",1.82,1,"",45.0549
+"Ganymede Equilibrium Shell D_eq",108,89.4534,"km",17.1728
+"Ganymede Nusselt Number Nu",4.12,2.63288,"",36.0952
+"Callisto (Pure) Shell D_eq",142,167.113,"km",17.6851
+"Callisto (Pure) Nusselt Nu",4.05,3.65011,"",9.87394
+"Callisto (5% NH3) Shell D_eq",112,120.475,"km",7.56734
+"Callisto (5% NH3) Ocean D_oc",188,179.525,"km",4.5082
+"Titan (5% NH3) Shell D_eq",88.5,105.274,"km",18.954
+"Titan (5% NH3) Ocean D_oc",311.5,294.726,"km",5.385

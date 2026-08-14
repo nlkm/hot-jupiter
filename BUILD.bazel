@@ -2444,6 +2444,28 @@ alias(
     actual = "//replications_ss/paper_236:paper_236_solver",
 )
 
+alias(
+    name = "paper_231_solver",
+    actual = "//replications_ss/paper_231:paper_231_solver",
+)
+
+
+alias(
+    name = "paper_246_solver",
+    actual = "//replications_ss/paper_246:paper_246_solver",
+)
+
+alias(
+    name = "paper_239_solver",
+    actual = "//replications_ss/paper_239:paper_239_solver",
+)
+
+alias(
+    name = "paper_234_solver",
+    actual = "//replications_ss/paper_234:paper_234_solver",
+)
+
+
 
 
 
