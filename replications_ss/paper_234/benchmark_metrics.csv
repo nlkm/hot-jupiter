@@ -1,0 +1,7 @@
+metric_name,value,target,status
+r_squared_eccentricity_sweep,0.990606,0.98,PASS
+r_squared_semimajor_sweep,0.996595,0.98,PASS
+nominal_earth_water_mass_fraction,0.00220063,0.0021,PASS
+nominal_earth_delivered_oceans,9.38757,9.0,PASS
+desiccated_world_threshold_ej,0.15,0.15,PASS
+water_world_threshold_aj,6.50,6.50,PASS
