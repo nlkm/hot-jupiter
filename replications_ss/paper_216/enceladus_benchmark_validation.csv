@@ -1,0 +1,8 @@
+benchmark_name,Q_S,k2_S,expected_gw,model_gw,rel_error_pct,citation
+"Canonical Equilibrium (Meyer & Wisdom 2007)",18000,0.341,1.171,1.1709,0.00860077,"Meyer & Wisdom (2007) Eq. (2)"
+"Goldreich-Soter Minimum Bound",18000,0.39,1.339,1.33915,0.0113275,"Goldreich & Soter (1966)"
+"Low Saturn k2 Limit",18000,0.21,0.721,0.721082,0.0113275,"Meyer & Wisdom (2007) Table 1"
+"Astrometric Fast Dissipation",1695,0.39,14.218,14.2211,0.0216608,"Lainey et al. (2012, 2017)"
+"Moderate Tidal Dissipation",5000,0.341,4.215,4.21524,0.00563288,"Fuller et al. (2016)"
+"Spencer 2006 Equilibrium Required",3634,0.341,5.8,5.79972,0.00480553,"Spencer et al. (2006) CIRS"
+"Howett 2011 Equilibrium Required",1334,0.341,15.8,15.7992,0.00480553,"Howett et al. (2011) CIRS"

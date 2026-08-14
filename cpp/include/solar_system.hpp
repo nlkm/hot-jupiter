@@ -8107,6 +8107,246 @@ using EuropaThermalEvolutionModel = MitriShowman2005IceConvectionModel;
 using MitriShowman2005Model = MitriShowman2005IceConvectionModel;
 using Paper222EuropaIceShellModel = MitriShowman2005IceConvectionModel;
 
+// ============================================================================
+// 127. INNER OORT CLOUD PLANETOID (90377) SEDNA & STELLAR ENCOUNTER PERIHELION LIFTING
+// (Brown, Trujillo, & Rabinowitz 2004; Morbidelli & Levison 2004; Kenyon & Bromley 2004)
+// ============================================================================
+class Brown2004SednaInnerOortModel {
+ public:
+  // Sedna Observed Orbital & Physical Parameters (Brown et al. 2004, MPC 2026)
+  static constexpr double A_SEDNA_AU = 506.0;          // Semi-major axis [AU] (literature range 500-525 AU)
+  static constexpr double Q_SEDNA_AU = 76.0;           // Perihelion distance [AU]
+  static constexpr double E_SEDNA = 0.8498;            // Eccentricity (1 - q/a)
+  static constexpr double I_SEDNA_DEG = 11.93;         // Orbital inclination [deg]
+  static constexpr double APHELION_SEDNA_AU = 936.0;   // Aphelion distance [AU] (2a - q)
+  static constexpr double PERIOD_SEDNA_YR = 11385.0;   // Orbital period [yr] (a^1.5)
+  static constexpr double H_MAG_SEDNA = 1.58;          // Absolute visual magnitude H_V
+  static constexpr double ALBEDO_SEDNA_NOM = 0.24;     // Geometric visual albedo p_V
+  static constexpr double DIAMETER_SEDNA_KM = 1000.0;  // Effective diameter [km]
+  static constexpr double RHO_SEDNA_KG_M3 = 1800.0;    // Bulk density [kg/m^3]
+
+  // Nominal Solar Birth Cluster Parameters (Lada & Lada 2003, Adams 2010, Brasser et al. 2006)
+  static constexpr double N_STARS_CLUSTER_NOM = 1000.0; // Total cluster stars
+  static constexpr double R_CLUSTER_PC_NOM = 1.0;       // Cluster core radius [pc]
+  static constexpr double NHO_CLUSTER_PC3_NOM = 2.0e3;  // Stellar number density n_* [pc^-3]
+  static constexpr double SIGMA_V_KM_S_NOM = 1.0;       // Cluster velocity dispersion [km/s]
+  static constexpr double TAU_CLUSTER_MYR_NOM = 30.0;   // Cluster lifetime [Myr]
+  static constexpr double M_STAR_ENCOUNTER_NOM = 0.8;   // Perturbing star mass [M_sun]
+  static constexpr double V_ENCOUNTER_KM_S_NOM = 1.0;   // Relative encounter speed [km/s]
+  static constexpr double B_IMPACT_NOM_AU = 450.0;      // Nominal impact parameter [AU]
+  static constexpr double Q0_PRIMORDIAL_AU = 30.0;      // Initial perihelion distance (Neptune-scattered) [AU]
+
+  // Physical units constants within class for convenience
+  static constexpr double G_SI = 6.67430e-11;          // m^3 kg^-1 s^-2
+  static constexpr double M_SUN_KG = 1.98847e30;       // kg
+  static constexpr double AU_M = 1.495978707e11;       // m
+  static constexpr double SEC_PER_YEAR = 3.15576e7;    // s
+  static constexpr double PC_M = 3.085677581e16;       // m
+  static constexpr double KM_S_TO_M_S = 1000.0;
+
+  // 1. Orbital dynamics & Keplerian parameters
+  double orbital_period_yr(double a_au = A_SEDNA_AU) const {
+    return std::pow(a_au, 1.5);
+  }
+
+  double aphelion_distance_au(double a_au = A_SEDNA_AU, double q_au = Q_SEDNA_AU) const {
+    return 2.0 * a_au - q_au;
+  }
+
+  double eccentricity(double a_au = A_SEDNA_AU, double q_au = Q_SEDNA_AU) const {
+    return 1.0 - (q_au / a_au);
+  }
+
+  double orbital_speed_at_radius_km_s(double r_au, double a_au = A_SEDNA_AU) const {
+    // v = sqrt(GM * (2/r - 1/a))
+    double mu_au3_s2 = (G_SI * M_SUN_KG) / (std::pow(AU_M, 3.0));
+    double v_au_s = std::sqrt(mu_au3_s2 * (2.0 / r_au - 1.0 / a_au));
+    return (v_au_s * AU_M) / 1000.0; // km/s
+  }
+
+  double aphelion_velocity_km_s(double a_au = A_SEDNA_AU, double q_au = Q_SEDNA_AU) const {
+    double Q_au = aphelion_distance_au(a_au, q_au);
+    return orbital_speed_at_radius_km_s(Q_au, a_au);
+  }
+
+  // 2. Physical characteristics from photometry
+  double diameter_from_albedo_km(double H_v = H_MAG_SEDNA, double p_v = ALBEDO_SEDNA_NOM) const {
+    // D = 1329 * 10^(-H/5) / sqrt(p_v)
+    return (1329.0 / std::sqrt(std::max(0.01, p_v))) * std::pow(10.0, -0.2 * H_v);
+  }
+
+  double mass_from_diameter_kg(double diameter_km = DIAMETER_SEDNA_KM, double rho_kg_m3 = RHO_SEDNA_KG_M3) const {
+    double radius_m = 0.5 * diameter_km * 1000.0;
+    return (4.0 / 3.0) * M_PI * std::pow(radius_m, 3.0) * rho_kg_m3;
+  }
+
+  double mass_in_earth_masses(double diameter_km = DIAMETER_SEDNA_KM, double rho_kg_m3 = RHO_SEDNA_KG_M3) const {
+    double m_kg = mass_from_diameter_kg(diameter_km, rho_kg_m3);
+    double m_earth_kg = 5.9722e24;
+    return m_kg / m_earth_kg;
+  }
+
+  // 3. Stellar Flyby Impulse Approximation & Perihelion Lifting
+  // Impulsive velocity impulse delta_v [km/s] at distance r_au from Sun
+  // for a star of mass M_star (in M_sun) passing at impact parameter b_au with velocity V_enc (in km/s)
+  double impulsive_velocity_kick_km_s(double r_au, double b_au, double M_star_msun = M_STAR_ENCOUNTER_NOM,
+                                     double V_enc_km_s = V_ENCOUNTER_KM_S_NOM, double geometry_factor = 1.0) const {
+    // In tidal approximation (r << b): Delta v = 2 * G * M_* * r / (V_enc * b^2)
+    // G * M_sun in (km/s)^2 * AU:
+    // G * M_sun = 1.3271244e20 m^3/s^2 = 1.3271244e14 km^3/s^2
+    // 1 AU = 1.4959787e8 km -> GM_sun = 887.05 km^2/s^2 * AU
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M); // ~887.05
+    double delta_v = (2.0 * GM_sun_km2_s2_au * M_star_msun * r_au) / (V_enc_km_s * b_au * b_au);
+    return delta_v * geometry_factor;
+  }
+
+  // Exact lifted perihelion distance q_new [AU] after velocity kick delta_v_theta [km/s] at aphelion Q_au
+  double lifted_perihelion_au(double a0_au, double q0_au, double delta_v_theta_km_s) const {
+    double Q_au = aphelion_distance_au(a0_au, q0_au);
+    double v_Q_0 = aphelion_velocity_km_s(a0_au, q0_au); // km/s
+    double v_Q_new = v_Q_0 + delta_v_theta_km_s;
+    if (v_Q_new <= 0.0) return 0.0;
+
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    // Specific energy: E = 0.5 * v^2 - GM / Q
+    double specific_energy = 0.5 * v_Q_new * v_Q_new - (GM_sun_km2_s2_au / Q_au);
+    if (specific_energy >= 0.0) {
+      // Unbound parabolic/hyperbolic orbit
+      return 1.0e6; // Ejected
+    }
+
+    double a_new = -GM_sun_km2_s2_au / (2.0 * specific_energy);
+    // Angular momentum h = Q * v_Q_new
+    double h_new = Q_au * v_Q_new; // (km/s) * AU
+    // e_new = sqrt(1 - 2 * |E| * h^2 / GM^2)
+    double term = 1.0 - (2.0 * std::abs(specific_energy) * h_new * h_new) / (GM_sun_km2_s2_au * GM_sun_km2_s2_au);
+    term = std::max(0.0, term);
+    double e_new = std::sqrt(term);
+    return a_new * (1.0 - e_new);
+  }
+
+  // Analytical approximation for lifted perihelion: sqrt(q') = sqrt(q0) + Q * Delta_v / sqrt(2 GM)
+  double analytical_lifted_perihelion_au(double a0_au, double q0_au, double delta_v_theta_km_s) const {
+    double Q_au = aphelion_distance_au(a0_au, q0_au);
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    double sqrt_2GM = std::sqrt(2.0 * GM_sun_km2_s2_au); // ~42.12 km/s * AU^(1/2)
+    double sqrt_q_prime = std::sqrt(q0_au) + (Q_au * delta_v_theta_km_s) / sqrt_2GM;
+    if (sqrt_q_prime <= 0.0) return 0.0;
+    return sqrt_q_prime * sqrt_q_prime;
+  }
+
+  // Required transverse velocity kick Delta v [km/s] to achieve target perihelion q_target_au
+  double required_velocity_kick_km_s(double a0_au, double q0_au, double q_target_au = Q_SEDNA_AU) const {
+    double Q_au = aphelion_distance_au(a0_au, q0_au);
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    double sqrt_2GM = std::sqrt(2.0 * GM_sun_km2_s2_au);
+    return (sqrt_2GM / Q_au) * (std::sqrt(q_target_au) - std::sqrt(q0_au));
+  }
+
+  // Required encounter impact parameter b [AU] to produce q_target_au
+  double required_impact_parameter_au(double a0_au, double q0_au, double q_target_au = Q_SEDNA_AU,
+                                      double M_star_msun = M_STAR_ENCOUNTER_NOM,
+                                      double V_enc_km_s = V_ENCOUNTER_KM_S_NOM) const {
+    double Q_au = aphelion_distance_au(a0_au, q0_au);
+    double delta_v_req = required_velocity_kick_km_s(a0_au, q0_au, q_target_au);
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    // delta_v = 2 * GM_* * Q / (V_enc * b^2) => b = sqrt(2 * GM_* * Q / (V_enc * delta_v))
+    double b2 = (2.0 * GM_sun_km2_s2_au * M_star_msun * Q_au) / (V_enc_km_s * std::max(1.0e-8, delta_v_req));
+    return std::sqrt(std::max(1.0, b2));
+  }
+
+  // 4. Open Birth Cluster Encounter Probability & Cross Section
+  // Gravitational focusing cross section sigma [AU^2]
+  double encounter_cross_section_au2(double b_au, double M_star_msun = M_STAR_ENCOUNTER_NOM,
+                                     double sigma_v_km_s = SIGMA_V_KM_S_NOM) const {
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    double v_esc2_at_b = (2.0 * GM_sun_km2_s2_au * (1.0 + M_star_msun)) / b_au;
+    double focusing_factor = 1.0 + v_esc2_at_b / (sigma_v_km_s * sigma_v_km_s);
+    return M_PI * b_au * b_au * focusing_factor;
+  }
+
+  // Encounter rate Gamma(b) [Myr^-1]
+  double encounter_rate_per_myr(double b_au, double n_cluster_pc3 = NHO_CLUSTER_PC3_NOM,
+                                double sigma_v_km_s = SIGMA_V_KM_S_NOM,
+                                double M_star_msun = M_STAR_ENCOUNTER_NOM) const {
+    double sigma_au2 = encounter_cross_section_au2(b_au, M_star_msun, sigma_v_km_s);
+    // Convert sigma to pc^2: 1 AU = 4.8481368e-6 pc -> 1 AU^2 = 2.35044e-11 pc^2
+    double au_to_pc = 4.8481368e-6;
+    double sigma_pc2 = sigma_au2 * au_to_pc * au_to_pc;
+    // velocity in pc / Myr: 1 km/s = 1.022712 pc / Myr
+    double v_pc_myr = sigma_v_km_s * 1.022712;
+    return n_cluster_pc3 * sigma_pc2 * v_pc_myr;
+  }
+
+  // Cumulative encounter probability within cluster lifetime tau_cluster_myr
+  double cumulative_encounter_probability(double b_au, double tau_cluster_myr = TAU_CLUSTER_MYR_NOM,
+                                         double n_cluster_pc3 = NHO_CLUSTER_PC3_NOM,
+                                         double sigma_v_km_s = SIGMA_V_KM_S_NOM,
+                                         double M_star_msun = M_STAR_ENCOUNTER_NOM) const {
+    double gamma_myr = encounter_rate_per_myr(b_au, n_cluster_pc3, sigma_v_km_s, M_star_msun);
+    double expected_encounters = gamma_myr * tau_cluster_myr;
+    return 1.0 - std::exp(-expected_encounters);
+  }
+
+  // 5. Ineffectiveness of Modern Galactic Tides and Field Stars
+  // Galactic vertical tidal torque timescale tau_tide [Gyr]
+  double galactic_tide_oscillation_period_gyr(double a_au = A_SEDNA_AU) const {
+    // For a ~ 500 AU, tau_tide ~ 400 Gyr (much longer than Age of Universe 13.8 Gyr)
+    double tau_tide_nom_gyr = 4.5 * std::pow(20000.0 / a_au, 1.5);
+    return tau_tide_nom_gyr;
+  }
+
+  // Maximum perihelion shift delta_q [AU] caused by galactic tides over Solar System age (4.5 Gyr)
+  double max_galactic_tide_delta_q_au(double a_au = A_SEDNA_AU, double t_gyr = 4.5) const {
+    // Delta q_tide ~ 20 AU * (a / 20000)^4 * (t / 4.5 Gyr)
+    double delta_q = 20.0 * std::pow(a_au / 20000.0, 4.0) * (t_gyr / 4.5);
+    return delta_q;
+  }
+
+  // Neptune secular torque perihelion diffusion rate [AU/Gyr] at given perihelion q
+  double neptune_perihelion_diffusion_rate_au_gyr(double q_au) const {
+    // Exponential cutoff beyond Neptune's sphere: exp(-(q - 30) / delta_q_scale)
+    if (q_au <= 30.0) return 10.0;
+    double delta_q = q_au - 30.0;
+    return 10.0 * std::exp(-delta_q / 4.5);
+  }
+
+  // 6. Detached Population & Inner Oort Cloud Size Distribution
+  // Expected fraction of scattered planetesimals captured into detached IOC with q in [40, 100] AU
+  double detached_inner_oort_capture_fraction(double b_au = B_IMPACT_NOM_AU, double M_star_msun = M_STAR_ENCOUNTER_NOM) const {
+    // Peak capture efficiency occurs for b ~ 300-600 AU
+    double b_opt = 450.0;
+    double width = 200.0;
+    double f0 = 0.18 * (M_star_msun / 0.8);
+    double arg = (b_au - b_opt) / width;
+    return f0 * std::exp(-0.5 * arg * arg);
+  }
+
+  // Total estimated Inner Oort Cloud mass [M_earth] from primordial disk mass M_disk_mearth
+  double inner_oort_cloud_mass_mearth(double M_disk_mearth = 30.0, double b_au = B_IMPACT_NOM_AU) const {
+    double f_ioc = detached_inner_oort_capture_fraction(b_au);
+    return M_disk_mearth * f_ioc * 0.40; // 40% scattered outward
+  }
+
+  // Cumulative number of bodies larger than diameter D_km in Inner Oort Cloud (differential index q_index = 3.5)
+  double cumulative_population_number(double D_km, double D_ref_km = 1000.0, double N_ref = 60.0, double power_law_index = 2.5) const {
+    return N_ref * std::pow(D_ref_km / std::max(10.0, D_km), power_law_index);
+  }
+
+  // Structure for benchmark evaluation
+  struct BenchmarkPoint {
+    double semi_major_axis_au;
+    double initial_perihelion_au;
+    double impact_parameter_au;
+    double delta_v_kms;
+    double lifted_perihelion_au;
+    double expected_perihelion_au;
+  };
+};
+
+using Paper244SednaInnerOortModel = Brown2004SednaInnerOortModel;
+using SednaStellarEncounterModel = Brown2004SednaInnerOortModel;
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP

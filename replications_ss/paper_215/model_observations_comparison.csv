@@ -1,0 +1,11 @@
+property_name,obs_value,obs_uncert,model_value,unit,residual,rel_diff_pct
+"Tethys Ithaca Chasma Corridor Width",100.000,15.000,98.777,"km",-1.223,1.223
+"Tethys Circumferential Extension",28.500,4.000,28.152,"km",-0.348,1.223
+"Tethys Ocean Freezing Linear Strain",0.850,0.120,0.844,"%",-0.006,0.751
+"Tethys Paleo Elastic Thickness Te",16.000,4.000,16.000,"km",0.000,0.000
+"Tethys Paleo Heat Flux (Ithaca)",25.000,6.000,26.174,"mW/m^2",1.174,4.698
+"Tethys Current Surface Heat Flux",0.080,0.020,0.078,"mW/m^2",-0.002,2.500
+"Dione Current Tidal Power",1.800,0.500,1.815,"GW",0.015,0.850
+"Rhea Current Tidal Power",0.015,0.005,0.013,"GW",-0.002,15.624
+"Tethys Resonant Peak Tidal Power",45.000,8.000,45.197,"GW",0.197,0.439
+"Dione Resonant Peak Tidal Power",22.000,5.000,23.854,"GW",1.854,8.428
