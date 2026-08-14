@@ -218,6 +218,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #211 | Showman \& Han (2004) *Numerical Simulations of Convection in Europa's Ice Shell* | Stagnant-Lid Ice Convection, Arrhenius Viscosity, $Nu$--$Ra$ Scaling \& Thermal Diapirism | Core C++ Engine | `//:paper_211_solver` | $0.9942$ | ✅ VERIFIED |
 | #212 | Hussmann \& Spohn (2004) *Thermal-Orbital Evolution of Io and Europa* | Coupled Laplace Resonance Thermal-Orbital Feedback \& Limit Cycles | Core C++ Engine | `//:paper_212_solver` | $0.9982$ | ✅ Completed |
 | #214 | Rhoden et al. (2015), Hoppa (1999), Hurford (2007) *The Origin of Europa's Linear Fractures* | Non-Synchronous Rotation, Diurnal Tidal Stress Fields \& Cycloid Lineaments | Core C++ Engine | `//:paper_214_solver` | $0.9997$ | ✅ VERIFIED |
+| #228 | Batygin \& Morbidelli (2011) *Analytical Description of the Nice Model Resonance Crossing* | Secular Resonant Harmonics, Chirikov Resonance Overlap \& Jupiter-Saturn 2:1 Crossing | `NiceModelResonantCrossingAnalyticalModel` | `//:paper_228_solver` | $0.9998$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
 | #252 | Wisdom (1983) *Origin of Kirkwood Gaps* | 3:1 Resonance Overlap Chaos & Gap Clearance | $0.996$ | ✅ VERIFIED |
 | #351 | Batygin & Brown (2016) *Evidence for a Distant Giant Planet (Planet Nine)* | Secular Perihelion Alignment & Kozai Dynamics | $0.995$ | ✅ VERIFIED |

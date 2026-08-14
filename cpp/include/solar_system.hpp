@@ -7062,7 +7062,7 @@ class Gomes2005LateHeavyBombardmentModel {
 
   // Total Lunar impact flux [kg/yr]
   double lunar_total_impact_flux_kg_yr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
-                                       double background_flux_kg_yr = 5.0e10) const {
+                                       double background_flux_kg_yr = 1.0e8) const {
     double f_ast = lunar_impact_flux_asteroids_kg_yr(time_myr, t_inst_myr);
     double f_comet = lunar_impact_flux_comets_kg_yr(time_myr, t_inst_myr);
     return f_ast + f_comet + background_flux_kg_yr;
@@ -7094,7 +7094,7 @@ class Gomes2005LateHeavyBombardmentModel {
     double ratio_ast = relative_impact_mass_ratio_vs_moon(r_target, v_esc, V_INF_ASTEROIDS);
     double ratio_comet = relative_impact_mass_ratio_vs_moon(r_target, v_esc, V_INF_COMETS);
 
-    return f_moon_ast * ratio_ast + f_moon_comet * ratio_comet + 5.0e10 * (ratio_ast + ratio_comet) * 0.5;
+    return f_moon_ast * ratio_ast + f_moon_comet * ratio_comet + 1.0e8 * (ratio_ast + ratio_comet) * 0.5;
   }
 
   // Integrated cumulative mass delivered [kg] to target body up to time_myr
@@ -7666,6 +7666,389 @@ class SpohnSchubert2003IcyMoonOceanModel {
 
 using SpohnSchubert2003OceanModel = SpohnSchubert2003IcyMoonOceanModel;
 using Paper221IcyMoonOceanModel = SpohnSchubert2003IcyMoonOceanModel;
+
+// ============================================================================
+// 132. MITRI & SHOWMAN (2005) EUROPA ICE SHELL CONVECTIVE-CONDUCTIVE TRANSITIONS
+// (Mitri & Showman 2005, Icarus 177, 447-460; Showman & Han 2004; Solomatov 1995)
+// ============================================================================
+class MitriShowman2005IceConvectionModel {
+ public:
+  static constexpr double M_JUPITER = 1.8982e27;       // Jupiter mass [kg]
+  static constexpr double M_EUROPA = 4.7998e22;        // Europa mass [kg]
+  static constexpr double R_EUROPA = 1.5608e6;         // Europa mean radius [m]
+  static constexpr double G_SURF = 1.315;              // Surface gravity [m/s^2]
+  static constexpr double RHO_ICE = 920.0;             // Ice I density [kg/m^3]
+  static constexpr double RHO_OCEAN = 1000.0;          // Subsurface ocean water density [kg/m^3]
+  static constexpr double ALPHA_EXP = 1.60e-4;         // Thermal expansion coefficient [1/K]
+  static constexpr double K_COND = 2.30;               // Ice thermal conductivity [W/(m K)]
+  static constexpr double A_CONDUCT = 567.0;           // Temperature-dependent conductivity coeff [W/m]
+  static constexpr double CP_ICE = 2000.0;             // Specific heat capacity [J/(kg K)]
+  static constexpr double KAPPA_DIFF = 1.25e-6;        // Thermal diffusivity [m^2/s] (K / (rho * Cp))
+  static constexpr double LATENT_HEAT_FUSION = 3.34e5; // Latent heat of melting [J/kg]
+  static constexpr double T_SURF_NOM = 100.0;          // Nominal surface temperature [K]
+  static constexpr double T_BASE_NOM = 270.0;          // Basal ocean-ice boundary temperature [K]
+  static constexpr double ACTIVATION_E = 50000.0;      // Activation energy for diffusion creep [J/mol]
+  static constexpr double ACTIVATION_E_DISL = 60000.0; // Activation energy for dislocation creep [J/mol]
+  static constexpr double GAS_R = 8.314462;            // Universal gas constant [J/(mol K)]
+  static constexpr double ETA_BASE_NOM = 1.0e14;       // Nominal basal viscosity [Pa s]
+  static constexpr double D_SHELL_NOM_KM = 25.0;       // Nominal ice shell thickness [km]
+  static constexpr double F_BASAL_NOM_MW = 30.0;       // Nominal ocean/mantle basal heat flux [mW/m^2]
+  static constexpr double MU_ICE = 3.5e9;              // Ice shear modulus [Pa]
+  static constexpr double N_MEAN_MOTION = 2.0478e-5;   // Europa orbital mean motion [rad/s]
+  static constexpr double ECCENTRICITY = 0.009;        // Nominal orbital eccentricity
+  static constexpr double SEC_PER_YEAR = 31557600.0;   // Seconds per Julian year
+  static constexpr double SEC_PER_KYR = 3.15576e10;    // Seconds per kyr
+  static constexpr double SEC_PER_MYR = 3.15576e13;    // Seconds per Myr
+
+  // Temperature difference across ice shell [K]
+  double delta_temperature_k(double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM) const {
+    return std::max(1.0, T_base - T_surf);
+  }
+
+  // Frank-Kamenetskii rheological parameter theta = (E* Delta T) / (R T_base^2)
+  double frank_kamenetskii_param(double E_act = ACTIVATION_E, double T_base = T_BASE_NOM, double T_surf = T_SURF_NOM) const {
+    double delta_t = delta_temperature_k(T_surf, T_base);
+    return (E_act * delta_t) / (GAS_R * T_base * T_base);
+  }
+
+  // Rheological temperature scale Delta T_rh = R T_base^2 / E* [K]
+  double rheological_temperature_scale_k(double E_act = ACTIVATION_E, double T_base = T_BASE_NOM) const {
+    return (GAS_R * T_base * T_base) / E_act;
+  }
+
+  // Temperature-dependent Arrhenius ice viscosity eta(T) [Pa s]
+  double viscosity_at_temperature(double T_k, double eta_base = ETA_BASE_NOM,
+                                  double E_act = ACTIVATION_E, double T_base = T_BASE_NOM) const {
+    double T = std::max(50.0, T_k);
+    double exponent = (E_act / GAS_R) * (1.0 / T - 1.0 / T_base);
+    exponent = std::min(100.0, std::max(-50.0, exponent));
+    return eta_base * std::exp(exponent);
+  }
+
+  // Viscosity contrast across ice shell Delta eta = eta(T_surf) / eta(T_base)
+  double viscosity_contrast(double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM, double E_act = ACTIVATION_E) const {
+    return viscosity_at_temperature(T_surf, 1.0, E_act, T_base);
+  }
+
+  // Basal Rayleigh number Ra_b based on basal viscosity and shell thickness D
+  double basal_rayleigh_number(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                               double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM) const {
+    double D_m = std::max(100.0, d_shell_km * 1.0e3);
+    double delta_t = delta_temperature_k(T_surf, T_base);
+    double numerator = RHO_ICE * G_SURF * ALPHA_EXP * delta_t * std::pow(D_m, 3.0);
+    double denominator = KAPPA_DIFF * eta_base;
+    return numerator / denominator;
+  }
+
+  // Rheological Rayleigh number Ra_rh based on Delta T_rh
+  double rheological_rayleigh_number(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                                    double E_act = ACTIVATION_E, double T_base = T_BASE_NOM) const {
+    double D_m = std::max(100.0, d_shell_km * 1.0e3);
+    double delta_t_rh = rheological_temperature_scale_k(E_act, T_base);
+    double numerator = RHO_ICE * G_SURF * ALPHA_EXP * delta_t_rh * std::pow(D_m, 3.0);
+    double denominator = KAPPA_DIFF * eta_base;
+    return numerator / denominator;
+  }
+
+  // Critical Rayleigh number Ra_cr for onset of stagnant-lid convection (Solomatov 1995, Mitri & Showman 2005)
+  double critical_rayleigh_number(double E_act = ACTIVATION_E, double T_base = T_BASE_NOM, double T_surf = T_SURF_NOM) const {
+    double theta = frank_kamenetskii_param(E_act, T_base, T_surf);
+    return 20.0 * std::pow(theta, 4.0);
+  }
+
+  // Critical ice shell thickness for convection onset D_cr [km]
+  double critical_thickness_convection_onset_km(double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E,
+                                               double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM) const {
+    double ra_cr = critical_rayleigh_number(E_act, T_base, T_surf);
+    double delta_t = delta_temperature_k(T_surf, T_base);
+    double d_m_cubed = (ra_cr * KAPPA_DIFF * eta_base) / (RHO_ICE * G_SURF * ALPHA_EXP * delta_t);
+    return std::cbrt(d_m_cubed) / 1.0e3;
+  }
+
+  // Whether the shell undergoes solid-state thermal convection
+  bool is_convective(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E) const {
+    double ra_b = basal_rayleigh_number(d_shell_km, eta_base);
+    double ra_cr = critical_rayleigh_number(E_act);
+    return ra_b >= ra_cr;
+  }
+
+  // Nusselt number in stagnant lid regime: Nu = a * theta^(-(1+beta)) * Ra_b^beta
+  double nusselt_stagnant_lid(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                             double E_act = ACTIVATION_E, double a_coeff = 0.95, double beta = 0.22) const {
+    if (!is_convective(d_shell_km, eta_base, E_act)) {
+      return 1.0;  // Pure conduction below critical Rayleigh number
+    }
+    double ra_rh = rheological_rayleigh_number(d_shell_km, eta_base, E_act);
+    double theta = frank_kamenetskii_param(E_act);
+    double nu = a_coeff * std::pow(ra_rh, beta) / theta;
+    return std::max(1.0, nu);
+  }
+
+  // Nusselt number in mobile lid regime: Nu_mob = a_mob * Ra_b^beta_mob
+  double nusselt_mobile_lid(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                           double a_mob = 0.15, double beta_mob = 0.28) const {
+    double ra_b = basal_rayleigh_number(d_shell_km, eta_base);
+    if (ra_b < 1000.0) return 1.0;
+    return std::max(1.0, a_mob * std::pow(ra_b, beta_mob));
+  }
+
+  // Nusselt number in isoviscous Rayleigh-Benard convection: Nu_iso = a_iso * Ra_b^(1/3)
+  double nusselt_isoviscous(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                           double a_iso = 0.10) const {
+    double ra_b = basal_rayleigh_number(d_shell_km, eta_base);
+    if (ra_b < 657.5) return 1.0;
+    return std::max(1.0, a_iso * std::cbrt(ra_b));
+  }
+
+  // Conductive baseline surface heat flux [mW/m^2]
+  double conductive_heat_flux_mw_m2(double d_shell_km = D_SHELL_NOM_KM,
+                                   double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM) const {
+    double D_m = std::max(100.0, d_shell_km * 1.0e3);
+    double delta_t = delta_temperature_k(T_surf, T_base);
+    return (K_COND * delta_t / D_m) * 1.0e3;
+  }
+
+  // Conductive heat flux with logarithmic thermal conductivity [mW/m^2]
+  double conductive_log_heat_flux_mw_m2(double d_shell_km = D_SHELL_NOM_KM,
+                                       double T_surf = T_SURF_NOM, double T_base = T_BASE_NOM) const {
+    double D_m = std::max(100.0, d_shell_km * 1.0e3);
+    return (A_CONDUCT * std::log(T_base / T_surf) / D_m) * 1.0e3;
+  }
+
+  // Total stagnant lid surface heat flux [mW/m^2]
+  double stagnant_lid_heat_flux_mw_m2(double d_shell_km = D_SHELL_NOM_KM,
+                                     double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E) const {
+    double f_cond = conductive_heat_flux_mw_m2(d_shell_km);
+    double nu = nusselt_stagnant_lid(d_shell_km, eta_base, E_act);
+    return f_cond * nu;
+  }
+
+  // Mobile lid surface heat flux [mW/m^2]
+  double mobile_lid_heat_flux_mw_m2(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM) const {
+    double f_cond = conductive_heat_flux_mw_m2(d_shell_km);
+    double nu = nusselt_mobile_lid(d_shell_km, eta_base);
+    return f_cond * nu;
+  }
+
+  // Stagnant lid thickness [km] (Solomatov 1995, Showman & Han 2004, Mitri & Showman 2005)
+  double stagnant_lid_thickness_km(double d_shell_km = D_SHELL_NOM_KM,
+                                  double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E) const {
+    double nu = nusselt_stagnant_lid(d_shell_km, eta_base, E_act);
+    if (nu <= 1.001) {
+      return d_shell_km;  // Fully conductive lid
+    }
+    double delta_t = delta_temperature_k();
+    double delta_t_rh = rheological_temperature_scale_k(E_act);
+    double lid_frac = (delta_t - delta_t_rh) / (delta_t * nu);
+    lid_frac = std::min(1.0, std::max(0.05, lid_frac));
+    return d_shell_km * lid_frac;
+  }
+
+  // Convective sublayer thickness [km]
+  double convective_sublayer_thickness_km(double d_shell_km = D_SHELL_NOM_KM,
+                                         double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E) const {
+    double d_lid = stagnant_lid_thickness_km(d_shell_km, eta_base, E_act);
+    return std::max(0.0, d_shell_km - d_lid);
+  }
+
+  // Convective core interior temperature [K]
+  double convective_core_temperature_k(double E_act = ACTIVATION_E, double T_base = T_BASE_NOM) const {
+    return T_base - rheological_temperature_scale_k(E_act, T_base);
+  }
+
+  // Convective flow upwelling velocity u_conv [m/yr] (Showman & Han 2004, Mitri & Showman 2005)
+  double convective_velocity_m_yr(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                                 double E_act = ACTIVATION_E, double c_u = 0.25) const {
+    if (!is_convective(d_shell_km, eta_base, E_act)) return 0.0;
+    double ra_rh = rheological_rayleigh_number(d_shell_km, eta_base, E_act);
+    double D_m = d_shell_km * 1.0e3;
+    double u_m_s = c_u * (KAPPA_DIFF / D_m) * std::pow(ra_rh, 2.0 / 3.0);
+    return u_m_s * SEC_PER_YEAR;
+  }
+
+  // Volumetric viscoelastic tidal heating rate in warm ice [W/m^3] (Mitri & Showman 2005, Sotin et al. 2002)
+  double volumetric_tidal_heating_w_m3(double T_k, double eta_base = ETA_BASE_NOM,
+                                      double ecc = ECCENTRICITY, double E_act = ACTIVATION_E) const {
+    double eta = viscosity_at_temperature(T_k, eta_base, E_act);
+    double omega = N_MEAN_MOTION;
+    double tau_m = eta / MU_ICE;
+    double maxwell_factor = (omega * tau_m) / (1.0 + omega * omega * tau_m * tau_m);
+    // Tidal strain amplitude scaling: epsilon_0 ~ 1.5e-5 * (e / e_nom)
+    double eps_0 = 1.5e-5 * (ecc / ECCENTRICITY);
+    double q_vol = 2.0 * MU_ICE * (eps_0 * eps_0) * omega * maxwell_factor;
+    return q_vol;
+  }
+
+  // Integrated tidal heat flux across ice shell [mW/m^2]
+  double tidal_heat_flux_mw_m2(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                              double ecc = ECCENTRICITY, double E_act = ACTIVATION_E) const {
+    if (is_convective(d_shell_km, eta_base, E_act)) {
+      double d_conv_m = convective_sublayer_thickness_km(d_shell_km, eta_base, E_act) * 1.0e3;
+      double d_lid_m = stagnant_lid_thickness_km(d_shell_km, eta_base, E_act) * 1.0e3;
+      double T_core = convective_core_temperature_k(E_act);
+      double q_core = volumetric_tidal_heating_w_m3(T_core, eta_base, ecc, E_act);
+      double q_lid_avg = volumetric_tidal_heating_w_m3(0.5 * (T_SURF_NOM + T_core), eta_base, ecc, E_act);
+      double flux_w_m2 = q_core * d_conv_m + q_lid_avg * d_lid_m;
+      return flux_w_m2 * 1.0e3; // mW/m^2
+    } else {
+      // Conductive geotherm tidal integral
+      double D_m = d_shell_km * 1.0e3;
+      int n_pts = 40;
+      double dz = D_m / n_pts;
+      double flux_w = 0.0;
+      for (int i = 0; i <= n_pts; ++i) {
+        double frac = static_cast<double>(i) / n_pts;
+        double T_z = T_SURF_NOM + frac * (T_BASE_NOM - T_SURF_NOM);
+        double q_z = volumetric_tidal_heating_w_m3(T_z, eta_base, ecc, E_act);
+        double weight = (i == 0 || i == n_pts) ? 0.5 : 1.0;
+        flux_w += weight * q_z * dz;
+      }
+      return flux_w * 1.0e3; // mW/m^2
+    }
+  }
+
+  // Equilibrium conductive thickness [km] matching basal heat flux F_basal [mW/m^2]
+  double equilibrium_conductive_thickness_km(double F_basal_mw_m2) const {
+    double F = std::max(1.0, F_basal_mw_m2);
+    double delta_t = delta_temperature_k();
+    return (K_COND * delta_t * 1.0e3) / (F * 1.0e-3 * 1.0e3 * 1000.0);
+  }
+
+  // Equilibrium stagnant-lid convective thickness [km] matching basal flux + tidal dissipation
+  double equilibrium_stagnant_lid_thickness_km(double F_basal_mw_m2, double eta_base = ETA_BASE_NOM,
+                                              double ecc = ECCENTRICITY, double E_act = ACTIVATION_E) const {
+    double D_low = critical_thickness_convection_onset_km(eta_base, E_act);
+    double D_high = 120.0; // km
+    for (int iter = 0; iter < 80; ++iter) {
+      double D_mid = 0.5 * (D_low + D_high);
+      double F_out = stagnant_lid_heat_flux_mw_m2(D_mid, eta_base, E_act);
+      double F_in = F_basal_mw_m2 + tidal_heat_flux_mw_m2(D_mid, eta_base, ecc, E_act);
+      double res = F_out - F_in;
+      if (std::abs(res) < 1.0e-4 || (D_high - D_low) < 1.0e-4) {
+        return D_mid;
+      }
+      if (res > 0.0) {
+        D_low = D_mid;
+      } else {
+        D_high = D_mid;
+      }
+    }
+    return 0.5 * (D_low + D_high);
+  }
+
+  // Structure containing multi-branch equilibrium state and stability
+  struct EquilibriumBranches {
+    double F_basal_mw_m2;
+    double D_conductive_km;
+    double D_convective_km;
+    double D_crit_onset_km;
+    bool conductive_branch_valid;
+    bool convective_branch_valid;
+    bool has_bistability;
+    std::string favored_state;
+  };
+
+  // Evaluate both equilibrium branches for given basal heat flux
+  EquilibriumBranches evaluate_equilibrium_branches(double F_basal_mw_m2, double eta_base = ETA_BASE_NOM,
+                                                   double ecc = ECCENTRICITY, double E_act = ACTIVATION_E) const {
+    EquilibriumBranches res;
+    res.F_basal_mw_m2 = F_basal_mw_m2;
+    res.D_crit_onset_km = critical_thickness_convection_onset_km(eta_base, E_act);
+    res.D_conductive_km = equilibrium_conductive_thickness_km(F_basal_mw_m2);
+    res.D_convective_km = equilibrium_stagnant_lid_thickness_km(F_basal_mw_m2, eta_base, ecc, E_act);
+
+    // Conductive branch is stable if D_conductive < D_crit_onset
+    res.conductive_branch_valid = (res.D_conductive_km <= res.D_crit_onset_km * 1.15);
+    // Convective branch is valid if D_convective >= D_crit_onset
+    res.convective_branch_valid = (res.D_convective_km >= res.D_crit_onset_km * 0.90);
+
+    res.has_bistability = (res.conductive_branch_valid && res.convective_branch_valid);
+
+    if (res.has_bistability) {
+      res.favored_state = "Bistable (Hysteresis Window)";
+    } else if (res.convective_branch_valid) {
+      res.favored_state = "Convective (Stagnant Lid)";
+    } else {
+      res.favored_state = "Purely Conductive";
+    }
+
+    return res;
+  }
+
+  // Dynamic simulation trajectory snapshot
+  struct EvolutionPoint {
+    double time_kyr;
+    double D_km;
+    double delta_lid_km;
+    double delta_conv_km;
+    double F_surf_mw_m2;
+    double F_basal_mw_m2;
+    double F_tide_mw_m2;
+    double Nu;
+    double u_conv_m_yr;
+    bool is_convective;
+  };
+
+  // Time-dependent thermal evolution solver (Mitri & Showman 2005, Eq. 8-12)
+  // dD/dt = [F_surf(D) - F_basal(t) - F_tide(D)] / (rho_ice * L_fusion)
+  std::vector<EvolutionPoint> integrate_thermal_evolution(
+      double D_init_km, double t_total_kyr, double dt_kyr,
+      double F_basal_init_mw = 30.0, double F_basal_pert_mw = 45.0,
+      double t_pert_start_kyr = 500.0, double t_pert_end_kyr = 1500.0,
+      double eta_base = ETA_BASE_NOM, double ecc = ECCENTRICITY, double E_act = ACTIVATION_E) const {
+    std::vector<EvolutionPoint> history;
+    double D_km = D_init_km;
+    double t_kyr = 0.0;
+    int num_steps = static_cast<int>(t_total_kyr / dt_kyr);
+
+    for (int step = 0; step <= num_steps; ++step) {
+      // Determine time-dependent basal heat flux
+      double F_b = F_basal_init_mw;
+      if (t_kyr >= t_pert_start_kyr && t_kyr <= t_pert_end_kyr) {
+        F_b = F_basal_pert_mw;
+      }
+
+      bool conv = is_convective(D_km, eta_base, E_act);
+      double nu = conv ? nusselt_stagnant_lid(D_km, eta_base, E_act) : 1.0;
+      double F_surf = conv ? stagnant_lid_heat_flux_mw_m2(D_km, eta_base, E_act)
+                           : conductive_heat_flux_mw_m2(D_km);
+      double F_tide = tidal_heat_flux_mw_m2(D_km, eta_base, ecc, E_act);
+      double d_lid = conv ? stagnant_lid_thickness_km(D_km, eta_base, E_act) : D_km;
+      double d_conv = conv ? convective_sublayer_thickness_km(D_km, eta_base, E_act) : 0.0;
+      double u_conv = conv ? convective_velocity_m_yr(D_km, eta_base, E_act) : 0.0;
+
+      history.push_back({
+        t_kyr,
+        D_km,
+        d_lid,
+        d_conv,
+        F_surf,
+        F_b,
+        F_tide,
+        nu,
+        u_conv,
+        conv
+      });
+
+      // Stefan energy balance at basal ocean-ice interface:
+      // rho_ice * L_f * dD/dt = F_surf - (F_basal + F_tide)  [W/m^2]
+      double net_flux_w_m2 = (F_surf - F_b - F_tide) * 1.0e-3; // W/m^2
+      double dD_dt_m_s = net_flux_w_m2 / (RHO_ICE * LATENT_HEAT_FUSION);
+      double dD_dt_km_kyr = dD_dt_m_s * (SEC_PER_KYR / 1000.0);
+
+      // Advance shell thickness
+      D_km += dD_dt_km_kyr * dt_kyr;
+      D_km = std::max(2.0, std::min(150.0, D_km));
+      t_kyr += dt_kyr;
+    }
+
+    return history;
+  }
+};
+
+using EuropaThermalEvolutionModel = MitriShowman2005IceConvectionModel;
+using MitriShowman2005Model = MitriShowman2005IceConvectionModel;
+using Paper222EuropaIceShellModel = MitriShowman2005IceConvectionModel;
 
 }  // namespace hot_jupiter
 
