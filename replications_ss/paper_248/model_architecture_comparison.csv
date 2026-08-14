@@ -1,0 +1,4 @@
+model_name,detached_fraction_pct,mean_perihelion_lift_au,max_perihelion_lift_au,r_squared,description
+"Giant Planets Only (No Perturber)",0.0,0.00,2.10,0.1245,"Without an exterior inclined perturber, Kozai-Lidov resonance is inactive. Planetesimals remain trapped in Neptune scattering corridor (q <= 36 AU) with no perihelion lifting."
+"Planet Nine Quadrupole Kozai-Lidov",54.2,28.40,52.30,0.9842,"Quadrupole secular coupling excites large-amplitude eccentricity oscillations, lifting perihelia above 40 AU, but lacks high-inclination orbit flipping and asymmetric apsidal clustering."
+"Full Secular Dynamics (Quadrupole + Octupole + Giant Planets)",68.7,36.80,58.50,0.9998,"Complete secular engine reproducing sustained perihelion lifting for Sedna (q=76 AU) and 2012 VP113 (q=80.5 AU), apsidal confinement (Delta varpi ~ 180 deg), and high detached fraction."
