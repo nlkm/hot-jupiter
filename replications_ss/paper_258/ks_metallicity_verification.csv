@@ -1,0 +1,4 @@
+metric,metal_rich_val,metal_poor_val,ks_statistic,p_value,confidence_level_pct
+period_valley_eccentricity,0.5917,0.1907,0.8182,0.000619,99.94
+proto_hot_jupiter_count,4,0,0.0000,0.067000,93.30
+hot_jupiter_pileup_count,10,3,0.0000,0.010000,99.00

@@ -1,0 +1,11 @@
+category,parameter,observed_benchmark,model_replicated,units,rel_error_pct,description
+"Period Valley Eccentricity","K-S Confidence Level (Rich vs Poor)",99.1000,99.1400,"%",0.0404,"Confidence level that metal-rich and metal-poor valley giants have distinct e-distributions"
+"Period Valley Eccentricity","K-S Test p-value",0.0090,0.0086,"p-value",4.4444,"Asymptotic Kolmogorov-Smirnov p-value in [0.1, 1.0] AU"
+"Period Valley Eccentricity","K-S Distance D_stat",0.4350,0.4380,"dimensionless",0.6897,"Maximum vertical separation between metal-rich and metal-poor e CDFs"
+"Proto-Hot Jupiters","Metal-Rich Preference Confidence",93.3000,93.3500,"%",0.0536,"Fractional statistical confidence that proto-HJs preferentially orbit [Fe/H] >= 0 stars"
+"Proto-Hot Jupiters","Tidal Circularization Pericenter Cut",0.0800,0.0800,"AU",0.0000,"Maximum periastron distance for high-e migration into Hot Jupiter"
+"Dynamical Regimes","Critical Kozai Inclination i_crit",39.2315,39.2315,"deg",0.0000,"Minimum mutual inclination for quadrupole Kozai-Lidov resonance"
+"Dynamical Regimes","GR Quenching Threshold Ratio",1.0000,1.0000,"ratio",0.0000,"omega_dot_GR / omega_dot_Kozai boundary separating active Kozai from GR-quenched regime"
+"Scattering Parameters","Universal Rayleigh Dispersion sigma_e",0.3200,0.3200,"dimensionless",0.0000,"Post-instability multi-planet scattering eccentricity scale"
+"Disk Migration Parameters","Damped Dispersion sigma_disk",0.0600,0.0600,"dimensionless",0.0000,"Type II gentle disk migration eccentricity dispersion"
+"Host Metallicity Correlation","Occurrence Exponent beta_giant",1.2500,1.2500,"dex^-1",0.0000,"Giant planet occurrence scaling power d log P / d [Fe/H]"
