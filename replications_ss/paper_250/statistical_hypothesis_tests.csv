@@ -1,0 +1,4 @@
+test_name,test_statistic,p_value_uniform_biased,p_value_raw_isotropic,rejects_null_at_05,verdict
+"Kuiper Invariant Circular Test",0.3264,0.8203,0.6389,NO,"Consistent with uniform population observed through survey selection bias (p > 0.05)"
+"Kolmogorov-Smirnov Test",0.2831,0.4719,0.3103,NO,"Consistent with biased uniform model (p > 0.05)"
+"Anderson-Darling Test",0.6768,0.2873,0.0085,NO,"Null hypothesis of uniform distribution cannot be rejected"
