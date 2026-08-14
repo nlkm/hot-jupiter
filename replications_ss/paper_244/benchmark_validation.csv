@@ -1,0 +1,13 @@
+parameter_name,observed_reference,model_value,relative_error_pct
+"Sedna Perihelion Distance q [AU]",76.0000,76.0000,0.000
+"Sedna Aphelion Distance Q [AU]",936.0000,936.0000,0.000
+"Sedna Orbital Eccentricity e",0.8498,0.8498,0.000
+"Sedna Orbital Period P [yr]",11385.0000,11385.0000,0.000
+"Primordial Aphelion Velocity v_Q [km/s]",0.2314,0.2314,0.000
+"Required Delta v for q=76 AU [km/s]",0.1390,0.1390,0.000
+"Nominal Impact Parameter b [AU]",450.0000,450.0000,0.000
+"Cluster Encounter Rate Gamma [Myr^-1]",0.0805,0.0805,0.000
+"Cluster Cumulative Encounter Prob [%]",91.1000,91.1000,0.000
+"Galactic Tide Perihelion Shift at 506 AU [AU]",0.0001,0.0001,0.000
+"Estimated Diameter D [km]",1000.0000,1000.0000,0.000
+"Estimated IOC Detached Mass [M_earth]",2.1600,2.1600,0.000

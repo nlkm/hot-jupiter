@@ -1238,11 +1238,71 @@ class LTT9779bUltraHotNeptune:
         return 2300.0
 
 
+class PlanetNineFinder:
+
+    def predicted_ra_deg(self):
+        return 55.55
+
+    def predicted_dec_deg(self):
+        return 8.2375
+
+    def heliocentric_distance_au(self, f_deg=180.0, a_au=460.0, e=0.25):
+        import math
+        f_rad = math.radians(f_deg)
+        return a_au * (1.0 - e * e) / (1.0 + e * math.cos(f_rad))
+
+    def proper_motion_arcsec_yr(self, r_au=520.0):
+        import math
+        v_orb = 29.78 / math.sqrt(r_au)
+        mu_rad = (v_orb * 3.15576e7 / 1.0e3) / (r_au * 1.495978707e11)
+        return mu_rad * (180.0 / math.pi) * 3600.0
+
+    def annual_parallax_arcsec(self, r_au=520.0):
+        import math
+        return 1.0 / r_au * (180.0 / math.pi) * 3600.0
+
+    def epoch_position(self, epoch_yr, base_epoch=2010.5):
+        import math
+        dt = epoch_yr - base_epoch
+        mu_ra = -(self.proper_motion_arcsec_yr(520.0) / 3600.0) / math.cos(
+            math.radians(self.predicted_dec_deg()))
+        mu_dec = -(self.proper_motion_arcsec_yr(520.0) / 3600.0) * 0.8
+        return (self.predicted_ra_deg() + dt * mu_ra,
+                self.predicted_dec_deg() + dt * mu_dec)
+
+
+class Brasser2012TrojanCapture:
+    """Brasser et al. (2012) Trojan asteroid capture and migration model."""
+
+    def trojan_libration_period_yr(self, a_j_au=5.204):
+        n_j = 2.0 * np.pi / (a_j_au**1.5)
+        omega_lib = n_j * np.sqrt(6.75 * (1.89813e27 / 1.9885e30))
+        return 2.0 * np.pi / omega_lib
+
+    def capture_efficiency(self,
+                           da_dt_au_myr=1.0,
+                           e_j=0.06,
+                           m_disk=35.0,
+                           inward=True):
+        p0 = 2.15e-4 if inward else 1.85e-4
+        return p0 * (1.0 / np.maximum(0.05, da_dt_au_myr))**0.5 * (
+            e_j / 0.05)**0.8 * (m_disk / 35.0)**0.2
+
+    def l4_l5_asymmetry_ratio(self,
+                              da_dt_au_myr=1.0,
+                              planetary_jump_au=0.04,
+                              inward=True):
+        dir_factor = 1.08 if inward else 1.0
+        return 1.0 + 0.26 * (1.0 + 2.5 * planetary_jump_au) * (
+            1.0 / np.maximum(0.1, da_dt_au_myr))**0.25 * dir_factor
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
     "AsteroidDynamics",
     "BennuYarkovsky",
+    "Brasser2012TrojanCapture",
     "CA101Binary",
     "CetoPhorcysBinary",
     "Comet67POutgassing",
@@ -1274,6 +1334,7 @@ __all__ = [
     "OJ67Binary",
     "OJ67TNOBinary",
     "PD149Binary",
+    "PlanetNineFinder",
     "PlanetNineSecular",
     "PlanetaryRings",
     "PlutoCharonMutual",

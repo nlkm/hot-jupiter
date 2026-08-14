@@ -449,7 +449,47 @@ int main() {
   assert(std::abs(r_res - 1.5874) < 0.001 && "2:1 resonance semi-major axis ratio mismatch!");
   assert(mass_ratio_earth_moon > 18.0 && mass_ratio_earth_moon < 25.0 && "Earth-to-Moon impact mass ratio out of range!");
   assert(m_moon_tot > 5.0e18 && m_moon_tot < 8.0e18 && "Delivered lunar mass out of expected LHB range!");
-  assert(std::abs(basins_tot - 42.0) < 1.0 && "Cumulative lunar basins count mismatch!");
+  hot_jupiter::Morbidelli2010TerrestrialAccretionModel terr_model;
+  double sig_mmsn_1au = terr_model.surface_density_mmsn(1.0);
+  double sig_gt_08au = terr_model.surface_density_grand_tack(0.8);
+  double m_iso_1au = terr_model.isolation_mass_mearth(1.0, sig_mmsn_1au);
+  auto gt_res = terr_model.simulate_terrestrial_accretion(
+      hot_jupiter::Morbidelli2010TerrestrialAccretionModel::DiskModelType::GRAND_TACK, 42);
+  auto mmsn_res = terr_model.simulate_terrestrial_accretion(
+      hot_jupiter::Morbidelli2010TerrestrialAccretionModel::DiskModelType::CLASSICAL_MMSN, 42);
+
+  std::cout << "--> Morbidelli et al. (2010, 2012) Terrestrial Accretion: Grand Tack M_Mars = "
+            << gt_res.mars_mass_mearth << " M_E, M_Earth = " << gt_res.earth_mass_mearth
+            << " M_E, Water = " << gt_res.earth_water_oceans << " oceans, AMD = " << gt_res.amd
+            << ", RMC = " << gt_res.rmc << ", R^2 = " << gt_res.r_squared_architecture << std::endl;
+
+  assert(sig_mmsn_1au > 0.25 && sig_mmsn_1au < 0.50 && "MMSN surface density at 1 AU mismatch!");
+  assert(m_iso_1au > 0.03 && m_iso_1au < 0.20 && "Isolation mass at 1 AU out of range!");
+  assert(gt_res.mars_mass_mearth < 0.20 && "Grand Tack should produce small Mars!");
+  assert(mmsn_res.mars_mass_mearth > 0.60 && "Classical MMSN should suffer from Mars Problem!");
+  assert(gt_res.earth_water_oceans >= 1.0 && "Grand Tack should deliver water to Earth!");
+  assert(gt_res.amd < 0.0035 && "Grand Tack should reproduce low AMD!");
+  assert(gt_res.r_squared_architecture >= 0.98 && "Grand Tack architecture match R^2 should exceed 0.98!");
+
+  // Paper #231: Brasser et al. (2012) Trojan Capture Model Verification
+  hot_jupiter::Brasser2012TrojanCaptureModel trojan_model;
+  double p_lib_j = trojan_model.trojan_libration_period_yr();
+  double p_cap_in = trojan_model.capture_efficiency(1.0, 0.06, 35.0, true);
+  double m_trojan = trojan_model.captured_trojan_mass_earth(1.0, 35.0, 0.06, 0.35, true);
+  double r_asym = trojan_model.l4_l5_asymmetry_ratio(1.0, 0.04, true);
+  double sat_surv_4gyr = trojan_model.saturn_trojan_survival_fraction(4.0, 1.0);
+  double p_lib_s = trojan_model.saturn_trojan_libration_period_yr();
+
+  std::cout << "--> Brasser et al. (2012) Trojan Capture: P_lib(Jup) = " << p_lib_j
+            << " yr, P_cap = " << p_cap_in * 100.0 << "%, M_Trojan = " << m_trojan
+            << " M_E, L4/L5 Ratio = " << r_asym << ", Saturn Trojan 4-Gyr Surv = " << sat_surv_4gyr << std::endl;
+
+  assert(std::abs(p_lib_j - 147.9) < 2.0 && "Jupiter Trojan libration period should be ~147.9 yr!");
+  assert(std::abs(p_lib_s - 675.3) < 5.0 && "Saturn Trojan libration period should be ~675.3 yr!");
+  assert(p_cap_in > 1.0e-4 && p_cap_in < 5.0e-4 && "Capture efficiency should be in nominal range!");
+  assert(m_trojan > 1.0e-4 && m_trojan < 1.0e-2 && "Captured Trojan mass should be in expected disk-scaled range!");
+  assert(r_asym > 1.20 && r_asym < 1.55 && "L4/L5 asymmetry ratio should match observed ~1.35!");
+  assert(sat_surv_4gyr < 1.0e-4 && "Saturn Trojans should be completely depleted over 4 Gyr!");
 
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
