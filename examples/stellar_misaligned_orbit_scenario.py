@@ -5,22 +5,36 @@ relative to its host star's spin axis (stellar obliquity psi_* = 80 deg and 135 
 """
 
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR, R_SUN, R_JUP
-from hot_jupiter.eos import TabularEOS
-from hot_jupiter.structure import InteriorSolver
+import matplotlib.pyplot as plt
+import numpy as np
+
 from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.constants import (
+    AU,
+    GYR,
+    M_EARTH,
+    M_JUP,
+    M_SUN,
+    YEAR,
+)
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
 from hot_jupiter.heating import TidalEccentricityHeating
 from hot_jupiter.orbit import OrbitalState, SpinVectorState
-from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.structure import InteriorSolver
 
 
 def run_stellar_misaligned_scenario():
-    print("==========================================================================")
-    print("   STELLAR SPIN-ORBIT MISALIGNMENT (ROSSITER-MCLAUGHLIN) BENCHMARK      ")
-    print("==========================================================================")
+    print(
+        "=========================================================================="
+    )
+    print(
+        "   STELLAR SPIN-ORBIT MISALIGNMENT (ROSSITER-MCLAUGHLIN) BENCHMARK      "
+    )
+    print(
+        "=========================================================================="
+    )
 
     eos = TabularEOS.create_synthetic_grid(use_cache=False)
     solver = InteriorSolver(envelope_eos=eos)
@@ -40,46 +54,94 @@ def run_stellar_misaligned_scenario():
     # Case 1: Aligned Orbit (psi_* = 0 deg)
     print("Case 1: Aligned Orbit (psi_* = 0.0 deg)")
     orbit_1 = OrbitalState(a=0.04 * AU, e=0.10)
-    spin_1 = SpinVectorState.from_period_hours(period_hrs=10.0, obliquity_deg=0.0)
+    spin_1 = SpinVectorState.from_period_hours(period_hrs=10.0,
+                                               obliquity_deg=0.0)
     res_1 = integrator.evolve_coupled(
-        S_initial=1.34e5, M_p=1.0 * M_JUP, M_c=12.0 * M_EARTH, M_star=1.0 * M_SUN,
-        orbital_state_initial=orbit_1, spin_state_initial=spin_1, k2_over_Q=2.0e-5,
-        t_span=t_span, num_eval=100,
+        S_initial=1.34e5,
+        M_p=1.0 * M_JUP,
+        M_c=12.0 * M_EARTH,
+        M_star=1.0 * M_SUN,
+        orbital_state_initial=orbit_1,
+        spin_state_initial=spin_1,
+        k2_over_Q=2.0e-5,
+        t_span=t_span,
+        num_eval=100,
     )
 
     # Case 2: Highly Misaligned Polar Orbit (psi_* = 80 deg)
     print("Case 2: Misaligned Polar Orbit (psi_* = 80.0 deg)")
-    spin_2 = SpinVectorState.from_period_hours(period_hrs=10.0, obliquity_deg=80.0)
+    spin_2 = SpinVectorState.from_period_hours(period_hrs=10.0,
+                                               obliquity_deg=80.0)
     res_2 = integrator.evolve_coupled(
-        S_initial=1.34e5, M_p=1.0 * M_JUP, M_c=12.0 * M_EARTH, M_star=1.0 * M_SUN,
-        orbital_state_initial=orbit_1, spin_state_initial=spin_2, k2_over_Q=2.0e-5,
-        t_span=t_span, num_eval=100,
+        S_initial=1.34e5,
+        M_p=1.0 * M_JUP,
+        M_c=12.0 * M_EARTH,
+        M_star=1.0 * M_SUN,
+        orbital_state_initial=orbit_1,
+        spin_state_initial=spin_2,
+        k2_over_Q=2.0e-5,
+        t_span=t_span,
+        num_eval=100,
     )
 
     # Case 3: Retrograde Orbit (psi_* = 135 deg)
     print("Case 3: Retrograde Orbit (psi_* = 135.0 deg)")
-    spin_3 = SpinVectorState.from_period_hours(period_hrs=10.0, obliquity_deg=135.0)
+    spin_3 = SpinVectorState.from_period_hours(period_hrs=10.0,
+                                               obliquity_deg=135.0)
     res_3 = integrator.evolve_coupled(
-        S_initial=1.34e5, M_p=1.0 * M_JUP, M_c=12.0 * M_EARTH, M_star=1.0 * M_SUN,
-        orbital_state_initial=orbit_1, spin_state_initial=spin_3, k2_over_Q=2.0e-5,
-        t_span=t_span, num_eval=100,
+        S_initial=1.34e5,
+        M_p=1.0 * M_JUP,
+        M_c=12.0 * M_EARTH,
+        M_star=1.0 * M_SUN,
+        orbital_state_initial=orbit_1,
+        spin_state_initial=spin_3,
+        k2_over_Q=2.0e-5,
+        t_span=t_span,
+        num_eval=100,
     )
 
-    print("\n--------------------------------------------------------------------------")
+    print(
+        "\n--------------------------------------------------------------------------"
+    )
     print("PRESENT-DAY METRICS AT 4.56 GYR:")
-    print("--------------------------------------------------------------------------")
-    print(f"Aligned Orbit (psi = 0 deg):    R_p = {res_1.R_p_jup[-1]:.3f} R_Jup, e = {res_1.e[-1]:.4f}, obl = {res_1.obliquity_deg[-1]:.1f} deg")
-    print(f"Polar Orbit (psi = 80 deg):     R_p = {res_2.R_p_jup[-1]:.3f} R_Jup, e = {res_2.e[-1]:.4f}, obl = {res_2.obliquity_deg[-1]:.1f} deg")
-    print(f"Retrograde Orbit (psi = 135 deg): R_p = {res_3.R_p_jup[-1]:.3f} R_Jup, e = {res_3.e[-1]:.4f}, obl = {res_3.obliquity_deg[-1]:.1f} deg")
-    print("--------------------------------------------------------------------------")
+    print(
+        "--------------------------------------------------------------------------"
+    )
+    print(
+        f"Aligned Orbit (psi = 0 deg):    R_p = {res_1.R_p_jup[-1]:.3f} R_Jup, e = {res_1.e[-1]:.4f}, obl = {res_1.obliquity_deg[-1]:.1f} deg"
+    )
+    print(
+        f"Polar Orbit (psi = 80 deg):     R_p = {res_2.R_p_jup[-1]:.3f} R_Jup, e = {res_2.e[-1]:.4f}, obl = {res_2.obliquity_deg[-1]:.1f} deg"
+    )
+    print(
+        f"Retrograde Orbit (psi = 135 deg): R_p = {res_3.R_p_jup[-1]:.3f} R_Jup, e = {res_3.e[-1]:.4f}, obl = {res_3.obliquity_deg[-1]:.1f} deg"
+    )
+    print(
+        "--------------------------------------------------------------------------"
+    )
 
     # Render Comparison Plot
     fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    fig.suptitle("Stellar Spin-Orbit Misalignment (Rossiter-McLaughlin Effect) Trajectories", fontsize=13, fontweight="bold")
+    fig.suptitle(
+        "Stellar Spin-Orbit Misalignment (Rossiter-McLaughlin Effect) Trajectories",
+        fontsize=13,
+        fontweight="bold")
 
-    axes[0, 0].plot(t_gyr, res_1.R_p_jup, label=r"Aligned ($\psi_* = 0^\circ$)", color="#1f77b4", lw=2)
-    axes[0, 0].plot(t_gyr, res_2.R_p_jup, label=r"Polar ($\psi_* = 80^\circ$)", color="#ff7f0e", lw=2)
-    axes[0, 0].plot(t_gyr, res_3.R_p_jup, label=r"Retrograde ($\psi_* = 135^\circ$)", color="#d62728", lw=2)
+    axes[0, 0].plot(t_gyr,
+                    res_1.R_p_jup,
+                    label=r"Aligned ($\psi_* = 0^\circ$)",
+                    color="#1f77b4",
+                    lw=2)
+    axes[0, 0].plot(t_gyr,
+                    res_2.R_p_jup,
+                    label=r"Polar ($\psi_* = 80^\circ$)",
+                    color="#ff7f0e",
+                    lw=2)
+    axes[0, 0].plot(t_gyr,
+                    res_3.R_p_jup,
+                    label=r"Retrograde ($\psi_* = 135^\circ$)",
+                    color="#d62728",
+                    lw=2)
     axes[0, 0].set_ylabel(r"Planet Radius $R_p$ [$R_{\mathrm{Jup}}$]")
     axes[0, 0].set_xscale("log")
     axes[0, 0].grid(True, alpha=0.3)

@@ -5,23 +5,24 @@ to fill its Roche lobe (R_p / R_Roche >= 1.0), driving hydrodynamic mass strippi
 """
 
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, R_JUP
+import matplotlib.pyplot as plt
+import numpy as np
+
+from hot_jupiter.constants import AU, GYR, M_EARTH, M_JUP, M_SUN, R_JUP, YEAR
 from hot_jupiter.mass_loss import RocheLobeMassLoss
-from hot_jupiter.eos import TabularEOS
-from hot_jupiter.structure import InteriorSolver
-from hot_jupiter.atmosphere import GuillotAtmosphere
-from hot_jupiter.heating import TidalEccentricityHeating
-from hot_jupiter.orbit import OrbitalState, SpinVectorState
-from hot_jupiter.evolution import ThermalEvolutionIntegrator
 
 
 def run_rlof_scenario():
-    print("==========================================================================")
-    print("      ROCHE LOBE OVERFLOW (RLOF) MASS-LOSS SCENARIO BENCHMARK            ")
-    print("==========================================================================")
+    print(
+        "=========================================================================="
+    )
+    print(
+        "      ROCHE LOBE OVERFLOW (RLOF) MASS-LOSS SCENARIO BENCHMARK            "
+    )
+    print(
+        "=========================================================================="
+    )
 
     rlof_evaluator = RocheLobeMassLoss()
 
@@ -35,7 +36,9 @@ def run_rlof_scenario():
     r_roche_jup = r_roche_m / R_JUP
 
     print(f"Initial Semi-Major Axis a:         {a_init/AU:.4f} AU")
-    print(f"Volume-Equivalent Roche Lobe R:    {r_roche_jup:.3f} R_Jup ({r_roche_m/1e8:.2f} x 10^8 m)")
+    print(
+        f"Volume-Equivalent Roche Lobe R:    {r_roche_jup:.3f} R_Jup ({r_roche_m/1e8:.2f} x 10^8 m)"
+    )
 
     # Time grid over 4.56 Gyr
     t_arr = np.linspace(1.0e6 * YEAR, 4.56 * GYR, 300)
@@ -56,8 +59,10 @@ def run_rlof_scenario():
         # Thermal contraction with Ohmic/tidal inflation keeping R_p ~ 1.5 - 1.6 R_Jup
         R_p_curr = (1.65 - 0.25 * (t / (4.56 * GYR))**0.2) * R_JUP
 
-        filling_factor = rlof_evaluator.roche_lobe_filling_factor(R_p_curr, a_curr, M_p_curr, M_star)
-        dM_dt, da_dt_rlof = rlof_evaluator.evaluate_mass_loss_rate(R_p_curr, a_curr, M_p_curr, M_star)
+        filling_factor = rlof_evaluator.roche_lobe_filling_factor(
+            R_p_curr, a_curr, M_p_curr, M_star)
+        dM_dt, da_dt_rlof = rlof_evaluator.evaluate_mass_loss_rate(
+            R_p_curr, a_curr, M_p_curr, M_star)
 
         M_p_curr = max(0.1 * M_JUP, M_p_curr + dM_dt * dt)
         a_curr = max(0.01 * AU, a_curr + da_dt_rlof * dt)
@@ -65,25 +70,40 @@ def run_rlof_scenario():
         R_p_track[i] = R_p_curr / R_JUP
         M_p_track[i] = M_p_curr / M_JUP
         filling_track[i] = filling_factor
-        dM_dt_track[i] = abs(dM_dt) / (M_EARTH / (1.0e9 * YEAR))  # M_earth / Gyr
+        dM_dt_track[i] = abs(dM_dt) / (M_EARTH /
+                                       (1.0e9 * YEAR))  # M_earth / Gyr
 
-    print(f"\nFinal State at 4.56 Gyr:")
-    print(f"  Planet Mass M_p:                 {M_p_track[-1]:.3f} M_Jup (Lost {(1.0 - M_p_track[-1])*317.8:.1f} M_Earth)")
+    print("\nFinal State at 4.56 Gyr:")
+    print(
+        f"  Planet Mass M_p:                 {M_p_track[-1]:.3f} M_Jup (Lost {(1.0 - M_p_track[-1])*317.8:.1f} M_Earth)"
+    )
     print(f"  Final Filling Factor R_p/R_R:    {filling_track[-1]:.3f}")
-    print(f"  Peak Mass-Loss Rate:             {np.max(dM_dt_track):.2f} M_Earth / Gyr")
+    print(
+        f"  Peak Mass-Loss Rate:             {np.max(dM_dt_track):.2f} M_Earth / Gyr"
+    )
 
     # Render Plot
     fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True)
-    fig.suptitle("Roche Lobe Overflow (RLOF) Mass-Loss & Atmospheric Stripping", fontsize=13, fontweight="bold")
+    fig.suptitle("Roche Lobe Overflow (RLOF) Mass-Loss & Atmospheric Stripping",
+                 fontsize=13,
+                 fontweight="bold")
 
     axes[0, 0].plot(t_gyr, R_p_track, color="#1f77b4", lw=2, label=r"$R_p$")
-    axes[0, 0].axhline(r_roche_jup, color="#d62728", ls="--", lw=1.5, label=r"Roche Lobe $R_{\mathrm{Roche}}$")
+    axes[0, 0].axhline(r_roche_jup,
+                       color="#d62728",
+                       ls="--",
+                       lw=1.5,
+                       label=r"Roche Lobe $R_{\mathrm{Roche}}$")
     axes[0, 0].set_ylabel(r"Radius [$R_{\mathrm{Jup}}$]")
     axes[0, 0].grid(True, alpha=0.3)
     axes[0, 0].legend(loc="best")
 
     axes[0, 1].plot(t_gyr, filling_track, color="#ff7f0e", lw=2)
-    axes[0, 1].axhline(1.0, color="#d62728", ls="--", lw=1.5, label="Overflow Threshold (1.0)")
+    axes[0, 1].axhline(1.0,
+                       color="#d62728",
+                       ls="--",
+                       lw=1.5,
+                       label="Overflow Threshold (1.0)")
     axes[0, 1].set_ylabel(r"Filling Factor $R_p / R_{\mathrm{Roche}}$")
     axes[0, 1].grid(True, alpha=0.3)
     axes[0, 1].legend(loc="best")
@@ -95,7 +115,8 @@ def run_rlof_scenario():
 
     axes[1, 1].plot(t_gyr, dM_dt_track, color="#9467bd", lw=2)
     axes[1, 1].set_xlabel("Age [Gyr]")
-    axes[1, 1].set_ylabel(r"Mass-Loss Rate $\dot{M}_{\mathrm{RLOF}}$ [$M_\oplus/\mathrm{Gyr}$]")
+    axes[1, 1].set_ylabel(
+        r"Mass-Loss Rate $\dot{M}_{\mathrm{RLOF}}$ [$M_\oplus/\mathrm{Gyr}$]")
     axes[1, 1].grid(True, alpha=0.3)
 
     plt.tight_layout()

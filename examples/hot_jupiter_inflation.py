@@ -3,28 +3,31 @@ Benchmark Example: Hot Jupiter Irradiated Cooling & Tidal Heating Inflation.
 """
 
 import os
+
 import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import M_JUP, M_EARTH, R_JUP, BAR, YEAR, AU, M_SUN
-from hot_jupiter.eos import AnalyticalHHeEOS
-from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.atmosphere import GuillotAtmosphere
-from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.constants import AU, BAR, M_EARTH, M_JUP, M_SUN, YEAR
+from hot_jupiter.eos import AnalyticalHHeEOS
 from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.visualization import plot_evolution_track
 
 
 def main():
-    print("--- Simulating Hot Jupiter with Stellar Irradiation & Tidal Inflation ---")
+    print(
+        "--- Simulating Hot Jupiter with Stellar Irradiation & Tidal Inflation ---"
+    )
 
     eos = AnalyticalHHeEOS()
     solver = InteriorSolver(envelope_eos=eos)
     atmosphere = GuillotAtmosphere(envelope_eos=eos)
-    
+
     # Tidal dissipation heating model
     tidal_heating = TidalEccentricityHeating(
         M_star=1.0 * M_SUN,
-        a=0.04 * AU,            # Close-in Hot Jupiter orbit
+        a=0.04 * AU,  # Close-in Hot Jupiter orbit
         eccentricity=0.04,
         k2_over_Q=2.0e-5,
     )
@@ -55,7 +58,9 @@ def main():
     )
 
     print(f"Initial Radius (1 Myr):  {result.R_p_jup[0]:.2f} R_Jup")
-    print(f"Final Radius (3.0 Gyr):  {result.R_p_jup[-1]:.2f} R_Jup (Inflated Radius)")
+    print(
+        f"Final Radius (3.0 Gyr):  {result.R_p_jup[-1]:.2f} R_Jup (Inflated Radius)"
+    )
     print(f"Final T_eff (3.0 Gyr):   {result.T_eff[-1]:.1f} K")
     print(f"Tidal Power Deposited:  {result.P_tidal[-1]:.2e} W")
 

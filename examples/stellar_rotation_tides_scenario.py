@@ -5,17 +5,24 @@ driven by host star rotation frequency Omega_*.
 """
 
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, DAY, HOUR
+import matplotlib.pyplot as plt
+import numpy as np
+
+from hot_jupiter.constants import AU, DAY, GYR, M_JUP, M_SUN
 from hot_jupiter.orbit import StellarTidalRates
 
 
 def run_stellar_rotation_benchmark():
-    print("==========================================================================")
-    print("   STELLAR ROTATION & STELLAR TIDAL INTERACTION BENCHMARK VALIDATION    ")
-    print("==========================================================================")
+    print(
+        "=========================================================================="
+    )
+    print(
+        "   STELLAR ROTATION & STELLAR TIDAL INTERACTION BENCHMARK VALIDATION    "
+    )
+    print(
+        "=========================================================================="
+    )
 
     stellar_evaluator = StellarTidalRates(k2_over_Q_star=1.0e-6)
 
@@ -39,7 +46,8 @@ def run_stellar_rotation_benchmark():
 
     for i in range(len(t_arr)):
         a_track_1[i] = a_curr_1 / AU
-        da_dt, _ = stellar_evaluator.evaluate_stellar_rates(M_p, M_star, a_curr_1, Omega_star_1)
+        da_dt, _ = stellar_evaluator.evaluate_stellar_rates(
+            M_p, M_star, a_curr_1, Omega_star_1)
         a_curr_1 = max(0.005 * AU, a_curr_1 + da_dt * dt)
 
     # Scenario 2: Super-Synchronous Fast Rotating Star (P_star = 1.5 days, P_orb = 3.0 days at a = 0.04 AU)
@@ -53,19 +61,37 @@ def run_stellar_rotation_benchmark():
 
     for i in range(len(t_arr)):
         a_track_2[i] = a_curr_2 / AU
-        da_dt, _ = stellar_evaluator.evaluate_stellar_rates(M_p, M_star, a_curr_2, Omega_star_2)
+        da_dt, _ = stellar_evaluator.evaluate_stellar_rates(
+            M_p, M_star, a_curr_2, Omega_star_2)
         a_curr_2 = a_curr_2 + da_dt * dt
 
-    print(f"Sub-synchronous Star (P_star = 25 days): Initial a = {a_init_1/AU:.3f} AU -> Final a = {a_track_1[-1]:.3f} AU (Inward Decay)")
-    print(f"Super-synchronous Star (P_star = 1.5 days): Initial a = {a_init_2/AU:.3f} AU -> Final a = {a_track_2[-1]:.3f} AU (Outward Expansion)")
+    print(
+        f"Sub-synchronous Star (P_star = 25 days): Initial a = {a_init_1/AU:.3f} AU -> Final a = {a_track_1[-1]:.3f} AU (Inward Decay)"
+    )
+    print(
+        f"Super-synchronous Star (P_star = 1.5 days): Initial a = {a_init_2/AU:.3f} AU -> Final a = {a_track_2[-1]:.3f} AU (Outward Expansion)"
+    )
 
     # Render Plot
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.plot(t_gyr, a_track_1, label=r"Sub-synchronous Star ($P_* = 25\text{ days}$, Inward Decay)", color="#d62728", lw=2)
-    ax.plot(t_gyr, a_track_2, label=r"Super-synchronous Star ($P_* = 1.5\text{ days}$, Outward Expansion)", color="#2ca02c", lw=2)
+    ax.plot(
+        t_gyr,
+        a_track_1,
+        label=r"Sub-synchronous Star ($P_* = 25\text{ days}$, Inward Decay)",
+        color="#d62728",
+        lw=2)
+    ax.plot(
+        t_gyr,
+        a_track_2,
+        label=
+        r"Super-synchronous Star ($P_* = 1.5\text{ days}$, Outward Expansion)",
+        color="#2ca02c",
+        lw=2)
     ax.set_xlabel("Age [Gyr]", fontsize=11)
     ax.set_ylabel(r"Semi-Major Axis $a$ [AU]", fontsize=11)
-    ax.set_title("Stellar Rotation Driven Tidal Orbital Migration", fontsize=12, fontweight="bold")
+    ax.set_title("Stellar Rotation Driven Tidal Orbital Migration",
+                 fontsize=12,
+                 fontweight="bold")
     ax.grid(True, alpha=0.3)
     ax.legend(loc="best")
 

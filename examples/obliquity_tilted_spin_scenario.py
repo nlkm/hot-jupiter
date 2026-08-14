@@ -5,22 +5,27 @@ and fast initial rotation (P_rot = 6 hours) on tidal dissipation power and radiu
 """
 
 import os
-import numpy as np
 
-from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR, HOUR, DAY
-from hot_jupiter.eos import TabularEOS
-from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.atmosphere import GuillotAtmosphere
+from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, YEAR
+from hot_jupiter.eos import TabularEOS
+from hot_jupiter.evolution import ThermalEvolutionIntegrator
 from hot_jupiter.heating import TidalEccentricityHeating
 from hot_jupiter.orbit import OrbitalState, SpinVectorState
-from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.visualization import plot_coupled_orbital_spin_evolution
 
 
 def run_obliquity_scenario():
-    print("==========================================================================")
-    print("   HIGH OBLIQUITY TILT & ASYNCHRONOUS INITIAL SPIN SCENARIO BENCHMARK    ")
-    print("==========================================================================")
+    print(
+        "=========================================================================="
+    )
+    print(
+        "   HIGH OBLIQUITY TILT & ASYNCHRONOUS INITIAL SPIN SCENARIO BENCHMARK    "
+    )
+    print(
+        "=========================================================================="
+    )
 
     # 1. Initialize models
     eos = TabularEOS.create_synthetic_grid(use_cache=False)
@@ -35,9 +40,12 @@ def run_obliquity_scenario():
     )
 
     # 2. Case A: Tilted Spin Vector (obliquity = 45 deg, P_rot = 6.0 hrs, e = 0.10)
-    print("Case A: High Obliquity Spin Tilt (epsilon_0 = 45.0 deg, P_rot = 6.0 hrs, e = 0.10)")
+    print(
+        "Case A: High Obliquity Spin Tilt (epsilon_0 = 45.0 deg, P_rot = 6.0 hrs, e = 0.10)"
+    )
     orbit_A = OrbitalState(a=0.04 * AU, e=0.10)
-    spin_A = SpinVectorState.from_period_hours(period_hrs=6.0, obliquity_deg=45.0)
+    spin_A = SpinVectorState.from_period_hours(period_hrs=6.0,
+                                               obliquity_deg=45.0)
 
     res_A = integrator.evolve_coupled(
         S_initial=1.34e5,
@@ -62,7 +70,8 @@ def run_obliquity_scenario():
     fig_path = "outputs/obliquity_tilted_spin_evolution.pdf"
     plot_coupled_orbital_spin_evolution(
         result=res_A,
-        title="High Initial Obliquity Tilt (45 deg) & Asynchronous Spin Evolution",
+        title=
+        "High Initial Obliquity Tilt (45 deg) & Asynchronous Spin Evolution",
         savepath=fig_path,
     )
     print(f"\nVector PDF figure saved to {fig_path}.\n")

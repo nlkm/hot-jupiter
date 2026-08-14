@@ -8,15 +8,15 @@ Compares present-day model output against Juno & Voyager observational measureme
 """
 
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
 
-from hot_jupiter.constants import M_JUP, R_JUP, M_EARTH, BAR, YEAR, GYR, L_SUN, SIGMA_SB
-from hot_jupiter.eos import TabularEOS
-from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.atmosphere import GuillotAtmosphere
-from hot_jupiter.heating import RadiogenicHeating
+from hot_jupiter.constants import M_EARTH, M_JUP, YEAR
+from hot_jupiter.eos import TabularEOS
 from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.heating import RadiogenicHeating
+from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.visualization import plot_evolution_track, plot_internal_profile
 
 
@@ -48,12 +48,14 @@ def main():
 
     # Jupiter solar insolation at 5.204 AU: F_inc = L_sun / (4 * pi * a^2) ~ 50.3 W/m^2
     F_inc_jupiter = 50.3  # W/m^2
-    A_b_jupiter = 0.34    # Bond albedo of Jupiter
+    A_b_jupiter = 0.34  # Bond albedo of Jupiter
 
     # Evolve from t = 1 Myr to t = 4.56 Gyr (Jupiter's present age)
     t_span = (1.0e6 * YEAR, 4.56e9 * YEAR)
 
-    print(f"Evolving planet structure (M_p = 1.00 M_J, M_c = {M_c/M_EARTH:.1f} M_Earth, a = 5.20 AU)...")
+    print(
+        f"Evolving planet structure (M_p = 1.00 M_J, M_c = {M_c/M_EARTH:.1f} M_Earth, a = 5.20 AU)..."
+    )
     result = integrator.evolve(
         M_p=M_p,
         M_c=M_c,
@@ -76,10 +78,18 @@ def main():
     print("PRESENT-DAY JUPITER MODEL vs OBSERVATIONAL MEASUREMENTS:")
     print("----------------------------------------------------------")
     print(f"Age:                    {result.t_gyr[-1]:.2f} Gyr")
-    print(f"Radius R_p:             {R_final_jup:.3f} R_Jup  (Observed: 1.000 R_Jup)")
-    print(f"Effective Temp T_eff:   {T_eff_final:.1f} K       (Observed: 124.4 +/- 0.3 K)")
-    print(f"Intrinsic Temp T_int:   {T_int_final:.1f} K        (Observed:  99.6 +/- 3.0 K)")
-    print(f"Intrinsic Luminosity:   {L_int_final_sun:.2e} L_sun (Observed: 8.7e-10 L_sun)")
+    print(
+        f"Radius R_p:             {R_final_jup:.3f} R_Jup  (Observed: 1.000 R_Jup)"
+    )
+    print(
+        f"Effective Temp T_eff:   {T_eff_final:.1f} K       (Observed: 124.4 +/- 0.3 K)"
+    )
+    print(
+        f"Intrinsic Temp T_int:   {T_int_final:.1f} K        (Observed:  99.6 +/- 3.0 K)"
+    )
+    print(
+        f"Intrinsic Luminosity:   {L_int_final_sun:.2e} L_sun (Observed: 8.7e-10 L_sun)"
+    )
     print(f"Final Entropy S:        {S_final:.2e} J/(kg K)")
     print("----------------------------------------------------------\n")
 

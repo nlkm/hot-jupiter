@@ -5,22 +5,32 @@ tidal dissipation, and Laplace-Lagrange secular planet-planet gravitational inte
 """
 
 import os
-import numpy as np
 
-from hot_jupiter.constants import M_JUP, M_EARTH, M_SUN, AU, YEAR, GYR
-from hot_jupiter.eos import TabularEOS
-from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.atmosphere import GuillotAtmosphere
-from hot_jupiter.heating import TidalEccentricityHeating
-from hot_jupiter.orbit import OrbitalState, SpinVectorState, PlanetSystemMember, MultiPlanetSystem
+from hot_jupiter.constants import AU, M_EARTH, M_JUP, M_SUN, YEAR
+from hot_jupiter.eos import TabularEOS
 from hot_jupiter.evolution import ThermalEvolutionIntegrator
+from hot_jupiter.heating import TidalEccentricityHeating
+from hot_jupiter.orbit import (
+    MultiPlanetSystem,
+    OrbitalState,
+    PlanetSystemMember,
+    SpinVectorState,
+)
+from hot_jupiter.structure import InteriorSolver
 from hot_jupiter.visualization import plot_multi_planet_system_evolution
 
 
 def run_multi_planet_system_benchmark():
-    print("==========================================================================")
-    print("       MULTI-PLANET SYSTEM COUPLED DYNAMICAL BENCHMARK VALIDATION         ")
-    print("==========================================================================")
+    print(
+        "=========================================================================="
+    )
+    print(
+        "       MULTI-PLANET SYSTEM COUPLED DYNAMICAL BENCHMARK VALIDATION         "
+    )
+    print(
+        "=========================================================================="
+    )
 
     # 1. Initialize EOS, interior solver, and atmosphere model
     eos = TabularEOS.create_synthetic_grid(use_cache=False)
@@ -44,7 +54,8 @@ def run_multi_planet_system_benchmark():
         M_c=12.0 * M_EARTH,
         S_initial=1.34e5,
         orbital_state=OrbitalState(a=0.05 * AU, e=0.15),
-        spin_state=SpinVectorState.from_period_hours(period_hrs=10.0, obliquity_deg=5.0),
+        spin_state=SpinVectorState.from_period_hours(period_hrs=10.0,
+                                                     obliquity_deg=5.0),
         k2_over_Q=1.0e-5,
     )
 
@@ -55,7 +66,8 @@ def run_multi_planet_system_benchmark():
         M_c=8.0 * M_EARTH,
         S_initial=1.30e5,
         orbital_state=OrbitalState(a=0.18 * AU, e=0.10),
-        spin_state=SpinVectorState.from_period_hours(period_hrs=12.0, obliquity_deg=10.0),
+        spin_state=SpinVectorState.from_period_hours(period_hrs=12.0,
+                                                     obliquity_deg=10.0),
         k2_over_Q=1.0e-5,
     )
 
@@ -66,7 +78,8 @@ def run_multi_planet_system_benchmark():
         M_c=15.0 * M_EARTH,
         S_initial=1.28e5,
         orbital_state=OrbitalState(a=1.20 * AU, e=0.05),
-        spin_state=SpinVectorState.from_period_hours(period_hrs=9.5, obliquity_deg=3.0),
+        spin_state=SpinVectorState.from_period_hours(period_hrs=9.5,
+                                                     obliquity_deg=3.0),
         k2_over_Q=1.0e-5,
     )
 
@@ -74,11 +87,17 @@ def run_multi_planet_system_benchmark():
     system.add_planet(pc)
     system.add_planet(pd)
 
-    print(f"System '{system.name}' (M_star = {system.M_star/1.988e30:.2f} M_sun, [Fe/H] = {system.Fe_H:+.2f}):")
+    print(
+        f"System '{system.name}' (M_star = {system.M_star/1.988e30:.2f} M_sun, [Fe/H] = {system.Fe_H:+.2f}):"
+    )
     for p in system.planets:
-        print(f"  Planet {p.name}: M_p = {p.M_p/1.898e27:4.2f} M_J, a = {p.orbital_state.a_au:5.2f} AU, e = {p.orbital_state.e:.2f}")
+        print(
+            f"  Planet {p.name}: M_p = {p.M_p/1.898e27:4.2f} M_J, a = {p.orbital_state.a_au:5.2f} AU, e = {p.orbital_state.e:.2f}"
+        )
 
-    print("\nEvolving system over 4.56 Gyr with Laplace-Lagrange secular perturbations...")
+    print(
+        "\nEvolving system over 4.56 Gyr with Laplace-Lagrange secular perturbations..."
+    )
     t_span = (1.0e6 * YEAR, 4.56e9 * YEAR)
 
     # 3. Execute Multi-Planet Integrator
@@ -91,17 +110,26 @@ def run_multi_planet_system_benchmark():
 
     # 4. Print Present-Day Metrics at 4.56 Gyr
     idx_final = -1
-    print("\n--------------------------------------------------------------------------")
+    print(
+        "\n--------------------------------------------------------------------------"
+    )
     print("PRESENT-DAY MULTI-PLANET SYSTEM METRICS AT 4.56 GYR:")
-    print("--------------------------------------------------------------------------")
+    print(
+        "--------------------------------------------------------------------------"
+    )
     for name in res.planet_names:
         print(f"Planet {name}:")
-        print(f"  Radius R_p:           {res.R_p_jup[name][idx_final]:.3f} R_Jup")
+        print(
+            f"  Radius R_p:           {res.R_p_jup[name][idx_final]:.3f} R_Jup")
         print(f"  Semi-major Axis a:    {res.a_au[name][idx_final]:.4f} AU")
         print(f"  Eccentricity e:       {res.e[name][idx_final]:.4f}")
-        print(f"  Rotation Period:      {res.P_rot_hrs[name][idx_final]:.2f} hours")
+        print(
+            f"  Rotation Period:      {res.P_rot_hrs[name][idx_final]:.2f} hours"
+        )
         print(f"  Effective Temp T_eff: {res.T_eff[name][idx_final]:.1f} K")
-        print("--------------------------------------------------------------------------")
+        print(
+            "--------------------------------------------------------------------------"
+        )
 
     # 5. Render & Save Vector PDF Figure
     os.makedirs("outputs", exist_ok=True)
