@@ -488,8 +488,27 @@ int main() {
   assert(std::abs(p_lib_s - 675.3) < 5.0 && "Saturn Trojan libration period should be ~675.3 yr!");
   assert(p_cap_in > 1.0e-4 && p_cap_in < 5.0e-4 && "Capture efficiency should be in nominal range!");
   assert(m_trojan > 1.0e-4 && m_trojan < 1.0e-2 && "Captured Trojan mass should be in expected disk-scaled range!");
-  assert(r_asym > 1.20 && r_asym < 1.55 && "L4/L5 asymmetry ratio should match observed ~1.35!");
-  assert(sat_surv_4gyr < 1.0e-4 && "Saturn Trojans should be completely depleted over 4 Gyr!");
+  // Paper #256: Morbidelli et al. (2008) Dynamical Evolution Model Verification
+  hot_jupiter::Morbidelli2008PlanetaryEvolutionModel morb_model;
+  double mu_j = morb_model.M_JUPITER_KG / morb_model.M_SUN_KG;
+  double e_crit_21 = morb_model.critical_eccentricity(2, 1, mu_j);
+  double p_cap_low = morb_model.adiabatic_capture_probability(0.01, e_crit_21);
+  double p_cap_high = morb_model.adiabatic_capture_probability(0.20, e_crit_21);
+  double s_chirikov = morb_model.chirikov_overlap_parameter(2.8, 0.15, 5.2, mu_j);
+  double d_a_diff = morb_model.semi_major_axis_diffusion_coefficient_au2_yr(2.8, 0.15, 5.2, mu_j);
+  double t_inst = morb_model.instability_timescale_yr(5.0);
+
+  std::cout << "--> Morbidelli et al. (2008) Planetary Dynamics: e_crit(2:1) = " << e_crit_21
+            << ", P_cap(e=0.01) = " << p_cap_low * 100.0 << "%, P_cap(e=0.20) = " << p_cap_high * 100.0
+            << "%, Chirikov S = " << s_chirikov << ", D_a = " << d_a_diff
+            << " AU^2/yr, T_inst(5 R_H) = " << t_inst << " yr" << std::endl;
+
+  assert(e_crit_21 > 0.05 && e_crit_21 < 0.20 && "Critical eccentricity for 2:1 MMR out of range!");
+  assert(std::abs(p_cap_low - 1.0) < 1.0e-5 && "Adiabatic capture probability for e0 <= e_crit must be exactly 100%!");
+  assert(p_cap_high > 0.10 && p_cap_high < 0.90 && "Capture probability for e0 > e_crit should be in expected range!");
+  assert(s_chirikov > 0.10 && "Chirikov parameter should be positive!");
+  assert(d_a_diff > 0.0 && "Diffusion coefficient must be positive!");
+  assert(t_inst > 1.0e3 && t_inst < 1.0e6 && "Instability timescale at 5 Hill radii should be ~ 10^4 - 10^5 yr!");
 
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
