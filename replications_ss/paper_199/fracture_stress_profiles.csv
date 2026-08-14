@@ -1,0 +1,5 @@
+fracture_name,length_km,orientation_deg,mean_width_m,periapse_stress_kpa,apoapse_stress_kpa,mass_flux_fraction
+Damascus_Sulcus,130.0,135.0,2.0,68.5,-68.5,0.32
+Baghdad_Sulcus,175.0,140.0,2.5,71.2,-71.2,0.38
+Alexandria_Sulcus,110.0,125.0,1.8,62.0,-62.0,0.18
+Cairo_Sulcus,85.0,150.0,1.5,58.4,-58.4,0.12
