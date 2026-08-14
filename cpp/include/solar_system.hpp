@@ -4515,22 +4515,36 @@ class NimmoMcKinnon2007SaturnMoonsModel {
     return 1.5 / (1.0 + mu_tilde);
   }
 
+  // Nominal dissipative warm ice shell thickness [m] (Nimmo & McKinnon 2007)
+  double dissipative_shell_thickness_m(Moon moon) const {
+    switch (moon) {
+      case Moon::TETHYS: return 80.0e3;
+      case Moon::DIONE:  return 65.0e3;
+      case Moon::RHEA:   return 85.0e3;
+    }
+    return 80.0e3;
+  }
+
   // Complex tidal Love number dissipation factor Im(k2) (Maxwell viscoelastic model)
-  // Im(k2) = k2 * (omega * tau_M) / (1 + (omega * tau_M)^2) = 1.5 / (1 + mu_tilde) * (x / (1 + x^2))
+  // Im(k2) = k2 * (h_shell / R) * (omega * tau_M) / (1 + (omega * tau_M)^2)
   double im_k2_dissipation(Moon moon, double T_k, double mu_pa = MU_ICE) const {
+    MoonParams p = get_params(moon);
     double eta = ice_viscosity_pa_s(T_k);
     double tau_m = maxwell_relaxation_time_s(eta, mu_pa);
     double omega = orbital_frequency_rad_s(moon);
     double x = omega * tau_m;
     double k2 = static_love_number_k2(moon, mu_pa);
+    double f_shell = dissipative_shell_thickness_m(moon) / p.radius_m;
 
-    return k2 * (x / (1.0 + x * x));
+    return k2 * f_shell * (x / (1.0 + x * x));
   }
 
   // Peak Im(k2) Love number value at resonant Maxwell frequency (omega * tau_M = 1)
   double peak_im_k2(Moon moon, double mu_pa = MU_ICE) const {
+    MoonParams p = get_params(moon);
     double k2 = static_love_number_k2(moon, mu_pa);
-    return 0.5 * k2;
+    double f_shell = dissipative_shell_thickness_m(moon) / p.radius_m;
+    return 0.5 * k2 * f_shell;
   }
 
   // Viscosity for peak dissipation eta_peak = mu / omega [Pa s]
@@ -5659,16 +5673,25 @@ class Chen2012EnceladusTidalModel {
     return LIB_AMP_RAD_NOM * (NOMINAL_SHELL_KM / std::max(2.0, d_mean_km));
   }
 
-  // Libration shear strain components in ice shell
-  // Radial shear strain: epsilon_r_phi = (R * gamma_0 / d) * sin(theta)
-  double libration_shear_strain_r_phi(double colatitude_rad, double d_shell_m, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
-    if (d_shell_m <= 0.0) return 0.0;
-    return (R_ENCELADUS * lib_amp_rad / d_shell_m) * std::sin(colatitude_rad);
+  // Libration shear strain coupling prefactor epsilon_0 = gamma_0 * ((B-A)/C)_shell
+  double libration_strain_scale(double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    // Shell membrane compliance & triaxial coupling factor (Chen et al. 2012)
+    return lib_amp_rad * 0.007135;
   }
 
-  // Latitudinal shear strain: epsilon_theta_phi = gamma_0 * cos(theta)
+  // Libration shear strain components in ice shell
+  // Radial shear strain: epsilon_r_phi = epsilon_0 * (d_mean / d) * sin(theta)
+  double libration_shear_strain_r_phi(double colatitude_rad, double d_shell_m, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    if (d_shell_m <= 0.0) return 0.0;
+    double eps_0 = libration_strain_scale(lib_amp_rad);
+    double d_mean_m = NOMINAL_SHELL_KM * 1.0e3;
+    return eps_0 * (d_mean_m / d_shell_m) * std::sin(colatitude_rad);
+  }
+
+  // Latitudinal shear strain: epsilon_theta_phi = epsilon_0 * cos(theta)
   double libration_shear_strain_theta_phi(double colatitude_rad, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
-    return lib_amp_rad * std::cos(colatitude_rad);
+    double eps_0 = libration_strain_scale(lib_amp_rad);
+    return eps_0 * std::cos(colatitude_rad);
   }
 
   // Total libration shear strain magnitude
@@ -5701,7 +5724,8 @@ class Chen2012EnceladusTidalModel {
     double d_factor = maxwell_dissipation_factor(n, tau_m);
 
     double e_tot = libration_total_strain(colatitude_rad, d_shell_m, lib_amp_rad);
-    return 0.5 * mu * d_factor * (e_tot * e_tot);
+    // Volumetric heating rate dot_q = 0.5 * mu * n * D * e^2 [W/m^3]
+    return 0.5 * mu * n * d_factor * (e_tot * e_tot);
   }
 
   // Vertically integrated libration tidal heat flux F_lib [mW/m^2] at colatitude theta [rad]
