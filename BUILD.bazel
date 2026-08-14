@@ -2466,6 +2466,11 @@ alias(
 )
 
 alias(
+    name = "paper_235_solver",
+    actual = "//replications_ss/paper_235:paper_235_solver",
+)
+
+alias(
     name = "paper_241_solver",
     actual = "//replications_ss/paper_241:paper_241_solver",
 )
@@ -2539,6 +2544,42 @@ alias(
     name = "paper_257_solver",
     actual = "//replications_ss/paper_257:paper_257_solver",
 )
+
+alias(
+    name = "paper_254_solver",
+    actual = "//replications_ss/paper_254:paper_254_solver",
+)
+
+alias(
+    name = "paper_250_solver",
+    actual = "//replications_ss/paper_250:paper_250_solver",
+)
+
+alias(
+    name = "paper_255_solver",
+    actual = "//replications_ss/paper_255:paper_255_solver",
+)
+
+alias(
+    name = "paper_253_solver",
+    actual = "//replications_ss/paper_253:paper_253_solver",
+)
+
+
+alias(
+    name = "paper_272_solver",
+    actual = "//replications_ss/paper_272:paper_272_solver",
+)
+
+alias(
+    name = "paper_261_solver",
+    actual = "//replications_ss/paper_261:paper_261_solver",
+)
+
+
+
+
+
 
 
 
