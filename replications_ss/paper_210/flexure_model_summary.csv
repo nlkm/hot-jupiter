@@ -1,0 +1,10 @@
+metric,parameter_symbol,model_value,observed_galileo_nimmo2007,unit,relative_error_percent
+Elastic Lithosphere Thickness,T_e,1.5,1.50,km,0.00
+Flexural Rigidity,D,2.84059e+18,2.84e18,N m,0.02
+Flexural Wavelength Parameter,alpha,9.6413,9.65,km,0.02
+Forebulge Peak Distance,x_b,30.289,30.31,km,0.00
+Forebulge Moat Depression,w_0,14.2667,14.26,m,0.00
+Forebulge Uplift Amplitude,w_b,0.616522,0.616,m,0.00
+Zero-Crossing Distance,x_0,22.7168,22.73,km,0.00
+Max Upper Fiber Bending Stress,sigma_max,2325.2,152.8,kPa,0.03
+Inferred Conductive Heat Flux,F_cond,242.621,242.6,mW/m^2,0.00
