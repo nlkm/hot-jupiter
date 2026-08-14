@@ -59,10 +59,10 @@ def load_csv_to_dict(filename):
                 try:
                     data[h.strip()].append(float(val))
                 except ValueError:
-                    data[h.strip()].append(val.strip())
-    for k in data:
-        if len(data[k]) > 0 and isinstance(data[k][0], float):
-            data[k] = np.array(data[k])
+                    pass
+    for k, v in data.items():
+        if len(v) > 0 and isinstance(v[0], float):
+            data[k] = np.array(v)
     return data
 
 

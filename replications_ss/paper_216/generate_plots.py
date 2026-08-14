@@ -8,11 +8,8 @@ import numpy as np
 from matplotlib import patches
 
 # Set clean publication aesthetic styling
-plt.style.use(
-    "seaborn-v0_8-whitegrid"
-    if "seaborn-v0_8-whitegrid" in plt.style.available
-    else "default"
-)
+plt.style.use("seaborn-v0_8-whitegrid" if "seaborn-v0_8-whitegrid" in
+              plt.style.available else "default")
 plt.rcParams["font.family"] = "DejaVu Sans"
 plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["font.size"] = 11
@@ -63,16 +60,21 @@ def instantaneous_tidal_power_gw(e, k2_over_q_E=0.0107):
     return (factor * (e**2)) * 1.0e-9
 
 
-def conductive_heat_loss_gw(d_shell_km, A_cond=567.0, T_surf=75.0, T_melt=273.15):
+def conductive_heat_loss_gw(d_shell_km,
+                            A_cond=567.0,
+                            T_surf=75.0,
+                            T_melt=273.15):
     d_m = np.maximum(100.0, d_shell_km * 1.0e3)
     area = 4.0 * np.pi * (R_E**2)
     flux = (A_cond * np.log(T_melt / T_surf)) / d_m
     return (flux * area) * 1.0e-9
 
 
-def equilibrium_shell_thickness_km(
-    heat_gw, p_radio=0.32, A_cond=567.0, T_surf=75.0, T_melt=273.15
-):
+def equilibrium_shell_thickness_km(heat_gw,
+                                   p_radio=0.32,
+                                   A_cond=567.0,
+                                   T_surf=75.0,
+                                   T_melt=273.15):
     tot_gw = np.maximum(0.01, heat_gw + p_radio)
     area = 4.0 * np.pi * (R_E**2)
     target_flux = (tot_gw * 1.0e9) / area
@@ -100,9 +102,11 @@ ax1.axhspan(
     alpha=0.18,
     label=r"Spencer et al. (2006) CIRS ($5.8 \pm 1.9$ GW)",
 )
-ax1.axhline(
-    5.8, color="crimson", linestyle="--", lw=1.8, label=r"Spencer Nominal ($5.8$ GW)"
-)
+ax1.axhline(5.8,
+            color="crimson",
+            linestyle="--",
+            lw=1.8,
+            label=r"Spencer Nominal ($5.8$ GW)")
 ax1.axhspan(
     15.8 - 3.1,
     15.8 + 3.1,
@@ -110,9 +114,11 @@ ax1.axhspan(
     alpha=0.12,
     label=r"Howett et al. (2011) CIRS ($15.8 \pm 3.1$ GW)",
 )
-ax1.axhline(
-    15.8, color="purple", linestyle=":", lw=1.8, label=r"Howett Nominal ($15.8$ GW)"
-)
+ax1.axhline(15.8,
+            color="purple",
+            linestyle=":",
+            lw=1.8,
+            label=r"Howett Nominal ($15.8$ GW)")
 ax1.axhline(
     P_radio_gw,
     color="gray",
@@ -162,7 +168,8 @@ ax1.scatter(
     s=90,
     zorder=6,
     edgecolors="black",
-    label=r"Lainey et al. (2012, 2017) Astrometric ($14.2$ GW, $Q_S \approx 1700$)",
+    label=
+    r"Lainey et al. (2012, 2017) Astrometric ($14.2$ GW, $Q_S \approx 1700$)",
 )
 ax1.scatter(
     [3634.0],
@@ -179,7 +186,8 @@ ax1.set_yscale("log")
 ax1.set_xlim(500, 150000)
 ax1.set_ylim(0.1, 40.0)
 ax1.set_xlabel(r"Saturn Tidal Dissipation Quality Factor $Q_S$", fontsize=12)
-ax1.set_ylabel(r"Equilibrium Tidal Heating Power $\dot{E}_{\rm eq}$ [GW]", fontsize=12)
+ax1.set_ylabel(r"Equilibrium Tidal Heating Power $\dot{E}_{\rm eq}$ [GW]",
+               fontsize=12)
 ax1.set_title(
     r"\textbf{(a)} 2:1 Resonance Equilibrium Tidal Heating vs. Saturn $Q_S$",
     fontsize=13,
@@ -235,9 +243,11 @@ ax2.axvline(
     lw=1.8,
     label=r"Present Forced $e = 0.0047$ ($P_{\rm tide} \approx 14.6$ GW)",
 )
-ax2.axhline(
-    5.8, color="crimson", linestyle=":", lw=1.5, label=r"Spencer Obs ($5.8$ GW)"
-)
+ax2.axhline(5.8,
+            color="crimson",
+            linestyle=":",
+            lw=1.5,
+            label=r"Spencer Obs ($5.8$ GW)")
 ax2.axhline(
     1.17,
     color="navy",
@@ -248,8 +258,7 @@ ax2.axhline(
 
 # Mark equilibrium forced eccentricity
 e_eq_0107 = np.sqrt(
-    (1.171e9) / (10.5 * 0.0107 * G * (M_S**2) * (R_E**5) * n_E / (a_E**6))
-)
+    (1.171e9) / (10.5 * 0.0107 * G * (M_S**2) * (R_E**5) * n_E / (a_E**6)))
 ax2.scatter(
     [e_eq_0107 * 1e3],
     [1.171],
@@ -263,7 +272,8 @@ ax2.scatter(
 ax2.set_xlim(0, 16.0)
 ax2.set_ylim(0, 30.0)
 ax2.set_xlabel(r"Orbital Eccentricity $e \times 10^3$", fontsize=12)
-ax2.set_ylabel(r"Instantaneous Tidal Heating Power $P_{\rm tide}$ [GW]", fontsize=12)
+ax2.set_ylabel(r"Instantaneous Tidal Heating Power $P_{\rm tide}$ [GW]",
+               fontsize=12)
 ax2.set_title(
     r"\textbf{(b)} Instantaneous Tidal Power vs. Orbital Eccentricity",
     fontsize=13,
@@ -300,7 +310,8 @@ ax3.axvline(
     color="navy",
     linestyle="--",
     lw=1.8,
-    label=r"Canonical Eq. Tidal + Radio ($1.49$ GW $\rightarrow d_{\rm eq} \approx 42$ km)",
+    label=
+    r"Canonical Eq. Tidal + Radio ($1.49$ GW $\rightarrow d_{\rm eq} \approx 42$ km)",
 )
 ax3.axvline(
     5.8,
@@ -336,7 +347,8 @@ ax3.axhspan(
 ax3.set_xlim(0.4, 22.0)
 ax3.set_ylim(0.0, 60.0)
 ax3.set_xlabel(r"Total Internal Heat Output $P_{\rm total}$ [GW]", fontsize=12)
-ax3.set_ylabel(r"Equilibrium Ice Shell Thickness $d_{\rm eq}$ [km]", fontsize=12)
+ax3.set_ylabel(r"Equilibrium Ice Shell Thickness $d_{\rm eq}$ [km]",
+               fontsize=12)
 ax3.set_title(
     r"\textbf{(a)} Conductive Ice Shell Thickness vs. Heating Power",
     fontsize=13,
@@ -398,7 +410,8 @@ ax4.scatter(
     s=80,
     zorder=6,
     edgecolors="black",
-    label=r"Meyer \& Wisdom Deficit ($\Delta P \approx 4.31$ GW at $Q_S = 18000$)",
+    label=
+    r"Meyer \& Wisdom Deficit ($\Delta P \approx 4.31$ GW at $Q_S = 18000$)",
 )
 ax4.scatter(
     [18000.0],
@@ -407,7 +420,8 @@ ax4.scatter(
     s=80,
     zorder=6,
     edgecolors="black",
-    label=r"Howett Revised Deficit ($\Delta P \approx 14.31$ GW at $Q_S = 18000$)",
+    label=
+    r"Howett Revised Deficit ($\Delta P \approx 14.31$ GW at $Q_S = 18000$)",
 )
 
 ax4.set_xscale("log")
@@ -445,18 +459,18 @@ ax5.set_aspect("equal")
 ax5.set_facecolor("#f8fafc")
 
 # Draw Saturn
-saturn = patches.Circle(
-    (0, 0), 1.2, facecolor="#f4d06f", edgecolor="#c29d38", lw=2.0, zorder=4
-)
+saturn = patches.Circle((0, 0),
+                        1.2,
+                        facecolor="#f4d06f",
+                        edgecolor="#c29d38",
+                        lw=2.0,
+                        zorder=4)
 ax5.add_patch(saturn)
 ax5.text(
     0,
     0,
-    r"\textbf{Saturn}"
-    + "\n"
-    + r"$M_S = 5.68 \times 10^{26}\,$kg"
-    + "\n"
-    + r"$R_S = 60,268\,$km",
+    r"\textbf{Saturn}" + "\n" + r"$M_S = 5.68 \times 10^{26}\,$kg" + "\n" +
+    r"$R_S = 60,268\,$km",
     ha="center",
     va="center",
     fontsize=9,
@@ -506,20 +520,18 @@ ax5.add_patch(enc_orbit)
 
 # Enceladus Body
 enc_pos = (3.4, 0.0)
-enc_body = patches.Circle(
-    enc_pos, 0.35, facecolor="#93c5fd", edgecolor="#1d4ed8", lw=1.8, zorder=5
-)
+enc_body = patches.Circle(enc_pos,
+                          0.35,
+                          facecolor="#93c5fd",
+                          edgecolor="#1d4ed8",
+                          lw=1.8,
+                          zorder=5)
 ax5.add_patch(enc_body)
 ax5.text(
     enc_pos[0] + 0.5,
     enc_pos[1] + 0.35,
-    r"\textbf{Enceladus (Inner, 1)}"
-    + "\n"
-    + r"$a_E = 238,040\,$km"
-    + "\n"
-    + r"$P_E = 32.89\,$h"
-    + "\n"
-    + r"$e_E = 0.0047$",
+    r"\textbf{Enceladus (Inner, 1)}" + "\n" + r"$a_E = 238,040\,$km" + "\n" +
+    r"$P_E = 32.89\,$h" + "\n" + r"$e_E = 0.0047$",
     fontsize=8.5,
     color="#1e3a8a",
     fontweight="bold",
@@ -541,20 +553,18 @@ ax5.add_patch(dione_orbit)
 
 # Dione Body
 dione_pos = (0.0, 4.8)
-dione_body = patches.Circle(
-    dione_pos, 0.55, facecolor="#6ee7b7", edgecolor="#047857", lw=1.8, zorder=5
-)
+dione_body = patches.Circle(dione_pos,
+                            0.55,
+                            facecolor="#6ee7b7",
+                            edgecolor="#047857",
+                            lw=1.8,
+                            zorder=5)
 ax5.add_patch(dione_body)
 ax5.text(
     dione_pos[0] + 0.65,
     dione_pos[1],
-    r"\textbf{Dione (Outer, 2)}"
-    + "\n"
-    + r"$a_D = 377,420\,$km"
-    + "\n"
-    + r"$P_D = 65.77\,$h"
-    + "\n"
-    + r"$e_D = 0.0022$",
+    r"\textbf{Dione (Outer, 2)}" + "\n" + r"$a_D = 377,420\,$km" + "\n" +
+    r"$P_D = 65.77\,$h" + "\n" + r"$e_D = 0.0022$",
     fontsize=8.5,
     color="#064e3b",
     fontweight="bold",
@@ -616,9 +626,12 @@ ax6.set_aspect("equal")
 ax6.set_facecolor("#f8fafc")
 
 # Draw Outer Ice Shell
-outer_shell = patches.Circle(
-    (0, 0), 4.2, facecolor="#bae6fd", edgecolor="#0284c7", lw=2.2, zorder=2
-)
+outer_shell = patches.Circle((0, 0),
+                             4.2,
+                             facecolor="#bae6fd",
+                             edgecolor="#0284c7",
+                             lw=2.2,
+                             zorder=2)
 ax6.add_patch(outer_shell)
 
 # Draw South Polar Thinning (Distorted Ocean Boundary)
@@ -626,11 +639,9 @@ theta = np.linspace(0, 2 * np.pi, 300)
 r_ocean = np.zeros_like(theta)
 for i, th in enumerate(theta):
     # Base radius 3.3, but extends outward at south pole (th near -pi/2)
-    spt_factor = (
-        0.55 * np.exp(-0.5 * ((th - 1.5 * np.pi) / 0.4) ** 2)
-        if th > np.pi
-        else 0.55 * np.exp(-0.5 * ((th + 0.5 * np.pi) / 0.4) ** 2)
-    )
+    spt_factor = (0.55 * np.exp(-0.5 * ((th - 1.5 * np.pi) / 0.4)**2)
+                  if th > np.pi else 0.55 *
+                  np.exp(-0.5 * ((th + 0.5 * np.pi) / 0.4)**2))
     r_ocean[i] = 3.2 + spt_factor
 
 x_ocean = r_ocean * np.cos(theta)
@@ -646,18 +657,18 @@ ax6.fill(
 )
 
 # Porous Silicate Core
-core = patches.Circle(
-    (0, 0), 2.1, facecolor="#a8a29e", edgecolor="#57534e", lw=2.0, zorder=4
-)
+core = patches.Circle((0, 0),
+                      2.1,
+                      facecolor="#a8a29e",
+                      edgecolor="#57534e",
+                      lw=2.0,
+                      zorder=4)
 ax6.add_patch(core)
 ax6.text(
     0,
     0,
-    r"\textbf{Porous Silicate Core}"
-    + "\n"
-    + r"$R_{\rm core} \approx 190\,$km"
-    + "\n"
-    + r"$\rho \approx 2400\,$kg/m$^3$",
+    r"\textbf{Porous Silicate Core}" + "\n" +
+    r"$R_{\rm core} \approx 190\,$km" + "\n" + r"$\rho \approx 2400\,$kg/m$^3$",
     ha="center",
     va="center",
     fontsize=8.5,
@@ -671,7 +682,10 @@ spt_y = -4.2
 stripe_x = [-0.6, -0.2, 0.2, 0.6]
 stripe_names = ["Damascus", "Baghdad", "Alexandria", "Cairo"]
 for sx in stripe_x:
-    ax6.plot([sx, sx * 0.8], [spt_y, spt_y + 0.5], color="#dc2626", lw=2.5, zorder=6)
+    ax6.plot([sx, sx * 0.8], [spt_y, spt_y + 0.5],
+             color="#dc2626",
+             lw=2.5,
+             zorder=6)
     # Eruption plume jets
     ax6.plot(
         [sx, sx * 1.5],
@@ -686,11 +700,9 @@ for sx in stripe_x:
 ax6.text(
     0,
     -5.7,
-    r"\textbf{Tiger Stripe Plumes $\rightarrow$ E-Ring}"
-    + "\n"
-    + r"Observed Output: $5.8 - 15.8\,$GW"
-    + "\n"
-    + r"$\dot{M} \approx 200\,$kg/s H$_2$O vapor/ice",
+    r"\textbf{Tiger Stripe Plumes $\rightarrow$ E-Ring}" + "\n" +
+    r"Observed Output: $5.8 - 15.8\,$GW" + "\n" +
+    r"$\dot{M} \approx 200\,$kg/s H$_2$O vapor/ice",
     ha="center",
     va="center",
     fontsize=8.5,
@@ -702,11 +714,8 @@ ax6.text(
 ax6.text(
     2.6,
     2.7,
-    r"\textbf{Ice I Shell}"
-    + "\n"
-    + r"Equator: $\sim 25-35\,$km"
-    + "\n"
-    + r"South Pole: $\sim 5\,$km",
+    r"\textbf{Ice I Shell}" + "\n" + r"Equator: $\sim 25-35\,$km" + "\n" +
+    r"South Pole: $\sim 5\,$km",
     fontsize=8,
     color="#0369a1",
     fontweight="bold",
@@ -722,16 +731,11 @@ ax6.text(
 
 # Heat flow comparison box
 energy_box = (
-    r"\textbf{Energy Budget Comparison:}"
-    + "\n"
-    + r"$\bullet$ Canonical Eq. Tidal: $\dot{E}_{\rm eq} \approx 1.17\,$GW"
-    + "\n"
-    + r"$\bullet$ Core Radiogenic: $P_{\rm rad} \approx 0.32\,$GW"
-    + "\n"
-    + r"$\bullet$ Observed Heat Loss: $P_{\rm obs} \approx 5.8 - 15.8\,$GW"
-    + "\n"
-    + r"$\bullet$ \textbf{Deficit: $\Delta P \approx 4.3 - 14.3\,$GW}"
-)
+    r"\textbf{Energy Budget Comparison:}" + "\n" +
+    r"$\bullet$ Canonical Eq. Tidal: $\dot{E}_{\rm eq} \approx 1.17\,$GW" +
+    "\n" + r"$\bullet$ Core Radiogenic: $P_{\rm rad} \approx 0.32\,$GW" + "\n" +
+    r"$\bullet$ Observed Heat Loss: $P_{\rm obs} \approx 5.8 - 15.8\,$GW" +
+    "\n" + r"$\bullet$ \textbf{Deficit: $\Delta P \approx 4.3 - 14.3\,$GW}")
 ax6.text(
     -5.8,
     -2.8,
