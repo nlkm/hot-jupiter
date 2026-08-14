@@ -18,10 +18,8 @@ int main() {
     HeatingModel heating;
 
     double M_p = 1.0 * M_JUP;
-    double M_star = 1.0 * M_SUN;
     double R_star = 1.0 * R_SUN;
     double a = 0.03 * AU;
-    double e = 0.05;
 
     std::ofstream csv("outputs/jwst_transmission_scale_height.csv");
     csv << "t_gyr,R_p_inflated_Rjup,R_p_base_Rjup,H_inflated_km,H_base_km,delta_ppm_inflated,delta_ppm_base\n";

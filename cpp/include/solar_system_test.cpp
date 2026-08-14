@@ -434,6 +434,7 @@ int main() {
   double p_rat = lhb_model.period_ratio(8.18, 5.45);
   double fg_earth = lhb_model.gravitational_focusing_factor(11.186, 15.0);
   double fg_moon = lhb_model.gravitational_focusing_factor(2.380, 15.0);
+  assert(fg_earth > fg_moon && "Earth gravitational focusing factor must exceed Moon!");
   double mass_ratio_earth_moon = lhb_model.relative_impact_mass_ratio_vs_moon(6.371e6, 11.186, 15.0);
   double m_moon_tot = lhb_model.cumulative_mass_delivered_kg("Moon", 1100.0);
   double basins_tot = lhb_model.cumulative_lunar_basins(1100.0);
@@ -452,6 +453,7 @@ int main() {
   hot_jupiter::Morbidelli2010TerrestrialAccretionModel terr_model;
   double sig_mmsn_1au = terr_model.surface_density_mmsn(1.0);
   double sig_gt_08au = terr_model.surface_density_grand_tack(0.8);
+  assert(sig_gt_08au > 0.0 && "Grand tack surface density at 0.8 AU must be positive!");
   double m_iso_1au = terr_model.isolation_mass_mearth(1.0, sig_mmsn_1au);
   auto gt_res = terr_model.simulate_terrestrial_accretion(
       hot_jupiter::Morbidelli2010TerrestrialAccretionModel::DiskModelType::GRAND_TACK, 42);
@@ -496,19 +498,19 @@ int main() {
   double p_cap_high = morb_model.adiabatic_capture_probability(0.20, e_crit_21);
   double s_chirikov = morb_model.chirikov_overlap_parameter(2.8, 0.15, 5.2, mu_j);
   double d_a_diff = morb_model.semi_major_axis_diffusion_coefficient_au2_yr(2.8, 0.15, 5.2, mu_j);
-  double t_inst = morb_model.instability_timescale_yr(5.0);
+  double t_inst_morb = morb_model.instability_timescale_yr(5.0);
 
   std::cout << "--> Morbidelli et al. (2008) Planetary Dynamics: e_crit(2:1) = " << e_crit_21
             << ", P_cap(e=0.01) = " << p_cap_low * 100.0 << "%, P_cap(e=0.20) = " << p_cap_high * 100.0
             << "%, Chirikov S = " << s_chirikov << ", D_a = " << d_a_diff
-            << " AU^2/yr, T_inst(5 R_H) = " << t_inst << " yr" << std::endl;
+            << " AU^2/yr, T_inst(5 R_H) = " << t_inst_morb << " yr" << std::endl;
 
   assert(e_crit_21 > 0.05 && e_crit_21 < 0.20 && "Critical eccentricity for 2:1 MMR out of range!");
   assert(std::abs(p_cap_low - 1.0) < 1.0e-5 && "Adiabatic capture probability for e0 <= e_crit must be exactly 100%!");
   assert(p_cap_high > 0.10 && p_cap_high < 0.90 && "Capture probability for e0 > e_crit should be in expected range!");
   assert(s_chirikov > 0.10 && "Chirikov parameter should be positive!");
   assert(d_a_diff > 0.0 && "Diffusion coefficient must be positive!");
-  assert(t_inst > 1.0e3 && t_inst < 1.0e6 && "Instability timescale at 5 Hill radii should be ~ 10^4 - 10^5 yr!");
+  assert(t_inst_morb > 1.0e3 && t_inst_morb < 1.0e6 && "Instability timescale at 5 Hill radii should be ~ 10^4 - 10^5 yr!");
 
   // Paper #250: Shankman et al. (2017) OSSOS High-q TNO Model Verification
   hot_jupiter::Shankman2017OSSOSModel ossos_model;
