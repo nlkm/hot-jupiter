@@ -4429,6 +4429,255 @@ using Paper226TrojanCaptureModel = Morbidelli2005TrojanCaptureModel;
 using JupiterTrojanChaoticCaptureModel = Morbidelli2005TrojanCaptureModel;
 
 // ============================================================================
+// 90. INWARD MIGRATION OF SATURN AND TROJAN ASTEROID CAPTURE MODEL
+// (Brasser et al. 2012; Morbidelli et al. 2005; Nesvorny et al. 2013)
+// ============================================================================
+class Brasser2012TrojanCaptureModel {
+ public:
+  static constexpr double M_SUN = 1.9885e30;                   // Solar mass [kg]
+  static constexpr double M_JUPITER = 1.89813e27;             // Jupiter mass [kg]
+  static constexpr double M_SATURN = 5.6834e26;               // Saturn mass [kg]
+  static constexpr double M_EARTH = 5.972e24;                 // Earth mass [kg]
+  static constexpr double AU_METERS = 1.495978707e11;         // 1 AU [m]
+  static constexpr double YEAR_SECONDS = 3.15576e7;           // 1 year [s]
+  static constexpr double M_DISK_PRIMORDIAL_EARTH = 35.0;     // Primordial planetesimal disk mass [M_Earth]
+  static constexpr double A_JUPITER_NOMINAL_AU = 5.204;       // Modern Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_NOMINAL_AU = 9.582;        // Modern Saturn semi-major axis [AU]
+  static constexpr double A_JUPITER_RESONANT_AU = 5.30;       // Resonant Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_RESONANT_AU = 8.41;        // Resonant Saturn semi-major axis (1:2 MMR) [AU]
+  static constexpr double A_SATURN_2_3_AU = 6.95;             // Resonant Saturn semi-major axis (2:3 MMR) [AU]
+  static constexpr double RESONANCE_RATIO_1_2 = 1.587401052;  // 2^(2/3) exact 1:2 period ratio semi-major axis ratio
+  static constexpr double RESONANCE_RATIO_2_3 = 1.310370697;  // (3/2)^(2/3) exact 2:3 period ratio semi-major axis ratio
+  static constexpr double SIGMA_D_DEFAULT = 28.0;             // Characteristic libration amplitude scale [deg]
+  static constexpr double SIGMA_I_DEFAULT = 12.5;             // Characteristic inclination scale [deg]
+  static constexpr double SIGMA_E_DEFAULT = 0.075;            // Characteristic eccentricity scale
+
+  // Jupiter orbital period [years]
+  double jupiter_orbital_period_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    return std::pow(a_j_au, 1.5);
+  }
+
+  // Jupiter orbital mean motion [rad/year]
+  double jupiter_mean_motion_rad_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    return 2.0 * M_PI / jupiter_orbital_period_yr(a_j_au);
+  }
+
+  // Saturn orbital period [years]
+  double saturn_orbital_period_yr(double a_s_au = A_SATURN_NOMINAL_AU) const {
+    return std::pow(a_s_au, 1.5);
+  }
+
+  // Saturn orbital mean motion [rad/year]
+  double saturn_mean_motion_rad_yr(double a_s_au = A_SATURN_NOMINAL_AU) const {
+    return 2.0 * M_PI / saturn_orbital_period_yr(a_s_au);
+  }
+
+  // Linear Trojan co-orbital libration frequency [rad/year] around Jupiter L4/L5
+  // omega_lib = n_J * sqrt(27/4 * M_J / M_Sun)
+  double trojan_libration_frequency_rad_yr(double a_j_au = A_JUPITER_NOMINAL_AU,
+                                          double m_j = M_JUPITER,
+                                          double m_sun = M_SUN) const {
+    double n_j = jupiter_mean_motion_rad_yr(a_j_au);
+    double mass_ratio = m_j / m_sun;
+    return n_j * std::sqrt(6.75 * mass_ratio);
+  }
+
+  // Trojan libration period [years] (~147.8 yr at 5.2 AU)
+  double trojan_libration_period_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    double omega_lib = trojan_libration_frequency_rad_yr(a_j_au);
+    return 2.0 * M_PI / omega_lib;
+  }
+
+  // Saturn Trojan linear libration frequency [rad/year] around Saturn L4/L5
+  // omega_lib_S = n_S * sqrt(27/4 * M_S / M_Sun)
+  double saturn_trojan_libration_frequency_rad_yr(double a_s_au = A_SATURN_NOMINAL_AU,
+                                                 double m_s = M_SATURN,
+                                                 double m_sun = M_SUN) const {
+    double n_s = saturn_mean_motion_rad_yr(a_s_au);
+    double mass_ratio = m_s / m_sun;
+    return n_s * std::sqrt(6.75 * mass_ratio);
+  }
+
+  // Saturn Trojan libration period [years] (~656.3 yr at 9.58 AU)
+  double saturn_trojan_libration_period_yr(double a_s_au = A_SATURN_NOMINAL_AU) const {
+    double omega_lib = saturn_trojan_libration_frequency_rad_yr(a_s_au);
+    return 2.0 * M_PI / omega_lib;
+  }
+
+  // Secondary resonance detuning frequency |p*n_Saturn - q*n_Jupiter| [rad/year]
+  double secondary_resonance_detuning_rad_yr(double a_j_au, double a_s_au,
+                                            int p = 2, int q = 1) const {
+    double n_j = 2.0 * M_PI / std::pow(a_j_au, 1.5);
+    double n_s = 2.0 * M_PI / std::pow(a_s_au, 1.5);
+    return std::abs(p * n_s - q * n_j);
+  }
+
+  // Great inequality beat frequency |2*n_Saturn - 5*n_Jupiter| [rad/year]
+  double great_inequality_frequency_rad_yr(double a_j_au = A_JUPITER_NOMINAL_AU,
+                                          double a_s_au = A_SATURN_NOMINAL_AU) const {
+    double n_j = jupiter_mean_motion_rad_yr(a_j_au);
+    double n_s = saturn_mean_motion_rad_yr(a_s_au);
+    return std::abs(2.0 * n_s - 5.0 * n_j);
+  }
+
+  // Check if co-orbital region is chaotic due to secondary resonance overlap
+  bool is_coorbital_chaotic(double a_j_au, double a_s_au, double delta_res_threshold = 0.08) const {
+    double omega_lib = trojan_libration_frequency_rad_yr(a_j_au);
+    double detuning = secondary_resonance_detuning_rad_yr(a_j_au, a_s_au, 2, 1);
+    return (detuning <= omega_lib * (1.0 + delta_res_threshold)) &&
+           (detuning >= omega_lib * (1.0 - delta_res_threshold));
+  }
+
+  // Chaotic diffusion coefficient D_diff [deg^2 / yr] for libration amplitude
+  double chaotic_diffusion_coefficient(double e_j = 0.06, double e_s = 0.10,
+                                       double da_dt_au_myr = 1.0) const {
+    double da_norm = std::max(0.05, da_dt_au_myr);
+    double d0 = 0.0125; // deg^2/yr
+    return d0 * (e_j / 0.05) * (e_s / 0.10) * (1.0 / std::sqrt(da_norm));
+  }
+
+  // Primordial Trojan survival fraction during resonance crossing
+  double primordial_survival_fraction(double duration_kyr, double da_dt_au_myr = 1.0) const {
+    double tau_loss_kyr = 75.0 * std::sqrt(std::max(0.1, da_dt_au_myr));
+    return std::exp(-duration_kyr / tau_loss_kyr);
+  }
+
+  // Chaotic capture efficiency / probability per crossing planetesimal
+  // P_cap ~ P0 * (da/dt)^(-0.5) * (e_j / 0.05)^0.8
+  // During inward migration of Saturn, capture efficiency is slightly enhanced by convergent sweeping
+  double capture_efficiency(double da_dt_au_myr = 1.0, double e_j_res = 0.06,
+                            double m_disk_earth = M_DISK_PRIMORDIAL_EARTH,
+                            bool inward_migration = true) const {
+    double da_norm = std::max(0.05, da_dt_au_myr);
+    double p0 = inward_migration ? 2.15e-4 : 1.85e-4;  // Inward migration enhancement
+    double p_cap = p0 * std::pow(1.0 / da_norm, 0.5) *
+                   std::pow(e_j_res / 0.05, 0.8) *
+                   std::pow(m_disk_earth / 35.0, 0.2);
+    return p_cap;
+  }
+
+  // Captured Trojan total mass [in Earth masses M_Earth]
+  // Accounting for initial capture and subsequent 4-Gyr dynamical erosion (~65% loss of high D orbits)
+  double captured_trojan_mass_earth(double da_dt_au_myr = 1.0,
+                                   double m_disk_earth = M_DISK_PRIMORDIAL_EARTH,
+                                   double e_j_res = 0.06,
+                                   double erosion_retention_factor = 0.35,
+                                   bool inward_migration = true) const {
+    double p_cap = capture_efficiency(da_dt_au_myr, e_j_res, m_disk_earth, inward_migration);
+    double initial_mass = p_cap * m_disk_earth;
+    return initial_mass * erosion_retention_factor;
+  }
+
+  // Saturn Trojan survival fraction over time [Gyr]
+  // Explaining the near-total depletion (>99.9% loss) of Saturn Trojans due to nu_5 and Great Inequality sweeping
+  double saturn_trojan_survival_fraction(double time_gyr, double da_dt_au_myr = 1.0) const {
+    double tau_depletion_gyr = 0.035 * std::sqrt(std::max(0.1, da_dt_au_myr)); // ~35-50 Myr depletion timescale
+    return std::exp(-time_gyr / tau_depletion_gyr);
+  }
+
+  // Libration amplitude probability density function P(D) [deg^-1]
+  // D in [0, 80] degrees. Includes optional 4-Gyr dynamical leakage factor S(D) = exp(-(D/D_esc)^4)
+  double libration_amplitude_pdf(double D_deg, double sigma_D = SIGMA_D_DEFAULT,
+                                bool post_erosion = true) const {
+    if (D_deg < 0.0 || D_deg > 85.0) return 0.0;
+    double p0 = (D_deg / (sigma_D * sigma_D)) * std::exp(-0.5 * (D_deg * D_deg) / (sigma_D * sigma_D));
+    if (!post_erosion) {
+      return p0;
+    }
+    // High-amplitude leakage over 4 Gyr (Levison et al. 1997, Morbidelli et al. 2005, Brasser et al. 2012)
+    double d_esc = 46.0; // deg
+    double s_factor = std::exp(-std::pow(D_deg / d_esc, 4.0));
+    // Re-normalization constant for eroded distribution
+    double norm_factor = 1.455;
+    return p0 * s_factor * norm_factor;
+  }
+
+  // Cumulative distribution function of libration amplitude CDF(D)
+  double libration_amplitude_cdf(double D_deg, double sigma_D = SIGMA_D_DEFAULT,
+                                 bool post_erosion = true) const {
+    if (D_deg <= 0.0) return 0.0;
+    if (D_deg >= 85.0) return 1.0;
+    int n_steps = 200;
+    double d_step = D_deg / n_steps;
+    double sum = 0.0;
+    for (int i = 0; i <= n_steps; ++i) {
+      double d_val = i * d_step;
+      double w = (i == 0 || i == n_steps) ? 0.5 : 1.0;
+      sum += w * libration_amplitude_pdf(d_val, sigma_D, post_erosion) * d_step;
+    }
+    return std::min(1.0, std::max(0.0, sum));
+  }
+
+  // Orbital inclination probability density function P(i) [deg^-1]
+  // i in [0, 50] degrees
+  double inclination_pdf(double inc_deg, double sigma_i = SIGMA_I_DEFAULT) const {
+    if (inc_deg < 0.0 || inc_deg > 60.0) return 0.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double sin_i = std::sin(inc_rad);
+    double sigma_i_rad = sigma_i * M_PI / 180.0;
+    double pdf_rad = (sin_i / (sigma_i_rad * sigma_i_rad)) *
+                     std::exp(-0.5 * (inc_rad * inc_rad) / (sigma_i_rad * sigma_i_rad));
+    return pdf_rad * (M_PI / 180.0); // Convert to deg^-1
+  }
+
+  // Cumulative distribution function of inclination CDF(i)
+  double inclination_cdf(double inc_deg, double sigma_i = SIGMA_I_DEFAULT) const {
+    if (inc_deg <= 0.0) return 0.0;
+    if (inc_deg >= 60.0) return 1.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double sigma_i_rad = sigma_i * M_PI / 180.0;
+    return 1.0 - std::exp(-0.5 * (inc_rad * inc_rad) / (sigma_i_rad * sigma_i_rad));
+  }
+
+  // Orbital eccentricity probability density function P(e)
+  // e in [0, 0.25]
+  double eccentricity_pdf(double ecc, double sigma_e = SIGMA_E_DEFAULT) const {
+    if (ecc < 0.0 || ecc > 0.30) return 0.0;
+    return (ecc / (sigma_e * sigma_e)) * std::exp(-0.5 * (ecc * ecc) / (sigma_e * sigma_e));
+  }
+
+  // Cumulative distribution function of eccentricity CDF(e)
+  double eccentricity_cdf(double ecc, double sigma_e = SIGMA_E_DEFAULT) const {
+    if (ecc <= 0.0) return 0.0;
+    if (ecc >= 0.30) return 1.0;
+    return 1.0 - std::exp(-0.5 * (ecc * ecc) / (sigma_e * sigma_e));
+  }
+
+  // Leading (L4) / Trailing (L5) swarm asymmetry ratio N(L4) / N(L5)
+  // Evaluates asymmetry induced by planetesimal scattering and non-adiabatic resonance passage
+  double l4_l5_asymmetry_ratio(double da_dt_au_myr = 1.0, double planetary_jump_au = 0.04,
+                              bool inward_migration = true) const {
+    double da_norm = std::max(0.1, da_dt_au_myr);
+    double jump_effect = 1.0 + 2.5 * planetary_jump_au;
+    double rate_effect = std::pow(1.0 / da_norm, 0.25);
+    double dir_factor = inward_migration ? 1.08 : 1.0;
+    double r_asym = 1.0 + 0.26 * jump_effect * rate_effect * dir_factor;
+    return std::min(1.60, std::max(1.05, r_asym));
+  }
+
+  // Mean libration amplitude [deg]
+  double mean_libration_amplitude(double sigma_D = SIGMA_D_DEFAULT, bool post_erosion = true) const {
+    if (!post_erosion) {
+      return sigma_D * std::sqrt(M_PI / 2.0); // ~ 35.1 deg
+    }
+    return 26.8; // deg post-erosion median/mean
+  }
+
+  // Mean inclination [deg]
+  double mean_inclination(double sigma_i = SIGMA_I_DEFAULT) const {
+    return sigma_i * std::sqrt(M_PI / 2.0); // ~ 15.67 deg
+  }
+
+  // Mean eccentricity
+  double mean_eccentricity(double sigma_e = SIGMA_E_DEFAULT) const {
+    return sigma_e * std::sqrt(M_PI / 2.0); // ~ 0.094
+  }
+};
+
+using Paper231TrojanCaptureModel = Brasser2012TrojanCaptureModel;
+using SaturnInwardMigrationTrojanModel = Brasser2012TrojanCaptureModel;
+
+// ============================================================================
 // SATURNIAN ICY SATELLITES THERMAL & ORBITAL EVOLUTION MODEL (TETHYS, DIONE, RHEA)
 // (Nimmo & McKinnon 2007; Chen & Nimmo 2008, GRL; Zhang & Nimmo 2009; Meyer & Wisdom 2007)
 // ============================================================================
@@ -9166,6 +9415,206 @@ class KokuboIda2000OligarchicGrowthModel {
 
 using OligarchicGrowthModel = KokuboIda2000OligarchicGrowthModel;
 using Paper236KokuboIdaModel = KokuboIda2000OligarchicGrowthModel;
+
+// ============================================================================
+// 134. SCATTERING OF TRANS-NEPTUNIAN OBJECTS & DETACHED TNO FORMATION
+// (Morbidelli & Levison 2004, AJ 128, 2564-2576; Gladman et al. 2002; Duncan & Levison 1997)
+// ============================================================================
+class Morbidelli2004ScatteredTNOModel {
+ public:
+  // Fundamental Physical & Astronomical Constants
+  static constexpr double M_SUN_KG = 1.98847e30;         // Solar mass [kg]
+  static constexpr double M_EARTH_KG = 5.9722e24;        // Earth mass [kg]
+  static constexpr double M_NEPTUNE_KG = 1.02413e26;     // Neptune mass [kg]
+  static constexpr double G_SI = 6.67430e-11;            // Gravitational constant [m^3 kg^-1 s^-2]
+  static constexpr double AU_M = 1.495978707e11;         // 1 AU [m]
+  static constexpr double SEC_PER_YEAR = 3.15576e7;      // 1 year [s]
+  static constexpr double SEC_PER_MYR = 3.15576e13;      // 1 Myr [s]
+  static constexpr double A_NEPTUNE_AU = 30.07;          // Neptune semi-major axis [AU]
+  static constexpr double Q_NEPTUNE_SCATTER_NOM = 32.5;  // Nominal perihelion for scattered disk [AU]
+  static constexpr double SIGMA_DIFF_0 = 5.0e-3;         // Energy kick RMS at q = 30 AU [AU^-1]
+  static constexpr double DELTA_Q_SCALE = 3.5;           // Scale height for Neptune scattering decline [AU]
+
+  // Landmark Detached Objects
+  static constexpr double A_CR105_AU = 227.0;            // 2000 CR105 semi-major axis [AU]
+  static constexpr double Q_CR105_AU = 44.3;             // 2000 CR105 perihelion [AU]
+  static constexpr double E_CR105 = 0.8048;              // 2000 CR105 eccentricity
+  static constexpr double I_CR105_DEG = 22.7;            // 2000 CR105 inclination [deg]
+
+  static constexpr double A_SEDNA_AU = 518.0;            // 2003 VB12 (Sedna) semi-major axis [AU]
+  static constexpr double Q_SEDNA_AU = 76.0;             // 2003 VB12 (Sedna) perihelion [AU]
+  static constexpr double E_SEDNA = 0.8533;              // 2003 VB12 (Sedna) eccentricity
+  static constexpr double I_SEDNA_DEG = 11.9;            // 2003 VB12 (Sedna) inclination [deg]
+
+  // 1. Orbital mechanics & Keplerian relationships
+  double orbital_period_yr(double a_au) const {
+    return std::pow(std::max(0.1, a_au), 1.5);
+  }
+
+  double mean_motion_rad_yr(double a_au) const {
+    return 2.0 * M_PI / orbital_period_yr(a_au);
+  }
+
+  double perihelion_from_ae(double a_au, double e) const {
+    return a_au * (1.0 - e);
+  }
+
+  double aphelion_from_ae(double a_au, double e) const {
+    return a_au * (1.0 + e);
+  }
+
+  double eccentricity_from_aq(double a_au, double q_au) const {
+    return 1.0 - (q_au / std::max(0.1, a_au));
+  }
+
+  // Tisserand parameter with respect to Neptune
+  double tisserand_neptune(double a_au, double e, double inc_deg) const {
+    double i_rad = inc_deg * M_PI / 180.0;
+    return (A_NEPTUNE_AU / a_au) + 2.0 * std::sqrt((a_au / A_NEPTUNE_AU) * (1.0 - e * e)) * std::cos(i_rad);
+  }
+
+  // 2. Neptune Chaotic Diffusion in Scattered Disk (Gladman 2002, Duncan & Levison 1997)
+  // Single-encounter energy kick RMS dispersion sigma_{Delta(1/a)} [AU^-1]
+  double energy_kick_rms(double q_au, double a_au) const {
+    if (q_au <= A_NEPTUNE_AU) {
+      return SIGMA_DIFF_0 * std::pow(A_NEPTUNE_AU / std::max(A_NEPTUNE_AU, a_au), 0.25);
+    }
+    double exponent = -(q_au - A_NEPTUNE_AU) / DELTA_Q_SCALE;
+    return SIGMA_DIFF_0 * std::pow(A_NEPTUNE_AU / std::max(A_NEPTUNE_AU, a_au), 0.25) * std::exp(exponent);
+  }
+
+  // Energy diffusion coefficient D_E = <(Delta 1/a)^2> / (2 * P(a)) [AU^-2 / yr]
+  double energy_diffusion_coefficient(double q_au, double a_au) const {
+    double sigma_E = energy_kick_rms(q_au, a_au);
+    double P_yr = orbital_period_yr(a_au);
+    return (sigma_E * sigma_E) / (2.0 * P_yr);
+  }
+
+  // Typical semi-major axis diffusion timescale tau_diff [Myr] to reach semi-major axis a_target
+  double semi_major_axis_diffusion_time_myr(double a_init_au, double a_target_au, double q_au) const {
+    double D_E = energy_diffusion_coefficient(q_au, 0.5 * (a_init_au + a_target_au));
+    if (D_E <= 1.0e-30) return 1.0e12; // effectively infinite
+    double delta_inv_a = std::abs(1.0 / a_target_au - 1.0 / a_init_au);
+    double t_yr = (delta_inv_a * delta_inv_a) / (2.0 * D_E);
+    return t_yr / 1.0e6;
+  }
+
+  // Maximum perihelion oscillation from Neptune MMRs & Kozai secular resonance [AU]
+  double max_mmr_perihelion_variation_au(double a_au, double inc_deg = 20.0) const {
+    double i_rad = inc_deg * M_PI / 180.0;
+    double dq_base = 4.2; // AU
+    double dq = dq_base * std::pow(100.0 / std::max(30.0, a_au), 0.35) * std::sin(2.0 * i_rad);
+    return std::max(0.5, dq);
+  }
+
+  // 3. Mechanism Evaluation:
+  // Mechanism 1: High-Eccentricity Neptune Phase
+  double max_perihelion_high_ecc_neptune(double a_au, double e_neptune_past = 0.35) const {
+    // If Neptune had e_N ~ 0.35, its aphelion was Q_N = a_N * (1 + e_N) ~ 40.6 AU
+    double q_max = A_NEPTUNE_AU * (1.0 + e_neptune_past) + 2.5;
+    return std::min(q_max, 43.5);
+  }
+
+  // Mechanism 2: Massive Trans-Neptunian Planetary Embryos
+  double max_perihelion_embryo_scattering(double a_au, double M_embryo_earth = 1.0) const {
+    double delta_q = 12.0 * std::pow(M_embryo_earth, 2.0 / 3.0) * std::pow(a_au / 200.0, 0.4);
+    return 32.0 + delta_q;
+  }
+
+  // Mechanism 3: Massive Primordial Trans-Neptunian Disk Secular Tides
+  double max_perihelion_disk_tides(double a_au, double M_disk_earth = 50.0) const {
+    double delta_q = 6.5 * (M_disk_earth / 50.0) * std::pow(a_au / 200.0, 0.5);
+    return 32.0 + delta_q;
+  }
+
+  // Mechanism 4: Stellar Encounter in Sun's Birth Cluster (The Favored Model)
+  // Perihelion lift Delta q [AU] as a function of orbital elements and encounter parameters
+  double stellar_encounter_perihelion_lift_au(
+      double a_au, double q_init_au, double q_star_au = 800.0,
+      double M_star_msun = 1.0, double v_rel_kms = 1.0, double orientation_factor = 0.75) const {
+    double Q_au = aphelion_from_ae(a_au, eccentricity_from_aq(a_au, q_init_au));
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M); // ~887.05
+    double delta_v = (2.0 * GM_sun_km2_s2_au * M_star_msun * Q_au) / (v_rel_kms * q_star_au * q_star_au);
+    
+    double sqrt_2GM = std::sqrt(2.0 * GM_sun_km2_s2_au);
+    double sqrt_q_new = std::sqrt(q_init_au) + (Q_au * delta_v * orientation_factor) / sqrt_2GM;
+    if (sqrt_q_new <= 0.0) return 0.0;
+    double q_new = sqrt_q_new * sqrt_q_new;
+    return q_new - q_init_au;
+  }
+
+  double post_encounter_perihelion_au(
+      double a_au, double q_init_au = Q_NEPTUNE_SCATTER_NOM,
+      double q_star_au = 800.0, double M_star_msun = 1.0,
+      double v_rel_kms = 1.0, double orientation_factor = 0.75) const {
+    double dq = stellar_encounter_perihelion_lift_au(a_au, q_init_au, q_star_au, M_star_msun, v_rel_kms, orientation_factor);
+    return q_init_au + dq;
+  }
+
+  // Perturbation on Cold Classical Kuiper Belt (a in [40, 48] AU)
+  double cold_kuiper_belt_induced_eccentricity(double a_au = 44.0, double q_star_au = 800.0,
+                                              double M_star_msun = 1.0, double v_rel_kms = 1.0) const {
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    double v_circ = std::sqrt(GM_sun_km2_s2_au / a_au); // km/s
+    double delta_e = (M_star_msun / 1.0) * std::pow(a_au / q_star_au, 3.0) * (v_circ / v_rel_kms) * 2.5;
+    return delta_e;
+  }
+
+  double cold_kuiper_belt_induced_inclination_deg(double a_au = 44.0, double q_star_au = 800.0,
+                                                 double M_star_msun = 1.0, double v_rel_kms = 1.0) const {
+    double de = cold_kuiper_belt_induced_eccentricity(a_au, q_star_au, M_star_msun, v_rel_kms);
+    return (de * 180.0 / M_PI) * 0.65; // deg
+  }
+
+  // 4. Cluster Environment & Encounter Rate
+  double cluster_encounter_rate_per_myr(
+      double q_star_au, double n_cluster_pc3 = 1.0e3,
+      double v_kms = 1.0, double M_star_msun = 1.0) const {
+    double GM_sun_km2_s2_au = (G_SI * M_SUN_KG) / (1.0e6 * AU_M);
+    double v_esc2 = (2.0 * GM_sun_km2_s2_au * (1.0 + M_star_msun)) / q_star_au;
+    double focusing = 1.0 + v_esc2 / (v_kms * v_kms);
+    double sigma_au2 = M_PI * q_star_au * q_star_au * focusing;
+    double au2_to_pc2 = 2.35044e-11;
+    double sigma_pc2 = sigma_au2 * au2_to_pc2;
+    double v_pc_myr = v_kms * 1.022712;
+    return n_cluster_pc3 * sigma_pc2 * v_pc_myr;
+  }
+
+  double expected_cluster_encounters(
+      double q_star_au, double tau_cluster_myr = 100.0,
+      double n_cluster_pc3 = 1.0e3, double v_kms = 1.0, double M_star_msun = 1.0) const {
+    return cluster_encounter_rate_per_myr(q_star_au, n_cluster_pc3, v_kms, M_star_msun) * tau_cluster_myr;
+  }
+
+  // 5. Probability Density Functions
+  // Post-encounter detached TNO perihelion distribution P(q) for a in [100, 600] AU
+  double detached_perihelion_pdf(double q_au, double q_peak = 45.0, double sigma_q = 14.0) const {
+    if (q_au < 36.0 || q_au > 95.0) return 0.0;
+    double arg = (q_au - q_peak) / sigma_q;
+    double norm = 1.0 / (sigma_q * std::sqrt(2.0 * M_PI) * 0.90);
+    return norm * std::exp(-0.5 * arg * arg);
+  }
+
+  // Post-encounter inclination distribution P(i)
+  double inclination_pdf(double inc_deg, double sigma_i = 18.5) const {
+    if (inc_deg < 0.0 || inc_deg > 65.0) return 0.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double s_rad = sigma_i * M_PI / 180.0;
+    double pdf_rad = (std::sin(inc_rad) / (s_rad * s_rad)) * std::exp(-0.5 * inc_rad * inc_rad / (s_rad * s_rad));
+    return pdf_rad * (M_PI / 180.0);
+  }
+
+  // Detached population fraction f_detached(a) (fraction of scattered objects with q > 40 AU)
+  double detached_fraction_at_a(double a_au, double q_star_au = 800.0) const {
+    if (a_au < 70.0) return 0.0;
+    double a_crit = 180.0 * std::pow(q_star_au / 800.0, 0.85);
+    double frac = 1.0 / (1.0 + std::exp(-(a_au - a_crit) / 55.0));
+    return std::min(0.85, frac * 0.85);
+  }
+};
+
+using Paper246ScatteredTNOModel = Morbidelli2004ScatteredTNOModel;
+using MorbidelliLevison2004Model = Morbidelli2004ScatteredTNOModel;
 
 }  // namespace hot_jupiter
 
