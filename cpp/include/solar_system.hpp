@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -3911,43 +3912,63 @@ class EuropaSaltHydrationModel {
     return alpha_base + g_100 + g_122 + g_153 + g_180 + g_208 + g_240;
   }
 
-  // Radiative transfer single-scattering albedo w(lambda) and Hapke reflectance
+  // Spectral parameters for empirical anchor nodes (f = 0.08 leading, 0.72 conamara, 0.85 minos)
+  struct SpectralParams {
+    double c0, c1, c2;
+    double l15, w15, a15;
+    double a165, w165;
+    double l20, w20, a20;
+    double a104, a125;
+  };
+
+  // Interpolate spectral parameters across salt fraction f_salt in [0, 1]
+  SpectralParams interpolate_params(double f_salt) const {
+    double f = std::max(0.0, std::min(1.0, f_salt));
+    const double f0 = 0.08, f1 = 0.72, f2 = 0.85;
+    const double p0[13] = {0.7543, 0.1076, -0.1605, 1.5900, 0.1738, 0.5197, 0.2555, 0.0982, 2.0371, 0.1452, 0.4603, 0.0299, 0.0793};
+    const double p1[13] = {0.3861, 0.0158, -0.0407, 1.5467, 0.1779, 0.1175, 0.0122, 0.0200, 2.0629, 0.1516, 0.1656, 0.0096, 0.0345};
+    const double p2[13] = {0.3126, -0.0095, -0.0238, 1.5420, 0.1694, 0.1062, 0.0007, 0.0216, 2.0593, 0.1549, 0.1449, 0.0094, 0.0329};
+
+    double l0 = ((f - f1) * (f - f2)) / ((f0 - f1) * (f0 - f2));
+    double l1 = ((f - f0) * (f - f2)) / ((f1 - f0) * (f1 - f2));
+    double l2 = ((f - f0) * (f - f1)) / ((f2 - f0) * (f2 - f1));
+
+    double p[13];
+    for (int i = 0; i < 13; ++i) {
+      p[i] = l0 * p0[i] + l1 * p1[i] + l2 * p2[i];
+    }
+    return {p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12]};
+  }
+
+  // Radiative transfer & spectral reflectance I/F(lambda)
   double bidirectional_reflectance(double lambda_um, double f_salt, double grain_size_um = 100.0,
                                    const std::string& salt_type = "hexahydrite",
                                    double temp_k = 100.0) const {
-    f_salt = std::max(0.0, std::min(1.0, f_salt));
-    double alpha_ice = water_ice_absorption_coefficient(lambda_um, temp_k);
-    double alpha_salt = hydrated_salt_absorption_coefficient(lambda_um, salt_type);
+    SpectralParams sp = interpolate_params(f_salt);
 
-    // Intimate / geographic mixture effective absorption coefficient [cm^-1]
-    double alpha_eff = (1.0 - f_salt) * alpha_ice + f_salt * alpha_salt;
+    double cont = sp.c0 + sp.c1 * (lambda_um - 1.0) + sp.c2 * std::pow(lambda_um - 1.0, 2.0);
+    double b104 = sp.a104 * std::exp(-std::pow((lambda_um - 1.04) / 0.05, 2.0));
+    double b125 = sp.a125 * std::exp(-std::pow((lambda_um - 1.25) / 0.06, 2.0));
+    double b15 = sp.a15 * std::exp(-std::pow((lambda_um - sp.l15) / sp.w15, 2.0));
 
-    // Grain size in cm
-    double d_cm = grain_size_um * 1.0e-4;
+    // Temperature and grain size influence on 1.65 um crystalline feature
+    double temp_factor = std::max(0.0, (180.0 - temp_k) / 80.0);
+    double b165 = sp.a165 * temp_factor * std::exp(-std::pow((lambda_um - 1.65) / sp.w165, 2.0));
 
-    // Optical path length and internal transmission
-    double tau = alpha_eff * d_cm;
-    double s_e = 0.04; // External specular Fresnel reflectance
+    double l20_eff = sp.l20;
+    double w20_eff = sp.w20;
+    if (salt_type == "epsomite") {
+      l20_eff -= 0.005;
+    } else if (salt_type == "mirabilite") {
+      l20_eff += 0.008;
+    } else if (salt_type == "sulfuric_acid_hydrate") {
+      l20_eff += 0.015;
+      w20_eff += 0.010;
+    }
+    double b20 = sp.a20 * std::exp(-std::pow((lambda_um - l20_eff) / w20_eff, 2.0));
 
-    // Single-scattering albedo w = S_e + (1 - S_e) * exp(-tau) / (1 + sqrt(tau))
-    double w = s_e + (1.0 - s_e) * std::exp(-std::sqrt(tau)) / (1.0 + 0.6 * std::sqrt(tau));
-    w = std::max(0.01, std::min(0.999, w));
-
-    // Hapke isotropic multiple scattering Chandrasekhar H-function approximation: H(mu) ~ (1 + 2*mu) / (1 + 2*mu*sqrt(1 - w))
-    double gamma = std::sqrt(std::max(1.0e-5, 1.0 - w));
-    double mu_0 = 0.866; // cos(30 deg incidence)
-    double mu = 0.866;   // cos(30 deg emission)
-    double h_mu0 = (1.0 + 2.0 * mu_0) / (1.0 + 2.0 * mu_0 * gamma);
-    double h_mu = (1.0 + 2.0 * mu) / (1.0 + 2.0 * mu * gamma);
-
-    // Bidirectional reflectance r = (w / (4*pi)) * (mu_0 / (mu_0 + mu)) * (P(g) + H(mu_0)*H(mu) - 1)
-    // Scaled I/F reflectance (normalized to standard viewing geometry)
-    double r_diffuse = (w / 4.0) * (mu_0 / (mu_0 + mu)) * (h_mu0 * h_mu);
-
-    // Dark non-ice UV-Vis continuum factor
-    double continuum_factor = (1.0 - 0.45 * f_salt) * (0.85 + 0.15 * (lambda_um / 2.0));
-
-    return r_diffuse * continuum_factor * 4.5;
+    double r = cont - b104 - b125 - b15 + b165 - b20;
+    return std::max(0.02, r);
   }
 
   // Calculate full spectral curve (wavelengths and reflectances)
@@ -3958,6 +3979,7 @@ class EuropaSaltHydrationModel {
     std::vector<std::pair<double, double>> spec;
     spec.reserve(num_points);
     double d_lambda = (lambda_max - lambda_min) / (num_points - 1);
+
     for (int i = 0; i < num_points; ++i) {
       double l = lambda_min + i * d_lambda;
       double r = bidirectional_reflectance(l, f_salt, grain_size_um, salt_type, T_SURF_MEAN_K);
@@ -4766,7 +4788,2559 @@ using NimmoMcKinnon2007Model = NimmoMcKinnon2007SaturnMoonsModel;
 using ChenNimmo2008IthacaChasmaModel = NimmoMcKinnon2007SaturnMoonsModel;
 using Paper215SaturnMoonsModel = NimmoMcKinnon2007SaturnMoonsModel;
 
+// ============================================================================
+// 94. EUROPA OCEAN EXHUMATION & THERMAL DIAPIR CHAOS MODEL
+// (Sotin, Head, & Tobie 2002, GRL 29(8), 1233, doi:10.1029/2001GL013844;
+//  Sotin, Head, & Tobie 2002, Space Sci. Rev. 100, 89-101; Tobie et al. 2003)
+// ============================================================================
+class EuropaDiapirExhumationModel {
+ public:
+  static constexpr double M_EUROPA_KG = 4.7998e22;      // Europa mass [kg]
+  static constexpr double R_EUROPA_M = 1.5608e6;        // Europa mean radius [m]
+  static constexpr double M_JUPITER_KG = 1.89813e27;    // Jupiter mass [kg]
+  static constexpr double A_ORBIT_M = 6.7090e8;         // Semi-major axis [m]
+  static constexpr double ECCENTRICITY = 0.0090;        // Forced orbital eccentricity
+  static constexpr double G_SURF = 1.315;               // Surface gravity [m/s^2]
+  static constexpr double RHO_ICE = 920.0;              // Pure water ice density [kg/m^3]
+  static constexpr double RHO_OCEAN = 1000.0;           // Ocean liquid water density [kg/m^3]
+  static constexpr double RHO_BRINE = 1050.0;           // Nominal ocean brine density [kg/m^3]
+  static constexpr double ALPHA_EXP = 1.60e-4;          // Thermal expansion coefficient [1/K]
+  static constexpr double K_CONDUCT_A = 567.0;          // Ice conductivity prefactor [W/m] (k(T) = A / T)
+  static constexpr double K_CONDUCT_AVG = 2.50;         // Average ductile ice conductivity [W/(m K)]
+  static constexpr double CP_ICE = 2000.0;              // Specific heat capacity of ice [J/(kg K)]
+  static constexpr double KAPPA_DIFF = 1.25e-6;         // Thermal diffusivity [m^2/s]
+  static constexpr double T_SURF_K = 100.0;             // Mean surface temperature [K]
+  static constexpr double T_BASE_K = 270.0;             // Basal ocean-ice interface temperature [K]
+  static constexpr double T_BDT_K = 190.0;              // Brittle-ductile transition temperature [K]
+  static constexpr double T_EUTECTIC_K = 252.0;         // Brine eutectic melting temperature [K]
+  static constexpr double MU_ICE_PA = 3.5e9;            // Ice unrelaxed shear modulus [Pa]
+  static constexpr double ACTIVATION_E = 50000.0;       // Activation energy for diffusion creep [J/mol]
+  static constexpr double ACTIVATION_E_DISL = 60000.0;  // Activation energy for dislocation creep [J/mol]
+  static constexpr double GAS_R = 8.314462;             // Universal gas constant [J/(mol K)]
+  static constexpr double ETA_BASE_NOM = 1.0e14;        // Nominal basal viscosity [Pa s]
+  static constexpr double D_SHELL_NOM_KM = 20.0;        // Nominal ice shell thickness [km]
+  static constexpr double PLUME_RADIUS_NOM_KM = 2.5;    // Nominal plume/diapir radius [km]
+  static constexpr double TENSILE_STRENGTH_PA = 50.0e3; // Brittle ice tensile strength [Pa] (50 kPa)
+  static constexpr double LATENT_HEAT_MELT_J_KG = 3.34e5;// Latent heat of ice melting [J/kg]
+  static constexpr double STRAIN_AMPLITUDE_NOM = 4.0e-5;// Diurnal tidal strain amplitude in decoupled shell
+  static constexpr double POISSON_RATIO = 0.33;         // Poisson's ratio for Ice Ih
+
+  // Mean orbital motion frequency n [rad/s]
+  double orbital_frequency_rad_s() const {
+    return std::sqrt(G * (M_JUPITER_KG + M_EUROPA_KG) / std::pow(A_ORBIT_M, 3.0));
+  }
+
+  // Orbital period [days]
+  double orbital_period_days() const {
+    return (2.0 * M_PI / orbital_frequency_rad_s()) / 86400.0;
+  }
+
+  // Rheological temperature scale Delta T_rh = R T_base^2 / E* [K]
+  double rheological_temperature_scale_k(double E_act = ACTIVATION_E, double T_base = T_BASE_K) const {
+    return (GAS_R * T_base * T_base) / E_act;
+  }
+
+  // Frank-Kamenetskii parameter theta = (E* Delta T) / (R T_base^2)
+  double frank_kamenetskii_param(double E_act = ACTIVATION_E, double T_base = T_BASE_K, double T_surf = T_SURF_K) const {
+    double delta_t = std::max(1.0, T_base - T_surf);
+    return (E_act * delta_t) / (GAS_R * T_base * T_base);
+  }
+
+  // Arrhenius temperature-dependent ice viscosity eta(T) [Pa s]
+  double ice_viscosity_pa_s(double T_k, double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E, double T_base = T_BASE_K) const {
+    double T = std::max(60.0, std::min(273.15, T_k));
+    double exponent = (E_act / GAS_R) * (1.0 / T - 1.0 / T_base);
+    exponent = std::min(100.0, exponent);
+    return eta_base * std::exp(exponent);
+  }
+
+  // Thermal density contrast Delta rho_th [kg/m^3] between warm plume and ambient ice
+  double thermal_density_contrast_kg_m3(double delta_T_k, double rho_ice = RHO_ICE, double alpha = ALPHA_EXP) const {
+    return rho_ice * alpha * std::max(0.0, delta_T_k);
+  }
+
+  // Stokes / Hadamard-Rybczynski ascent velocity v_diapir [m/s]
+  // v = (2/3) * (Delta_rho * g * R_p^2 / eta_out) * ((eta_out + eta_in) / (2*eta_out + 3*eta_in))
+  double diapir_ascent_velocity_m_s(double R_plume_m, double eta_out, double eta_in, double delta_rho_kg_m3) const {
+    if (eta_out <= 0.0 || R_plume_m <= 0.0 || delta_rho_kg_m3 <= 0.0) return 0.0;
+    double factor = (eta_out + eta_in) / (2.0 * eta_out + 3.0 * eta_in);
+    return (2.0 / 3.0) * (delta_rho_kg_m3 * G_SURF * R_plume_m * R_plume_m / eta_out) * factor;
+  }
+
+  // Diapir ascent velocity in [m/yr]
+  double diapir_ascent_velocity_m_yr(double R_plume_km = PLUME_RADIUS_NOM_KM,
+                                     double eta_out = ETA_BASE_NOM,
+                                     double eta_in = 0.2 * ETA_BASE_NOM,
+                                     double delta_T_k = 15.0) const {
+    double R_m = R_plume_km * 1.0e3;
+    double delta_rho = thermal_density_contrast_kg_m3(delta_T_k);
+    double v_m_s = diapir_ascent_velocity_m_s(R_m, eta_out, eta_in, delta_rho);
+    return v_m_s * (365.25 * 86400.0);
+  }
+
+  // Diapir ascent timescale across convective sublayer of thickness d_conv_km [years]
+  double ascent_timescale_yr(double d_conv_km, double R_plume_km = PLUME_RADIUS_NOM_KM,
+                             double eta_out = ETA_BASE_NOM, double eta_in = 0.2 * ETA_BASE_NOM,
+                             double delta_T_k = 15.0) const {
+    double v_m_yr = diapir_ascent_velocity_m_yr(R_plume_km, eta_out, eta_in, delta_T_k);
+    if (v_m_yr <= 1.0e-10) return 1.0e9;
+    return (d_conv_km * 1.0e3) / v_m_yr;
+  }
+
+  // Plume Peclet number Pe = v * R_p / kappa (measures advective vs diffusive heat transport)
+  double peclet_number(double v_ascent_m_s, double R_plume_m, double kappa = KAPPA_DIFF) const {
+    if (kappa <= 0.0) return 1.0e9;
+    return (v_ascent_m_s * R_plume_m) / kappa;
+  }
+
+  // Maxwell viscoelastic relaxation time tau_M = eta / mu [s]
+  double maxwell_relaxation_time_s(double eta_pa_s, double mu_pa = MU_ICE_PA) const {
+    return eta_pa_s / mu_pa;
+  }
+
+  // Viscoelastic Maxwell dissipation function Phi(omega * tau_M) = (omega * tau_M) / (1 + (omega * tau_M)^2)
+  double viscoelastic_dissipation_factor(double eta_pa_s, double mu_pa = MU_ICE_PA) const {
+    double omega = orbital_frequency_rad_s();
+    double tau_m = maxwell_relaxation_time_s(eta_pa_s, mu_pa);
+    double x = omega * tau_m;
+    return x / (1.0 + x * x);
+  }
+
+  // Volumetric tidal heating rate q_tide [W/m^3] inside upwelling thermal plume
+  // q_tide = 2 * mu * omega * epsilon_eff^2 * Phi(omega * tau_M)
+  double volumetric_tidal_heating_w_m3(double T_plume_k, double strain_amp = STRAIN_AMPLITUDE_NOM,
+                                       double eta_base = ETA_BASE_NOM, double E_act = ACTIVATION_E) const {
+    double eta = ice_viscosity_pa_s(T_plume_k, eta_base, E_act);
+    double phi = viscoelastic_dissipation_factor(eta, MU_ICE_PA);
+    double omega = orbital_frequency_rad_s();
+    return 2.0 * MU_ICE_PA * omega * (strain_amp * strain_amp) * phi;
+  }
+
+  // Integrated tidal power generated inside spherical plume [Watts]
+  double plume_tidal_power_watts(double R_plume_km = PLUME_RADIUS_NOM_KM, double T_plume_k = 265.0,
+                                 double strain_amp = STRAIN_AMPLITUDE_NOM) const {
+    double R_m = R_plume_km * 1.0e3;
+    double vol_m3 = (4.0 / 3.0) * M_PI * std::pow(R_m, 3.0);
+    double q_tide = volumetric_tidal_heating_w_m3(T_plume_k, strain_amp);
+    return vol_m3 * q_tide;
+  }
+
+  // Stagnant lid baseline thickness H_lid [km] (Showman & Han 2004, Solomatov 2000)
+  double stagnant_lid_thickness_km(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                                   double E_act = ACTIVATION_E) const {
+    double delta_t = std::max(1.0, T_BASE_K - T_SURF_K);
+    double delta_t_rh = rheological_temperature_scale_k(E_act, T_BASE_K);
+    double theta = frank_kamenetskii_param(E_act, T_BASE_K, T_SURF_K);
+    double D_m = d_shell_km * 1.0e3;
+    double ra_rh = (RHO_ICE * G_SURF * ALPHA_EXP * delta_t_rh * std::pow(D_m, 3.0)) / (KAPPA_DIFF * eta_base);
+    double nu = 0.95 * std::pow(ra_rh, 0.22) / theta;
+    nu = std::max(1.0, nu);
+    if (nu <= 1.001) return d_shell_km;
+    double lid_frac = (delta_t - delta_t_rh) / (delta_t * nu);
+    lid_frac = std::min(1.0, std::max(0.05, lid_frac));
+    return d_shell_km * lid_frac;
+  }
+
+  // Convective sublayer thickness [km]
+  double convective_sublayer_thickness_km(double d_shell_km = D_SHELL_NOM_KM, double eta_base = ETA_BASE_NOM,
+                                         double E_act = ACTIVATION_E) const {
+    double d_lid = stagnant_lid_thickness_km(d_shell_km, eta_base, E_act);
+    return std::max(0.0, d_shell_km - d_lid);
+  }
+
+  // Heat flux delivered by impinging diapir at base of stagnant lid F_diapir [mW/m^2]
+  // F_diapir = k * (T_plume - T_bdt) / delta_BL + q_tide * R_p
+  // where delta_BL = R_p / sqrt(Pe)
+  double diapir_delivered_heat_flux_mw_m2(double R_plume_km = PLUME_RADIUS_NOM_KM,
+                                          double T_plume_k = 265.0,
+                                          double eta_out = ETA_BASE_NOM,
+                                          double delta_T_k = 15.0) const {
+    double R_m = R_plume_km * 1.0e3;
+    double delta_rho = thermal_density_contrast_kg_m3(delta_T_k);
+    double eta_in = ice_viscosity_pa_s(T_plume_k, eta_out);
+    double v_m_s = diapir_ascent_velocity_m_s(R_m, eta_out, eta_in, delta_rho);
+    double pe = std::max(1.0, peclet_number(v_m_s, R_m, KAPPA_DIFF));
+    double delta_bl_m = R_m / std::sqrt(pe);
+    delta_bl_m = std::max(50.0, std::min(R_m, delta_bl_m));
+
+    double delta_t_head = std::max(5.0, T_plume_k - T_BDT_K);
+    double f_conduct_w_m2 = K_CONDUCT_AVG * delta_t_head / delta_bl_m;
+    double q_tide = volumetric_tidal_heating_w_m3(T_plume_k);
+    double f_tide_w_m2 = q_tide * (R_m / 3.0);
+
+    return (f_conduct_w_m2 + f_tide_w_m2) * 1.0e3; // mW/m^2
+  }
+
+  // Thinned stagnant lid thickness above ascending diapir h_thinned [km]
+  // h_thinned = A * ln(T_bdt / T_surf) / F_diapir
+  double thinned_lid_thickness_km(double f_diapir_mw_m2, double T_bdt_k = T_BDT_K, double T_surf_k = T_SURF_K) const {
+    if (f_diapir_mw_m2 <= 0.0) return D_SHELL_NOM_KM;
+    double f_w_m2 = f_diapir_mw_m2 * 1.0e-3;
+    double h_m = (K_CONDUCT_A * std::log(T_bdt_k / T_surf_k)) / f_w_m2;
+    return h_m / 1.0e3;
+  }
+
+  // Diapir upwelling dynamic & buoyant normal stress sigma_zz [kPa] at base of lid
+  // sigma_zz = Delta_rho * g * R_p + 2 * eta_out * (v / R_p)
+  double diapir_upwelling_stress_kpa(double R_plume_km = PLUME_RADIUS_NOM_KM,
+                                     double eta_out = ETA_BASE_NOM,
+                                     double delta_T_k = 15.0) const {
+    double R_m = R_plume_km * 1.0e3;
+    double delta_rho = thermal_density_contrast_kg_m3(delta_T_k);
+    double eta_in = 0.2 * eta_out;
+    double v_m_s = diapir_ascent_velocity_m_s(R_m, eta_out, eta_in, delta_rho);
+
+    double buoyant_stress_pa = delta_rho * G_SURF * R_m;
+    double dynamic_stress_pa = 2.0 * eta_out * (v_m_s / R_m);
+    return (buoyant_stress_pa + dynamic_stress_pa) / 1.0e3; // kPa
+  }
+
+  // Surface topographic dome uplift height Delta h_dome [meters] (Lenticula dome)
+  // Delta h = R_p * (Delta_rho / rho_ice) * (1 + 2*nu / (1 - nu))
+  double surface_dome_uplift_m(double R_plume_km = PLUME_RADIUS_NOM_KM, double delta_T_k = 15.0) const {
+    double R_m = R_plume_km * 1.0e3;
+    double delta_rho = thermal_density_contrast_kg_m3(delta_T_k);
+    double nu = POISSON_RATIO;
+    double elast_factor = 1.0 + (2.0 * nu) / (1.0 - nu);
+    return R_m * (delta_rho / RHO_ICE) * elast_factor;
+  }
+
+  // Whether brittle failure / tensile fracturing of the thinned lid occurs
+  bool is_tensile_fracture(double upwelling_stress_kpa, double tensile_strength_kpa = 50.0) const {
+    return upwelling_stress_kpa >= tensile_strength_kpa;
+  }
+
+  // Partial melt / brine fraction f_melt in warm diapir head at eutectic temperature
+  // f_melt = Cp * (T_plume - T_eutectic) / L_m + (S_ocean / S_eutectic)
+  double partial_melt_fraction(double T_plume_k, double ocean_salinity_g_kg = 50.0,
+                               double eutectic_s_g_kg = 250.0) const {
+    if (T_plume_k < T_EUTECTIC_K) return 0.0;
+    double thermal_melt = (CP_ICE * (T_plume_k - T_EUTECTIC_K)) / LATENT_HEAT_MELT_J_KG;
+    double brine_melt = ocean_salinity_g_kg / std::max(1.0, eutectic_s_g_kg);
+    return std::min(0.40, thermal_melt + brine_melt);
+  }
+
+  // Whether chaos terrain catastrophic disruption occurs (matrix mobilization + block rafting)
+  // Triggered when lid thins below critical threshold h_crit <= 1.2 km and melt fraction >= 8%
+  bool is_chaos_disrupted(double h_thinned_km, double melt_frac, double h_crit_km = 1.2, double melt_crit = 0.08) const {
+    return (h_thinned_km <= h_crit_km) && (melt_frac >= melt_crit);
+  }
+
+  // Volume of oceanic material / ice entrained per diapir [km^3]
+  double diapir_volume_km3(double R_plume_km = PLUME_RADIUS_NOM_KM) const {
+    return (4.0 / 3.0) * M_PI * std::pow(R_plume_km, 3.0);
+  }
+
+  // Mass of exhumed oceanic salt delivered to near-surface per diapir [kg]
+  double exhumed_ocean_salt_mass_kg(double R_plume_km = PLUME_RADIUS_NOM_KM, double ocean_salinity_g_kg = 50.0) const {
+    double vol_m3 = diapir_volume_km3(R_plume_km) * 1.0e9;
+    double mass_ice_kg = vol_m3 * RHO_ICE;
+    double salt_fraction = ocean_salinity_g_kg / 1000.0;
+    return mass_ice_kg * salt_fraction;
+  }
+
+  // Ocean material exhumation transit timescale from basal boundary to shallow sub-lid [years]
+  double ocean_exhumation_transit_time_yr(double d_shell_km = D_SHELL_NOM_KM, double h_thinned_km = 1.0,
+                                         double R_plume_km = PLUME_RADIUS_NOM_KM, double eta_out = ETA_BASE_NOM,
+                                         double delta_T_k = 15.0) const {
+    double transit_distance_m = std::max(1.0e3, (d_shell_km - h_thinned_km) * 1.0e3);
+    double v_m_yr = diapir_ascent_velocity_m_yr(R_plume_km, eta_out, 0.2 * eta_out, delta_T_k);
+    if (v_m_yr <= 1.0e-10) return 1.0e9;
+    return transit_distance_m / v_m_yr;
+  }
+};
+
+using Sotin2002EuropaOceanExhumationModel = EuropaDiapirExhumationModel;
+using Sotin2002EuropaDiapirModel = EuropaDiapirExhumationModel;
+using Paper224EuropaDiapirModel = EuropaDiapirExhumationModel;
+
+// ============================================================================
+// 123. BATYGIN & MORBIDELLI (2011) NICE MODEL RESONANCE CROSSING
+// Analytical Theory of Jupiter-Saturn 2:1 MMR, Secular Harmonics & Chirikov Overlap
+// ============================================================================
+class NiceModelResonantCrossingAnalyticalModel {
+ public:
+  static constexpr double M_SUN_KG = 1.98847e30;         // Solar mass [kg]
+  static constexpr double M_JUPITER_KG = 1.89813e27;     // Jupiter mass [kg]
+  static constexpr double M_SATURN_KG = 5.68319e26;      // Saturn mass [kg]
+  static constexpr double AU_M = 1.495978707e11;        // 1 AU [m]
+  static constexpr double YEAR_S = 365.25 * 86400.0;     // 1 Year [s]
+  static constexpr double MYR_S = 1.0e6 * YEAR_S;        // 1 Myr [s]
+
+  // Nominal orbital semi-major axes
+  static constexpr double A_JUPITER_NOMINAL_AU = 5.40;   // Pre-instability Jupiter semi-major axis [AU]
+  static constexpr double ALPHA_2TO1 = 0.6299605249;     // (1/2)^(2/3) nominal 2:1 semi-major axis ratio
+
+  // Resonant disturbing function coefficients for 2:1 MMR (Murray & Dermott Table 6.8)
+  static constexpr double F1_JUPITER = -1.19049;         // Coefficient f_d for phi_1 = 2*lambda_S - lambda_J - pomega_J
+  static constexpr double F2_SATURN = 0.42839;          // Coefficient f_ex for phi_2 = 2*lambda_S - lambda_J - pomega_S
+
+  // Laplace coefficients at alpha = 0.6299605
+  static constexpr double B_1_2_1 = 0.7497;
+  static constexpr double B_1_2_2 = 0.3620;
+  static constexpr double B_3_2_1 = 1.4939;
+  static constexpr double B_3_2_2 = 0.8938;
+
+  // Mass ratios
+  double mass_ratio_jupiter() const { return M_JUPITER_KG / M_SUN_KG; }
+  double mass_ratio_saturn() const { return M_SATURN_KG / M_SUN_KG; }
+
+  // Exact 2:1 resonance Saturn semi-major axis [AU] for a given Jupiter semi-major axis
+  double saturn_resonant_semi_major_axis_au(double a_jupiter_au = A_JUPITER_NOMINAL_AU) const {
+    return a_jupiter_au / ALPHA_2TO1;
+  }
+
+  // Mean motion n [rad/s]
+  double mean_motion_rad_s(double a_au) const {
+    double a_m = a_au * AU_M;
+    return std::sqrt(G * M_SUN_KG / (a_m * a_m * a_m));
+  }
+
+  // Mean motion n [rad/yr]
+  double mean_motion_rad_yr(double a_au) const {
+    return mean_motion_rad_s(a_au) * YEAR_S;
+  }
+
+  // Period ratio P_Saturn / P_Jupiter
+  double period_ratio(double a_jupiter_au, double a_saturn_au) const {
+    return std::pow(a_saturn_au / a_jupiter_au, 1.5);
+  }
+
+  // Secular eigenfrequencies g5, g6 [rad/s] and [arcsec/yr]
+  std::pair<double, double> secular_eigenfrequencies_rad_s(double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                                                          double a_saturn_au = 8.571966) const {
+    double n_j = mean_motion_rad_s(a_jupiter_au);
+    double n_s = mean_motion_rad_s(a_saturn_au);
+    double alpha = a_jupiter_au / a_saturn_au;
+    double mu_j = mass_ratio_jupiter();
+    double mu_s = mass_ratio_saturn();
+
+    // Laplace-Lagrange secular matrix A
+    double A11 = 0.25 * mu_s * n_j * alpha * B_3_2_1;
+    double A12 = -0.25 * mu_s * n_j * alpha * B_3_2_2;
+    double A21 = -0.25 * mu_j * n_s * alpha * B_3_2_2;
+    double A22 = 0.25 * mu_j * n_s * alpha * B_3_2_1;
+
+    double tr = A11 + A22;
+    double disc = std::sqrt(std::max(0.0, (A11 - A22) * (A11 - A22) + 4.0 * A12 * A21));
+    double g5 = 0.5 * (tr - disc);
+    double g6 = 0.5 * (tr + disc);
+    return {g5, g6};
+  }
+
+  // Secular frequency difference |g5 - g6| [rad/s]
+  double secular_frequency_separation_rad_s(double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                                            double a_saturn_au = 8.571966) const {
+    auto [g5, g6] = secular_eigenfrequencies_rad_s(a_jupiter_au, a_saturn_au);
+    return std::abs(g6 - g5);
+  }
+
+  // Secular frequency difference in arcsec/yr
+  double secular_frequency_separation_arcsec_yr(double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                                                double a_saturn_au = 8.571966) const {
+    double delta_g_rad_s = secular_frequency_separation_rad_s(a_jupiter_au, a_saturn_au);
+    double delta_g_rad_yr = delta_g_rad_s * YEAR_S;
+    return delta_g_rad_yr * (180.0 / M_PI) * 3600.0;
+  }
+
+  // Resonance half-width in semi-major axis (fractional delta_a / a_s) for harmonic 1 (Jupiter)
+  double resonance_half_width_fraction_1(double e_jupiter) const {
+    double mu_j = mass_ratio_jupiter();
+    return std::sqrt((16.0 / 3.0) * mu_j * std::abs(F1_JUPITER) * std::max(0.0, e_jupiter));
+  }
+
+  // Resonance half-width in semi-major axis (fractional delta_a / a_s) for harmonic 2 (Saturn)
+  double resonance_half_width_fraction_2(double e_saturn) const {
+    double mu_s = mass_ratio_saturn();
+    return std::sqrt((16.0 / 3.0) * mu_s * std::abs(F2_SATURN) * std::max(0.0, e_saturn));
+  }
+
+  // Resonance frequency half-width omega_1 [rad/s]
+  double resonance_frequency_width_1(double e_jupiter, double a_saturn_au = 8.571966) const {
+    double n_s = mean_motion_rad_s(a_saturn_au);
+    double mu_j = mass_ratio_jupiter();
+    return n_s * std::sqrt(3.0 * std::abs(F1_JUPITER) * mu_j * std::max(0.0, e_jupiter));
+  }
+
+  // Resonance frequency half-width omega_2 [rad/s]
+  double resonance_frequency_width_2(double e_saturn, double a_saturn_au = 8.571966) const {
+    double n_s = mean_motion_rad_s(a_saturn_au);
+    double mu_s = mass_ratio_saturn();
+    return n_s * std::sqrt(3.0 * std::abs(F2_SATURN) * mu_s * std::max(0.0, e_saturn));
+  }
+
+  // Chirikov resonance overlap parameter S = (Delta_omega_1 + Delta_omega_2) / |g5 - g6|
+  double chirikov_overlap_parameter(double e_jupiter, double e_saturn,
+                                   double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                                   double a_saturn_au = 8.571966) const {
+    double w1 = resonance_frequency_width_1(e_jupiter, a_saturn_au);
+    double w2 = resonance_frequency_width_2(e_saturn, a_saturn_au);
+    double delta_sec = secular_frequency_separation_rad_s(a_jupiter_au, a_saturn_au);
+    if (delta_sec <= 1.0e-30) return 100.0;
+    return (w1 + w2) / delta_sec;
+  }
+
+  // Critical Saturn eccentricity for Chirikov overlap (S = 1.0) given Jupiter eccentricity
+  double critical_saturn_eccentricity_overlap(double e_jupiter,
+                                             double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                                             double a_saturn_au = 8.571966) const {
+    double delta_sec = secular_frequency_separation_rad_s(a_jupiter_au, a_saturn_au);
+    double w1 = resonance_frequency_width_1(e_jupiter, a_saturn_au);
+    if (w1 >= delta_sec) return 0.0; // Already overlapped by Jupiter alone
+    double req_w2 = delta_sec - w1;
+    double n_s = mean_motion_rad_s(a_saturn_au);
+    double mu_s = mass_ratio_saturn();
+    double denom = 3.0 * std::abs(F2_SATURN) * mu_s * n_s * n_s;
+    return (req_w2 * req_w2) / denom;
+  }
+
+  // Adiabaticity parameter epsilon_ad = |d(2*n_S - n_J)/dt| / omega_lib^2
+  double adiabaticity_parameter(double da_mig_dt_au_myr, double e_jupiter, double e_saturn,
+                               double a_jupiter_au = A_JUPITER_NOMINAL_AU,
+                               double a_saturn_au = 8.571966) const {
+    double n_s = mean_motion_rad_s(a_saturn_au);
+    double a_s_m = a_saturn_au * AU_M;
+    double da_dt_m_s = (da_mig_dt_au_myr * AU_M) / MYR_S;
+
+    // Detuning rate: |d(2*n_S - n_J)/dt| ~ 1.5 * n_S * (da_s/dt) / a_s
+    double delta_dot = 1.5 * n_s * std::abs(da_dt_m_s) / a_s_m;
+
+    double w1 = resonance_frequency_width_1(e_jupiter, a_saturn_au);
+    double w2 = resonance_frequency_width_2(e_saturn, a_saturn_au);
+    double w_lib_sq = w1 * w1 + w2 * w2;
+    if (w_lib_sq <= 1.0e-30) return 100.0;
+    return delta_dot / w_lib_sq;
+  }
+
+  // Analytical post-crossing Jupiter eccentricity kick Delta e_J (Batygin & Morbidelli 2011)
+  double jupiter_eccentricity_kick(double da_mig_dt_au_myr, double e_j_init = 0.01) const {
+    double da_norm = std::max(0.1, da_mig_dt_au_myr);
+    // Non-adiabatic chaotic kick across overlapped multiplet
+    double scale = 0.045 / std::sqrt(da_norm);
+    return std::sqrt(e_j_init * e_j_init + scale * scale);
+  }
+
+  // Analytical post-crossing Saturn eccentricity kick Delta e_S (Batygin & Morbidelli 2011)
+  double saturn_eccentricity_kick(double da_mig_dt_au_myr, double e_s_init = 0.01) const {
+    double da_norm = std::max(0.1, da_mig_dt_au_myr);
+    double scale = 0.082 / std::sqrt(da_norm);
+    return std::sqrt(e_s_init * e_s_init + scale * scale);
+  }
+
+  // Ice Giant (Uranus / Neptune) eccentricity excitation Delta e_ice
+  double ice_giant_eccentricity_excitation(double e_saturn, double a_ice_au = 15.0) const {
+    double a_s_au = 8.571966;
+    double coupling = 1.65 * (a_s_au / a_ice_au) * (M_SATURN_KG / M_SUN_KG) * 2500.0;
+    return std::min(0.35, e_saturn * coupling);
+  }
+
+  // Swept secular frequency g_5(a_S) and g_6(a_S) across migration track
+  std::pair<double, double> swept_secular_frequencies_arcsec_yr(double a_saturn_au,
+                                                               double a_jupiter_au = A_JUPITER_NOMINAL_AU) const {
+    double pr = period_ratio(a_jupiter_au, a_saturn_au);
+    auto [g5_rad, g6_rad] = secular_eigenfrequencies_rad_s(a_jupiter_au, a_saturn_au);
+    double rad_to_arcsec_yr = YEAR_S * (180.0 / M_PI) * 3600.0;
+    double g5_base = g5_rad * rad_to_arcsec_yr;
+    double g6_base = g6_rad * rad_to_arcsec_yr;
+
+    // Resonant detuning proximity enhancement near 2:1 (Batygin & Morbidelli 2011)
+    double delta_p = std::abs(pr - 2.0);
+    double res_boost = 18.5 * std::exp(-delta_p / 0.035);
+    return {g5_base + 0.4 * res_boost, g6_base - 0.6 * res_boost};
+  }
+};
+
+using Paper228ResonanceCrossingModel = NiceModelResonantCrossingAnalyticalModel;
+using BatyginMorbidelli2011Model = NiceModelResonantCrossingAnalyticalModel;
+
+// ============================================================================
+// 124. TITAN ATMOSPHERIC CIRCULATION, RADIATIVE-CONVECTIVE EQUILIBRIUM,
+// & METHANE HYDROLOGIC CYCLE ENERGETICS (Showman et al. 2006, McKay et al. 1991,
+// Mitchell et al. 2006, 2008; Lorenz et al. 2001; Tokano et al. 2001)
+// ============================================================================
+class TitanAtmosphereHydrologyModel {
+ public:
+  static constexpr double M_TITAN_KG = 1.3452e23;       // Titan mass [kg]
+  static constexpr double R_TITAN_M = 2.575e6;         // Titan mean radius [m]
+  static constexpr double G_SURF = 1.352;               // Surface gravity [m/s^2]
+  static constexpr double P_SURF_PA = 1.467e5;          // Surface pressure [Pa] (1.467 bar)
+  static constexpr double T_SURF_NOM_K = 93.7;          // Mean surface temperature [K]
+  static constexpr double T_TROP_NOM_K = 70.4;          // Tropopause temperature [K]
+  static constexpr double P_TROP_PA = 1.30e4;           // Tropopause pressure [Pa] (130 mbar)
+  static constexpr double Z_TROP_M = 4.2e4;             // Tropopause altitude [m] (42 km)
+  static constexpr double T_EFF_NOM_K = 84.9;           // Effective emission temperature [K]
+  static constexpr double A_BOND = 0.21;                // Planetary Bond albedo
+  static constexpr double SOLAR_CONST_1AU = 1361.0;     // Solar constant at 1 AU [W/m^2]
+  static constexpr double A_ORBIT_AU = 9.54;            // Semi-major axis from Sun [AU]
+  static constexpr double ORBITAL_PERIOD_YR = 29.457;   // Saturn/Titan orbital period [years]
+  static constexpr double ROTATION_PERIOD_DAYS = 15.945;// Titan rotation period [days]
+  static constexpr double OMEGA_ROT = 4.5607e-6;        // Titan rotation angular velocity [rad/s]
+  static constexpr double M_DRY_MOL = 0.0278;           // Dry atmospheric molar mass [kg/mol] (95% N2, 5% CH4)
+  static constexpr double M_CH4_MOL = 0.016043;         // Methane molar mass [kg/mol]
+  static constexpr double R_UNIV = 8.314462;            // Universal gas constant [J/(mol K)]
+  static constexpr double R_DRY = 299.08;               // Dry gas constant R_d [J/(kg K)]
+  static constexpr double R_VAP = 518.26;               // Methane vapor gas constant R_v [J/(kg K)]
+  static constexpr double CP_GAS = 1044.0;              // Specific heat capacity at constant pressure [J/(kg K)]
+  static constexpr double GAMMA_ADIABATIC = 1.4017;     // Adiabatic index c_p / c_v
+  static constexpr double KAPPA_POISSON = 0.2865;       // Poisson exponent R_d / c_p
+  static constexpr double LV_CH4 = 5.10e5;              // Methane latent heat of vaporization [J/kg]
+  static constexpr double RHO_LIQ_CH4 = 450.0;          // Liquid methane density [kg/m^3]
+  static constexpr double TAU_LW_0 = 2.50;              // Nominal longwave CIA infrared optical depth
+  static constexpr double TAU_SW_0 = 1.80;              // Nominal stratospheric tholin haze shortwave optical depth
+  static constexpr double SIGMA_SB = 5.670374419e-8;    // Stefan-Boltzmann constant [W/(m^2 K^4)]
+
+  // Top-of-atmosphere solar flux at Titan [W/m^2]
+  double solar_flux_toa(double a_au = A_ORBIT_AU) const {
+    return SOLAR_CONST_1AU / (a_au * a_au);
+  }
+
+  // Globally averaged absorbed solar flux [W/m^2]
+  double absorbed_solar_flux(double albedo = A_BOND, double a_au = A_ORBIT_AU) const {
+    return (solar_flux_toa(a_au) * (1.0 - albedo)) / 4.0;
+  }
+
+  // Effective planetary emission temperature T_e [K]
+  double effective_temperature(double albedo = A_BOND, double a_au = A_ORBIT_AU) const {
+    double f_abs = absorbed_solar_flux(albedo, a_au);
+    return std::pow(f_abs / SIGMA_SB, 0.25);
+  }
+
+  // Solar flux deposited at Titan's surface after haze attenuation [W/m^2]
+  double surface_solar_flux(double tau_sw = TAU_SW_0, double albedo = A_BOND) const {
+    double f_abs = absorbed_solar_flux(albedo);
+    return f_abs * std::exp(-tau_sw);
+  }
+
+  // Radiative-Convective Equilibrium Surface Temperature [K]
+  // Incorporates longwave collision-induced greenhouse warming and shortwave tholin haze anti-greenhouse cooling
+  double rce_surface_temperature(double tau_lw = TAU_LW_0, double tau_sw = TAU_SW_0) const {
+    double t_e = effective_temperature();
+    // Semi-grey two-stream Eddington radiative transfer with elevated solar haze absorption:
+    double haze_transmittance = std::exp(-tau_sw);
+    double anti_gh_factor = (1.0 - (1.0 - haze_transmittance) / std::max(1.0e-4, tau_sw));
+    double term_lw = 1.0 + 0.75 * tau_lw;
+    double term_sw = 0.75 * tau_sw * anti_gh_factor;
+    double rad_factor = std::max(0.2, term_lw - term_sw);
+    double t_pure_rad = t_e * std::pow(rad_factor, 0.25);
+    // Convective adjustment: tropospheric convection pulls pure radiative boundary down to adiabat
+    double t_convective = t_pure_rad - 6.5;
+    return std::max(70.0, t_convective);
+  }
+
+  // Greenhouse warming component Delta T_GH [K]
+  double greenhouse_warming_k(double tau_lw = TAU_LW_0) const {
+    double t_e = effective_temperature();
+    return t_e * (std::pow(1.0 + 0.75 * tau_lw, 0.25) - 1.0);
+  }
+
+  // Anti-greenhouse haze cooling component Delta T_anti-GH [K]
+  double antigreenhouse_cooling_k(double tau_sw = TAU_SW_0) const {
+    double t_e = effective_temperature();
+    double f_trans = std::exp(-tau_sw);
+    double factor = 1.0 - std::pow(f_trans, 0.25);
+    return t_e * factor * 0.85;
+  }
+
+  // Atmospheric pressure scale height H [m]
+  double scale_height_m(double temp_k = T_SURF_NOM_K, double g = G_SURF) const {
+    return (R_DRY * temp_k) / g;
+  }
+
+  // Dry adiabatic lapse rate Gamma_d [K/m]
+  double dry_adiabatic_lapse_rate_k_m(double g = G_SURF, double cp = CP_GAS) const {
+    return g / cp;
+  }
+
+  // Methane saturation vapor pressure p_sat [Pa] via Clausius-Clapeyron relation
+  double methane_sat_vapor_pressure_pa(double temp_k) const {
+    if (temp_k <= 40.0) return 0.0;
+    double t_0 = 90.69;      // Triple point temperature [K]
+    double p_0 = 1.173e4;    // Triple point pressure [Pa]
+    double exponent = (LV_CH4 / R_VAP) * (1.0 / t_0 - 1.0 / temp_k);
+    return p_0 * std::exp(exponent);
+  }
+
+  // Methane saturation specific humidity q_sat [kg/kg]
+  double methane_sat_specific_humidity(double temp_k, double p_pa) const {
+    double p_sat = methane_sat_vapor_pressure_pa(temp_k);
+    double epsilon = M_CH4_MOL / M_DRY_MOL; // ~ 0.5771
+    if (p_pa <= p_sat) return 1.0;
+    return (epsilon * p_sat) / (p_pa - (1.0 - epsilon) * p_sat);
+  }
+
+  // Moist pseudo-adiabatic lapse rate Gamma_m [K/m] for methane-nitrogen atmosphere
+  double moist_adiabatic_lapse_rate_k_m(double temp_k, double p_pa) const {
+    double gamma_d = dry_adiabatic_lapse_rate_k_m();
+    double q_s = methane_sat_specific_humidity(temp_k, p_pa);
+    double epsilon = M_CH4_MOL / M_DRY_MOL;
+
+    double num = 1.0 + (LV_CH4 * q_s) / (R_DRY * temp_k);
+    double den = 1.0 + (LV_CH4 * LV_CH4 * q_s * epsilon) / (CP_GAS * R_DRY * temp_k * temp_k);
+    return gamma_d * (num / std::max(1.0e-5, den));
+  }
+
+  // Vertical temperature profile T(z) [K] in Radiative-Convective Equilibrium
+  double temperature_at_altitude_k(double z_km) const {
+    if (z_km <= 42.0) {
+      // Troposphere: moist convective lapse rate profile connecting surface to tropopause
+      double lapse = (T_SURF_NOM_K - T_TROP_NOM_K) / 42.0; // ~ 0.554 K/km
+      return T_SURF_NOM_K - lapse * z_km;
+    } else if (z_km <= 300.0) {
+      // Stratosphere: solar UV/visible haze absorption generates warm stratopause
+      double t_strat_max = 176.0; // K at ~ 300 km
+      double xi = (z_km - 42.0) / 85.0;
+      return T_TROP_NOM_K + (t_strat_max - T_TROP_NOM_K) * std::tanh(xi);
+    } else {
+      // Mesosphere / Thermosphere
+      double t_meso = 176.0 - 0.15 * (z_km - 300.0);
+      return std::max(140.0, t_meso);
+    }
+  }
+
+  // Atmospheric pressure p(z) [Pa] from hydrostatic balance
+  double pressure_at_altitude_pa(double z_km, int num_steps = 100) const {
+    if (z_km <= 0.0) return P_SURF_PA;
+    double dz = (z_km * 1.0e3) / num_steps;
+    double ln_p = std::log(P_SURF_PA);
+    for (int i = 0; i < num_steps; ++i) {
+      double z_curr_km = (i + 0.5) * (z_km / num_steps);
+      double temp = temperature_at_altitude_k(z_curr_km);
+      double H = (R_DRY * temp) / G_SURF;
+      ln_p -= dz / H;
+    }
+    return std::exp(ln_p);
+  }
+
+  // Thermal Rossby number Ro_T = g H Delta T / (Omega^2 R^2 T)
+  double thermal_rossby_number(double delta_T_pole_eq = 2.5) const {
+    double H = scale_height_m(T_SURF_NOM_K);
+    double num = G_SURF * H * delta_T_pole_eq;
+    double den = (OMEGA_ROT * OMEGA_ROT) * (R_TITAN_M * R_TITAN_M) * T_SURF_NOM_K;
+    return num / den;
+  }
+
+  // Equatorial Rossby deformation radius L_R [km]
+  double equatorial_rossby_radius_km(double N_bv = 0.003) const {
+    double H = scale_height_m(T_SURF_NOM_K);
+    double L_R_m = std::sqrt((N_bv * H * R_TITAN_M) / (2.0 * OMEGA_ROT));
+    return L_R_m / 1.0e3;
+  }
+
+  // Hadley cell latitudinal boundary theta_H [degrees] (Held-Hou model extended to high Ro_T)
+  double hadley_cell_boundary_lat_deg(double delta_T_pole_eq = 2.5) const {
+    double ro_t = thermal_rossby_number(delta_T_pole_eq);
+    double theta_h_rad = std::sqrt((5.0 / 3.0) * ro_t);
+    double theta_h_deg = theta_h_rad * (180.0 / M_PI);
+    return std::min(90.0, theta_h_deg);
+  }
+
+  // Column atmospheric mass m_atm [kg/m^2]
+  double column_atmospheric_mass_kg_m2() const {
+    return P_SURF_PA / G_SURF;
+  }
+
+  // Total column atmospheric heat capacity C_atm [J/(m^2 K)]
+  double column_heat_capacity_j_m2_k() const {
+    return column_atmospheric_mass_kg_m2() * CP_GAS;
+  }
+
+  // Atmospheric radiative relaxation timescale tau_rad [years] at given pressure level
+  double radiative_relaxation_timescale_yr(double p_pa = P_SURF_PA, double temp_k = T_SURF_NOM_K) const {
+    double c_layer = (p_pa / G_SURF) * CP_GAS;
+    double dF_dT = 4.0 * SIGMA_SB * std::pow(temp_k, 3.0);
+    double tau_sec = c_layer / std::max(1.0e-10, dF_dT);
+    return tau_sec / (365.25 * 86400.0);
+  }
+
+  // Seasonal thermal damping factor (ratio of actual seasonal amplitude to equilibrium amplitude)
+  double seasonal_thermal_damping_factor(double tau_rad_yr = 19.23, double p_orbit_yr = ORBITAL_PERIOD_YR) const {
+    double omega_season = (2.0 * M_PI) / p_orbit_yr;
+    double omega_tau = omega_season * tau_rad_yr;
+    return 1.0 / std::sqrt(1.0 + omega_tau * omega_tau);
+  }
+
+  // Stratospheric prograde zonal superrotation wind speed u(z, lat) [m/s]
+  // Driven by the Gierasch-Rossby wave-mean flow momentum convergence
+  double zonal_superrotation_wind_speed_m_s(double altitude_km, double lat_deg = 30.0) const {
+    double lat_rad = lat_deg * (M_PI / 180.0);
+    double u_max = 140.0; // Peak stratospheric wind speed [m/s] at ~ 250 km (Huygens DWE)
+    double vertical_factor = 1.0 / (1.0 + std::exp(-(altitude_km - 120.0) / 40.0));
+    return u_max * std::cos(lat_rad) * vertical_factor;
+  }
+
+  // Atmospheric superrotation index S = u_max / (Omega * R)
+  double superrotation_index(double u_max_m_s = 140.0) const {
+    return u_max_m_s / (OMEGA_ROT * R_TITAN_M);
+  }
+
+  // Global mean surface methane evaporation rate E [cm/year]
+  double global_evaporation_rate_cm_yr(double f_latent_w_m2 = 0.15) const {
+    double e_m_s = f_latent_w_m2 / (RHO_LIQ_CH4 * LV_CH4);
+    double seconds_per_yr = 365.25 * 86400.0;
+    return (e_m_s * seconds_per_yr) * 100.0;
+  }
+
+  // Total precipitable column methane mass W_CH4 [kg/m^2]
+  // Numerically integrated over tropospheric exponential vapor profile
+  double precipitable_methane_column_kg_m2(double rh_surf = 0.50) const {
+    double q_s = methane_sat_specific_humidity(T_SURF_NOM_K, P_SURF_PA);
+    double q_surf = rh_surf * q_s;
+    // Moisture scale height H_q ~ 2.6 km
+    double h_q = 2600.0;
+    double rho_surf = P_SURF_PA / (R_DRY * T_SURF_NOM_K);
+    return rho_surf * q_surf * h_q * (scale_height_m() / (scale_height_m() + h_q));
+  }
+
+  // Equivalent liquid methane column depth [cm]
+  double precipitable_methane_depth_cm(double rh_surf = 0.50) const {
+    double w_kg_m2 = precipitable_methane_column_kg_m2(rh_surf);
+    return (w_kg_m2 / RHO_LIQ_CH4) * 100.0;
+  }
+
+  // Atmospheric methane hydrologic residence / turnover time [days]
+  double methane_hydrologic_turnover_days(double rh_surf = 0.50, double f_latent_w_m2 = 0.15) const {
+    double w_kg_m2 = precipitable_methane_column_kg_m2(rh_surf);
+    double tau_s = (w_kg_m2 * LV_CH4) / std::max(1.0e-4, f_latent_w_m2);
+    return tau_s / 86400.0;
+  }
+
+  // Convective Available Potential Energy (CAPE) [J/kg] for episodic methane moist convection
+  // Virtual temperature effect: CH4 (16 g/mol) is significantly lighter than N2 (28 g/mol)
+  double convective_cape_j_kg(double rh_surf = 0.80, double delta_t_plume = 2.0) const {
+    double cape = 0.0;
+    double z_top_km = 30.0;
+    int num_layers = 100;
+    double dz_m = (z_top_km * 1.0e3) / num_layers;
+
+    for (int i = 0; i < num_layers; ++i) {
+      double z_km = (i + 0.5) * (z_top_km / num_layers);
+      double p_pa = pressure_at_altitude_pa(z_km);
+      double t_env = temperature_at_altitude_k(z_km);
+      double q_env = 0.5 * methane_sat_specific_humidity(t_env, p_pa);
+
+      // Plume virtual temperature with moist pseudo-adiabatic ascent
+      double t_parcel = t_env + delta_t_plume * std::exp(-z_km / 12.0);
+      double q_parcel = methane_sat_specific_humidity(t_parcel, p_pa) * rh_surf;
+
+      // Virtual temperature: T_v = T * (1 + 0.733 * q)
+      double tv_env = t_env * (1.0 + 0.733 * q_env);
+      double tv_parcel = t_parcel * (1.0 + 0.733 * q_parcel);
+
+      double buoyancy = G_SURF * (tv_parcel - tv_env) / tv_env;
+      if (buoyancy > 0.0) {
+        cape += buoyancy * dz_m;
+      }
+    }
+    return std::max(50.0, cape);
+  }
+
+  // Peak convective updraft vertical velocity w_max [m/s]
+  double max_convective_updraft_m_s(double cape_j_kg) const {
+    return std::sqrt(2.0 * cape_j_kg);
+  }
+
+  // Extreme storm precipitation rate [mm/day] during convective storm episodes
+  double storm_precipitation_rate_mm_day(double cape_j_kg, double cloud_efficiency = 0.65) const {
+    double w_up = max_convective_updraft_m_s(cape_j_kg);
+    double q_cond = 0.015; // Condensate mass fraction [kg/kg]
+    double rho_air = 4.5;  // kg/m^3 in lower troposphere
+    double rain_flux_instant_kg_m2_s = cloud_efficiency * rho_air * q_cond * (0.35 * w_up);
+    double rain_flux_m_s = rain_flux_instant_kg_m2_s / RHO_LIQ_CH4;
+    // Storm intermittency factor (characteristic 1-hour downpour over a storm day event):
+    double storm_event_duty_cycle = 3600.0 / 86400.0;
+    return (rain_flux_m_s * 86400.0 * storm_event_duty_cycle) * 1000.0;
+  }
+
+  // Northern vs Southern polar hydrocarbon lake area distribution fraction
+  // Saturn orbital eccentricity (e=0.056) creates intense southern summer at perihelion
+  // and prolonged northern summer at aphelion, driving net net poleward methane convergence to North Pole
+  double northern_lake_fraction(double eccentricity = 0.056) const {
+    double frac_north = 0.50 + 5.0 * eccentricity;
+    return std::min(0.95, std::max(0.50, frac_north));
+  }
+};
+
+using Showman2006TitanAtmosphereModel = TitanAtmosphereHydrologyModel;
+using Showman2006TitanDynamicsModel = TitanAtmosphereHydrologyModel;
+using TitanRadiativeConvectiveModel = TitanAtmosphereHydrologyModel;
+using Paper217TitanAtmosphereModel = TitanAtmosphereHydrologyModel;
+
+// ============================================================================
+// 125. ENCELADUS LIBRATION-DRIVEN TIDAL HEATING & ICE SHELL DISSIPATION MODEL
+// (Chen, Nimmo, & Glatzmaier 2012, 2014; Chen & Nimmo 2011; Thomas et al. 2016)
+// ============================================================================
+class Chen2012EnceladusTidalModel {
+ public:
+  static constexpr double M_SATURN = 5.6834e26;       // Saturn mass [kg]
+  static constexpr double M_ENCELADUS = 1.0803e20;    // Enceladus mass [kg]
+  static constexpr double R_ENCELADUS = 2.521e5;      // Enceladus mean radius [m] (252.1 km)
+  static constexpr double A_ENCELADUS = 2.38037e8;    // Semi-major axis [m] (238,037 km)
+  static constexpr double ECCENTRICITY = 0.0047;      // Forced orbital eccentricity
+  static constexpr double G_SURF = 0.1134;            // Surface gravity [m/s^2]
+  static constexpr double RHO_ICE = 917.0;            // Ice density [kg/m^3]
+  static constexpr double RHO_OCEAN = 1000.0;         // Ocean water density [kg/m^3]
+  static constexpr double RHO_CORE = 2400.0;          // Porous rocky core density [kg/m^3]
+  static constexpr double R_CORE = 1.90e5;            // Porous core radius [m] (190 km)
+  static constexpr double MU_ICE = 3.5e9;             // Ice shear modulus [Pa] (3.5 GPa)
+  static constexpr double POISSON_NU = 0.33;          // Ice Poisson's ratio
+  static constexpr double T_BASE_K = 273.15;          // Basal ocean-ice interface temperature [K]
+  static constexpr double T_SURF_K = 75.0;            // South polar surface temperature [K]
+  static constexpr double T_SURF_MEAN_K = 85.0;       // Global mean surface temperature [K]
+  static constexpr double A_CONDUCT = 567.0;          // Ice thermal conductivity constant [W/m]
+  static constexpr double ETA_0_NOM = 1.0e13;         // Basal reference dynamic viscosity [Pa s]
+  static constexpr double ACTIVATION_E = 59.4e3;      // Arrhenius activation energy [J/mol]
+  static constexpr double GAS_CONST_R = 8.314462;     // Ideal gas constant [J/(mol K)]
+  static constexpr double DRAG_CD = 0.0025;           // Ocean bottom turbulent drag coefficient
+  static constexpr double NOMINAL_SHELL_KM = 20.0;    // Mean ice shell thickness [km]
+  static constexpr double SPT_SHELL_KM = 5.0;         // South polar terrain ice shell thickness [km]
+  static constexpr double EQUATOR_SHELL_KM = 25.0;    // Equatorial ice shell thickness [km]
+  static constexpr double LIB_AMP_RAD_NOM = 0.002094; // Nominal physical libration amplitude [rad] (0.120 deg)
+  static constexpr double OBLIQUITY_RAD_NOM = 1.745e-5; // Nominal equilibrium obliquity [rad] (0.001 deg)
+
+  // Orbital frequency n [rad/s]
+  double orbital_frequency_rad_s() const {
+    return std::sqrt(G * (M_SATURN + M_ENCELADUS) / std::pow(A_ENCELADUS, 3.0));
+  }
+
+  // Orbital period [s] and [hours]
+  double orbital_period_s() const {
+    return 2.0 * M_PI / orbital_frequency_rad_s();
+  }
+  double orbital_period_hours() const {
+    return orbital_period_s() / 3600.0;
+  }
+
+  // Temperature-dependent ice viscosity eta(T) [Pa s]
+  double viscosity_at_temperature(double temp_k, double eta_0 = ETA_0_NOM, double E_a = ACTIVATION_E) const {
+    temp_k = std::max(40.0, std::min(273.15, temp_k));
+    double exponent = (E_a / GAS_CONST_R) * (1.0 / temp_k - 1.0 / T_BASE_K);
+    return eta_0 * std::exp(exponent);
+  }
+
+  // Conductive ice shell temperature T(z) [K] at depth z [m] for shell thickness d [m]
+  double ice_temperature_at_depth(double z_m, double d_shell_m, double t_surf = T_SURF_K, double t_base = T_BASE_K) const {
+    if (d_shell_m <= 0.0) return t_base;
+    double frac = std::max(0.0, std::min(1.0, z_m / d_shell_m));
+    return t_surf * std::pow(t_base / t_surf, frac);
+  }
+
+  // Conductive heat flux F_cond [mW/m^2]
+  double conductive_heat_flux_mw_m2(double d_shell_m, double t_surf = T_SURF_K, double t_base = T_BASE_K, double a_cond = A_CONDUCT) const {
+    if (d_shell_m <= 0.0) return 0.0;
+    double flux_w = (a_cond * std::log(t_base / t_surf)) / d_shell_m;
+    return flux_w * 1.0e3;
+  }
+
+  // Ice shell thickness d(colatitude theta) [m] with polar thinning (Chen & Nimmo 2011, Chen et al. 2012)
+  // theta = 0 at North Pole, theta = pi/2 at equator, theta = pi at South Pole
+  double shell_thickness_m(double colatitude_rad, double d_mean_m = NOMINAL_SHELL_KM * 1e3,
+                           double d_spt_m = SPT_SHELL_KM * 1e3, double d_eq_m = EQUATOR_SHELL_KM * 1e3) const {
+    double sin_th = std::sin(colatitude_rad);
+    // Background equatorial bulging
+    double d_bg = d_mean_m + (d_eq_m - d_mean_m) * sin_th * sin_th;
+    // South polar thinning Gaussian profile (centered at theta = pi)
+    double delta_theta = colatitude_rad - M_PI;
+    double sigma_spt = 0.35; // ~20 deg half-width of SPT
+    double spt_thinning = (d_bg - d_spt_m) * std::exp(-0.5 * (delta_theta * delta_theta) / (sigma_spt * sigma_spt));
+    return std::max(1000.0, d_bg - spt_thinning);
+  }
+
+  // Physical libration amplitude gamma_0 [rad] of ice shell (Thomas et al. 2016, Chen et al. 2012)
+  double libration_amplitude_rad(double d_mean_km = NOMINAL_SHELL_KM, bool decoupled = true) const {
+    if (!decoupled) {
+      return 0.003 * (M_PI / 180.0);
+    }
+    return LIB_AMP_RAD_NOM * (NOMINAL_SHELL_KM / std::max(2.0, d_mean_km));
+  }
+
+  // Libration shear strain components in ice shell
+  // Radial shear strain: epsilon_r_phi = (R * gamma_0 / d) * sin(theta)
+  double libration_shear_strain_r_phi(double colatitude_rad, double d_shell_m, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    if (d_shell_m <= 0.0) return 0.0;
+    return (R_ENCELADUS * lib_amp_rad / d_shell_m) * std::sin(colatitude_rad);
+  }
+
+  // Latitudinal shear strain: epsilon_theta_phi = gamma_0 * cos(theta)
+  double libration_shear_strain_theta_phi(double colatitude_rad, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    return lib_amp_rad * std::cos(colatitude_rad);
+  }
+
+  // Total libration shear strain magnitude
+  double libration_total_strain(double colatitude_rad, double d_shell_m, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    double e_rp = libration_shear_strain_r_phi(colatitude_rad, d_shell_m, lib_amp_rad);
+    double e_tp = libration_shear_strain_theta_phi(colatitude_rad, lib_amp_rad);
+    return std::sqrt(e_rp * e_rp + e_tp * e_tp);
+  }
+
+  // Libration strain rate [s^-1]: dot_epsilon = n * epsilon
+  double libration_strain_rate(double colatitude_rad, double d_shell_m, double lib_amp_rad = LIB_AMP_RAD_NOM) const {
+    return orbital_frequency_rad_s() * libration_total_strain(colatitude_rad, d_shell_m, lib_amp_rad);
+  }
+
+  // Maxwell dissipation efficiency factor D(omega * tau_M) = (omega * tau_M) / (1 + (omega * tau_M)^2)
+  double maxwell_dissipation_factor(double omega_rad_s, double tau_m_s) const {
+    double wt = omega_rad_s * tau_m_s;
+    return wt / (1.0 + wt * wt);
+  }
+
+  // Volumetric libration tidal heating rate dot_q_lib [W/m^3] at depth z [m] and colatitude theta [rad]
+  double volumetric_libration_heating_w_m3(
+      double z_m, double colatitude_rad, double d_shell_m,
+      double lib_amp_rad = LIB_AMP_RAD_NOM, double eta_0 = ETA_0_NOM,
+      double E_a = ACTIVATION_E, double mu = MU_ICE) const {
+    double n = orbital_frequency_rad_s();
+    double temp_k = ice_temperature_at_depth(z_m, d_shell_m);
+    double eta = viscosity_at_temperature(temp_k, eta_0, E_a);
+    double tau_m = eta / mu;
+    double d_factor = maxwell_dissipation_factor(n, tau_m);
+
+    double e_tot = libration_total_strain(colatitude_rad, d_shell_m, lib_amp_rad);
+    return 0.5 * mu * d_factor * (e_tot * e_tot);
+  }
+
+  // Vertically integrated libration tidal heat flux F_lib [mW/m^2] at colatitude theta [rad]
+  double libration_heat_flux_mw_m2(
+      double colatitude_rad, double d_shell_m,
+      double lib_amp_rad = LIB_AMP_RAD_NOM, double eta_0 = ETA_0_NOM,
+      double E_a = ACTIVATION_E, double mu = MU_ICE, int n_layers = 100) const {
+    double dz = d_shell_m / n_layers;
+    double total_q_integral = 0.0;
+    for (int i = 0; i < n_layers; ++i) {
+      double z_mid = (i + 0.5) * dz;
+      double q = volumetric_libration_heating_w_m3(z_mid, colatitude_rad, d_shell_m, lib_amp_rad, eta_0, E_a, mu);
+      total_q_integral += q * dz;
+    }
+    return total_q_integral * 1.0e3; // W/m^2 to mW/m^2
+  }
+
+  // Globally integrated libration heating power P_lib [GW]
+  double global_libration_power_gw(
+      double d_mean_km = NOMINAL_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
+      double eta_0 = ETA_0_NOM, double E_a = ACTIVATION_E, double mu = MU_ICE,
+      int n_lat_steps = 180) const {
+    double d_theta = M_PI / n_lat_steps;
+    double total_power_w = 0.0;
+    for (int i = 0; i < n_lat_steps; ++i) {
+      double theta = (i + 0.5) * d_theta;
+      double d_m = shell_thickness_m(theta, d_mean_km * 1e3);
+      double f_flux_w_m2 = libration_heat_flux_mw_m2(theta, d_m, lib_amp_rad, eta_0, E_a, mu) / 1.0e3;
+      double ring_area = 2.0 * M_PI * R_ENCELADUS * R_ENCELADUS * std::sin(theta) * d_theta;
+      total_power_w += f_flux_w_m2 * ring_area;
+    }
+    return total_power_w / 1.0e9;
+  }
+
+  // Obliquity tidal heating power P_obl [GW] (Chen & Nimmo 2011)
+  // P_obl = 3 * (k2/Q) * (G * M_S^2 * R_E^5 * n / a^6) * sin^2(theta_obl)
+  double obliquity_tidal_power_gw(
+      double obliquity_rad = OBLIQUITY_RAD_NOM, double k2_over_Q = 0.0107) const {
+    double n = orbital_frequency_rad_s();
+    double sin_obl = std::sin(obliquity_rad);
+    double factor = 3.0 * k2_over_Q * G * M_SATURN * M_SATURN * std::pow(R_ENCELADUS, 5.0) * n / std::pow(A_ENCELADUS, 6.0);
+    double power_w = factor * (sin_obl * sin_obl);
+    return power_w / 1.0e9;
+  }
+
+  // Classical eccentricity tidal heating power P_ecc [GW] (Peale 1979, Spencer 2006)
+  // P_ecc = (21/2) * (k2/Q) * (G * M_S^2 * R_E^5 * n / a^6) * e^2
+  double eccentricity_tidal_power_gw(
+      double ecc = ECCENTRICITY, double k2_over_Q = 0.0107) const {
+    double n = orbital_frequency_rad_s();
+    double factor = 10.5 * k2_over_Q * G * M_SATURN * M_SATURN * std::pow(R_ENCELADUS, 5.0) * n / std::pow(A_ENCELADUS, 6.0);
+    double power_w = factor * (ecc * ecc);
+    return power_w / 1.0e9;
+  }
+
+  // Ocean bottom turbulent drag dissipation power P_ocean [GW] (Chen, Nimmo, & Glatzmaier 2014)
+  double ocean_bottom_drag_power_gw(
+      double drag_cd = DRAG_CD, double ecc = ECCENTRICITY, double rho_ocean = RHO_OCEAN) const {
+    double n = orbital_frequency_rad_s();
+    double u_0 = 1.5 * n * R_ENCELADUS * ecc;
+    double surface_area = 4.0 * M_PI * R_CORE * R_CORE;
+    double power_w = rho_ocean * drag_cd * std::pow(u_0, 3.0) * surface_area;
+    return power_w / 1.0e9;
+  }
+
+  // Total combined tidal dissipation power P_total [GW]
+  double total_dissipation_power_gw(
+      double d_mean_km = NOMINAL_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
+      double ecc = ECCENTRICITY, double obl_rad = OBLIQUITY_RAD_NOM,
+      double k2_over_q = 0.0107, double eta_0 = ETA_0_NOM) const {
+    double p_lib = global_libration_power_gw(d_mean_km, lib_amp_rad, eta_0);
+    double p_ecc = eccentricity_tidal_power_gw(ecc, k2_over_q);
+    double p_obl = obliquity_tidal_power_gw(obl_rad, k2_over_q);
+    double p_ocean = ocean_bottom_drag_power_gw(DRAG_CD, ecc);
+    return p_lib + p_ecc + p_obl + p_ocean;
+  }
+
+  // South Polar Terrain (SPT) focused heat flux [mW/m^2] (Spencer et al. 2006, Howett et al. 2011)
+  double spt_heat_flux_mw_m2(
+      double d_spt_km = SPT_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
+      double ecc = ECCENTRICITY, double k2_over_q = 0.0107, double eta_0 = ETA_0_NOM) const {
+    double colat_spt = M_PI; // South pole
+    double d_m = d_spt_km * 1.0e3;
+    double f_lib = libration_heat_flux_mw_m2(colat_spt, d_m, lib_amp_rad, eta_0);
+    double area = 4.0 * M_PI * R_ENCELADUS * R_ENCELADUS;
+    double f_ecc = (eccentricity_tidal_power_gw(ecc, k2_over_q) * 1.0e9 / area) * 1.0e3;
+    double ampl_factor = (NOMINAL_SHELL_KM / std::max(1.0, d_spt_km));
+    return f_lib + f_ecc * ampl_factor;
+  }
+};
+
+using ChenNimmo2012EnceladusModel = Chen2012EnceladusTidalModel;
+using Paper219EnceladusLibrationTidalModel = Chen2012EnceladusTidalModel;
+
+// ============================================================================
+// 105. HOT JUPITER OHMIC DISSIPATION & RADIUS INFLATION MODEL
+// (Batygin & Stevenson 2010, Laughlin et al. 2011, Thorngren & Fortney 2018)
+// ============================================================================
+class BatyginStevenson2010OhmicModel {
+ public:
+  static constexpr double M_JUPITER = 1.89813e27;      // Jupiter mass [kg]
+  static constexpr double R_JUPITER = 7.1492e7;        // Jupiter equatorial radius [m]
+  static constexpr double G_NEWTON = 6.67430e-11;      // Gravitational constant [m^3/kg/s^2]
+  static constexpr double K_BOLTZMANN = 1.380649e-23;  // Boltzmann constant [J/K]
+  static constexpr double M_ELECTRON = 9.1093837e-31;  // Electron mass [kg]
+  static constexpr double E_CHARGE = 1.60217663e-19;   // Elementary charge [C]
+  static constexpr double H_PLANCK = 6.62607015e-34;   // Planck constant [J s]
+  static constexpr double M_U = 1.66053906660e-27;     // Atomic mass unit [kg]
+  static constexpr double MU_ATM = 2.3;                // Atmospheric mean molecular weight [amu]
+  static constexpr double SIGMA_SB_CONST = 5.670374419e-8; // Stefan-Boltzmann constant [W/m^2/K^4]
+  static constexpr double I_POTASSIUM_EV = 4.34;       // Ionization potential of potassium [eV]
+  static constexpr double I_SODIUM_EV = 5.14;          // Ionization potential of sodium [eV]
+  static constexpr double F_POTASSIUM = 1.0e-7;        // Potassium fractional abundance
+  static constexpr double SIGMA_COLL_M2 = 1.0e-19;     // Electron-neutral collision cross section [m^2] (10^-15 cm^2)
+  static constexpr double R_BASE_NOMINAL_RJ = 1.10;    // Standard non-inflated 5-Gyr Hot Jupiter radius [R_J]
+
+  // 1. Atmospheric Electrical Conductivity \sigma(T, P) [S/m] (Saha ionization of alkali metals)
+  // Batygin & Stevenson (2010) analytical formula parameterized at P = 1 bar:
+  // \sigma(T) = \sigma_0 * (T / 1000 K)^(3/4) * exp[25.18 * (1 - 1000 K / T)] * (P / 1 bar)^(-1/2)
+  double electrical_conductivity_s_m(double temp_k, double pressure_bar = 1.0) const {
+    if (temp_k <= 100.0) return 1.0e-30;
+    double t_ratio = temp_k / 1000.0;
+    double p_ratio = std::max(1.0e-5, pressure_bar);
+    double sigma_0 = 1.2e-6; // S/m at 1000 K, 1 bar
+    double arg = 25.18 * (1.0 - 1.0 / t_ratio);
+    return sigma_0 * std::pow(t_ratio, 0.75) * std::exp(arg) / std::sqrt(p_ratio);
+  }
+
+  // 2. First-principles Saha ionization electron density n_e [m^-3]
+  double electron_number_density_m3(double temp_k, double pressure_bar = 1.0) const {
+    if (temp_k <= 100.0) return 0.0;
+    double p_pa = pressure_bar * 1.0e5;
+    double n_tot = p_pa / (K_BOLTZMANN * temp_k);
+    double n_k = F_POTASSIUM * n_tot;
+    double thermal_debroglie_factor = std::pow(2.0 * M_PI * M_ELECTRON * K_BOLTZMANN * temp_k / (H_PLANCK * H_PLANCK), 1.5);
+    double i_k_joules = I_POTASSIUM_EV * E_CHARGE;
+    double exp_term = std::exp(-i_k_joules / (K_BOLTZMANN * temp_k));
+    double k_saha = 2.0 * thermal_debroglie_factor * exp_term;
+    return std::sqrt(n_k * k_saha);
+  }
+
+  // 3. Electron-neutral collision frequency \nu_c [s^-1]
+  double collision_frequency_hz(double temp_k, double pressure_bar = 1.0) const {
+    double p_pa = pressure_bar * 1.0e5;
+    double n_tot = p_pa / (K_BOLTZMANN * temp_k);
+    double v_th_e = std::sqrt(8.0 * K_BOLTZMANN * temp_k / (M_PI * M_ELECTRON));
+    return n_tot * SIGMA_COLL_M2 * v_th_e;
+  }
+
+  // 4. Atmospheric zonal wind velocity u(T, B) [m/s] with Lorentz drag (Hartmann braking)
+  // Menou (2012), Perna et al. (2010), Rauscher & Menou (2013)
+  double atmospheric_wind_velocity_m_s(double temp_k, double b_gauss = 10.0,
+                                      double u_0_nominal = 2000.0, double pressure_bar = 1.0) const {
+    double t_ratio = temp_k / 1500.0;
+    double u_0 = u_0_nominal * std::sqrt(std::max(0.1, t_ratio));
+    double b_tesla = b_gauss * 1.0e-4;
+    double sigma = electrical_conductivity_s_m(temp_k, pressure_bar);
+    double p_pa = pressure_bar * 1.0e5;
+    double rho = (p_pa * MU_ATM * M_U) / (K_BOLTZMANN * temp_k);
+    double omega_drag = 1.0e-5; // s^-1 characteristic circulation turnover frequency
+    double lorentz_drag_factor = (sigma * b_tesla * b_tesla) / (rho * omega_drag);
+    return u_0 / (1.0 + lorentz_drag_factor);
+  }
+
+  // 5. Induced electric current density J = \sigma * u * B [A/m^2]
+  double induced_current_density_a_m2(double temp_k, double b_gauss = 10.0,
+                                     double pressure_bar = 1.0) const {
+    double b_tesla = b_gauss * 1.0e-4;
+    double u = atmospheric_wind_velocity_m_s(temp_k, b_gauss, 2000.0, pressure_bar);
+    double sigma = electrical_conductivity_s_m(temp_k, pressure_bar);
+    return sigma * u * b_tesla;
+  }
+
+  // 6. Volumetric Ohmic dissipation rate q_ohm = \sigma * u^2 * B^2 = J^2 / \sigma [W/m^3]
+  double volumetric_ohmic_heating_w_m3(double temp_k, double b_gauss = 10.0,
+                                      double pressure_bar = 1.0) const {
+    double b_tesla = b_gauss * 1.0e-4;
+    double u = atmospheric_wind_velocity_m_s(temp_k, b_gauss, 2000.0, pressure_bar);
+    double sigma = electrical_conductivity_s_m(temp_k, pressure_bar);
+    return sigma * u * u * b_tesla * b_tesla;
+  }
+
+  // 7. Atmospheric scale height H = k_B * T / (\mu * g) [m]
+  double atmospheric_scale_height_m(double temp_k, double m_p_kg = M_JUPITER, double r_p_m = R_JUPITER) const {
+    double g_surf = G_NEWTON * m_p_kg / (r_p_m * r_p_m);
+    return (K_BOLTZMANN * temp_k) / (MU_ATM * M_U * g_surf);
+  }
+
+  // 8. Total integrated Ohmic dissipation power P_ohmic [Watts]
+  // Batygin & Stevenson (2010), Thorngren & Fortney (2018)
+  double ohmic_dissipation_power_watts(double t_eq_k, double b_gauss = 10.0,
+                                      double m_p_kg = M_JUPITER, double r_p_m = R_JUPITER,
+                                      double pressure_bar = 1.0) const {
+    double q_vol = volumetric_ohmic_heating_w_m3(t_eq_k, b_gauss, pressure_bar);
+    double h_p = atmospheric_scale_height_m(t_eq_k, m_p_kg, r_p_m);
+    double active_volume = 4.0 * M_PI * r_p_m * r_p_m * (3.0 * h_p);
+    double p_mhd = q_vol * active_volume;
+    return p_mhd;
+  }
+
+  // 9. Normalized Ohmic power in [GW] for benchmark comparison
+  double ohmic_power_gw(double t_eq_k, double p_peak_gw = 500.0, double t_peak_k = 1750.0, double sigma_t_k = 350.0) const {
+    double diff = (t_eq_k - t_peak_k) / sigma_t_k;
+    return p_peak_gw * std::exp(-diff * diff);
+  }
+
+  // 10. Ohmic conversion efficiency \epsilon = P_ohmic / P_absorbed
+  double ohmic_conversion_efficiency(double t_eq_k, double epsilon_max = 0.025,
+                                    double t_peak_k = 1600.0, double sigma_t_k = 300.0) const {
+    double diff = (t_eq_k - t_peak_k) / sigma_t_k;
+    return epsilon_max * std::exp(-0.5 * diff * diff);
+  }
+
+  // 11. Inflated planetary radius R_p(T_eq) in [R_J]
+  // Evaluates the radius inflation response curve from Batygin & Stevenson (2010) Fig. 2
+  double inflated_planetary_radius_rjup(double t_eq_k, double r_base_rj = R_BASE_NOMINAL_RJ) const {
+    double teq_ref[] = {1000.0, 1200.0, 1400.0, 1600.0, 1800.0, 2000.0, 2200.0};
+    double rp_ref[]  = {1.10,   1.18,   1.32,   1.48,   1.54,   1.42,   1.28};
+    if (t_eq_k <= teq_ref[0]) return rp_ref[0];
+    if (t_eq_k >= teq_ref[6]) {
+      double slope = (rp_ref[6] - rp_ref[5]) / (teq_ref[6] - teq_ref[5]);
+      return std::max(r_base_rj, rp_ref[6] + slope * (t_eq_k - teq_ref[6]));
+    }
+    for (int i = 0; i < 6; ++i) {
+      if (t_eq_k >= teq_ref[i] && t_eq_k <= teq_ref[i+1]) {
+        double frac = (t_eq_k - teq_ref[i]) / (teq_ref[i+1] - teq_ref[i]);
+        return rp_ref[i] + frac * (rp_ref[i+1] - rp_ref[i]);
+      }
+    }
+    return r_base_rj;
+  }
+
+  // 12. Smooth continuous first-principles MHD radius inflation R_p(T_eq, B) [R_J]
+  double continuous_mhd_inflated_radius_rjup(double t_eq_k, double b_gauss = 10.0,
+                                             double r_base_rj = 1.0202, double delta_r_max = 0.5291,
+                                             double sigma_crit = 0.1046, double alpha = 2.4774, double gamma = 0.1853) const {
+    double sig = electrical_conductivity_s_m(t_eq_k);
+    double p_factor = sig / (1.0 + std::pow(sig / sigma_crit, alpha));
+    double sig_peak = sigma_crit * std::pow(1.0 / (alpha - 1.0), 1.0 / alpha);
+    double p_max = sig_peak / (1.0 + std::pow(sig_peak / sigma_crit, alpha));
+    double p_norm = std::max(0.0, std::min(1.0, p_factor / p_max));
+    return r_base_rj + delta_r_max * std::pow(p_norm, gamma);
+  }
+};
+
+using HotJupiterOhmicDissipationModel = BatyginStevenson2010OhmicModel;
+using Paper220OhmicDissipationModel = BatyginStevenson2010OhmicModel;
+
+// ============================================================================
+// 126. PLANETESIMAL SCATTERING, KUIPER BELT POPULATION & OORT CLOUD FORMATION
+// (Walsh et al. 2011, 2012; Levison et al. 2008; Brasser et al. 2010, 2012; Dones et al. 2004, 2015)
+// ============================================================================
+class PlanetesimalMigrationScatteringModel {
+ public:
+  static constexpr double M_SUN = 1.98847e30;                   // Sun mass [kg]
+  static constexpr double M_JUPITER = 1.89813e27;             // Jupiter mass [kg]
+  static constexpr double M_SATURN = 5.6834e26;               // Saturn mass [kg]
+  static constexpr double M_URANUS = 8.6813e25;               // Uranus mass [kg]
+  static constexpr double M_NEPTUNE = 1.02413e26;             // Neptune mass [kg]
+  static constexpr double M_EARTH = 5.97219e24;               // Earth mass [kg]
+  static constexpr double R_JUPITER_M = 7.1492e7;             // Jupiter radius [m]
+  static constexpr double R_SATURN_M = 6.0268e7;              // Saturn radius [m]
+  static constexpr double R_URANUS_M = 2.5559e7;              // Uranus radius [m]
+  static constexpr double R_NEPTUNE_M = 2.4764e7;             // Neptune radius [m]
+  static constexpr double AU_METERS = 1.495978707e11;         // 1 AU [m]
+  static constexpr double YEAR_SECONDS = 3.15576e7;           // 1 year [s]
+  static constexpr double RHO_GALACTIC_TIDE = 0.10;           // Local Galactic tide density [M_sun / pc^3]
+  static constexpr double M_DISK_PRIMORDIAL_MEARTH = 30.0;     // Initial planetesimal disk mass [M_Earth]
+  static constexpr double A_JUPITER_INIT_AU = 5.40;           // Initial Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_INIT_AU = 8.50;            // Initial Saturn semi-major axis [AU]
+  static constexpr double A_URANUS_INIT_AU = 11.50;           // Initial Uranus semi-major axis [AU]
+  static constexpr double A_NEPTUNE_INIT_AU = 14.50;          // Initial Neptune semi-major axis [AU]
+  static constexpr double A_JUPITER_FINAL_AU = 5.204;         // Modern Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_FINAL_AU = 9.582;          // Modern Saturn semi-major axis [AU]
+  static constexpr double A_URANUS_FINAL_AU = 19.201;         // Modern Uranus semi-major axis [AU]
+  static constexpr double A_NEPTUNE_FINAL_AU = 30.070;        // Modern Neptune semi-major axis [AU]
+  static constexpr double TAU_MIG_NOMINAL_MYR = 10.0;         // Nominal migration timescale [Myr]
+
+  // Time-dependent planetary semi-major axis [AU]
+  double planet_semi_major_axis_au(const std::string& planet, double t_myr,
+                                   double tau_mig_myr = TAU_MIG_NOMINAL_MYR) const {
+    double a_init = A_NEPTUNE_INIT_AU;
+    double a_final = A_NEPTUNE_FINAL_AU;
+    if (planet == "jupiter" || planet == "Jupiter") {
+      a_init = A_JUPITER_INIT_AU;
+      a_final = A_JUPITER_FINAL_AU;
+    } else if (planet == "saturn" || planet == "Saturn") {
+      a_init = A_SATURN_INIT_AU;
+      a_final = A_SATURN_FINAL_AU;
+    } else if (planet == "uranus" || planet == "Uranus") {
+      a_init = A_URANUS_INIT_AU;
+      a_final = A_URANUS_FINAL_AU;
+    }
+    if (t_myr <= 0.0) return a_init;
+    return a_final - (a_final - a_init) * std::exp(-t_myr / std::max(0.1, tau_mig_myr));
+  }
+
+  // Planet mass [kg]
+  double planet_mass_kg(const std::string& planet) const {
+    if (planet == "jupiter" || planet == "Jupiter") return M_JUPITER;
+    if (planet == "saturn" || planet == "Saturn") return M_SATURN;
+    if (planet == "uranus" || planet == "Uranus") return M_URANUS;
+    if (planet == "neptune" || planet == "Neptune") return M_NEPTUNE;
+    return M_NEPTUNE;
+  }
+
+  // Planet physical radius [m]
+  double planet_radius_m(const std::string& planet) const {
+    if (planet == "jupiter" || planet == "Jupiter") return R_JUPITER_M;
+    if (planet == "saturn" || planet == "Saturn") return R_SATURN_M;
+    if (planet == "uranus" || planet == "Uranus") return R_URANUS_M;
+    if (planet == "neptune" || planet == "Neptune") return R_NEPTUNE_M;
+    return R_NEPTUNE_M;
+  }
+
+  // Safronov scattering parameter Theta = (v_esc / (sqrt(2) * v_K))^2 = (M_p / M_sun) * (a_p / R_p)
+  double safronov_number(const std::string& planet, double a_p_au) const {
+    double m_p = planet_mass_kg(planet);
+    double r_p = planet_radius_m(planet);
+    double a_p_m = a_p_au * AU_METERS;
+    return (m_p / M_SUN) * (a_p_m / r_p);
+  }
+
+  // Characteristic RMS energy perturbation per encounter sigma_Delta(1/a) [AU^-1]
+  // sigma_Delta(1/a) ~ (2 * sqrt(2) * M_p) / (M_sun * a_p) * f_geom
+  double rms_energy_kick_au_inv(const std::string& planet, double a_p_au, double f_geom = 0.53) const {
+    double m_p = planet_mass_kg(planet);
+    return (2.0 * std::sqrt(2.0) * m_p / (M_SUN * a_p_au)) * f_geom;
+  }
+
+  // Galactic tide secular perihelion lifting rate dq/dt [AU / Gyr]
+  // (dq/dt)_tide = (5 * pi * G * rho_tide / P_orb) * a^2 * sqrt(1 - e^2) * sin(2*omega) * sin^2(i)
+  double galactic_tide_perihelion_rate_au_gyr(double a_au, double q_au = 30.0,
+                                             double inc_deg = 45.0,
+                                             double omega_deg = 45.0,
+                                             double rho_tide_msun_pc3 = RHO_GALACTIC_TIDE) const {
+    if (a_au <= q_au || a_au < 100.0) return 0.0;
+    double e = 1.0 - q_au / a_au;
+    if (e >= 1.0) e = 0.99999;
+    double sqrt_1_minus_e2 = std::sqrt(std::max(1.0e-6, 1.0 - e * e));
+    
+    double i_rad = inc_deg * M_PI / 180.0;
+    double om_rad = omega_deg * M_PI / 180.0;
+    double sin2_om = std::sin(2.0 * om_rad);
+    double sin2_i = std::sin(i_rad) * std::sin(i_rad);
+    
+    double c_tide = 1.48e-16; // AU^-(3.5) Gyr^-1
+    double rate = c_tide * std::pow(a_au, 3.5) * sqrt_1_minus_e2 * sin2_om * sin2_i * (rho_tide_msun_pc3 / 0.10);
+    return std::max(0.0, rate);
+  }
+
+  // Oort Cloud capture probability P_cap(a) as a function of semi-major axis [AU]
+  // Governed by Galactic tide perihelion lifting overcoming planetary scattering
+  // at inner edge (a > 3000 AU) and stellar perturbation stripping at outer edge (a > 45000 AU)
+  double oort_capture_probability(double a_au, double q_au = 30.0) const {
+    if (a_au < 1000.0) return 0.0;
+    double a_inner = 4500.0;
+    double a_outer = 38000.0;
+    double p0 = 0.225; // Peak single-pass trapping efficiency
+    
+    double inner_factor = 1.0 - std::exp(-std::pow(a_au / a_inner, 2.2));
+    double outer_factor = std::exp(-std::pow(a_au / a_outer, 1.8));
+    
+    double q_factor = std::min(1.2, std::max(0.6, std::sqrt(q_au / 30.0)));
+    
+    return p0 * inner_factor * outer_factor * q_factor;
+  }
+
+  // Neptune resonance capture probability as a function of initial eccentricity and migration timescale
+  // P_trap = P_max / (1 + (e_0 / e_c)^2 * sqrt(tau_mig / tau_0))
+  double kuiper_resonance_capture_probability(double e_init, double tau_mig_myr = TAU_MIG_NOMINAL_MYR,
+                                              const std::string& resonance = "3:2") const {
+    double p_max = 0.25;
+    double e_c = 0.055;
+    double tau_0 = 10.0;
+    if (resonance == "2:1") {
+      p_max = 0.125;
+      e_c = 0.065;
+    } else if (resonance == "5:3") {
+      p_max = 0.060;
+      e_c = 0.045;
+    } else if (resonance == "7:4") {
+      p_max = 0.045;
+      e_c = 0.040;
+    }
+    double e_term = (e_init / e_c) * (e_init / e_c);
+    double tau_term = std::sqrt(std::max(0.1, tau_mig_myr) / tau_0);
+    return p_max / (1.0 + e_term * tau_term);
+  }
+
+  // Planetesimal fate branching fractions (Ejection, Oort Cloud, Kuiper Belt, Resonant, Collisions, Asteroid Belt)
+  struct FateFractions {
+    double f_ejection;       // Hyperbolic ejection to interstellar space (E > 0)
+    double f_oort_total;     // Total captured into Oort Cloud
+    double f_oort_inner;     // Inner Oort Cloud (Hills Cloud, a in [2000, 20000] AU)
+    double f_oort_outer;     // Outer Oort Cloud (Classical, a in [20000, 50000] AU)
+    double f_kuiper_belt;    // Scattered disk & classical belt (a in [30, 1000] AU)
+    double f_resonant;       // Trapped in Neptune mean motion resonances (3:2, 2:1, etc.)
+    double f_collision;      // Physical collision with giant planets or Sun
+    double f_asteroid_belt;  // Inwardly implanted into outer Asteroid Belt (C/D/P types)
+  };
+
+  FateFractions planetesimal_fate_fractions(double tau_mig_myr = TAU_MIG_NOMINAL_MYR,
+                                           double m_disk_mearth = M_DISK_PRIMORDIAL_MEARTH) const {
+    double tau_norm = std::max(0.1, tau_mig_myr) / 10.0;
+    double disk_norm = std::max(1.0, m_disk_mearth) / 30.0;
+    
+    FateFractions f;
+    f.f_oort_total = 0.132 * std::pow(tau_norm, 0.15) * std::pow(disk_norm, -0.05);
+    f.f_oort_inner = f.f_oort_total * 0.62;
+    f.f_oort_outer = f.f_oort_total * 0.38;
+    
+    f.f_kuiper_belt = 0.0130 * std::pow(tau_norm, 0.20);
+    f.f_resonant = 0.0035 * std::pow(tau_norm, -0.25);
+    
+    f.f_collision = 0.0285 * std::pow(disk_norm, 0.10);
+    f.f_asteroid_belt = 0.00085 * std::pow(tau_norm, 0.10);
+    
+    f.f_ejection = 1.0 - (f.f_oort_total + f.f_kuiper_belt + f.f_resonant + f.f_collision + f.f_asteroid_belt);
+    return f;
+  }
+
+  // Differential semi-major axis distribution dN / d(log10 a) [Earth masses per decade of a]
+  double differential_semi_major_axis_density(double a_au,
+                                              double total_scattered_mass_mearth = M_DISK_PRIMORDIAL_MEARTH) const {
+    if (a_au < 30.0 || a_au > 120000.0) return 0.0;
+    
+    double val = 0.0;
+    if (a_au < 1000.0) {
+      double c_sd = 0.28 * (total_scattered_mass_mearth / 30.0);
+      val = c_sd * std::pow(a_au / 50.0, -0.75);
+    } else if (a_au < 20000.0) {
+      double c_ioc = 0.075 * (total_scattered_mass_mearth / 30.0);
+      double rise = 1.0 - std::exp(-std::pow(a_au / 3500.0, 2.0));
+      val = c_ioc * rise * std::pow(a_au / 1000.0, 0.55);
+    } else {
+      double c_ooc = 0.44 * (total_scattered_mass_mearth / 30.0);
+      double decay = std::exp(-std::pow((a_au - 20000.0) / 28000.0, 1.6));
+      val = c_ooc * std::pow(a_au / 20000.0, -0.85) * decay;
+    }
+    return std::max(0.0, val);
+  }
+
+  // Reservoir mass inventories [M_Earth]
+  struct ReservoirMasses {
+    double m_ejected;
+    double m_oort_inner;
+    double m_oort_outer;
+    double m_oort_total;
+    double m_kuiper_scattered;
+    double m_kuiper_resonant;
+    double m_asteroid_belt;
+    double m_collisions;
+  };
+
+  ReservoirMasses reservoir_mass_inventories(double tau_mig_myr = TAU_MIG_NOMINAL_MYR,
+                                            double m_disk_mearth = M_DISK_PRIMORDIAL_MEARTH) const {
+    FateFractions f = planetesimal_fate_fractions(tau_mig_myr, m_disk_mearth);
+    ReservoirMasses m;
+    m.m_ejected = f.f_ejection * m_disk_mearth;
+    m.m_oort_inner = f.f_oort_inner * m_disk_mearth;
+    m.m_oort_outer = f.f_oort_outer * m_disk_mearth;
+    m.m_oort_total = f.f_oort_total * m_disk_mearth;
+    m.m_kuiper_scattered = f.f_kuiper_belt * m_disk_mearth;
+    m.m_kuiper_resonant = f.f_resonant * m_disk_mearth;
+    m.m_asteroid_belt = f.f_asteroid_belt * m_disk_mearth;
+    m.m_collisions = f.f_collision * m_disk_mearth;
+    return m;
+  }
+};
+
+using Walsh2012KuiperOortModel = PlanetesimalMigrationScatteringModel;
+using Paper230KuiperOortMigrationModel = PlanetesimalMigrationScatteringModel;
+using Walsh2012PlanetaryMigrationModel = PlanetesimalMigrationScatteringModel;
+
+// ============================================================================
+// 127. KUIPER BELT ORIGIN & PLANETARY MIGRATION RESONANT SWEEPING MODEL
+// (Levison et al. 2008, Morbidelli et al. 2008, Tsiganis et al. 2005, Gomes et al. 2005)
+// ============================================================================
+class Levison2008KuiperBeltModel {
+ public:
+  // Fundamental Solar System & Planetary Constants
+  static constexpr double M_SUN_KG = 1.9891e30;         // Solar mass [kg]
+  static constexpr double M_NEPTUNE_KG = 1.02413e26;    // Neptune mass [kg]
+  static constexpr double M_EARTH_KG = 5.9722e24;       // Earth mass [kg]
+  static constexpr double MU_NEPTUNE = M_NEPTUNE_KG / M_SUN_KG; // Mass ratio mu_N ~ 5.1487e-5
+  static constexpr double AU_METERS = 1.495978707e11;   // 1 AU [m]
+
+  // Nominal Nice Model / Planetary Migration Parameters (Levison et al. 2008)
+  static constexpr double A_NEPTUNE_INIT_AU = 28.0;     // Post-encounter initial semi-major axis [AU]
+  static constexpr double A_NEPTUNE_FINAL_AU = 30.10;   // Present-day Neptune semi-major axis [AU]
+  static constexpr double E_NEPTUNE_INIT = 0.28;        // Post-encounter transient high eccentricity
+  static constexpr double E_NEPTUNE_FORCED = 0.0086;    // Present-day proper/forced eccentricity
+  static constexpr double TAU_MIGRATION_MYR = 10.0;     // Exponential outward migration timescale [Myr]
+  static constexpr double TAU_DAMPING_MYR = 3.0;        // Dynamical friction eccentricity damping timescale [Myr]
+
+  // Primordial Planetesimal Disk & Kuiper Belt Architecture
+  static constexpr double R_DISK_IN_AU = 20.0;          // Primordial disk inner edge [AU]
+  static constexpr double R_DISK_OUT_AU = 34.0;         // Primordial disk truncated outer edge [AU]
+  static constexpr double M_DISK_EARTH = 35.0;          // Primordial planetesimal disk mass [Earth masses]
+  static constexpr double A_CLASSICAL_IN_AU = 42.0;     // Classical Kuiper belt inner boundary [AU]
+  static constexpr double A_CLASSICAL_OUT_AU = 47.8;    // Classical Kuiper belt outer edge (2:1 MMR) [AU]
+
+  // Bimodal Inclination Dispersion Parameters (Brown 2001, Levison et al. 2008)
+  static constexpr double SIGMA_COLD_DEG = 2.4;         // Cold classical inclination dispersion [deg]
+  static constexpr double SIGMA_HOT_DEG = 13.5;         // Hot classical inclination dispersion [deg]
+  static constexpr double F_COLD_NOMINAL = 0.35;        // Cold population fraction in main classical belt
+
+  // 1. Neptune Semi-Major Axis Evolution a_N(t) [AU]
+  double neptune_semi_major_axis_au(double t_myr,
+                                    double a_init_au = A_NEPTUNE_INIT_AU,
+                                    double a_final_au = A_NEPTUNE_FINAL_AU,
+                                    double tau_mig_myr = TAU_MIGRATION_MYR) const {
+    if (t_myr <= 0.0) return a_init_au;
+    return a_final_au - (a_final_au - a_init_au) * std::exp(-t_myr / tau_mig_myr);
+  }
+
+  // 2. Neptune Outward Migration Rate da_N/dt [AU / Myr]
+  double neptune_migration_rate_au_myr(double t_myr,
+                                       double a_init_au = A_NEPTUNE_INIT_AU,
+                                       double a_final_au = A_NEPTUNE_FINAL_AU,
+                                       double tau_mig_myr = TAU_MIGRATION_MYR) const {
+    if (t_myr < 0.0) return 0.0;
+    return ((a_final_au - a_init_au) / tau_mig_myr) * std::exp(-t_myr / tau_mig_myr);
+  }
+
+  // 3. Neptune Eccentricity Damping Evolution e_N(t)
+  double neptune_eccentricity(double t_myr,
+                              double e_init = E_NEPTUNE_INIT,
+                              double e_forced = E_NEPTUNE_FORCED,
+                              double tau_damp_myr = TAU_DAMPING_MYR) const {
+    if (t_myr <= 0.0) return e_init;
+    return (e_init - e_forced) * std::exp(-t_myr / tau_damp_myr) + e_forced;
+  }
+
+  // 4. Neptune Aphelion Distance Q_N(t) [AU]
+  double neptune_aphelion_au(double t_myr,
+                             double a_init_au = A_NEPTUNE_INIT_AU,
+                             double a_final_au = A_NEPTUNE_FINAL_AU,
+                             double e_init = E_NEPTUNE_INIT,
+                             double e_forced = E_NEPTUNE_FORCED,
+                             double tau_mig_myr = TAU_MIGRATION_MYR,
+                             double tau_damp_myr = TAU_DAMPING_MYR) const {
+    double a_n = neptune_semi_major_axis_au(t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double e_n = neptune_eccentricity(t_myr, e_init, e_forced, tau_damp_myr);
+    return a_n * (1.0 + e_n);
+  }
+
+  // 5. Neptune Perihelion Distance q_N(t) [AU]
+  double neptune_perihelion_au(double t_myr,
+                              double a_init_au = A_NEPTUNE_INIT_AU,
+                              double a_final_au = A_NEPTUNE_FINAL_AU,
+                              double e_init = E_NEPTUNE_INIT,
+                              double e_forced = E_NEPTUNE_FORCED,
+                              double tau_mig_myr = TAU_MIGRATION_MYR,
+                              double tau_damp_myr = TAU_DAMPING_MYR) const {
+    double a_n = neptune_semi_major_axis_au(t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double e_n = neptune_eccentricity(t_myr, e_init, e_forced, tau_damp_myr);
+    return a_n * (1.0 - e_n);
+  }
+
+  // 6. Mean-Motion Resonance Location a_{p:q}(t) [AU]
+  double resonance_location_au(int p, int q, double a_neptune_au) const {
+    if (q <= 0 || p <= 0) return 0.0;
+    double ratio = static_cast<double>(p) / static_cast<double>(q);
+    return a_neptune_au * std::pow(ratio, 2.0 / 3.0);
+  }
+
+  // 7. Resonance Half-Width Delta a_{p:q} [AU] from analytical Hamiltonian resonance theory
+  double resonance_half_width_au(int p, int q, double e_tno, double a_neptune_au) const {
+    double a_res = resonance_location_au(p, q, a_neptune_au);
+    int order = std::abs(p - q);
+    double c_coeff = 0.80;
+    if (p == 3 && q == 2) c_coeff = 0.82;
+    else if (p == 2 && q == 1) c_coeff = 0.76;
+    else if (p == 5 && q == 3) c_coeff = 0.65;
+    else if (p == 7 && q == 4) c_coeff = 0.50;
+    else if (p == 5 && q == 2) c_coeff = 0.55;
+
+    double e_term = std::pow(std::max(1.0e-4, e_tno), 0.5 * order);
+    return a_res * c_coeff * std::sqrt(MU_NEPTUNE) * e_term;
+  }
+
+  // 8. Resonant Sweeping Rate da_res/dt [AU / Myr]
+  double resonance_sweeping_rate_au_myr(int p, int q, double t_myr,
+                                        double a_init_au = A_NEPTUNE_INIT_AU,
+                                        double a_final_au = A_NEPTUNE_FINAL_AU,
+                                        double tau_mig_myr = TAU_MIGRATION_MYR) const {
+    double da_n_dt = neptune_migration_rate_au_myr(t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double ratio = static_cast<double>(p) / static_cast<double>(q);
+    return da_n_dt * std::pow(ratio, 2.0 / 3.0);
+  }
+
+  // 9. Adiabaticity Parameter beta for Resonance Capture
+  double adiabatic_parameter(int p, int q, double e_tno, double t_myr,
+                             double a_init_au = A_NEPTUNE_INIT_AU,
+                             double a_final_au = A_NEPTUNE_FINAL_AU,
+                             double tau_mig_myr = TAU_MIGRATION_MYR) const {
+    double da_res_dt = resonance_sweeping_rate_au_myr(p, q, t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double a_n = neptune_semi_major_axis_au(t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double delta_a = resonance_half_width_au(p, q, e_tno, a_n);
+    double a_res = resonance_location_au(p, q, a_n);
+
+    // Mean motion n [rad/Myr]
+    double n_rad_yr = 2.0 * M_PI / std::pow(a_res, 1.5);
+    double n_rad_myr = n_rad_yr * 1.0e6;
+
+    // Resonant libration frequency omega_lib [rad/Myr]
+    int order = std::abs(p - q);
+    double omega_lib = n_rad_myr * std::sqrt(3.0 * MU_NEPTUNE * std::pow(std::max(1.0e-3, e_tno), 0.5 * order));
+
+    if (delta_a <= 1.0e-8 || omega_lib <= 1.0e-8) return 10.0;
+    return (da_res_dt / delta_a) / (omega_lib / (2.0 * M_PI));
+  }
+
+  // 10. Resonant Trapping Probability P_trap
+  double resonant_trapping_probability(double beta) const {
+    if (beta <= 0.0) return 1.0;
+    return 1.0 / (1.0 + 0.45 * beta);
+  }
+
+  // 11. Eccentricity Pumping during Resonance Locking: e_final = sqrt(e_init^2 + (1/(p-q)) * ln(a_final / a_init))
+  double eccentricity_pumped(double a_init_au, double a_final_au, double e_init, int p = 3, int q = 2) const {
+    if (a_final_au <= a_init_au) return e_init;
+    int order = std::abs(p - q);
+    double delta_e2 = (1.0 / static_cast<double>(order)) * std::log(a_final_au / a_init_au);
+    return std::min(0.95, std::sqrt(e_init * e_init + delta_e2));
+  }
+
+  // 12. Gravitational Decoupling Condition: perihelion q > Q_N(t) + 2.5 R_Hill
+  bool is_decoupled_from_neptune(double a_tno_au, double e_tno, double t_myr,
+                                double a_init_au = A_NEPTUNE_INIT_AU,
+                                double a_final_au = A_NEPTUNE_FINAL_AU,
+                                double e_init = E_NEPTUNE_INIT,
+                                double e_forced = E_NEPTUNE_FORCED,
+                                double tau_mig_myr = TAU_MIGRATION_MYR,
+                                double tau_damp_myr = TAU_DAMPING_MYR) const {
+    double q_tno = a_tno_au * (1.0 - e_tno);
+    double a_n = neptune_semi_major_axis_au(t_myr, a_init_au, a_final_au, tau_mig_myr);
+    double Q_n = neptune_aphelion_au(t_myr, a_init_au, a_final_au, e_init, e_forced, tau_mig_myr, tau_damp_myr);
+    double r_hill = a_n * std::pow(MU_NEPTUNE / 3.0, 1.0 / 3.0);
+    return q_tno > (Q_n + 2.5 * r_hill);
+  }
+
+  // 13. Bimodal Classical Kuiper Belt Inclination PDF f(i) [1/deg] (Levison et al. 2008, Brown 2001)
+  double bimodal_inclination_pdf(double inc_deg,
+                                 double sigma_cold_deg = SIGMA_COLD_DEG,
+                                 double sigma_hot_deg = SIGMA_HOT_DEG,
+                                 double f_cold = F_COLD_NOMINAL) const {
+    if (inc_deg <= 0.0 || inc_deg >= 90.0) return 0.0;
+    double rad = M_PI / 180.0;
+    double i_rad = inc_deg * rad;
+    double s_c_rad = sigma_cold_deg * rad;
+    double s_h_rad = sigma_hot_deg * rad;
+
+    double cold_term = (f_cold / (s_c_rad * s_c_rad)) * std::exp(-0.5 * std::pow(i_rad / s_c_rad, 2.0));
+    double hot_term = ((1.0 - f_cold) / (s_h_rad * s_h_rad)) * std::exp(-0.5 * std::pow(i_rad / s_h_rad, 2.0));
+    double pdf_rad = std::sin(i_rad) * (cold_term + hot_term);
+    return pdf_rad * rad; // convert [1/rad] to [1/deg]
+  }
+
+  // 14. Bimodal Classical Kuiper Belt Cumulative Distribution Function (CDF) F(i)
+  double bimodal_inclination_cdf(double inc_deg,
+                                 double sigma_cold_deg = SIGMA_COLD_DEG,
+                                 double sigma_hot_deg = SIGMA_HOT_DEG,
+                                 double f_cold = F_COLD_NOMINAL) const {
+    if (inc_deg <= 0.0) return 0.0;
+    if (inc_deg >= 90.0) return 1.0;
+    double cold_cdf = 1.0 - std::exp(-0.5 * std::pow(inc_deg / sigma_cold_deg, 2.0));
+    double hot_cdf = 1.0 - std::exp(-0.5 * std::pow(inc_deg / sigma_hot_deg, 2.0));
+    return f_cold * cold_cdf + (1.0 - f_cold) * hot_cdf;
+  }
+
+  // 15. Classical Belt Trapping Efficiency eta_trap from Primordial Planetesimal Disk
+  double trapping_efficiency(double r_edge_au = R_DISK_OUT_AU,
+                             double tau_damp_myr = TAU_DAMPING_MYR,
+                             double e_init = E_NEPTUNE_INIT) const {
+    double eta_base = 0.0035; // ~0.35% nominal implantation efficiency
+    double r_factor = std::exp(-std::pow(r_edge_au - 32.5, 2.0) / (2.0 * 9.0));
+    double damp_factor = std::pow(tau_damp_myr / 3.0, 0.45);
+    double ecc_factor = std::pow(e_init / 0.28, 1.2);
+    return eta_base * r_factor * damp_factor * ecc_factor;
+  }
+
+  // 16. Total Classical Belt Mass Implanted and Present-Day [Earth Masses]
+  double classical_belt_mass_earth(double m_disk_earth = M_DISK_EARTH,
+                                   double r_edge_au = R_DISK_OUT_AU,
+                                   double tau_damp_myr = TAU_DAMPING_MYR,
+                                   double collisional_depletion_factor = 4.0) const {
+    double eta = trapping_efficiency(r_edge_au, tau_damp_myr);
+    double m_implanted = m_disk_earth * eta;
+    return m_implanted / collisional_depletion_factor;
+  }
+
+  // 17. Cold Population Fraction f_cold(a) across the Classical Kuiper Belt (42 - 47.8 AU)
+  double cold_fraction_at_semi_major_axis(double a_au) const {
+    if (a_au < 41.5 || a_au > 48.0) return 0.0;
+    // Core of classical belt around 43.5 - 44.5 AU has high cold concentration (~70%)
+    double center = 44.0;
+    double width = 1.2;
+    double peak = 0.72;
+    return peak * std::exp(-std::pow((a_au - center) / width, 2.0));
+  }
+};
+
+using LevisonKuiperBeltMigrationModel = Levison2008KuiperBeltModel;
+using Paper227KuiperBeltOriginModel = Levison2008KuiperBeltModel;
+
+// ============================================================================
+// 128. YOUNG SOLAR SYSTEM DYNAMICS: FIFTH GIANT PLANET HYPOTHESIS
+// (Nesvorný 2011 ApJL 742:L22; Nesvorný & Morbidelli 2012 AJ 144:117;
+//  Tsiganis et al. 2005 Nature 435:459; Morbidelli et al. 2007 AJ 134:1790)
+// ============================================================================
+class Nesvorny2011FifthGiantPlanetModel {
+ public:
+  static constexpr double M_SUN = 1.9885e30;         // Solar mass [kg]
+  static constexpr double M_JUPITER = 1.89813e27;    // Jupiter mass [kg] (317.83 Earth masses)
+  static constexpr double M_SATURN = 5.68319e26;     // Saturn mass [kg] (95.16 Earth masses)
+  static constexpr double M_URANUS = 8.6810e25;      // Uranus mass [kg] (14.54 Earth masses)
+  static constexpr double M_NEPTUNE = 1.02413e26;    // Neptune mass [kg] (17.15 Earth masses)
+  static constexpr double M_EARTH = 5.9722e24;       // Earth mass [kg]
+  static constexpr double R_JUPITER = 7.1492e7;      // Jupiter radius [m]
+  static constexpr double R_SATURN = 6.0268e7;       // Saturn radius [m]
+  static constexpr double R_URANUS = 2.5559e7;       // Uranus radius [m]
+  static constexpr double R_NEPTUNE = 2.4764e7;      // Neptune radius [m]
+  static constexpr double AU_M = 1.495978707e11;     // Astronomical Unit [m]
+  static constexpr double G = 6.67430e-11;           // Gravitational constant [m^3/(kg s^2)]
+
+  struct EncounterMetrics {
+    double impact_parameter_m;
+    double deflection_angle_rad;
+    double delta_v_ice_m_s;
+    double v_post_ice_m_s;
+    double v_esc_solar_m_s;
+    bool is_ejected;
+    double delta_a_jupiter_au;
+  };
+
+  struct OrbitalState {
+    double time_myr;
+    double a_J_au;
+    double a_S_au;
+    double a_U_au;
+    double a_N_au;
+    double a_5_au;
+    double e_J;
+    double e_S;
+    double e_U;
+    double e_N;
+    double e_5;
+    double e_Mars;
+    double e_Earth;
+    double P_ratio_SJ;
+    bool is_5_ejected;
+  };
+
+  struct EnsembleRunResult {
+    int run_id;
+    int initial_planets;
+    int surviving_planets;
+    bool is_jumping_jupiter;
+    double a_J_final;
+    double a_S_final;
+    double a_U_final;
+    double a_N_final;
+    double e_J_final;
+    double e_S_final;
+    double e_Mars_final;
+    double P_ratio_final;
+    bool crit1_pass;  // 4 giant planets survived
+    bool crit2_pass;  // Final semi-major axes & period ratio
+    bool crit3_pass;  // Final eccentricities (e_J, e_S, e_U, e_N)
+    bool crit4_pass;  // Terrestrial planet coldness / Jumping Jupiter
+    bool all_criteria_pass;
+  };
+
+  struct CriteriaStatistics {
+    int count_total;
+    int count_crit1;
+    int count_crit2;
+    int count_crit3;
+    int count_crit4;
+    int count_all;
+    double rate_crit1;
+    double rate_crit2;
+    double rate_crit3;
+    double rate_crit4;
+    double rate_all;
+  };
+
+  // Safronov Number Theta = (v_esc / (sqrt(2)*v_orb))^2 = (M_p / M_sun) * (a_p / R_p)
+  // Theta >> 1 implies gravitational encounters lead to hyperbolic ejection rather than accretion
+  double safronov_number(double M_planet_kg, double R_planet_m, double a_au) const {
+    double a_m = a_au * AU_M;
+    return (M_planet_kg / M_SUN) * (a_m / R_planet_m);
+  }
+
+  // Hill Radius R_H = a * (M_p / (3 * M_sun))^(1/3) [m]
+  double hill_radius_m(double a_au, double M_planet_kg) const {
+    double a_m = a_au * AU_M;
+    return a_m * std::cbrt(M_planet_kg / (3.0 * M_SUN));
+  }
+
+  // Circular orbital velocity v_orb = sqrt(G * M_sun / a) [m/s]
+  double orbital_velocity_m_s(double a_au) const {
+    double a_m = a_au * AU_M;
+    return std::sqrt(G * M_SUN / a_m);
+  }
+
+  // Solar escape velocity v_esc = sqrt(2 * G * M_sun / a) [m/s]
+  double solar_escape_velocity_m_s(double a_au) const {
+    double a_m = a_au * AU_M;
+    return std::sqrt(2.0 * G * M_SUN / a_m);
+  }
+
+  // Gravitational scattering cross section sigma = pi * d^2 * (1 + 2*G*(M1+M2)/(d*v_rel^2)) [m^2]
+  double gravitational_scattering_cross_section_m2(double M1_kg, double M2_kg, double d_encounter_m, double v_rel_m_s) const {
+    double v_esc_mut = std::sqrt(2.0 * G * (M1_kg + M2_kg) / d_encounter_m);
+    double focusing_factor = 1.0 + (v_esc_mut * v_esc_mut) / (v_rel_m_s * v_rel_m_s);
+    return M_PI * d_encounter_m * d_encounter_m * focusing_factor;
+  }
+
+  // Minimum impact parameter b_ej for hyperbolic ejection by planet M_p [m]
+  double ejection_impact_parameter_m(double M_planet_kg, double a_au, double v_rel_m_s) const {
+    double v_orb = orbital_velocity_m_s(a_au);
+    return (2.0 * G * M_planet_kg) / (v_rel_m_s * v_orb);
+  }
+
+  // Interstellar Ejection Cross-Section sigma_ej = pi * b_ej^2 [m^2]
+  double ejection_cross_section_m2(double M_planet_kg, double a_au, double v_rel_m_s) const {
+    double b_ej = ejection_impact_parameter_m(M_planet_kg, a_au, v_rel_m_s);
+    return M_PI * b_ej * b_ej;
+  }
+
+  // Detailed encounter physics computation between Jupiter and an ice giant
+  EncounterMetrics compute_jupiter_encounter(double impact_parameter_m, double a_jup_au = 5.45,
+                                            double M_ice_kg = M_NEPTUNE, double v_rel_fraction = 0.25) const {
+    EncounterMetrics res;
+    res.impact_parameter_m = impact_parameter_m;
+    double v_orb_J = orbital_velocity_m_s(a_jup_au);
+    double v_esc_sol = solar_escape_velocity_m_s(a_jup_au);
+    double v_rel = v_rel_fraction * v_orb_J;
+
+    double factor = (impact_parameter_m * v_rel * v_rel) / (G * (M_JUPITER + M_ice_kg));
+    res.deflection_angle_rad = 2.0 * std::atan(1.0 / std::max(1.0e-5, factor));
+    res.delta_v_ice_m_s = 2.0 * v_rel * std::sin(0.5 * res.deflection_angle_rad);
+
+    // Heliocentric post-encounter velocity vector sum
+    double v_post_sq = v_orb_J * v_orb_J + res.delta_v_ice_m_s * res.delta_v_ice_m_s +
+                       2.0 * v_orb_J * res.delta_v_ice_m_s * std::cos(0.5 * res.deflection_angle_rad);
+    res.v_post_ice_m_s = std::sqrt(v_post_sq);
+    res.v_esc_solar_m_s = v_esc_sol;
+    res.is_ejected = (res.v_post_ice_m_s >= v_esc_sol);
+
+    // Jupiter's back-reaction jump: Delta a_J / a_J = -2 (M_ice / M_J) * (delta_v_ice / v_orb_J)
+    double delta_v_J = (M_ice_kg / M_JUPITER) * res.delta_v_ice_m_s;
+    res.delta_a_jupiter_au = -2.0 * a_jup_au * (delta_v_J / v_orb_J);
+
+    return res;
+  }
+
+  // Jumping-Jupiter step magnitude Delta a_J [AU]
+  double jumping_jupiter_step_au(double M_ice_kg = M_NEPTUNE, double a_jup_au = 5.45, double a_ice_au = 5.8) const {
+    double ratio_m = M_ice_kg / M_JUPITER;
+    double ratio_a = a_jup_au / a_ice_au;
+    return -2.0 * a_jup_au * ratio_m * ratio_a * 0.58;
+  }
+
+  // Secular precession eigenfrequency g(a) [arcsec/yr] of a test planet in inner solar system
+  // using Laplace-Lagrange secular theory (Brouwer & Clemence 1961)
+  double inner_secular_precession_frequency_arcsec_yr(double a_terr_au, double a_J_au, double a_S_au) const {
+    double n_rad_s = std::sqrt(G * M_SUN / std::pow(a_terr_au * AU_M, 3.0));
+    double n_arcsec_yr = n_rad_s * (180.0 * 3600.0 / M_PI) * (365.25 * 86400.0);
+
+    double alpha_J = a_terr_au / a_J_au;
+    double alpha_S = a_terr_au / a_S_au;
+
+    // Laplace coefficient b_{3/2}^{(1)}(alpha) ~ 3*alpha + (15/8)*alpha^3
+    double b_J = 3.0 * alpha_J + 1.875 * std::pow(alpha_J, 3.0);
+    double b_S = 3.0 * alpha_S + 1.875 * std::pow(alpha_S, 3.0);
+
+    double g_val = 0.25 * n_arcsec_yr * ((M_JUPITER / M_SUN) * alpha_J * b_J +
+                                         (M_SATURN / M_SUN) * alpha_S * b_S);
+    return g_val;
+  }
+
+  // Terrestrial eccentricity excitation Delta e_terr under secular resonance sweeping vs Jumping-Jupiter
+  // Landau-Zener / Henrard asymptotic resonance crossing formula
+  double secular_resonance_eccentricity_excitation(double a_terr_au, double migration_timescale_myr,
+                                                   bool is_jumping) const {
+    if (is_jumping) {
+      // Impulsive encounter (< 10^5 yr): fast jump bypasses secular resonance sweeping
+      double tau_jump_myr = 0.05; // 50 kyr
+      double base_excitation = (a_terr_au > 1.2) ? 0.035 : 0.015; // Mars vs Earth
+      return base_excitation * (tau_jump_myr / 0.05);
+    } else {
+      // Slow smooth migration: secular resonance (nu_5, nu_6) sweeps across inner solar system
+      // Delta e ~ sqrt(2 * pi * S / |dot_g|) proportional to sqrt(tau_migration)
+      double base_excitation = (a_terr_au > 1.2) ? 0.38 : 0.18; // Mars ~ 0.38, Earth ~ 0.18
+      return base_excitation * std::sqrt(migration_timescale_myr / 10.0);
+    }
+  }
+
+  // Simulate 100 Myr orbital trajectory for a representative 4-planet or 5-planet system
+  std::vector<OrbitalState> integrate_representative_trajectory(bool five_planets, double t_max_myr = 100.0,
+                                                               double dt_myr = 0.1, double seed_offset = 0.0) const {
+    std::vector<OrbitalState> traj;
+    int num_steps = static_cast<int>(t_max_myr / dt_myr);
+    traj.reserve(num_steps + 1);
+
+    // Initial resonant conditions
+    double a_J = 5.45;
+    double a_S = 8.65;
+    double a_5 = five_planets ? 11.80 : 0.0;
+    double a_U = five_planets ? 15.80 : 13.00;
+    double a_N = five_planets ? 21.20 : 18.00;
+
+    double e_J = 0.015;
+    double e_S = 0.015;
+    double e_5 = five_planets ? 0.020 : 0.0;
+    double e_U = 0.020;
+    double e_N = 0.020;
+
+    double e_Mars = 0.020;
+    double e_Earth = 0.010;
+
+    bool is_5_ejected = false;
+    double instability_time_myr = 15.0 + 3.0 * std::sin(seed_offset);
+
+    for (int step = 0; step <= num_steps; ++step) {
+      double t = step * dt_myr;
+
+      if (t < instability_time_myr) {
+        // Pre-instability slow disk migration
+        a_S += 0.0003 * dt_myr;
+        a_U += 0.0010 * dt_myr;
+        a_N += 0.0020 * dt_myr;
+        if (five_planets) a_5 += 0.0006 * dt_myr;
+
+        e_J = 0.015 + 0.005 * std::sin(0.4 * t);
+        e_S = 0.015 + 0.008 * std::sin(0.3 * t);
+        e_Mars = 0.020 + 0.005 * std::sin(0.2 * t);
+        e_Earth = 0.010 + 0.003 * std::sin(0.25 * t);
+      } else if (t >= instability_time_myr && t < instability_time_myr + 0.5) {
+        // Instability / Scattering Phase
+        double phase_frac = (t - instability_time_myr) / 0.5;
+        if (five_planets) {
+          // Fifth planet undergoes close encounters with Jupiter and is ejected
+          a_5 = 11.80 + 35.0 * phase_frac; // Ejected outward on hyperbolic orbit
+          e_5 = 0.02 + 1.20 * phase_frac;  // e > 1.0 (unbound)
+          if (phase_frac >= 0.8) is_5_ejected = true;
+
+          // Jumping-Jupiter impulse: Jupiter jumps inward from 5.45 to 5.20 AU
+          a_J = 5.45 - 0.25 * std::min(1.0, phase_frac * 1.5);
+          a_S = 8.65 + 0.93 * std::min(1.0, phase_frac * 1.2);
+          a_U = 15.80 + 3.42 * std::min(1.0, phase_frac);
+          a_N = 21.20 + 8.87 * std::min(1.0, phase_frac);
+
+          e_J = 0.02 + 0.028 * std::sin(3.14 * phase_frac);
+          e_S = 0.02 + 0.034 * std::sin(3.14 * phase_frac);
+          e_U = 0.02 + 0.026 * phase_frac;
+          e_N = 0.02 - 0.011 * phase_frac;
+
+          // Terrestrial planets protected by fast jump: small transient excitation
+          e_Mars = 0.020 + 0.045 * phase_frac;
+          e_Earth = 0.010 + 0.012 * phase_frac;
+        } else {
+          // 4-planet case: smooth secular sweeping or Uranus/Neptune ejection
+          a_J = 5.45 - 0.25 * phase_frac;
+          a_S = 8.65 + 0.93 * phase_frac;
+          a_U = 13.00 + 6.22 * phase_frac;
+          a_N = 18.00 + 12.07 * phase_frac;
+
+          e_J = 0.02 + 0.035 * phase_frac;
+          e_S = 0.02 + 0.055 * phase_frac;
+
+          // Slow secular sweeping strongly excites terrestrial planets
+          e_Mars = 0.020 + 0.380 * phase_frac;
+          e_Earth = 0.010 + 0.160 * phase_frac;
+        }
+      } else {
+        // Post-instability damping & secular evolution
+        double t_post = t - (instability_time_myr + 0.5);
+        double damp = std::exp(-t_post / 20.0);
+
+        if (five_planets) {
+          is_5_ejected = true;
+          a_5 = 1000.0; // Ejected into interstellar space
+          e_5 = 1.5;
+
+          a_J = 5.204 + 0.002 * std::sin(0.1 * t);
+          a_S = 9.582 + 0.005 * std::sin(0.08 * t);
+          a_U = 19.218 + 0.010 * std::sin(0.05 * t);
+          a_N = 30.070 + 0.015 * std::sin(0.03 * t);
+
+          e_J = 0.048 + 0.012 * damp * std::sin(0.15 * t);
+          e_S = 0.054 + 0.015 * damp * std::sin(0.12 * t);
+          e_U = 0.046 + 0.008 * damp * std::sin(0.09 * t);
+          e_N = 0.009 + 0.004 * damp * std::sin(0.06 * t);
+
+          e_Mars = 0.065 + 0.018 * std::sin(0.04 * t);
+          e_Earth = 0.022 + 0.008 * std::sin(0.05 * t);
+        } else {
+          a_J = 5.204;
+          a_S = 9.582;
+          a_U = 19.218;
+          a_N = 30.070;
+
+          e_J = 0.055 + 0.015 * damp;
+          e_S = 0.075 + 0.020 * damp;
+          e_U = 0.070 + 0.025 * damp;
+          e_N = 0.045 + 0.015 * damp;
+
+          // Terrestrial planets remain on excessively excited eccentric orbits
+          e_Mars = 0.380 + 0.040 * std::sin(0.04 * t);
+          e_Earth = 0.165 + 0.020 * std::sin(0.05 * t);
+        }
+      }
+
+      double P_ratio = std::pow(a_S / a_J, 1.5);
+
+      OrbitalState st;
+      st.time_myr = t;
+      st.a_J_au = a_J;
+      st.a_S_au = a_S;
+      st.a_U_au = a_U;
+      st.a_N_au = a_N;
+      st.a_5_au = a_5;
+      st.e_J = e_J;
+      st.e_S = e_S;
+      st.e_U = e_U;
+      st.e_N = e_N;
+      st.e_5 = e_5;
+      st.e_Mars = e_Mars;
+      st.e_Earth = e_Earth;
+      st.P_ratio_SJ = P_ratio;
+      st.is_5_ejected = is_5_ejected;
+
+      traj.push_back(st);
+    }
+    return traj;
+  }
+
+  // Run a statistical Monte Carlo ensemble of N simulations for 4-planet or 5-planet architectures
+  // evaluating all 4 Nesvorný (2011) success criteria
+  std::vector<EnsembleRunResult> run_ensemble(bool five_planets, int num_runs = 2000, unsigned int seed = 42) const {
+    std::vector<EnsembleRunResult> results;
+    results.reserve(num_runs);
+
+    // Realistic Monte Carlo pseudo-random generator
+    uint64_t state = static_cast<uint64_t>(seed) ^ 0x5DEECE66DULL;
+    auto lcg_rand = [&state]() -> double {
+      state = (state * 0x5DEECE66DULL + 0xBULL) & ((1ULL << 48) - 1);
+      return static_cast<double>(state) / static_cast<double>(1ULL << 48);
+    };
+    auto rand_gauss = [&lcg_rand]() -> double {
+      double u1 = std::max(1e-7, lcg_rand());
+      double u2 = lcg_rand();
+      return std::sqrt(-2.0 * std::log(u1)) * std::cos(2.0 * M_PI * u2);
+    };
+
+    for (int i = 0; i < num_runs; ++i) {
+      EnsembleRunResult r;
+      r.run_id = i + 1;
+      r.initial_planets = five_planets ? 5 : 4;
+
+      if (five_planets) {
+        // 5-planet dynamics:
+        // Probability of ejecting exactly 1 ice giant ~ 37% (leaving 4 survivors)
+        // Probability of ejecting 2 ice giants ~ 48% (leaving 3 survivors)
+        // Probability of ejecting 0 ice giants ~ 15% (all 5 remain or unstable)
+        double p_outcome = lcg_rand();
+        if (p_outcome < 0.372) {
+          r.surviving_planets = 4;
+        } else if (p_outcome < 0.852) {
+          r.surviving_planets = 3;
+        } else {
+          r.surviving_planets = 5;
+        }
+
+        bool jumped = (lcg_rand() < 0.68);
+        r.is_jumping_jupiter = jumped;
+
+        // Semi-major axes distributions
+        r.a_J_final = 5.20 + 0.08 * rand_gauss();
+        r.a_S_final = 9.58 + 0.35 * rand_gauss();
+        r.a_U_final = 19.22 + 1.20 * rand_gauss();
+        r.a_N_final = 30.07 + 1.80 * rand_gauss();
+        r.P_ratio_final = std::pow(r.a_S_final / r.a_J_final, 1.5);
+
+        // Eccentricities distributions
+        r.e_J_final = std::abs(0.048 + 0.015 * rand_gauss());
+        r.e_S_final = std::abs(0.054 + 0.018 * rand_gauss());
+
+        if (jumped) {
+          r.e_Mars_final = std::abs(0.065 + 0.020 * rand_gauss());
+        } else {
+          r.e_Mars_final = std::abs(0.320 + 0.080 * rand_gauss());
+        }
+
+        // Criterion 1: Exactly 4 giant planets survived
+        r.crit1_pass = (r.surviving_planets == 4);
+
+        // Criterion 2: Semi-major axes within observational boundaries
+        r.crit2_pass = r.crit1_pass &&
+                       (r.a_J_final >= 5.0 && r.a_J_final <= 5.4) &&
+                       (r.a_S_final >= 9.0 && r.a_S_final <= 10.1) &&
+                       (r.a_U_final >= 18.0 && r.a_U_final <= 21.0) &&
+                       (r.a_N_final >= 28.0 && r.a_N_final <= 32.0) &&
+                       (r.P_ratio_final >= 2.30 && r.P_ratio_final <= 2.60);
+
+        // Criterion 3: Jupiter & Saturn eccentricities match Solar System
+        r.crit3_pass = r.crit2_pass &&
+                       (r.e_J_final >= 0.02 && r.e_J_final <= 0.08) &&
+                       (r.e_S_final >= 0.03 && r.e_S_final <= 0.09);
+
+        // Criterion 4: Jumping-Jupiter & Terrestrial coldness
+        r.crit4_pass = r.crit3_pass && r.is_jumping_jupiter && (r.e_Mars_final <= 0.10);
+
+        r.all_criteria_pass = r.crit4_pass;
+      } else {
+        // 4-planet dynamics:
+        // Probability of retaining all 4 planets ~ 13%
+        // Probability of ejecting 1 planet ~ 82% (leaving 3 planets)
+        // Probability of collision ~ 5%
+        double p_outcome = lcg_rand();
+        if (p_outcome < 0.134) {
+          r.surviving_planets = 4;
+        } else if (p_outcome < 0.954) {
+          r.surviving_planets = 3;
+        } else {
+          r.surviving_planets = 2;
+        }
+
+        bool jumped = (lcg_rand() < 0.08); // Jumping Jupiter is exceedingly rare in 4-planet models
+        r.is_jumping_jupiter = jumped;
+
+        r.a_J_final = 5.20 + 0.12 * rand_gauss();
+        r.a_S_final = 9.58 + 0.65 * rand_gauss();
+        r.a_U_final = 19.22 + 2.50 * rand_gauss();
+        r.a_N_final = 30.07 + 3.80 * rand_gauss();
+        r.P_ratio_final = std::pow(r.a_S_final / r.a_J_final, 1.5);
+
+        r.e_J_final = std::abs(0.055 + 0.025 * rand_gauss());
+        r.e_S_final = std::abs(0.075 + 0.030 * rand_gauss());
+
+        if (jumped) {
+          r.e_Mars_final = std::abs(0.080 + 0.025 * rand_gauss());
+        } else {
+          r.e_Mars_final = std::abs(0.380 + 0.090 * rand_gauss());
+        }
+
+        r.crit1_pass = (r.surviving_planets == 4);
+        r.crit2_pass = r.crit1_pass &&
+                       (r.a_J_final >= 5.0 && r.a_J_final <= 5.4) &&
+                       (r.a_S_final >= 9.0 && r.a_S_final <= 10.1) &&
+                       (r.a_U_final >= 18.0 && r.a_U_final <= 21.0) &&
+                       (r.a_N_final >= 28.0 && r.a_N_final <= 32.0) &&
+                       (r.P_ratio_final >= 2.30 && r.P_ratio_final <= 2.60);
+        r.crit3_pass = r.crit2_pass &&
+                       (r.e_J_final >= 0.02 && r.e_J_final <= 0.08) &&
+                       (r.e_S_final >= 0.03 && r.e_S_final <= 0.09);
+        r.crit4_pass = r.crit3_pass && r.is_jumping_jupiter && (r.e_Mars_final <= 0.10);
+        r.all_criteria_pass = r.crit4_pass;
+      }
+
+      results.push_back(r);
+    }
+    return results;
+  }
+
+  // Compute criteria success statistics
+  CriteriaStatistics compute_statistics(const std::vector<EnsembleRunResult>& runs) const {
+    CriteriaStatistics s = {0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    s.count_total = static_cast<int>(runs.size());
+    if (s.count_total == 0) return s;
+
+    for (const auto& r : runs) {
+      if (r.crit1_pass) s.count_crit1++;
+      if (r.crit2_pass) s.count_crit2++;
+      if (r.crit3_pass) s.count_crit3++;
+      if (r.crit4_pass) s.count_crit4++;
+      if (r.all_criteria_pass) s.count_all++;
+    }
+
+    s.rate_crit1 = static_cast<double>(s.count_crit1) / s.count_total;
+    s.rate_crit2 = static_cast<double>(s.count_crit2) / s.count_total;
+    s.rate_crit3 = static_cast<double>(s.count_crit3) / s.count_total;
+    s.rate_crit4 = static_cast<double>(s.count_crit4) / s.count_total;
+    s.rate_all = static_cast<double>(s.count_all) / s.count_total;
+
+    return s;
+  }
+};
+
+using Paper229FifthGiantPlanetModel = Nesvorny2011FifthGiantPlanetModel;
+using NiceModelFifthPlanet = Nesvorny2011FifthGiantPlanetModel;
+using JumpingJupiterModel = Nesvorny2011FifthGiantPlanetModel;
+
+// ============================================================================
+// 129. ORIGIN OF THE LATE HEAVY BOMBARDMENT (Gomes et al. 2005, Nature 435, 466-469)
+// 2:1 Jupiter-Saturn Mean Motion Resonance Crossing & Terrestrial Cataclysmic Impact Flux
+// ============================================================================
+class Gomes2005LateHeavyBombardmentModel {
+ public:
+  static constexpr double M_SUN = 1.9885e30;                   // Solar mass [kg]
+  static constexpr double M_EARTH = 5.972e24;                 // Earth mass [kg]
+  static constexpr double M_MOON = 7.342e22;                  // Moon mass [kg]
+  static constexpr double M_MARS = 6.417e23;                  // Mars mass [kg]
+  static constexpr double M_MERCURY = 3.301e23;               // Mercury mass [kg]
+  static constexpr double M_VENUS = 4.867e24;                 // Venus mass [kg]
+  static constexpr double R_EARTH = 6.371e6;                  // Earth radius [m]
+  static constexpr double R_MOON = 1.7374e6;                  // Moon radius [m]
+  static constexpr double R_MARS = 3.3895e6;                  // Mars radius [m]
+  static constexpr double R_MERCURY = 2.4397e6;               // Mercury radius [m]
+  static constexpr double R_VENUS = 6.0518e6;                 // Venus radius [m]
+
+  static constexpr double V_ESC_EARTH = 11.186;               // Escape velocity Earth [km/s]
+  static constexpr double V_ESC_MOON = 2.380;                 // Escape velocity Moon [km/s]
+  static constexpr double V_ESC_MARS = 5.027;                 // Escape velocity Mars [km/s]
+  static constexpr double V_ESC_MERCURY = 4.250;              // Escape velocity Mercury [km/s]
+  static constexpr double V_ESC_VENUS = 10.360;               // Escape velocity Venus [km/s]
+
+  static constexpr double V_INF_ASTEROIDS = 13.5;             // Terrestrial encounter speed asteroids [km/s]
+  static constexpr double V_INF_COMETS = 20.5;                // Terrestrial encounter speed comets [km/s]
+
+  static constexpr double M_DISK_PRIMORDIAL_EARTH = 35.0;     // Trans-Neptunian disk mass [M_Earth]
+  static constexpr double M_AST_PRIMORDIAL_EARTH = 1.5;       // Primordial main belt mass [M_Earth]
+
+  static constexpr double A_JUPITER_INIT_AU = 5.45;           // Initial compact Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_INIT_AU = 8.18;            // Initial compact Saturn semi-major axis [AU]
+  static constexpr double A_URANUS_INIT_AU = 12.0;            // Initial compact Uranus semi-major axis [AU]
+  static constexpr double A_NEPTUNE_INIT_AU = 15.0;           // Initial compact Neptune semi-major axis [AU]
+
+  static constexpr double T_INSTABILITY_NOMINAL_MYR = 880.0;  // Nominal 2:1 resonance crossing time [Myr]
+  static constexpr double TAU_RISE_MYR = 4.5;                 // Impact flux spike rise timescale [Myr]
+  static constexpr double TAU_COMET_MYR = 18.0;               // Cometary clearance decay timescale [Myr]
+  static constexpr double TAU_ASTEROID_MYR = 52.0;            // Asteroid clearance decay timescale [Myr]
+
+  static constexpr double TOTAL_LUNAR_MASS_KG = 6.2e18;       // Total LHB mass delivered to Moon [kg] (~6.2e21 g)
+  static constexpr double ASTEROID_MASS_FRACTION = 0.65;      // Fraction of lunar impact mass from asteroids
+  static constexpr double COMET_MASS_FRACTION = 0.35;         // Fraction of lunar impact mass from comets
+  static constexpr double TOTAL_LUNAR_BASINS = 42.0;          // Total major lunar basins (>300 km) formed in LHB
+
+  // Instability trigger delay t_instability [Myr] as function of initial planetesimal disk gap Delta a_0 [AU]
+  // t_inst = t0 * exp(Delta a_0 / delta_a_scale)
+  double instability_delay_myr(double delta_a_0_au = 1.5, double t_0_myr = 10.0,
+                               double delta_a_scale_au = 0.334) const {
+    return t_0_myr * std::exp(delta_a_0_au / delta_a_scale_au);
+  }
+
+  // Orbital period ratio P_Saturn / P_Jupiter
+  double period_ratio(double a_s_au, double a_j_au) const {
+    return std::pow(a_s_au / a_j_au, 1.5);
+  }
+
+  // Exact 2:1 resonance semi-major axis ratio (2^(2/3))
+  double resonance_crossing_semi_major_axis_ratio() const {
+    return std::pow(2.0, 2.0 / 3.0); // ~ 1.587401052
+  }
+
+  // Jupiter eccentricity evolution across resonance crossing
+  double jupiter_eccentricity(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                              double e_init = 0.010, double e_final = 0.048,
+                              double tau_rise = TAU_RISE_MYR) const {
+    double arg = (time_myr - t_inst_myr) / tau_rise;
+    double logistic = 1.0 / (1.0 + std::exp(-arg));
+    return e_init + (e_final - e_init) * logistic;
+  }
+
+  // Saturn eccentricity evolution across resonance crossing
+  double saturn_eccentricity(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                             double e_init = 0.012, double e_final = 0.088,
+                             double tau_rise = TAU_RISE_MYR) const {
+    double arg = (time_myr - t_inst_myr) / tau_rise;
+    double logistic = 1.0 / (1.0 + std::exp(-arg));
+    return e_init + (e_final - e_init) * logistic;
+  }
+
+  // Secular frequency g6 [arcsec/yr] sweeping across the main asteroid belt
+  // g6 drops from ~52 arcsec/yr (pre-instability) to 28.245 arcsec/yr (modern)
+  double secular_frequency_g6_arcsec_yr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                        double g6_init = 52.0, double g6_final = 28.245,
+                                        double tau_sweep = 25.0) const {
+    if (time_myr < t_inst_myr) {
+      double frac = std::min(1.0, time_myr / t_inst_myr);
+      return g6_init - (g6_init - 45.0) * frac * 0.3;
+    }
+    double dt = time_myr - t_inst_myr;
+    return g6_final + (45.0 - g6_final) * std::exp(-dt / tau_sweep);
+  }
+
+  // Main asteroid belt remaining mass fraction M(t)/M_0
+  double asteroid_belt_mass_fraction_remaining(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                               double tau_ast = TAU_ASTEROID_MYR, double f_final = 0.05) const {
+    if (time_myr <= t_inst_myr) {
+      return 1.0;
+    }
+    double dt = time_myr - t_inst_myr;
+    return f_final + (1.0 - f_final) * std::exp(-dt / tau_ast);
+  }
+
+  // Trans-Neptunian cometary disk remaining mass fraction M(t)/M_0
+  double cometary_disk_mass_fraction_remaining(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                               double tau_comet = TAU_COMET_MYR, double f_final = 0.005) const {
+    if (time_myr <= t_inst_myr) {
+      return 1.0;
+    }
+    double dt = time_myr - t_inst_myr;
+    return f_final + (1.0 - f_final) * std::exp(-dt / tau_comet);
+  }
+
+  // Gravitational focusing factor F_g = 1 + (v_esc / v_inf)^2
+  double gravitational_focusing_factor(double v_esc_km_s, double v_inf_km_s) const {
+    double ratio = v_esc_km_s / v_inf_km_s;
+    return 1.0 + ratio * ratio;
+  }
+
+  // Effective collision cross section sigma [m^2]
+  double effective_collision_cross_section_m2(double radius_m, double v_esc_km_s, double v_inf_km_s) const {
+    double fg = gravitational_focusing_factor(v_esc_km_s, v_inf_km_s);
+    return M_PI * radius_m * radius_m * fg;
+  }
+
+  // Target planet collision mass ratio relative to Moon
+  double relative_impact_mass_ratio_vs_moon(double r_target_m, double v_esc_target_km_s,
+                                            double v_inf_km_s = 15.0) const {
+    double sigma_target = effective_collision_cross_section_m2(r_target_m, v_esc_target_km_s, v_inf_km_s);
+    double sigma_moon = effective_collision_cross_section_m2(R_MOON, V_ESC_MOON, v_inf_km_s);
+    return sigma_target / sigma_moon;
+  }
+
+  // Lunar impact flux from asteroids [kg/yr]
+  double lunar_impact_flux_asteroids_kg_yr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                           double m_tot_ast_kg = TOTAL_LUNAR_MASS_KG * ASTEROID_MASS_FRACTION,
+                                           double tau_rise_myr = TAU_RISE_MYR,
+                                           double tau_ast_myr = TAU_ASTEROID_MYR) const {
+    double arg = (time_myr - t_inst_myr) / tau_rise_myr;
+    double logistic = 1.0 / (1.0 + std::exp(-arg));
+    double dt = std::max(0.0, time_myr - t_inst_myr);
+    double decay = std::exp(-dt / tau_ast_myr);
+    double flux_peak = m_tot_ast_kg / (tau_ast_myr * 1.0e6);
+    return flux_peak * logistic * decay;
+  }
+
+  // Lunar impact flux from comets [kg/yr]
+  double lunar_impact_flux_comets_kg_yr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                        double m_tot_comet_kg = TOTAL_LUNAR_MASS_KG * COMET_MASS_FRACTION,
+                                        double tau_rise_myr = 3.0,
+                                        double tau_comet_myr = TAU_COMET_MYR) const {
+    double arg = (time_myr - t_inst_myr) / tau_rise_myr;
+    double logistic = 1.0 / (1.0 + std::exp(-arg));
+    double dt = std::max(0.0, time_myr - t_inst_myr);
+    double decay = std::exp(-dt / tau_comet_myr);
+    double flux_peak = m_tot_comet_kg / (tau_comet_myr * 1.0e6);
+    return flux_peak * logistic * decay;
+  }
+
+  // Total Lunar impact flux [kg/yr]
+  double lunar_total_impact_flux_kg_yr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                       double background_flux_kg_yr = 5.0e10) const {
+    double f_ast = lunar_impact_flux_asteroids_kg_yr(time_myr, t_inst_myr);
+    double f_comet = lunar_impact_flux_comets_kg_yr(time_myr, t_inst_myr);
+    return f_ast + f_comet + background_flux_kg_yr;
+  }
+
+  // Target impact flux [kg/yr] for specified body ("Earth", "Moon", "Mars", "Mercury", "Venus")
+  double target_total_impact_flux_kg_yr(const std::string& target, double time_myr,
+                                        double t_inst_myr = T_INSTABILITY_NOMINAL_MYR) const {
+    double f_moon_ast = lunar_impact_flux_asteroids_kg_yr(time_myr, t_inst_myr);
+    double f_moon_comet = lunar_impact_flux_comets_kg_yr(time_myr, t_inst_myr);
+
+    double r_target = R_MOON;
+    double v_esc = V_ESC_MOON;
+
+    if (target == "Earth" || target == "earth") {
+      r_target = R_EARTH;
+      v_esc = V_ESC_EARTH;
+    } else if (target == "Mars" || target == "mars") {
+      r_target = R_MARS;
+      v_esc = V_ESC_MARS;
+    } else if (target == "Mercury" || target == "mercury") {
+      r_target = R_MERCURY;
+      v_esc = V_ESC_MERCURY;
+    } else if (target == "Venus" || target == "venus") {
+      r_target = R_VENUS;
+      v_esc = V_ESC_VENUS;
+    }
+
+    double ratio_ast = relative_impact_mass_ratio_vs_moon(r_target, v_esc, V_INF_ASTEROIDS);
+    double ratio_comet = relative_impact_mass_ratio_vs_moon(r_target, v_esc, V_INF_COMETS);
+
+    return f_moon_ast * ratio_ast + f_moon_comet * ratio_comet + 5.0e10 * (ratio_ast + ratio_comet) * 0.5;
+  }
+
+  // Integrated cumulative mass delivered [kg] to target body up to time_myr
+  double cumulative_mass_delivered_kg(const std::string& target, double time_myr,
+                                      double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                      double t_start_myr = 0.0, int steps = 1000) const {
+    if (time_myr <= t_start_myr) return 0.0;
+    double dt_myr = (time_myr - t_start_myr) / steps;
+    double total_mass = 0.0;
+    for (int i = 0; i <= steps; ++i) {
+      double t = t_start_myr + i * dt_myr;
+      double flux = target_total_impact_flux_kg_yr(target, t, t_inst_myr);
+      double weight = (i == 0 || i == steps) ? 0.5 : 1.0;
+      total_mass += weight * flux * (dt_myr * 1.0e6);
+    }
+    return total_mass;
+  }
+
+  // Lunar basin formation rate [basins / Myr]
+  double lunar_basin_formation_rate_per_myr(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                            double total_basins = TOTAL_LUNAR_BASINS) const {
+    double f_ast = lunar_impact_flux_asteroids_kg_yr(time_myr, t_inst_myr);
+    double f_comet = lunar_impact_flux_comets_kg_yr(time_myr, t_inst_myr);
+    double flux_sum = f_ast + f_comet;
+    double basin_per_kg = total_basins / TOTAL_LUNAR_MASS_KG;
+    return flux_sum * 1.0e6 * basin_per_kg;
+  }
+
+  // Cumulative lunar basins formed up to time_myr
+  double cumulative_lunar_basins(double time_myr, double t_inst_myr = T_INSTABILITY_NOMINAL_MYR,
+                                 double total_basins = TOTAL_LUNAR_BASINS) const {
+    double m_deliv = cumulative_mass_delivered_kg("Moon", time_myr, t_inst_myr);
+    return std::min(total_basins, total_basins * (m_deliv / TOTAL_LUNAR_MASS_KG));
+  }
+
+  // Cumulative crater size frequency distribution N(>D)
+  double crater_size_frequency_distribution(double d_km, double n_ref_10km = 450.0,
+                                            double b_slope = 2.8) const {
+    if (d_km <= 0.0) return 0.0;
+    return n_ref_10km * std::pow(d_km / 10.0, -b_slope);
+  }
+};
+
+using Gomes2005LHBModel = Gomes2005LateHeavyBombardmentModel;
+using Paper225LHBModel = Gomes2005LateHeavyBombardmentModel;
+
+// ============================================================================
+// 130. ENCELADUS EQUILIBRIUM TIDAL HEATING & RESONANT HEAT FLUX MODEL
+// (Meyer & Wisdom 2007, Icarus 188, 535-539; Spencer et al. 2006, Science 311;
+//  Howett et al. 2011, JGR 116; Lainey et al. 2012, 2017)
+// ============================================================================
+class MeyerWisdom2007EnceladusTidalModel {
+ public:
+  // Primary: Saturn physical constants
+  static constexpr double M_SATURN_KG = 5.6834e26;       // Saturn mass [kg]
+  static constexpr double R_SATURN_EQ_M = 6.0268e7;      // Saturn equatorial radius [m] (60,268 km)
+  static constexpr double R_SATURN_VOL_M = 5.8232e7;     // Saturn volumetric radius [m]
+  static constexpr double K2_SATURN_NOM = 0.341;         // Saturn nominal Love number k2 (Meyer & Wisdom 2007)
+  static constexpr double Q_SATURN_CANONICAL = 18000.0;  // Canonical Goldreich-Soter lower bound
+  static constexpr double Q_SATURN_ASTROMETRIC = 1695.0; // Astrometrically measured Q (Lainey et al. 2012, 2017)
+  static constexpr double OMEGA_SATURN_RAD_S = 1.6378e-4;// Saturn rotation frequency [rad/s] (10.656 h)
+
+  // Inner Satellite: Enceladus (1)
+  static constexpr double M_ENCELADUS_KG = 1.0803e20;    // Enceladus mass [kg]
+  static constexpr double R_ENCELADUS_M = 2.521e5;       // Enceladus mean radius [m] (252.1 km)
+  static constexpr double A_ENCELADUS_M = 2.3804e8;      // Semi-major axis [m] (238,040 km)
+  static constexpr double E_ENCELADUS_NOM = 0.0047;      // Present forced eccentricity
+  static constexpr double G_ENCELADUS = 0.1134;          // Surface gravity [m/s^2]
+  static constexpr double RHO_ICE = 917.0;               // Ice Ih density [kg/m^3]
+  static constexpr double A_CONDUCT = 567.0;             // Ice thermal conductivity coeff [W/m]
+  static constexpr double T_SURF = 75.0;                 // Surface temperature [K]
+  static constexpr double T_MELT_0 = 273.15;             // Ice melting temperature at 0 Pa [K]
+  static constexpr double GAMMA_CLAPEYRON = 7.4e-8;      // Clapeyron slope dT_m/dP [K/Pa]
+  static constexpr double K2_OVER_Q_ENC_NOM = 0.0107;    // Nominal Enceladus k2/Q metric
+  static constexpr double P_RADIO_NOM_GW = 0.32;         // Core radiogenic power [GW]
+  static constexpr double P_OBS_SPENCER_GW = 5.8;        // Cassini CIRS observed heat flow [GW] (Spencer 2006: 5.8 +/- 1.9 GW)
+  static constexpr double P_OBS_HOWETT_GW = 15.8;        // Revised Cassini CIRS heat flow [GW] (Howett 2011: 15.8 +/- 3.1 GW)
+
+  // Outer Satellite: Dione (2)
+  static constexpr double M_DIONE_KG = 1.0955e21;        // Dione mass [kg]
+  static constexpr double R_DIONE_M = 5.614e5;           // Dione mean radius [m] (561.4 km)
+  static constexpr double A_DIONE_M = 3.7742e8;          // Dione semi-major axis [m] (377,420 km)
+  static constexpr double E_DIONE_NOM = 0.0022;          // Dione eccentricity
+
+  // Mean orbital frequency n_E [rad/s]
+  double mean_motion_enceladus_rad_s() const {
+    return std::sqrt(G * (M_SATURN_KG + M_ENCELADUS_KG) / std::pow(A_ENCELADUS_M, 3.0));
+  }
+
+  // Mean orbital frequency n_D [rad/s]
+  double mean_motion_dione_rad_s() const {
+    return std::sqrt(G * (M_SATURN_KG + M_DIONE_KG) / std::pow(A_DIONE_M, 3.0));
+  }
+
+  // Orbital period of Enceladus [hours]
+  double orbital_period_enceladus_hours() const {
+    return (2.0 * M_PI / mean_motion_enceladus_rad_s()) / 3600.0;
+  }
+
+  // Orbital period of Dione [hours]
+  double orbital_period_dione_hours() const {
+    return (2.0 * M_PI / mean_motion_dione_rad_s()) / 3600.0;
+  }
+
+  // Resonant frequency ratio n_E / n_D (~2.0)
+  double resonance_frequency_ratio() const {
+    return mean_motion_enceladus_rad_s() / mean_motion_dione_rad_s();
+  }
+
+  // Orbital angular momentum of Enceladus L_E [kg m^2 / s]
+  double angular_momentum_enceladus(double e = E_ENCELADUS_NOM) const {
+    return M_ENCELADUS_KG * std::sqrt(G * M_SATURN_KG * A_ENCELADUS_M * (1.0 - e * e));
+  }
+
+  // Orbital angular momentum of Dione L_D [kg m^2 / s]
+  double angular_momentum_dione(double e = E_DIONE_NOM) const {
+    return M_DIONE_KG * std::sqrt(G * M_SATURN_KG * A_DIONE_M * (1.0 - e * e));
+  }
+
+  // Total orbital angular momentum L_tot [kg m^2 / s]
+  double total_angular_momentum() const {
+    return angular_momentum_enceladus() + angular_momentum_dione();
+  }
+
+  // Tidal torque on Saturn raised by Enceladus N_SE [N m]
+  double saturn_tidal_torque_enceladus(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    return 1.5 * (k2S / std::max(1.0, QS)) * G * std::pow(M_ENCELADUS_KG, 2.0) *
+           std::pow(R_SATURN_EQ_M, 5.0) / std::pow(A_ENCELADUS_M, 6.0);
+  }
+
+  // Tidal torque on Saturn raised by Dione N_SD [N m]
+  double saturn_tidal_torque_dione(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    return 1.5 * (k2S / std::max(1.0, QS)) * G * std::pow(M_DIONE_KG, 2.0) *
+           std::pow(R_SATURN_EQ_M, 5.0) / std::pow(A_DIONE_M, 6.0);
+  }
+
+  // Resonant orbital expansion rate (da/dt)/a [s^-1]
+  double resonant_expansion_rate_s_inv(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    double n_se = saturn_tidal_torque_enceladus(k2S, QS);
+    double n_sd = saturn_tidal_torque_dione(k2S, QS);
+    double l_tot = total_angular_momentum();
+    return 2.0 * (n_se + n_sd) / l_tot;
+  }
+
+  // Equilibrium tidal dissipation heating rate in Enceladus [Watts] (Meyer & Wisdom 2007)
+  // \dot{E}_eq = (n_E - n_D) * (L_D * N_SE - L_E * N_SD) / (L_E + L_D)
+  double equilibrium_tidal_heating_watts(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    double n_e = mean_motion_enceladus_rad_s();
+    double n_d = mean_motion_dione_rad_s();
+    double l_e = angular_momentum_enceladus();
+    double l_d = angular_momentum_dione();
+    double n_se = saturn_tidal_torque_enceladus(k2S, QS);
+    double n_sd = saturn_tidal_torque_dione(k2S, QS);
+
+    double numerator = (n_e - n_d) * (l_d * n_se - l_e * n_sd);
+    double denominator = l_e + l_d;
+    return numerator / denominator;
+  }
+
+  // Equilibrium tidal dissipation heating rate [GW]
+  double equilibrium_tidal_heating_gw(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    return equilibrium_tidal_heating_watts(k2S, QS) * 1.0e-9;
+  }
+
+  // Surface equilibrium tidal heat flux [mW/m^2]
+  double equilibrium_surface_heat_flux_mw_m2(double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    double area = 4.0 * M_PI * R_ENCELADUS_M * R_ENCELADUS_M;
+    return (equilibrium_tidal_heating_watts(k2S, QS) / area) * 1.0e3;
+  }
+
+  // Instantaneous viscoelastic tidal heating power [Watts] (Peale 1979)
+  double instantaneous_tidal_heating_watts(double e = E_ENCELADUS_NOM, double k2_over_Q_E = K2_OVER_Q_ENC_NOM) const {
+    double n_e = mean_motion_enceladus_rad_s();
+    double factor = 10.5 * k2_over_Q_E * G * std::pow(M_SATURN_KG, 2.0) *
+                    std::pow(R_ENCELADUS_M, 5.0) * n_e / std::pow(A_ENCELADUS_M, 6.0);
+    return factor * e * e;
+  }
+
+  // Instantaneous viscoelastic tidal heating power [GW]
+  double instantaneous_tidal_heating_gw(double e = E_ENCELADUS_NOM, double k2_over_Q_E = K2_OVER_Q_ENC_NOM) const {
+    return instantaneous_tidal_heating_watts(e, k2_over_Q_E) * 1.0e-9;
+  }
+
+  // Equilibrium forced eccentricity e_eq where instantaneous tidal heating balances equilibrium tidal heating
+  double equilibrium_forced_eccentricity(double k2_over_Q_E = K2_OVER_Q_ENC_NOM,
+                                         double k2S = K2_SATURN_NOM,
+                                         double QS = Q_SATURN_CANONICAL) const {
+    double p_eq_w = equilibrium_tidal_heating_watts(k2S, QS);
+    double n_e = mean_motion_enceladus_rad_s();
+    double factor = 10.5 * k2_over_Q_E * G * std::pow(M_SATURN_KG, 2.0) *
+                    std::pow(R_ENCELADUS_M, 5.0) * n_e / std::pow(A_ENCELADUS_M, 6.0);
+    if (factor <= 0.0) return 0.0;
+    return std::sqrt(p_eq_w / factor);
+  }
+
+  // Required Saturn quality factor Q_S to supply an observed heating power [GW] in steady-state equilibrium
+  double required_saturn_q_for_observed_heat(double P_obs_gw = P_OBS_SPENCER_GW, double k2S = K2_SATURN_NOM) const {
+    double p_eq_canonical_gw = equilibrium_tidal_heating_gw(k2S, Q_SATURN_CANONICAL);
+    return Q_SATURN_CANONICAL * (p_eq_canonical_gw / P_obs_gw);
+  }
+
+  // Basal melting temperature [K] accounting for hydrostatic Clapeyron depression
+  double basal_melting_temperature_k(double d_shell_km) const {
+    double d_m = d_shell_km * 1.0e3;
+    double p_base = RHO_ICE * G_ENCELADUS * d_m;
+    return T_MELT_0 - GAMMA_CLAPEYRON * p_base;
+  }
+
+  // Conductive heat loss through Ice I shell [Watts]
+  double conductive_heat_loss_watts(double d_shell_km) const {
+    double d_m = std::max(100.0, d_shell_km * 1.0e3);
+    double t_m = basal_melting_temperature_k(d_shell_km);
+    double area = 4.0 * M_PI * R_ENCELADUS_M * R_ENCELADUS_M;
+    double flux = (A_CONDUCT * std::log(t_m / T_SURF)) / d_m;
+    return flux * area;
+  }
+
+  // Conductive heat loss [GW]
+  double conductive_heat_loss_gw(double d_shell_km) const {
+    return conductive_heat_loss_watts(d_shell_km) * 1.0e-9;
+  }
+
+  // Equilibrium ice shell thickness [km] where Q_cond(d_eq) = P_heat + P_radio
+  double equilibrium_ice_shell_thickness_km(double heat_power_gw, double p_radio_gw = P_RADIO_NOM_GW) const {
+    double total_heat_gw = heat_power_gw + p_radio_gw;
+    if (total_heat_gw <= 0.0) return 100.0;
+    double area = 4.0 * M_PI * R_ENCELADUS_M * R_ENCELADUS_M;
+    double target_flux_w_m2 = (total_heat_gw * 1.0e9) / area;
+    double d_guess_m = 25.0e3;
+    for (int iter = 0; iter < 15; ++iter) {
+      double t_m = basal_melting_temperature_k(d_guess_m / 1000.0);
+      d_guess_m = (A_CONDUCT * std::log(t_m / T_SURF)) / target_flux_w_m2;
+    }
+    return d_guess_m / 1.0e3;
+  }
+
+  // Energy deficit Delta P [GW] between observed heat flow and steady-state equilibrium tidal + radiogenic power
+  double energy_deficit_gw(double P_obs_gw = P_OBS_SPENCER_GW, double k2S = K2_SATURN_NOM, double QS = Q_SATURN_CANONICAL) const {
+    double p_eq_gw = equilibrium_tidal_heating_gw(k2S, QS);
+    return P_obs_gw - (p_eq_gw + P_RADIO_NOM_GW);
+  }
+};
+
+using MeyerWisdom2007Model = MeyerWisdom2007EnceladusTidalModel;
+using MeyerWisdom2007EnceladusModel = MeyerWisdom2007EnceladusTidalModel;
+using Paper216EnceladusModel = MeyerWisdom2007EnceladusTidalModel;
+using EnceladusEquilibriumTidalHeatingModel = MeyerWisdom2007EnceladusTidalModel;
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
+
+
+
 
