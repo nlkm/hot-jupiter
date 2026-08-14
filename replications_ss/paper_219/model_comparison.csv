@@ -1,0 +1,8 @@
+parameter,observed_published,model_predicted,units,citation
+"SPT Thermal Emission Power",1.58000e+01,1.67991e+01,"GW","Spencer 2006, Howett 2011"
+"Peak SPT Heat Flux",1.85000e+02,1.85005e+02,"mW/m^2","Howett et al. 2011"
+"Equatorial Libration Amplitude",1.20000e-01,1.19977e-01,"deg","Thomas et al. 2016"
+"Obliquity Tidal Power (Nominal)",1.50000e-04,6.25541e-05,"GW","Chen & Nimmo 2011"
+"Ocean Turbulent Drag Dissipation",2.30000e-05,9.49651e-01,"GW","Chen et al. 2014"
+"Nominal Shell Libration Dissipation",1.12000e+01,1.15447e+01,"GW","Chen et al. 2012"
+"Forced Orbital Eccentricity Power",4.30000e+00,4.30470e+00,"GW","Peale 1979, Tobie 2008"

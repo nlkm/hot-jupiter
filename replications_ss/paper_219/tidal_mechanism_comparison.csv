@@ -1,0 +1,6 @@
+mechanism,power_gw,power_watts,fraction_percent,polar_concentration
+Libration Shear Strain (Decoupled Shell),11.5447,11544707712.6748,68.7221,Extreme (SPT focused)
+Eccentricity Radial Tidal Flexure,4.3047,4304700234.8579,25.6246,Moderate (global quad)
+Obliquity Tides (Nominal theta=0.001 deg),6.255410e-05,6.255410e+04,3.723653e-04,Negligible
+Obliquity Tides (Exaggerated theta=0.1 deg),0.6258,625776468.1079,3.5913,High
+Ocean Bottom Turbulent Drag,9.496507e-01,9.496507e+08,5.652979e+00,Uniform

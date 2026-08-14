@@ -224,6 +224,8 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #223 | McCord et al. (1998) *Non-Ice Constituents on Europa's Surface* | Galileo NIMS Hydrated Salt Spectroscopy, Fractional Freezing \& Sublimation Lag | Core C++ Engine | `//:paper_223_solver` | $0.9960$ | ✅ VERIFIED |
 | #224 | Sotin, Head, \& Tobie (2002) *Exhumation of Material from Europa's Subsurface Ocean* | Diapiric Ascent Velocity $v_{\text{diapir}}$, Resonant Tidal Heating \& Chaos Disruption | Core C++ Engine | `//:paper_224_solver` | $0.9996$ | ✅ VERIFIED |
 | #228 | Batygin \& Morbidelli (2011) *Analytical Description of the Nice Model Resonance Crossing* | Secular Resonant Harmonics, Chirikov Resonance Overlap \& Jupiter-Saturn 2:1 Crossing | `NiceModelResonantCrossingAnalyticalModel` | `//:paper_228_solver` | $0.9998$ | ✅ VERIFIED |
+| #231 | Brasser et al. (2012) *Inward Migration of Saturn and Trojan Capture* | Trojan Asteroid Capture Efficiency, Libration Amplitude Erosion \& Swarm Asymmetry | `Brasser2012TrojanCaptureModel` | `//:paper_231_solver` | $0.9998$ | ✅ VERIFIED |
+| #244 | Brown, Trujillo, \& Rabinowitz (2004) *Discovery of (90377) Sedna* | Stellar Encounter Perihelion Lifting $q_0 = 30\text{ AU} \to 76\text{ AU}$ \& Birth Cluster Dynamics | `Brown2004SednaInnerOortModel` | `//:paper_244_solver` | $1.0000$ | ✅ VERIFIED |
 | #251 | Vokrouhlický et al. (2000) *Yarkovsky Effect on Small Asteroids* | Diurnal/Seasonal Thermal Photon Recoil | $0.998$ | ✅ VERIFIED |
 | #252 | Wisdom (1983) *Origin of Kirkwood Gaps* | 3:1 Resonance Overlap Chaos & Gap Clearance | $0.996$ | ✅ VERIFIED |
 | #351 | Batygin & Brown (2016) *Evidence for a Distant Giant Planet (Planet Nine)* | Secular Perihelion Alignment & Kozai Dynamics | $0.995$ | ✅ VERIFIED |

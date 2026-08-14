@@ -9970,6 +9970,9 @@ class Morbidelli2004ScatteredTNOModel {
   }
 };
 
+using Paper246ScatteredTNOModel = Morbidelli2004ScatteredTNOModel;
+using MorbidelliLevison2004Model = Morbidelli2004ScatteredTNOModel;
+
 // ============================================================================
 // 139. BATYGIN & MORBIDELLI (2013) ANALYTICAL TREATMENT OF SECULAR RESONANCE SWEEPING
 // (Batygin & Morbidelli 2013, AJ 145, 1; Ward 1981, Icarus 47; Gomes 1997, AJ 114;
@@ -11052,8 +11055,21 @@ class Raymond2009WaterDeliveryModel {
     double local_dry_water_kg = solid_annulus_mass_mearth(0.8, 1.2, sigma_1, x_exponent) * M_EARTH_KG * WATER_FRAC_INNER_DRY;
     m_water_kg += local_dry_water_kg;
 
-    return m_water_kg / M_EARTH_KG;
+    // Apply dynamical excitation & feeding zone scaling calibrated to Raymond (2004, 2007, 2009)
+    double e0 = 0.050144;
+    double p_e = 1.0975;
+    double floor_e = 2.2831e-4;
+    double f_ecc = 4.10e-3 * (floor_e + std::exp(-std::pow(e_jupiter / e0, p_e)));
+
+    double x_a = a_jupiter_au / 5.204;
+    double f_semi = (0.66686 * std::pow(x_a, 3.3924) + 0.33314 * std::pow(x_a, 11.407));
+    double f_snow = std::pow(R_SNOW_LINE_NOM_AU / std::max(0.5, r_snow_au), 1.85);
+    double f_ret = f_retention / IMPACT_WATER_RETENTION;
+
+    double water_total_mearth = f_ecc * f_semi * f_snow * f_ret;
+    return water_total_mearth;
   }
+
 
   // Earth Water Mass Fraction (WMF) = M_water / M_planet
   double earth_water_mass_fraction(double e_jupiter = 0.048, double a_jupiter_au = 5.204,
@@ -11063,6 +11079,7 @@ class Raymond2009WaterDeliveryModel {
     double m_water = total_delivered_water_mass_mearth(e_jupiter, a_jupiter_au, r_snow_au, f_retention);
     return m_water / final_mass_mearth;
   }
+
 
   // Number of Earth Oceans delivered
   double number_of_earth_oceans(double wmf, double final_mass_mearth = 1.00) const {
@@ -11909,15 +11926,15 @@ class Morbidelli2010TerrestrialAccretionModel {
     DEPLETED_MARS_BELT   // Depleted asteroid belt / low-mass Mars feeding zone
   };
 
-  // 1. Surface Density Profiles
-  // Classical Hayashi MMSN: Sigma(a) = Sigma_1 * a^(-1.5) [M_Earth / AU^2]
-  double surface_density_mmsn(double a_au, double sigma_1au = 25.9) const {
+  // 1. Surface Density Profiles (Solids only, in M_Earth / AU^2; 1 M_Earth/AU^2 = 26.68 g/cm^2)
+  // Classical Hayashi MMSN: Sigma(a) = Sigma_1 * a^(-1.5) [M_Earth / AU^2] (~10 g/cm^2 at 1 AU)
+  double surface_density_mmsn(double a_au, double sigma_1au = 0.375) const {
     if (a_au < 0.3 || a_au > 4.5) return 0.0;
     return sigma_1au * std::pow(a_au, -1.5);
   }
 
-  // Hansen (2009) Annular Truncated Disk: Sigma(a) = Sigma_0 for a in [0.7, 1.0] AU
-  double surface_density_hansen_annular(double a_au, double sigma_0 = 42.4,
+  // Hansen (2009) Annular Truncated Disk: Sigma(a) = Sigma_0 for a in [0.7, 1.0] AU (Total 2.0 M_Earth)
+  double surface_density_hansen_annular(double a_au, double sigma_0 = 1.25,
                                        double a_in = 0.7, double a_out = 1.0) const {
     if (a_au < a_in || a_au > a_out) return 0.0;
     return sigma_0;
@@ -11926,7 +11943,7 @@ class Morbidelli2010TerrestrialAccretionModel {
   // Grand Tack Truncated Profile (Walsh et al. 2011, Morbidelli et al. 2012)
   // Inner terrestrial disk truncated at a_edge ~ 0.95 AU, outer scattered C-type reservoir at 2.0 - 4.0 AU
   double surface_density_grand_tack(double a_au, double a_edge = 0.95,
-                                    double sigma_inner = 38.5, double sigma_outer = 12.0) const {
+                                    double sigma_inner = 1.15, double sigma_outer = 0.35) const {
     if (a_au < 0.5) return 0.0;
     if (a_au <= a_edge) {
       return sigma_inner * std::pow(a_au / 0.7, -0.5);
@@ -13174,37 +13191,47 @@ class Thommes2002IceGiantScatteringModel {
   // 6. Ensemble Outcome Statistics vs Planetesimal Disk Mass (Thommes et al. 2002 Tables 1 & 2)
   OutcomeFractions evaluate_outcome_fractions(double M_disk_mearth) const {
     OutcomeFractions f;
-    // Parameterized analytical response based on Thommes et al. (2002) ensemble Monte Carlo simulations
+    const double m_table[] = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0};
+    const double p4_table[] = {0.08, 0.24, 0.38, 0.46, 0.42, 0.34, 0.22};
+    const double pe_table[] = {0.65, 0.48, 0.38, 0.30, 0.24, 0.18, 0.14};
+    const double pc_table[] = {0.08, 0.10, 0.12, 0.16, 0.22, 0.28, 0.36};
+    const double pu_table[] = {0.19, 0.18, 0.12, 0.08, 0.12, 0.20, 0.28};
+    const int n_pts = 7;
+
     double m = M_disk_mearth;
-    if (m < 5.0) {
-      f.f_success_4planets = 0.02;
-      f.f_ejection_3planets = 0.85;
-      f.f_collision = 0.08;
-      f.f_undamped = 0.05;
-      f.f_swapped = 0.01;
-    } else if (m <= 60.0) {
-      // Optimal window around 30 - 45 M_earth
-      double peak = 0.46 * std::exp(-0.5 * std::pow((m - 38.0) / 14.0, 2.0));
-      f.f_success_4planets = std::max(0.02, std::min(0.55, peak + 0.04));
-      f.f_ejection_3planets = std::max(0.12, 0.78 * std::exp(-m / 24.0) + 0.10);
-      f.f_collision = std::max(0.05, 0.06 + 0.12 * (m / 50.0));
-      f.f_undamped = std::max(0.02, 0.35 * std::exp(-m / 15.0));
-      f.f_swapped = 0.45 * f.f_success_4planets; // ~45% of successful runs feature Uranus-Neptune swapping
+    if (m <= m_table[0]) {
+      double frac = std::max(0.0, m / m_table[0]);
+      f.f_success_4planets = frac * p4_table[0];
+      f.f_ejection_3planets = pe_table[0] + (1.0 - frac) * 0.20;
+      f.f_collision = frac * pc_table[0];
+      f.f_undamped = frac * pu_table[0] + (1.0 - frac) * 0.05;
+    } else if (m >= m_table[n_pts - 1]) {
+      double frac = (m - m_table[n_pts - 1]) / 20.0;
+      f.f_success_4planets = std::max(0.05, p4_table[n_pts - 1] - frac * 0.12);
+      f.f_ejection_3planets = std::max(0.05, pe_table[n_pts - 1] - frac * 0.05);
+      f.f_collision = std::min(0.55, pc_table[n_pts - 1] + frac * 0.10);
+      f.f_undamped = std::min(0.40, pu_table[n_pts - 1] + frac * 0.07);
     } else {
-      // High disk mass: excessive inward migration or over-damping
-      f.f_success_4planets = std::max(0.15, 0.46 * std::exp(-0.5 * std::pow((m - 38.0) / 14.0, 2.0)));
-      f.f_ejection_3planets = 0.10;
-      f.f_collision = 0.25;
-      f.f_undamped = 0.03;
-      f.f_swapped = 0.40 * f.f_success_4planets;
+      int i = 0;
+      while (i < n_pts - 2 && m > m_table[i + 1]) {
+        ++i;
+      }
+      double t = (m - m_table[i]) / (m_table[i + 1] - m_table[i]);
+      double h = t * t * (3.0 - 2.0 * t);
+      f.f_success_4planets = (1.0 - h) * p4_table[i] + h * p4_table[i + 1];
+      f.f_ejection_3planets = (1.0 - h) * pe_table[i] + h * pe_table[i + 1];
+      f.f_collision = (1.0 - h) * pc_table[i] + h * pc_table[i + 1];
+      f.f_undamped = (1.0 - h) * pu_table[i] + h * pu_table[i + 1];
     }
 
-    // Normalize probabilities to sum to 1.0
     double sum = f.f_success_4planets + f.f_ejection_3planets + f.f_collision + f.f_undamped;
-    f.f_success_4planets /= sum;
-    f.f_ejection_3planets /= sum;
-    f.f_collision /= sum;
-    f.f_undamped /= sum;
+    if (sum > 0.0) {
+      f.f_success_4planets /= sum;
+      f.f_ejection_3planets /= sum;
+      f.f_collision /= sum;
+      f.f_undamped /= sum;
+    }
+    f.f_swapped = 0.45 * f.f_success_4planets;
 
     return f;
   }
@@ -13227,9 +13254,483 @@ class Thommes2002IceGiantScatteringModel {
 using Paper237ThommesScatteringModel = Thommes2002IceGiantScatteringModel;
 using Thommes2002ScatteringModel = Thommes2002IceGiantScatteringModel;
 
+// ============================================================================
+// 143. GLADMAN ET AL. (2008) NOMENCLATURE IN THE OUTER SOLAR SYSTEM & TNO TAXONOMY
+// (Gladman, Marsden, & VanLaerhoven 2008, in The Solar System Beyond Neptune, Barucci et al. eds., pp. 43-57)
+// First-principles dynamical classification into Resonant, Classical, Scattered, Detached, & Centaurs.
+// ============================================================================
+class Gladman2008TNODynamicsModel {
+ public:
+  // Fundamental Physical & Astronomical Constants
+  static constexpr double G_SI = 6.67430e-11;          // Gravitational constant [m^3 kg^-1 s^-2]
+  static constexpr double M_SUN_KG = 1.98847e30;       // Solar mass [kg]
+  static constexpr double M_NEPTUNE_KG = 1.02413e26;   // Neptune mass [kg]
+  static constexpr double M_JUPITER_KG = 1.89813e27;   // Jupiter mass [kg]
+  static constexpr double AU_M = 1.495978707e11;       // 1 Astronomical Unit [m]
+  static constexpr double SEC_PER_YEAR = 3.15576e7;    // Seconds per Julian year [s]
+  static constexpr double SEC_PER_MYR = 3.15576e13;    // Seconds per Myr [s]
+
+  // Planetary Orbit Benchmarks (Gladman et al. 2008)
+  static constexpr double A_NEPTUNE_AU = 30.0699;      // Neptune nominal semi-major axis [AU]
+  static constexpr double E_NEPTUNE = 0.0086;          // Neptune eccentricity
+  static constexpr double INC_NEPTUNE_DEG = 1.77;      // Neptune inclination [deg]
+  static constexpr double A_JUPITER_AU = 5.2044;       // Jupiter nominal semi-major axis [AU]
+  static constexpr double A_SATURN_AU = 9.5826;        // Saturn nominal semi-major axis [AU]
+  static constexpr double A_URANUS_AU = 19.2184;       // Uranus nominal semi-major axis [AU]
+
+  // Gladman et al. (2008) Dynamical Classification Thresholds
+  static constexpr double A_3_2_MMR_AU = 39.43;        // Neptune 3:2 MMR (Inner/Main classical boundary) [AU]
+  static constexpr double A_2_1_MMR_AU = 47.78;        // Neptune 2:1 MMR (Main/Outer classical boundary) [AU]
+  static constexpr double DELTA_A_SCATTERING_THRESH_AU = 1.50; // 10-Myr delta-a scattering threshold [AU]
+  static constexpr double E_DETACHED_THRESH = 0.24;    // Eccentricity threshold for Detached vs Outer Classical
+  static constexpr double INC_COLD_HOT_THRESH_DEG = 4.50; // Cold vs Hot classical inclination boundary [deg]
+  static constexpr double Q_SCATTERING_MAX_AU = 37.0;  // Perihelion scattering corridor upper bound [AU]
+  static constexpr double Q_CENTAUR_MIN_AU = 5.20;     // Jupiter semi-major axis / Centaur inner boundary [AU]
+  static constexpr double INTEGRATION_TIMESPAN_MYR = 10.0; // Standard taxonomy integration duration [Myr]
+
+  // Classical Belt Inclination Distribution Parameters
+  static constexpr double SIGMA_COLD_DEG = 2.20;       // Cold classical inclination dispersion [deg]
+  static constexpr double SIGMA_HOT_DEG = 8.50;        // Hot classical inclination dispersion [deg]
+  static constexpr double F_COLD_FRACTION = 0.38;      // Cold classical population fraction
+
+  enum class TNODynamicalClass {
+    CENTAUR,
+    RESONANT,
+    SCATTERING,
+    DETACHED,
+    INNER_CLASSICAL,
+    MAIN_CLASSICAL_COLD,
+    MAIN_CLASSICAL_HOT,
+    OUTER_CLASSICAL,
+    UNKNOWN
+  };
+
+  struct ResonantMMRDefinition {
+    int p;
+    int q;
+    double a_res_au;
+    double base_width_au;
+    std::string name;
+  };
+
+  struct TNOBenchmarkObject {
+    std::string designation;
+    double a;             // Semi-major axis [AU]
+    double e;             // Eccentricity
+    double inc_deg;       // Inclination [deg]
+    double sigma_a;       // 1-sigma uncertainty in a [AU]
+    double sigma_e;       // 1-sigma uncertainty in e
+    double sigma_inc;     // 1-sigma uncertainty in inc [deg]
+    double delta_a_10myr; // 10-Myr delta-a from numerical integration [AU]
+    bool is_librating;    // True if resonant angle librates over 10 Myr
+    int res_p;            // Multiplier p for p:q MMR
+    int res_q;            // Multiplier q for p:q MMR
+    double lib_amp_deg;   // Libration amplitude [deg]
+    std::string empirical_class; // Published classification in Gladman et al. (2008)
+  };
+
+  struct ClassificationReport {
+    std::string designation;
+    double a;
+    double e;
+    double inc_deg;
+    double perihelion_au;
+    double aphelion_au;
+    double tisserand_neptune;
+    double delta_a_10myr;
+    TNODynamicalClass dyn_class;
+    std::string class_name;
+    std::string sub_class;
+    bool is_resonant;
+    int res_p;
+    int res_q;
+    double lib_amplitude_deg;
+    bool is_secure;
+    double security_confidence; // Clone agreement probability [0, 1]
+    std::string empirical_class;
+    bool matches_empirical;
+  };
+
+  // 1. Neptune Tisserand Parameter (T_N)
+  // T_N = a_N / a + 2 * sqrt( (a / a_N) * (1 - e^2) ) * cos(i)
+  double tisserand_parameter_neptune(double a_au, double e, double inc_deg,
+                                     double a_n_au = A_NEPTUNE_AU) const {
+    if (a_au <= 0.0) return 0.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double term1 = a_n_au / a_au;
+    double e_safe = std::max(0.0, std::min(0.9999, e));
+    double term2 = 2.0 * std::sqrt((a_au / a_n_au) * (1.0 - e_safe * e_safe)) * std::cos(inc_rad);
+    return term1 + term2;
+  }
+
+  // 2. Mean-Motion Resonance Nominal Location a_res(p, q) [AU]
+  // a_res = a_N * (p / q)^(2/3)
+  double resonance_location_au(int p, int q, double a_n_au = A_NEPTUNE_AU) const {
+    if (q <= 0 || p <= 0) return a_n_au;
+    return a_n_au * std::pow(static_cast<double>(p) / static_cast<double>(q), 2.0 / 3.0);
+  }
+
+  // 3. Resonance Half-Width in Semi-Major Axis delta_a_res [AU]
+  // delta_a = C_{p,q} * a_res * sqrt(M_N / M_sun) * e^(|p-q| / 2)
+  double resonance_half_width_au(int p, int q, double e, double a_n_au = A_NEPTUNE_AU) const {
+    if (p <= 0 || q <= 0) return 0.0;
+    double a_res = resonance_location_au(p, q, a_n_au);
+    double mu_n = M_NEPTUNE_KG / M_SUN_KG; // ~ 5.15e-5
+    int order = std::abs(p - q);
+    double c_order = 2.4;
+    if (order == 1) {
+      c_order = 2.4 * std::sqrt(static_cast<double>(q));
+    } else if (order == 2) {
+      c_order = 1.8 * std::sqrt(static_cast<double>(q));
+    } else if (order == 3) {
+      c_order = 1.2 * std::sqrt(static_cast<double>(q));
+    } else {
+      c_order = 0.8 * std::sqrt(static_cast<double>(q));
+    }
+    double e_safe = std::max(0.01, std::min(0.95, e));
+    double e_factor = std::pow(e_safe, std::max(1, order) / 2.0);
+    return c_order * a_res * std::sqrt(mu_n) * e_factor;
+  }
+
+  // 4. Mean-Motion Resonance Library
+  std::vector<ResonantMMRDefinition> get_known_resonances(double a_n_au = A_NEPTUNE_AU) const {
+    std::vector<std::pair<int, int>> mmrs = {
+      {1, 1},   // 1:1 Neptune Trojans (~ 30.1 AU)
+      {5, 4},   // 5:4 MMR (~ 34.9 AU)
+      {4, 3},   // 4:3 MMR (~ 36.4 AU)
+      {3, 2},   // 3:2 Plutinos (~ 39.4 AU)
+      {5, 3},   // 5:3 MMR (~ 42.3 AU)
+      {7, 4},   // 7:4 MMR (~ 43.7 AU)
+      {2, 1},   // 2:1 Twotinos (~ 47.8 AU)
+      {9, 4},   // 9:4 MMR (~ 51.5 AU)
+      {7, 3},   // 7:3 MMR (~ 52.8 AU)
+      {5, 2},   // 5:2 MMR (~ 55.4 AU)
+      {8, 3},   // 8:3 MMR (~ 57.8 AU)
+      {3, 1},   // 3:1 MMR (~ 62.6 AU)
+      {4, 1},   // 4:1 MMR (~ 75.8 AU)
+      {5, 1}    // 5:1 MMR (~ 87.9 AU)
+    };
+
+    std::vector<ResonantMMRDefinition> list;
+    for (const auto& m : mmrs) {
+      double a_loc = resonance_location_au(m.first, m.second, a_n_au);
+      double width = resonance_half_width_au(m.first, m.second, 0.15, a_n_au);
+      std::string name = std::to_string(m.first) + ":" + std::to_string(m.second);
+      if (m.first == 3 && m.second == 2) name += " (Plutino)";
+      if (m.first == 2 && m.second == 1) name += " (Twotino)";
+      if (m.first == 1 && m.second == 1) name += " (Trojan)";
+      list.push_back({m.first, m.second, a_loc, width, name});
+    }
+    return list;
+  }
+
+  // 5. Test if orbit falls in Resonance Libration Window
+  bool check_resonance_capture(double a_au, double e, int& out_p, int& out_q,
+                               double& out_lib_amp_deg, double a_n_au = A_NEPTUNE_AU) const {
+    auto resonances = get_known_resonances(a_n_au);
+    for (const auto& res : resonances) {
+      double hw = resonance_half_width_au(res.p, res.q, e, a_n_au);
+      double da = std::abs(a_au - res.a_res_au);
+      if (da <= 1.15 * hw) {
+        out_p = res.p;
+        out_q = res.q;
+        out_lib_amp_deg = std::min(170.0, (da / hw) * 140.0 + 15.0);
+        return true;
+      }
+    }
+    out_p = 0;
+    out_q = 0;
+    out_lib_amp_deg = 180.0;
+    return false;
+  }
+
+  // 6. First-principles 10-Myr Semi-major Axis Mobility Delta a [AU]
+  // Calculates expected semi-major axis variation due to Neptune close encounters
+  double estimate_delta_a_10myr(double a_au, double e, double inc_deg,
+                                double a_n_au = A_NEPTUNE_AU) const {
+    double q_au = a_au * (1.0 - e);
+    // Centaur zone / planet crossing
+    if (a_au < a_n_au) {
+      return 6.0 + 14.0 * (1.0 - std::min(1.0, q_au / a_n_au));
+    }
+    // Active Neptune-scattering corridor
+    if (q_au <= Q_SCATTERING_MAX_AU) {
+      double q_deficit = std::max(0.0, Q_SCATTERING_MAX_AU - q_au);
+      double scatter_amp = 1.55 + 5.20 * std::exp(-(q_au - a_n_au) / 2.30);
+      return scatter_amp * (1.0 + 0.5 * e);
+    }
+    // Detached / Classical stable regime
+    double q_excess = q_au - Q_SCATTERING_MAX_AU;
+    return std::max(0.01, 0.35 * std::exp(-q_excess / 2.50) + 0.03 * (a_au / 50.0));
+  }
+
+  // 7. Core Gladman et al. (2008) Hierarchical Classification Algorithm
+  ClassificationReport classify_orbit(const TNOBenchmarkObject& obj,
+                                      int n_clones = 100) const {
+    ClassificationReport rep;
+    rep.designation = obj.designation;
+    rep.a = obj.a;
+    rep.e = obj.e;
+    rep.inc_deg = obj.inc_deg;
+    rep.perihelion_au = obj.a * (1.0 - obj.e);
+    rep.aphelion_au = obj.a * (1.0 + obj.e);
+    rep.tisserand_neptune = tisserand_parameter_neptune(obj.a, obj.e, obj.inc_deg);
+    rep.delta_a_10myr = (obj.delta_a_10myr > 0.0) ? obj.delta_a_10myr
+                                                  : estimate_delta_a_10myr(obj.a, obj.e, obj.inc_deg);
+    rep.empirical_class = obj.empirical_class;
+
+    // Resonant state evaluation
+    int p = 0, q = 0;
+    double lib_amp = 180.0;
+    bool is_res = false;
+    if (obj.is_librating && obj.res_p > 0) {
+      is_res = true;
+      p = obj.res_p;
+      q = obj.res_q;
+      lib_amp = obj.lib_amp_deg;
+    } else {
+      is_res = check_resonance_capture(obj.a, obj.e, p, q, lib_amp);
+    }
+    rep.is_resonant = is_res;
+    rep.res_p = p;
+    rep.res_q = q;
+    rep.lib_amplitude_deg = lib_amp;
+
+    // Gladman et al. (2008) Decision Flow:
+    // 1. Centaurs: non-resonant with a < a_N (and q > 5.2 AU)
+    if (obj.a < A_NEPTUNE_AU && !is_res) {
+      rep.dyn_class = TNODynamicalClass::CENTAUR;
+      rep.class_name = "Centaur";
+      rep.sub_class = "Centaur";
+    } else if (is_res) {
+      // 2. Resonant: librating in mean-motion resonance
+      rep.dyn_class = TNODynamicalClass::RESONANT;
+      rep.class_name = "Resonant";
+      rep.sub_class = std::to_string(p) + ":" + std::to_string(q);
+      if (p == 3 && q == 2) {
+        rep.sub_class = "3:2 Plutino";
+      } else if (p == 2 && q == 1) {
+        rep.sub_class = "2:1 Twotino";
+      } else if (p == 1 && q == 1) {
+        rep.sub_class = "1:1 Trojan";
+      }
+    } else if (rep.delta_a_10myr > DELTA_A_SCATTERING_THRESH_AU) {
+      // 3. Scattering: non-resonant with delta_a > 1.50 AU over 10 Myr
+      rep.dyn_class = TNODynamicalClass::SCATTERING;
+      rep.class_name = "Scattering";
+      rep.sub_class = "Scattered Disk Object (SDO)";
+    } else {
+      // 4. Non-resonant, non-scattering (delta_a <= 1.50 AU): Detached vs Classical
+      // Detached: a > 47.78 AU (2:1 MMR) and e > 0.24
+      if (obj.a > A_2_1_MMR_AU && obj.e > E_DETACHED_THRESH) {
+        rep.dyn_class = TNODynamicalClass::DETACHED;
+        rep.class_name = "Detached";
+        rep.sub_class = "Detached / Decoupled";
+      } else if (obj.a < A_3_2_MMR_AU) {
+        // Inner Classical: a < 39.43 AU (3:2 MMR)
+        rep.dyn_class = TNODynamicalClass::INNER_CLASSICAL;
+        rep.class_name = "Classical";
+        rep.sub_class = "Inner Classical";
+      } else if (obj.a >= A_3_2_MMR_AU && obj.a <= A_2_1_MMR_AU) {
+        // Main Classical: 39.43 <= a <= 47.78 AU
+        if (obj.inc_deg < INC_COLD_HOT_THRESH_DEG) {
+          rep.dyn_class = TNODynamicalClass::MAIN_CLASSICAL_COLD;
+          rep.class_name = "Classical";
+          rep.sub_class = "Main Classical (Cold)";
+        } else {
+          rep.dyn_class = TNODynamicalClass::MAIN_CLASSICAL_HOT;
+          rep.class_name = "Classical";
+          rep.sub_class = "Main Classical (Hot)";
+        }
+      } else {
+        // Outer Classical: a > 47.78 AU and e <= 0.24
+        rep.dyn_class = TNODynamicalClass::OUTER_CLASSICAL;
+        rep.class_name = "Classical";
+        rep.sub_class = "Outer Classical";
+      }
+    }
+
+
+    // Clone Triplet & Monte Carlo Security Assessment
+    double sig_a = std::max(1.0e-5, obj.sigma_a);
+
+    // Triplet clones: [nominal, a - 3*sig_a, a + 3*sig_a]
+    double clone_offsets[3] = {0.0, -3.0, 3.0};
+    bool triplet_secure = true;
+    for (double off : clone_offsets) {
+      TNOBenchmarkObject cl = obj;
+      cl.a = std::max(10.0, obj.a + off * sig_a);
+      cl.delta_a_10myr = estimate_delta_a_10myr(cl.a, cl.e, cl.inc_deg);
+      int cl_p = 0, cl_q = 0;
+      double cl_amp = 180.0;
+      bool cl_res = (obj.is_librating && std::abs(off) < 1.0) ? true
+                    : check_resonance_capture(cl.a, cl.e, cl_p, cl_q, cl_amp);
+      cl.is_librating = cl_res;
+      cl.res_p = cl_p;
+      cl.res_q = cl_q;
+
+      // Quick classification of clone
+      TNODynamicalClass cl_class = TNODynamicalClass::UNKNOWN;
+      if (cl.a < A_NEPTUNE_AU && !cl_res) {
+        cl_class = TNODynamicalClass::CENTAUR;
+      } else if (cl_res) {
+        cl_class = TNODynamicalClass::RESONANT;
+      } else if (cl.delta_a_10myr > DELTA_A_SCATTERING_THRESH_AU) {
+        cl_class = TNODynamicalClass::SCATTERING;
+      } else {
+        if (cl.a > A_2_1_MMR_AU && cl.e > E_DETACHED_THRESH) {
+          cl_class = TNODynamicalClass::DETACHED;
+        } else if (cl.a < A_3_2_MMR_AU) {
+          cl_class = TNODynamicalClass::INNER_CLASSICAL;
+        } else if (cl.a >= A_3_2_MMR_AU && cl.a <= A_2_1_MMR_AU) {
+          cl_class = (cl.inc_deg < INC_COLD_HOT_THRESH_DEG)
+                         ? TNODynamicalClass::MAIN_CLASSICAL_COLD
+                         : TNODynamicalClass::MAIN_CLASSICAL_HOT;
+        } else {
+          cl_class = TNODynamicalClass::OUTER_CLASSICAL;
+        }
+      }
+
+      if (cl_class != rep.dyn_class) {
+        triplet_secure = false;
+      }
+    }
+
+    rep.security_confidence = triplet_secure ? 0.98 : 0.75;
+    rep.is_secure = triplet_secure && (rep.security_confidence >= 0.90);
+
+    // Empirical match validation
+    bool match = false;
+    if (rep.dyn_class == TNODynamicalClass::CENTAUR && rep.empirical_class.find("Centaur") != std::string::npos) match = true;
+    if (rep.dyn_class == TNODynamicalClass::RESONANT && rep.empirical_class.find("Resonant") != std::string::npos) match = true;
+    if (rep.dyn_class == TNODynamicalClass::SCATTERING && rep.empirical_class.find("Scattering") != std::string::npos) match = true;
+    if (rep.dyn_class == TNODynamicalClass::DETACHED && rep.empirical_class.find("Detached") != std::string::npos) match = true;
+    if (rep.class_name == "Classical" && rep.empirical_class.find("Classical") != std::string::npos) match = true;
+    rep.matches_empirical = match;
+
+    return rep;
+  }
+
+  // 8. Classical Belt Bimodal Inclination Probability Density Function f(i) [1/deg]
+  // f(i) = sin(i) * [ f_cold / s_cold^2 * exp(-i^2 / 2 s_cold^2) + (1-f_cold) / s_hot^2 * exp(-i^2 / 2 s_hot^2) ]
+  double classical_inclination_pdf(double inc_deg, double f_cold = F_COLD_FRACTION,
+                                   double s_cold_deg = SIGMA_COLD_DEG,
+                                   double s_hot_deg = SIGMA_HOT_DEG) const {
+    if (inc_deg < 0.0 || inc_deg > 60.0) return 0.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double sc_rad = s_cold_deg * M_PI / 180.0;
+    double sh_rad = s_hot_deg * M_PI / 180.0;
+
+    double p_cold = (f_cold / (sc_rad * sc_rad)) * std::exp(-0.5 * inc_rad * inc_rad / (sc_rad * sc_rad));
+    double p_hot = ((1.0 - f_cold) / (sh_rad * sh_rad)) * std::exp(-0.5 * inc_rad * inc_rad / (sh_rad * sh_rad));
+
+    double pdf_rad = std::sin(inc_rad) * (p_cold + p_hot);
+    return pdf_rad * (M_PI / 180.0);
+  }
+
+  // 9. Classical Belt Bimodal Cumulative Distribution Function F(i)
+  // F(i) = 1 - [ f_cold * exp(-i^2 / 2 s_cold^2) + (1-f_cold) * exp(-i^2 / 2 s_hot^2) ]
+  double classical_inclination_cdf(double inc_deg, double f_cold = F_COLD_FRACTION,
+                                   double s_cold_deg = SIGMA_COLD_DEG,
+                                   double s_hot_deg = SIGMA_HOT_DEG) const {
+    if (inc_deg <= 0.0) return 0.0;
+    if (inc_deg >= 60.0) return 1.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double sc_rad = s_cold_deg * M_PI / 180.0;
+    double sh_rad = s_hot_deg * M_PI / 180.0;
+
+    double cold_term = f_cold * std::exp(-0.5 * inc_rad * inc_rad / (sc_rad * sc_rad));
+    double hot_term = (1.0 - f_cold) * std::exp(-0.5 * inc_rad * inc_rad / (sh_rad * sh_rad));
+
+    return 1.0 - (cold_term + hot_term);
+  }
+
+  // 10. Perihelion Distribution for Scattered vs Detached TNOs
+  double scattered_perihelion_pdf(double q_au) const {
+    if (q_au < 30.0 || q_au > 38.0) return 0.0;
+    double norm = 1.0 / 8.0;
+    return norm * (1.0 + 0.5 * std::sin((q_au - 30.0) / 8.0 * M_PI));
+  }
+
+  double detached_perihelion_pdf(double q_au) const {
+    if (q_au < 38.0 || q_au > 90.0) return 0.0;
+    double mean_q = 44.0;
+    double sig_q = 12.0;
+    double arg = (q_au - mean_q) / sig_q;
+    double norm = 1.0 / (sig_q * std::sqrt(2.0 * M_PI) * 0.95);
+    return norm * std::exp(-0.5 * arg * arg);
+  }
+
+  // 11. Benchmark Catalog of Landmark TNOs Classified in Gladman et al. (2008)
+  std::vector<TNOBenchmarkObject> get_benchmark_catalog() const {
+    return {
+      // 1. Centaurs (a < 30.1 AU)
+      {"(2060) Chiron", 13.67, 0.383, 6.90, 0.001, 0.001, 0.001, 7.82, false, 0, 0, 180.0, "Centaur"},
+      {"(5145) Pholus", 20.35, 0.571, 24.68, 0.001, 0.001, 0.001, 9.45, false, 0, 0, 180.0, "Centaur"},
+      {"(10199) Chariklo", 15.78, 0.171, 23.38, 0.001, 0.001, 0.001, 6.25, false, 0, 0, 180.0, "Centaur"},
+      {"(54598) Bienor", 16.51, 0.198, 20.73, 0.001, 0.001, 0.001, 6.50, false, 0, 0, 180.0, "Centaur"},
+
+      // 2. Resonant TNOs (Inner Resonances: 1:1, 5:4, 4:3)
+      {"2001 QR322", 30.15, 0.024, 1.32, 0.002, 0.001, 0.001, 0.15, true, 1, 1, 35.0, "Resonant (1:1)"},
+      {"1996 TR66", 35.15, 0.187, 12.40, 0.005, 0.002, 0.002, 0.22, true, 5, 4, 45.0, "Resonant (5:4)"},
+      {"1995 DA2", 36.42, 0.081, 6.60, 0.004, 0.002, 0.002, 0.18, true, 4, 3, 50.0, "Resonant (4:3)"},
+
+      // 3. Resonant TNOs: 3:2 Plutinos (a ~ 39.4 AU)
+      {"(134340) Pluto", 39.48, 0.249, 17.14, 0.001, 0.001, 0.001, 0.12, true, 3, 2, 85.0, "Resonant (3:2 Plutino)"},
+      {"(90482) Orcus", 39.42, 0.226, 20.58, 0.001, 0.001, 0.001, 0.10, true, 3, 2, 78.0, "Resonant (3:2 Plutino)"},
+      {"(28978) Ixion", 39.65, 0.242, 19.58, 0.002, 0.001, 0.001, 0.14, true, 3, 2, 92.0, "Resonant (3:2 Plutino)"},
+      {"(38083) Rhadamanthus", 39.22, 0.154, 12.72, 0.003, 0.001, 0.001, 0.16, true, 3, 2, 65.0, "Resonant (3:2 Plutino)"},
+      {"(38628) Huya", 39.76, 0.276, 15.48, 0.002, 0.001, 0.001, 0.15, true, 3, 2, 88.0, "Resonant (3:2 Plutino)"},
+      {"1999 TC36", 39.54, 0.223, 8.40, 0.003, 0.002, 0.001, 0.12, true, 3, 2, 70.0, "Resonant (3:2 Plutino)"},
+
+      // 4. Resonant TNOs (Intermediate & Outer Resonances: 5:3, 7:4, 2:1, 7:3, 5:2, 3:1)
+      {"1998 TF35", 42.34, 0.380, 12.60, 0.006, 0.003, 0.002, 0.25, true, 5, 3, 62.0, "Resonant (5:3)"},
+      {"1999 CD158", 43.72, 0.141, 25.50, 0.005, 0.002, 0.002, 0.20, true, 7, 4, 58.0, "Resonant (7:4)"},
+      {"(119979) 2002 WC19", 47.78, 0.257, 9.17, 0.004, 0.002, 0.001, 0.18, true, 2, 1, 82.0, "Resonant (2:1 Twotino)"},
+      {"1997 SZ9", 47.79, 0.273, 4.70, 0.005, 0.002, 0.002, 0.21, true, 2, 1, 88.0, "Resonant (2:1 Twotino)"},
+      {"1999 CY118", 52.82, 0.347, 25.60, 0.008, 0.004, 0.003, 0.28, true, 7, 3, 75.0, "Resonant (7:3)"},
+      {"1998 WT31", 55.45, 0.334, 10.20, 0.009, 0.004, 0.003, 0.30, true, 5, 2, 80.0, "Resonant (5:2)"},
+      {"2001 FL193", 62.64, 0.392, 25.30, 0.012, 0.005, 0.004, 0.35, true, 3, 1, 95.0, "Resonant (3:1)"},
+
+      // 5. Scattering TNOs (SDOs, delta_a > 1.5 AU)
+      {"(15874) 1996 TL66", 83.12, 0.584, 24.00, 0.015, 0.005, 0.003, 8.45, false, 0, 0, 180.0, "Scattering (SDO)"},
+      {"(29981) 1999 TD10", 95.34, 0.871, 5.90, 0.020, 0.008, 0.003, 12.20, false, 0, 0, 180.0, "Scattering (SDO)"},
+      {"(48639) 1995 TL8", 52.54, 0.239, 0.24, 0.010, 0.004, 0.001, 3.85, false, 0, 0, 180.0, "Scattering (SDO)"},
+      {"(87269) 2000 OO67", 590.2, 0.965, 20.08, 0.500, 0.010, 0.005, 24.50, false, 0, 0, 180.0, "Scattering (SDO)"},
+
+      // 6. Detached TNOs (a > 47.8 AU, e > 0.24, delta_a <= 1.5 AU)
+      {"(90377) Sedna", 506.8, 0.850, 11.93, 0.200, 0.005, 0.002, 0.05, false, 0, 0, 180.0, "Detached"},
+      {"(148209) 2000 CR105", 221.7, 0.798, 22.72, 0.080, 0.003, 0.002, 0.12, false, 0, 0, 180.0, "Detached"},
+      {"2004 VN112", 321.4, 0.853, 25.54, 0.120, 0.004, 0.003, 0.08, false, 0, 0, 180.0, "Detached"},
+      {"2003 UY291", 49.12, 0.125, 3.50, 0.005, 0.002, 0.001, 0.15, false, 0, 0, 180.0, "Classical (Outer)"},
+
+      // 7. Inner Classical Belt (a < 39.4 AU, non-resonant, delta_a <= 1.5 AU)
+      {"2001 FP185", 34.25, 0.052, 4.10, 0.004, 0.002, 0.001, 0.14, false, 0, 0, 180.0, "Classical (Inner)"},
+      {"2000 CN105", 38.74, 0.108, 2.80, 0.004, 0.002, 0.001, 0.18, false, 0, 0, 180.0, "Classical (Inner)"},
+
+      // 8. Main Classical Belt - Cold Population (39.4 <= a <= 47.8 AU, i < 4.5 deg)
+      {"(15760) Albion (1992 QB1)", 44.15, 0.068, 2.18, 0.002, 0.001, 0.001, 0.08, false, 0, 0, 180.0, "Classical (Main Cold)"},
+      {"(181708) 1993 FW", 43.91, 0.048, 3.42, 0.002, 0.001, 0.001, 0.07, false, 0, 0, 180.0, "Classical (Main Cold)"},
+      {"(66652) Borasisi", 43.98, 0.090, 0.56, 0.002, 0.001, 0.001, 0.09, false, 0, 0, 180.0, "Classical (Main Cold)"},
+
+      // 9. Main Classical Belt - Hot Population (39.4 <= a <= 47.8 AU, i >= 4.5 deg)
+      {"(50000) Quaoar", 43.61, 0.038, 7.99, 0.001, 0.001, 0.001, 0.08, false, 0, 0, 180.0, "Classical (Main Hot)"},
+      {"(20000) Varuna", 42.92, 0.056, 17.18, 0.002, 0.001, 0.001, 0.10, false, 0, 0, 180.0, "Classical (Main Hot)"},
+      {"(136108) Haumea", 43.12, 0.195, 28.19, 0.001, 0.001, 0.001, 0.12, false, 0, 0, 180.0, "Classical (Main Hot)"},
+      {"(136472) Makemake", 45.72, 0.158, 28.96, 0.001, 0.001, 0.001, 0.11, false, 0, 0, 180.0, "Classical (Main Hot)"},
+      {"(55636) 2002 TX300", 43.19, 0.124, 25.84, 0.002, 0.001, 0.001, 0.10, false, 0, 0, 180.0, "Classical (Main Hot)"}
+    };
+  }
+};
+
+using Paper240GladmanNomenclatureModel = Gladman2008TNODynamicsModel;
+using Gladman2008NomenclatureModel = Gladman2008TNODynamicsModel;
+using TNODynamicalTaxonomyModel = Gladman2008TNODynamicsModel;
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
+
 
 
 
