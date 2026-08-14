@@ -510,6 +510,30 @@ int main() {
   assert(d_a_diff > 0.0 && "Diffusion coefficient must be positive!");
   assert(t_inst > 1.0e3 && t_inst < 1.0e6 && "Instability timescale at 5 Hill radii should be ~ 10^4 - 10^5 yr!");
 
+  // Paper #250: Shankman et al. (2017) OSSOS High-q TNO Model Verification
+  hot_jupiter::Shankman2017OSSOSModel ossos_model;
+  auto ossos_metrics = ossos_model.evaluate_validation_metrics();
+  auto ossos_cat = ossos_model.get_ossos_characterized_sample();
+  double m_r_test = ossos_model.apparent_magnitude(6.42, 41.0);
+  double eta_test = ossos_model.detection_efficiency(m_r_test);
+  double rate_test = ossos_model.rate_of_motion_arcsec_hr(41.0);
+  double q_pdf_val = ossos_model.perihelion_pdf(40.0);
+  double varpi_pdf_val = ossos_model.directional_bias_varpi_pdf(253.3);
+
+  std::cout << "--> Shankman et al. (2017) OSSOS: m_r(GP136) = " << m_r_test
+            << ", eta = " << eta_test << ", rate = " << rate_test
+            << " \"/hr, q_pdf(40AU) = " << q_pdf_val
+            << ", varpi_pdf(253.3) = " << varpi_pdf_val
+            << ", Mean R^2 = " << ossos_metrics.mean_r_squared
+            << ", Kuiper p-val = " << ossos_metrics.kuiper_p_val_uniform << std::endl;
+
+  assert(ossos_cat.size() == 8 && "OSSOS characterized sample should have 8 objects!");
+  assert(m_r_test > 22.0 && m_r_test < 25.0 && "Apparent magnitude for GP136 out of expected range!");
+  assert(eta_test > 0.50 && "Detection efficiency for GP136 should be high!");
+  assert(rate_test > 1.0 && rate_test < 5.0 && "Rate of motion should be ~2-4 arcsec/hr!");
+  assert(ossos_metrics.mean_r_squared >= 0.98 && "OSSOS validation mean R^2 must be >= 0.98!");
+  assert(ossos_metrics.kuiper_p_val_uniform > 0.05 && "Kuiper test must show uniform population consistent (p > 0.05)!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
