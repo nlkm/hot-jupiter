@@ -4,6 +4,11 @@ Generates paper_rlof/figures/fig1_scenario1_disruption.png through fig5_usp_case
 """
 
 import os
+import sys
+
+# Add project root to sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                "..")))
 
 import matplotlib.pyplot as plt
 import numpy as np

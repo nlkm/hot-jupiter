@@ -10,7 +10,11 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 "..")))
 
-from hot_jupiter.database import DEFAULT_DB_PATH, get_db_connection, seed_database_if_empty
+from hot_jupiter.database import (
+    DEFAULT_DB_PATH,
+    get_db_connection,
+    seed_database_if_empty,
+)
 
 
 def populate_from_csv(
