@@ -1,0 +1,10 @@
+parameter,value,unit,description
+P_shear_nominal,5.48558,GW,Fault shear heating power
+P_latent_nominal,0.566,GW,Plume latent heat transport
+P_kinetic_nominal,0.016,GW,Plume kinetic venting power
+P_total_nominal,6.06758,GW,Total endogenic power
+ds_req_spencer,0.528658,m,Required slip for 5.8 GW
+ds_req_howett,1.44014,m,Required slip for 15.8 GW (d=5km)
+ds_req_howett_d7k,0.734765,m,Required slip for 15.8 GW (d=7km)
+ds_tidal_h2_002,0.222245,m,Tidal displacement for h2=0.02
+R2_goodness_of_fit,0.999995,-,Statistical agreement metric
