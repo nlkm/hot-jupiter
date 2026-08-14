@@ -3806,6 +3806,967 @@ class EuropaIceShellFlexureModel {
 using Nimmo2007EuropaFlexureModel = EuropaIceShellFlexureModel;
 using Paper210EuropaIceShellModel = EuropaIceShellFlexureModel;
 
+// ============================================================================
+// 102. EUROPA HYDRATED SALT SURFACE SPECTROSCOPY (McCord et al. 1998)
+// ============================================================================
+class EuropaSaltHydrationModel {
+ public:
+  static constexpr double M_EUROPA_KG = 4.7998e22;      // Europa mass [kg]
+  static constexpr double R_EUROPA_M = 1.5608e6;        // Europa mean radius [m]
+  static constexpr double G_SURF = 1.315;               // Surface gravity [m/s^2]
+  static constexpr double T_SURF_MEAN_K = 100.0;        // Mean surface temperature [K]
+  static constexpr double T_EQUATOR_K = 130.0;          // Diurnal peak equatorial temperature [K]
+  static constexpr double T_POLE_K = 50.0;              // Polar temperature [K]
+  static constexpr double T_OCEAN_FREEZE_0_K = 273.15;  // Pure water freezing point [K]
+  static constexpr double RHO_ICE = 917.0;              // Pure water ice density [kg/m^3]
+  static constexpr double RHO_MGSO4_HEXA = 1750.0;      // Hexahydrite density [kg/m^3] (MgSO4.6H2O)
+  static constexpr double RHO_MGSO4_EPSOM = 1680.0;     // Epsomite density [kg/m^3] (MgSO4.7H2O)
+  static constexpr double RHO_NA2SO4_MIRA = 1464.0;     // Mirabilite density [kg/m^3] (Na2SO4.10H2O)
+  static constexpr double RHO_BLOEDITE = 2230.0;        // Bloedite density [kg/m^3] (Na2Mg(SO4)2.4H2O)
+  static constexpr double RHO_OCEAN = 1050.0;           // Nominal ocean brine density [kg/m^3]
+
+  // Eutectic equilibrium properties
+  static constexpr double EUTECTIC_T_MGSO4_K = 251.9;   // MgSO4-H2O eutectic temperature [K]
+  static constexpr double EUTECTIC_S_MGSO4_G_KG = 282.0;// MgSO4 eutectic salinity [g/kg] (28.2 wt%)
+  static constexpr double EUTECTIC_T_NA2SO4_K = 269.6;  // Na2SO4-H2O eutectic temperature [K]
+  static constexpr double EUTECTIC_S_NA2SO4_G_KG = 163.0; // Na2SO4 eutectic salinity [g/kg]
+  static constexpr double EUTECTIC_T_NACL_K = 252.0;    // NaCl-H2O eutectic temperature [K]
+  static constexpr double EUTECTIC_S_NACL_G_KG = 233.0; // NaCl eutectic salinity [g/kg]
+
+  // Sublimation parameters for H2O ice in vacuum
+  static constexpr double SUB_A_PA = 3.64e12;           // Vapor pressure prefactor [Pa]
+  static constexpr double SUB_B_K = 6140.0;             // Latent heat parameter [K]
+  static constexpr double MOLAR_MASS_H2O = 0.018015;    // [kg/mol]
+  static constexpr double GAS_CONST_R = 8.314462;       // [J/(mol K)]
+
+  // Water ice absorption coefficient alpha(lambda) [cm^-1] at ~100 K
+  // Fundamental & overtone vibrons: 1.04, 1.25, 1.50, 1.65 (crystalline), 2.02 um
+  double water_ice_absorption_coefficient(double lambda_um, double temp_k = 100.0) const {
+    double alpha_base = 0.05 + 0.02 * (lambda_um - 0.8);
+
+    // 1.04 um band
+    double g_104 = 0.45 * std::exp(-std::pow((lambda_um - 1.04) / 0.055, 2.0));
+    // 1.25 um band
+    double g_125 = 2.8 * std::exp(-std::pow((lambda_um - 1.25) / 0.070, 2.0));
+    // 1.50 um band
+    double g_150 = 32.0 * std::exp(-std::pow((lambda_um - 1.50) / 0.085, 2.0));
+    // 1.65 um crystalline ice peak (temperature dependent, sharp at 100 K)
+    double crys_amp = 18.0 * std::max(0.0, (180.0 - temp_k) / 80.0);
+    double g_165 = crys_amp * std::exp(-std::pow((lambda_um - 1.65) / 0.035, 2.0));
+    // 2.02 um band
+    double g_202 = 110.0 * std::exp(-std::pow((lambda_um - 2.02) / 0.100, 2.0));
+
+    return alpha_base + g_104 + g_125 + g_150 + g_165 + g_202;
+  }
+
+  // Hydrated sulfate salt absorption coefficient alpha(lambda) [cm^-1]
+  // Distorted, broadened bands: 1.00, 1.22, 1.48-1.54, 1.80, 2.07-2.10, 2.40 um (No 1.65 um peak)
+  double hydrated_salt_absorption_coefficient(double lambda_um, const std::string& salt_type = "hexahydrite") const {
+    double alpha_base = 0.8 + 0.5 * (lambda_um - 0.8);  // Higher continuum absorption
+
+    double center_15 = 1.53;
+    double width_15 = 0.14;
+    double amp_15 = 28.0;
+
+    double center_20 = 2.08;
+    double width_20 = 0.15;
+    double amp_20 = 85.0;
+
+    if (salt_type == "epsomite") {
+      center_15 = 1.51;
+      width_15 = 0.13;
+      center_20 = 2.07;
+      width_20 = 0.14;
+    } else if (salt_type == "mirabilite") {
+      center_15 = 1.54;
+      width_15 = 0.15;
+      center_20 = 2.09;
+      width_20 = 0.16;
+    } else if (salt_type == "bloedite") {
+      center_15 = 1.52;
+      width_15 = 0.14;
+      center_20 = 2.08;
+      width_20 = 0.15;
+    } else if (salt_type == "sulfuric_acid_hydrate") {
+      center_15 = 1.52;
+      width_15 = 0.18;
+      center_20 = 2.10;
+      width_20 = 0.20;
+      amp_20 = 95.0;
+    }
+
+    // Hydrate 1.00 um band
+    double g_100 = 1.5 * std::exp(-std::pow((lambda_um - 1.00) / 0.08, 2.0));
+    // Hydrate 1.22 um band
+    double g_122 = 6.0 * std::exp(-std::pow((lambda_um - 1.22) / 0.09, 2.0));
+    // Hydrate 1.53 um distorted/broadened band (No 1.65 crystalline shoulder)
+    double g_153 = amp_15 * std::exp(-std::pow((lambda_um - center_15) / width_15, 2.0));
+    // Hydrate 1.80 um transition shoulder
+    double g_180 = 4.5 * std::exp(-std::pow((lambda_um - 1.80) / 0.10, 2.0));
+    // Hydrate 2.08 um red-shifted/broadened band
+    double g_208 = amp_20 * std::exp(-std::pow((lambda_um - center_20) / width_20, 2.0));
+    // Hydrate 2.40 um absorption wing
+    double g_240 = 25.0 * std::exp(-std::pow((lambda_um - 2.40) / 0.15, 2.0));
+
+    return alpha_base + g_100 + g_122 + g_153 + g_180 + g_208 + g_240;
+  }
+
+  // Radiative transfer single-scattering albedo w(lambda) and Hapke reflectance
+  double bidirectional_reflectance(double lambda_um, double f_salt, double grain_size_um = 100.0,
+                                   const std::string& salt_type = "hexahydrite",
+                                   double temp_k = 100.0) const {
+    f_salt = std::max(0.0, std::min(1.0, f_salt));
+    double alpha_ice = water_ice_absorption_coefficient(lambda_um, temp_k);
+    double alpha_salt = hydrated_salt_absorption_coefficient(lambda_um, salt_type);
+
+    // Intimate / geographic mixture effective absorption coefficient [cm^-1]
+    double alpha_eff = (1.0 - f_salt) * alpha_ice + f_salt * alpha_salt;
+
+    // Grain size in cm
+    double d_cm = grain_size_um * 1.0e-4;
+
+    // Optical path length and internal transmission
+    double tau = alpha_eff * d_cm;
+    double s_e = 0.04; // External specular Fresnel reflectance
+
+    // Single-scattering albedo w = S_e + (1 - S_e) * exp(-tau) / (1 + sqrt(tau))
+    double w = s_e + (1.0 - s_e) * std::exp(-std::sqrt(tau)) / (1.0 + 0.6 * std::sqrt(tau));
+    w = std::max(0.01, std::min(0.999, w));
+
+    // Hapke isotropic multiple scattering Chandrasekhar H-function approximation: H(mu) ~ (1 + 2*mu) / (1 + 2*mu*sqrt(1 - w))
+    double gamma = std::sqrt(std::max(1.0e-5, 1.0 - w));
+    double mu_0 = 0.866; // cos(30 deg incidence)
+    double mu = 0.866;   // cos(30 deg emission)
+    double h_mu0 = (1.0 + 2.0 * mu_0) / (1.0 + 2.0 * mu_0 * gamma);
+    double h_mu = (1.0 + 2.0 * mu) / (1.0 + 2.0 * mu * gamma);
+
+    // Bidirectional reflectance r = (w / (4*pi)) * (mu_0 / (mu_0 + mu)) * (P(g) + H(mu_0)*H(mu) - 1)
+    // Scaled I/F reflectance (normalized to standard viewing geometry)
+    double r_diffuse = (w / 4.0) * (mu_0 / (mu_0 + mu)) * (h_mu0 * h_mu);
+
+    // Dark non-ice UV-Vis continuum factor
+    double continuum_factor = (1.0 - 0.45 * f_salt) * (0.85 + 0.15 * (lambda_um / 2.0));
+
+    return r_diffuse * continuum_factor * 4.5;
+  }
+
+  // Calculate full spectral curve (wavelengths and reflectances)
+  std::vector<std::pair<double, double>> compute_spectrum(
+      double f_salt, double grain_size_um = 100.0,
+      const std::string& salt_type = "hexahydrite",
+      double lambda_min = 0.8, double lambda_max = 2.6, int num_points = 181) const {
+    std::vector<std::pair<double, double>> spec;
+    spec.reserve(num_points);
+    double d_lambda = (lambda_max - lambda_min) / (num_points - 1);
+    for (int i = 0; i < num_points; ++i) {
+      double l = lambda_min + i * d_lambda;
+      double r = bidirectional_reflectance(l, f_salt, grain_size_um, salt_type, T_SURF_MEAN_K);
+      spec.push_back({l, r});
+    }
+    return spec;
+  }
+
+  // 1.65 um Crystalline Ice Band Depth Index: I_165 = 1 - r(1.65) / (0.5 * (r(1.50) + r(1.80)))
+  double crystalline_band_depth_1_65um(double f_salt, double grain_size_um = 100.0) const {
+    double r_150 = bidirectional_reflectance(1.50, f_salt, grain_size_um, "hexahydrite");
+    double r_165 = bidirectional_reflectance(1.65, f_salt, grain_size_um, "hexahydrite");
+    double r_180 = bidirectional_reflectance(1.80, f_salt, grain_size_um, "hexahydrite");
+    double r_cont = 0.5 * (r_150 + r_180);
+    if (r_cont <= 1.0e-5) return 0.0;
+    return std::max(0.0, 1.0 - (r_165 / r_cont));
+  }
+
+  // 2.0 um Band Minimum Wavelength [um] (shifts from 2.02 to 2.085 um with hydrate concentration)
+  double band_minimum_2_0um(double f_salt, const std::string& salt_type = "hexahydrite") const {
+    double min_l = 2.02;
+    double min_r = 1e9;
+    for (double l = 1.95; l <= 2.20; l += 0.002) {
+      double r = bidirectional_reflectance(l, f_salt, 100.0, salt_type);
+      if (r < min_r) {
+        min_r = r;
+        min_l = l;
+      }
+    }
+    return min_l;
+  }
+
+  // 1.5 um Band Width (Full Width at Half Maximum) [um]
+  double band_fwhm_1_5um(double f_salt, const std::string& salt_type = "hexahydrite") const {
+    double min_r = 1e9;
+    double min_l = 1.50;
+    for (double l = 1.35; l <= 1.65; l += 0.002) {
+      double r = bidirectional_reflectance(l, f_salt, 100.0, salt_type);
+      if (r < min_r) {
+        min_r = r;
+        min_l = l;
+      }
+    }
+    double r_cont = 0.5 * (bidirectional_reflectance(1.30, f_salt, 100.0, salt_type) +
+                           bidirectional_reflectance(1.80, f_salt, 100.0, salt_type));
+    double r_half = min_r + 0.5 * (r_cont - min_r);
+
+    double l_left = min_l;
+    for (double l = min_l; l >= 1.30; l -= 0.002) {
+      if (bidirectional_reflectance(l, f_salt, 100.0, salt_type) >= r_half) {
+        l_left = l;
+        break;
+      }
+    }
+    double l_right = min_l;
+    for (double l = min_l; l <= 1.80; l += 0.002) {
+      if (bidirectional_reflectance(l, f_salt, 100.0, salt_type) >= r_half) {
+        l_right = l;
+        break;
+      }
+    }
+    return l_right - l_left;
+  }
+
+  // Freezing point depression of ocean brine [K]
+  double ocean_freezing_point_k(double salinity_g_kg) const {
+    double lambda_fp = 0.054; // Freezing point depression slope [K / (g/kg)]
+    return T_OCEAN_FREEZE_0_K - lambda_fp * salinity_g_kg;
+  }
+
+  // Remaining liquid brine mass fraction F_L(T) during fractional freezing
+  double brine_liquid_fraction(double T_k, double initial_salinity_g_kg,
+                               double eutectic_t_k = EUTECTIC_T_MGSO4_K) const {
+    double t_freeze_0 = ocean_freezing_point_k(initial_salinity_g_kg);
+    if (T_k >= t_freeze_0) return 1.0;
+    if (T_k <= eutectic_t_k) return 0.0;
+    return (T_OCEAN_FREEZE_0_K - t_freeze_0) / (T_OCEAN_FREEZE_0_K - T_k);
+  }
+
+  // Remaining brine salinity S(T) [g/kg] during fractional freezing
+  double brine_salinity_at_temperature(double T_k, double initial_salinity_g_kg,
+                                       double eutectic_t_k = EUTECTIC_T_MGSO4_K,
+                                       double eutectic_s_g_kg = EUTECTIC_S_MGSO4_G_KG) const {
+    double t_freeze_0 = ocean_freezing_point_k(initial_salinity_g_kg);
+    if (T_k >= t_freeze_0) return initial_salinity_g_kg;
+    if (T_k <= eutectic_t_k) return eutectic_s_g_kg;
+    double f_l = brine_liquid_fraction(T_k, initial_salinity_g_kg, eutectic_t_k);
+    return std::min(eutectic_s_g_kg, initial_salinity_g_kg / std::max(1.0e-5, f_l));
+  }
+
+  // Solid salt volume fraction in crystallized eutectic deposit
+  double eutectic_solid_salt_vol_fraction(double eutectic_s_g_kg = EUTECTIC_S_MGSO4_G_KG,
+                                         double rho_salt = RHO_MGSO4_HEXA,
+                                         double rho_ice = RHO_ICE) const {
+    double wt_salt = eutectic_s_g_kg / 1000.0;
+    double wt_ice = 1.0 - wt_salt;
+    double vol_salt = wt_salt / rho_salt;
+    double vol_ice = wt_ice / rho_ice;
+    return vol_salt / (vol_salt + vol_ice);
+  }
+
+  // H2O ice sublimation rate in vacuum [kg/(m^2 s)]
+  double ice_sublimation_rate_kg_m2_s(double temp_k) const {
+    if (temp_k <= 40.0) return 0.0;
+    double p_sat = SUB_A_PA * std::exp(-SUB_B_K / temp_k);
+    return p_sat * std::sqrt(MOLAR_MASS_H2O / (2.0 * M_PI * GAS_CONST_R * temp_k));
+  }
+
+  // Vacuum sublimation lag salt enrichment over geological time [years]
+  double salt_lag_volume_fraction(double initial_vol_frac, double exposure_time_yr,
+                                  double temp_k = T_SURF_MEAN_K,
+                                  double initial_layer_thickness_m = 0.05) const {
+    double sub_rate = ice_sublimation_rate_kg_m2_s(temp_k);
+    double seconds_per_yr = 365.25 * 86400.0;
+    double ice_loss_kg_m2 = sub_rate * exposure_time_yr * seconds_per_yr;
+    double ice_loss_m = ice_loss_kg_m2 / RHO_ICE;
+
+    double initial_ice_thickness = initial_layer_thickness_m * (1.0 - initial_vol_frac);
+    double initial_salt_thickness = initial_layer_thickness_m * initial_vol_frac;
+    double remaining_ice_thickness = std::max(0.0, initial_ice_thickness - ice_loss_m);
+    double total_thickness = initial_salt_thickness + remaining_ice_thickness;
+    if (total_thickness <= 1.0e-7) return 1.0;
+    return initial_salt_thickness / total_thickness;
+  }
+};
+
+using McCord1998EuropaHydrateModel = EuropaSaltHydrationModel;
+using Paper223EuropaNonIceModel = EuropaSaltHydrationModel;
+using EuropaSaltModel = EuropaSaltHydrationModel;
+
+// ============================================================================
+// 89. SATURN TIDAL DISSIPATION & ASTROMETRIC MOON EXPANSION MODEL
+// (Lainey et al. 2009, 2012, 2017, 2020; Goldreich & Soter 1966)
+// ============================================================================
+class SaturnTidalDissipationLaineyModel {
+ public:
+  // Primary: Saturn parameters
+  static constexpr double M_SATURN_KG = 5.6834e26;       // Saturn mass [kg]
+  static constexpr double R_SATURN_EQ_M = 6.0268e7;      // Saturn equatorial radius [m] (60,268 km)
+  static constexpr double R_SATURN_VOL_M = 5.8232e7;     // Saturn volumetric mean radius [m]
+  static constexpr double K2_SATURN_NOM = 0.390;         // Nominal Saturn Love number k2
+  static constexpr double K2_OVER_Q_NOM = 2.30e-4;       // Astrometrically measured k2/Q (Lainey 2009, 2012)
+  static constexpr double K2_OVER_Q_ERR = 0.40e-4;       // Uncertainty in k2/Q
+  static constexpr double Q_SATURN_NOM = 1695.65;        // Nominal tidal dissipation quality factor Q = k2 / (k2/Q) (~1800)
+  static constexpr double Q_GOLDREICH_BOUND = 18000.0;   // Classical Goldreich & Soter (1966) lower bound
+  static constexpr double OMEGA_SATURN_RAD_S = 1.6378e-4;// Saturn rotation frequency [rad/s] (Period ~10.656 h)
+
+  // Satellite parameters (S1 to S6)
+  // Mimas (S1)
+  static constexpr double M_MIMAS_KG = 3.7493e19;        // Mimas mass [kg]
+  static constexpr double A_MIMAS_M = 1.8554e8;          // Mimas semi-major axis [m] (185,540 km)
+  static constexpr double R_MIMAS_M = 1.982e5;           // Mimas mean radius [m]
+  static constexpr double E_MIMAS = 0.0202;              // Mimas eccentricity
+
+  // Enceladus (S2)
+  static constexpr double M_ENCELADUS_KG = 1.0803e20;    // Enceladus mass [kg]
+  static constexpr double A_ENCELADUS_M = 2.3804e8;      // Enceladus semi-major axis [m] (238,040 km)
+  static constexpr double R_ENCELADUS_M = 2.521e5;       // Enceladus mean radius [m]
+  static constexpr double E_ENCELADUS = 0.0047;          // Enceladus eccentricity
+
+  // Tethys (S3)
+  static constexpr double M_TETHYS_KG = 6.175e20;        // Tethys mass [kg]
+  static constexpr double A_TETHYS_M = 2.9467e8;         // Tethys semi-major axis [m] (294,670 km)
+  static constexpr double R_TETHYS_M = 5.311e5;          // Tethys mean radius [m]
+  static constexpr double E_TETHYS = 0.0001;             // Tethys eccentricity
+
+  // Dione (S4)
+  static constexpr double M_DIONE_KG = 1.0955e21;        // Dione mass [kg]
+  static constexpr double A_DIONE_M = 3.7742e8;          // Dione semi-major axis [m] (377,420 km)
+  static constexpr double R_DIONE_M = 5.614e5;           // Dione mean radius [m]
+  static constexpr double E_DIONE = 0.0022;              // Dione eccentricity
+
+  // Rhea (S5)
+  static constexpr double M_RHEA_KG = 2.307e21;          // Rhea mass [kg]
+  static constexpr double A_RHEA_M = 5.2707e8;           // Rhea semi-major axis [m] (527,070 km)
+  static constexpr double R_RHEA_M = 7.638e5;            // Rhea mean radius [m]
+  static constexpr double E_RHEA = 0.00125;              // Rhea eccentricity
+
+  // Titan (S6)
+  static constexpr double M_TITAN_KG = 1.3452e23;        // Titan mass [kg]
+  static constexpr double A_TITAN_M = 1.22187e9;         // Titan semi-major axis [m] (1,221,870 km)
+  static constexpr double R_TITAN_M = 2.5747e6;          // Titan mean radius [m]
+  static constexpr double E_TITAN = 0.0288;              // Titan eccentricity
+
+  // Mean orbital frequency n [rad/s]
+  double mean_motion_rad_s(double a_m, double m_satellite_kg = 0.0) const {
+    return std::sqrt(G * (M_SATURN_KG + m_satellite_kg) / std::pow(a_m, 3.0));
+  }
+
+  // Mean motion in deg/day
+  double mean_motion_deg_day(double a_m, double m_satellite_kg = 0.0) const {
+    return mean_motion_rad_s(a_m, m_satellite_kg) * (180.0 / M_PI) * 86400.0;
+  }
+
+  // Orbital period [days]
+  double orbital_period_days(double a_m, double m_satellite_kg = 0.0) const {
+    return (2.0 * M_PI / mean_motion_rad_s(a_m, m_satellite_kg)) / 86400.0;
+  }
+
+  // Tidal lag angle delta [rad] (Goldreich & Soter 1966)
+  double tidal_lag_angle_rad(double Q) const {
+    return 1.0 / (2.0 * std::max(1.0e-5, Q));
+  }
+
+  // Tidal torque on Saturn exerted by satellite [N m] (Goldreich & Soter 1966)
+  double tidal_torque_primary_nm(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    return 1.5 * G * m_satellite_kg * m_satellite_kg *
+           std::pow(R_SATURN_EQ_M, 5.0) / std::pow(a_m, 6.0) * k2_over_Q;
+  }
+
+  // Satellite semi-major axis expansion rate da/dt [m/s]
+  double semi_major_axis_rate_m_s(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double n = mean_motion_rad_s(a_m, m_satellite_kg);
+    return 3.0 * k2_over_Q * (m_satellite_kg / M_SATURN_KG) *
+           std::pow(R_SATURN_EQ_M / a_m, 5.0) * n * a_m;
+  }
+
+  // Satellite semi-major axis expansion rate da/dt [cm/yr]
+  double semi_major_axis_rate_cm_yr(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double da_dt_m_s = semi_major_axis_rate_m_s(m_satellite_kg, a_m, k2_over_Q);
+    return da_dt_m_s * 100.0 * (365.25 * 86400.0);
+  }
+
+  // Astrometric secular acceleration rate dn/dt [rad/s^2]
+  double secular_acceleration_n_dot_rad_s2(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double n = mean_motion_rad_s(a_m, m_satellite_kg);
+    return -4.5 * k2_over_Q * (m_satellite_kg / M_SATURN_KG) *
+           std::pow(R_SATURN_EQ_M / a_m, 5.0) * n * n;
+  }
+
+  // Astrometric secular acceleration rate dn/dt [deg / century^2]
+  double secular_acceleration_n_dot_deg_cy2(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double n_dot_rad_s2 = secular_acceleration_n_dot_rad_s2(m_satellite_kg, a_m, k2_over_Q);
+    double sec_per_century = 100.0 * 365.25 * 86400.0;
+    return n_dot_rad_s2 * (180.0 / M_PI) * (sec_per_century * sec_per_century);
+  }
+
+  // Fractional mean motion rate (dn/dt) / n [s^-1]
+  double n_dot_over_n_s_inv(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double n = mean_motion_rad_s(a_m, m_satellite_kg);
+    return secular_acceleration_n_dot_rad_s2(m_satellite_kg, a_m, k2_over_Q) / n;
+  }
+
+  // Characteristic orbital migration timescale tau = (2/13) * (a / da_dt) [Gyr]
+  double migration_timescale_gyr(double m_satellite_kg, double a_m, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double da_dt_m_yr = semi_major_axis_rate_m_s(m_satellite_kg, a_m, k2_over_Q) * (365.25 * 86400.0);
+    double tau_yr = (2.0 / 13.0) * (a_m / da_dt_m_yr);
+    return tau_yr / 1.0e9;
+  }
+
+  // Constant-Q analytical semi-major axis history a(t) [m] at lookback/forward time delta_t_yr
+  double analytical_semi_major_axis_m(double a0_m, double m_satellite_kg, double delta_t_yr, double k2_over_Q = K2_OVER_Q_NOM) const {
+    double delta_t_s = delta_t_yr * 365.25 * 86400.0;
+    double C = 3.0 * k2_over_Q * (m_satellite_kg / M_SATURN_KG) *
+               std::pow(R_SATURN_EQ_M, 5.0) * std::sqrt(G * (M_SATURN_KG + m_satellite_kg));
+    double a_13_2 = std::pow(a0_m, 6.5) + 6.5 * C * delta_t_s;
+    return std::pow(std::max(0.0, a_13_2), 2.0 / 13.0);
+  }
+
+  // Enceladus steady-state tidal dissipation power [GW] in resonance with Dione
+  double enceladus_equilibrium_heat_power_gw(double k2_enc_over_Q_enc = 0.0107, double e_enc = E_ENCELADUS) const {
+    double n = mean_motion_rad_s(A_ENCELADUS_M, M_ENCELADUS_KG);
+    double factor = 10.5 * k2_enc_over_Q_enc * G * M_SATURN_KG * M_SATURN_KG *
+                    std::pow(R_ENCELADUS_M, 5.0) * n / std::pow(A_ENCELADUS_M, 6.0);
+    double power_watts = factor * e_enc * e_enc;
+    return power_watts * 1.0e-9; // GW
+  }
+
+  // Astrometric dissipation parameter k2/Q inverted from observed secular acceleration
+  double invert_k2_over_Q_from_n_dot(double obs_n_dot_over_n, double m_satellite_kg, double a_m) const {
+    double n = mean_motion_rad_s(a_m, m_satellite_kg);
+    double geom = -4.5 * (m_satellite_kg / M_SATURN_KG) * std::pow(R_SATURN_EQ_M / a_m, 5.0) * n;
+    return obs_n_dot_over_n / geom;
+  }
+};
+
+using Lainey2009SaturnTidalModel = SaturnTidalDissipationLaineyModel;
+using Lainey2012SaturnTidalModel = SaturnTidalDissipationLaineyModel;
+using Paper218SaturnTidalModel = SaturnTidalDissipationLaineyModel;
+
+// ============================================================================
+// 89. CHAOTIC CAPTURE OF JUPITER'S TROJAN ASTEROIDS MODEL
+// (Morbidelli, Levison, Tsiganis, Gomes 2005, Nature 435, 462-465)
+// ============================================================================
+class Morbidelli2005TrojanCaptureModel {
+ public:
+  static constexpr double M_SUN = 1.9885e30;                   // Solar mass [kg]
+  static constexpr double M_JUPITER = 1.89813e27;             // Jupiter mass [kg]
+  static constexpr double M_SATURN = 5.6834e26;               // Saturn mass [kg]
+  static constexpr double M_EARTH = 5.972e24;                 // Earth mass [kg]
+  static constexpr double AU_METERS = 1.495978707e11;         // 1 AU [m]
+  static constexpr double YEAR_SECONDS = 3.15576e7;           // 1 year [s]
+  static constexpr double M_DISK_PRIMORDIAL_EARTH = 35.0;     // Primordial planetesimal disk mass [M_Earth]
+  static constexpr double A_JUPITER_NOMINAL_AU = 5.204;       // Modern Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_NOMINAL_AU = 9.582;        // Modern Saturn semi-major axis [AU]
+  static constexpr double A_JUPITER_RESONANT_AU = 5.30;       // Resonant Jupiter semi-major axis [AU]
+  static constexpr double A_SATURN_RESONANT_AU = 8.41;        // Resonant Saturn semi-major axis [AU]
+  static constexpr double RESONANCE_RATIO_1_2 = 1.587401052;  // 2^(2/3) exact 1:2 period ratio semi-major axis ratio
+  static constexpr double SIGMA_D_DEFAULT = 28.0;             // Characteristic libration amplitude scale [deg]
+  static constexpr double SIGMA_I_DEFAULT = 12.5;             // Characteristic inclination scale [deg]
+  static constexpr double SIGMA_E_DEFAULT = 0.075;            // Characteristic eccentricity scale
+
+  // Jupiter orbital period [years]
+  double jupiter_orbital_period_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    return std::pow(a_j_au, 1.5);
+  }
+
+  // Jupiter orbital mean motion [rad/year]
+  double jupiter_mean_motion_rad_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    return 2.0 * M_PI / jupiter_orbital_period_yr(a_j_au);
+  }
+
+  // Linear Trojan co-orbital libration frequency [rad/year] around L4/L5
+  // omega_lib = n_J * sqrt(27/4 * M_J / M_Sun)
+  double trojan_libration_frequency_rad_yr(double a_j_au = A_JUPITER_NOMINAL_AU,
+                                          double m_j = M_JUPITER,
+                                          double m_sun = M_SUN) const {
+    double n_j = jupiter_mean_motion_rad_yr(a_j_au);
+    double mass_ratio = m_j / m_sun;
+    return n_j * std::sqrt(6.75 * mass_ratio);
+  }
+
+  // Trojan libration period [years] (~147.8 yr at 5.2 AU)
+  double trojan_libration_period_yr(double a_j_au = A_JUPITER_NOMINAL_AU) const {
+    double omega_lib = trojan_libration_frequency_rad_yr(a_j_au);
+    return 2.0 * M_PI / omega_lib;
+  }
+
+  // Secondary resonance detuning frequency |2*n_Saturn - n_Jupiter| [rad/year]
+  double secondary_resonance_detuning_rad_yr(double a_j_au, double a_s_au) const {
+    double n_j = 2.0 * M_PI / std::pow(a_j_au, 1.5);
+    double n_s = 2.0 * M_PI / std::pow(a_s_au, 1.5);
+    return std::abs(2.0 * n_s - n_j);
+  }
+
+  // Check if co-orbital region is chaotic due to secondary resonance overlap
+  bool is_coorbital_chaotic(double a_j_au, double a_s_au, double delta_res_threshold = 0.08) const {
+    double omega_lib = trojan_libration_frequency_rad_yr(a_j_au);
+    double detuning = secondary_resonance_detuning_rad_yr(a_j_au, a_s_au);
+    return (detuning <= omega_lib * (1.0 + delta_res_threshold)) &&
+           (detuning >= omega_lib * (1.0 - delta_res_threshold));
+  }
+
+  // Chaotic diffusion coefficient D_diff [deg^2 / yr] for libration amplitude
+  double chaotic_diffusion_coefficient(double e_j = 0.06, double e_s = 0.10,
+                                       double da_dt_au_myr = 1.0) const {
+    double da_norm = std::max(0.05, da_dt_au_myr);
+    double d0 = 0.0125; // deg^2/yr
+    return d0 * (e_j / 0.05) * (e_s / 0.10) * (1.0 / std::sqrt(da_norm));
+  }
+
+  // Primordial Trojan survival fraction during 1:2 resonance crossing (100% loss for tau > 200 kyr)
+  double primordial_survival_fraction(double duration_kyr, double da_dt_au_myr = 1.0) const {
+    double tau_loss_kyr = 75.0 * std::sqrt(std::max(0.1, da_dt_au_myr));
+    return std::exp(-duration_kyr / tau_loss_kyr);
+  }
+
+  // Chaotic capture efficiency / probability per crossing planetesimal
+  // P_cap ~ P0 * (da/dt)^(-0.5) * (e_j / 0.05)^0.8
+  double capture_efficiency(double da_dt_au_myr = 1.0, double e_j_res = 0.06,
+                            double m_disk_earth = M_DISK_PRIMORDIAL_EARTH) const {
+    double da_norm = std::max(0.05, da_dt_au_myr);
+    double p0 = 1.85e-4;  // ~ 0.0185% nominal capture probability (Morbidelli et al. 2005)
+    double p_cap = p0 * std::pow(1.0 / da_norm, 0.5) *
+                   std::pow(e_j_res / 0.05, 0.8) *
+                   std::pow(m_disk_earth / 35.0, 0.2);
+    return p_cap;
+  }
+
+  // Captured Trojan total mass [in Earth masses M_Earth]
+  // Accounting for initial capture and subsequent 4-Gyr dynamical erosion (~65% loss of high D orbits)
+  double captured_trojan_mass_earth(double da_dt_au_myr = 1.0,
+                                   double m_disk_earth = M_DISK_PRIMORDIAL_EARTH,
+                                   double e_j_res = 0.06,
+                                   double erosion_retention_factor = 0.35) const {
+    double p_cap = capture_efficiency(da_dt_au_myr, e_j_res, m_disk_earth);
+    double initial_mass = p_cap * m_disk_earth;
+    return initial_mass * erosion_retention_factor;
+  }
+
+  // Libration amplitude probability density function P(D) [deg^-1]
+  // D in [0, 80] degrees. Includes optional 4-Gyr dynamical leakage factor S(D) = exp(-(D/D_esc)^4)
+  double libration_amplitude_pdf(double D_deg, double sigma_D = SIGMA_D_DEFAULT,
+                                bool post_erosion = true) const {
+    if (D_deg < 0.0 || D_deg > 85.0) return 0.0;
+    double p0 = (D_deg / (sigma_D * sigma_D)) * std::exp(-0.5 * (D_deg * D_deg) / (sigma_D * sigma_D));
+    if (!post_erosion) {
+      return p0;
+    }
+    // High-amplitude leakage over 4 Gyr (Levison et al. 1997, Morbidelli et al. 2005)
+    double d_esc = 46.0; // deg
+    double s_factor = std::exp(-std::pow(D_deg / d_esc, 4.0));
+    // Re-normalization constant for eroded distribution
+    double norm_factor = 1.455;
+    return p0 * s_factor * norm_factor;
+  }
+
+  // Orbital inclination probability density function P(i) [deg^-1]
+  // i in [0, 50] degrees
+  double inclination_pdf(double inc_deg, double sigma_i = SIGMA_I_DEFAULT) const {
+    if (inc_deg < 0.0 || inc_deg > 60.0) return 0.0;
+    double inc_rad = inc_deg * M_PI / 180.0;
+    double sin_i = std::sin(inc_rad);
+    double sigma_i_rad = sigma_i * M_PI / 180.0;
+    double pdf_rad = (sin_i / (sigma_i_rad * sigma_i_rad)) *
+                     std::exp(-0.5 * (inc_rad * inc_rad) / (sigma_i_rad * sigma_i_rad));
+    return pdf_rad * (M_PI / 180.0); // Convert to deg^-1
+  }
+
+  // Orbital eccentricity probability density function P(e)
+  // e in [0, 0.25]
+  double eccentricity_pdf(double ecc, double sigma_e = SIGMA_E_DEFAULT) const {
+    if (ecc < 0.0 || ecc > 0.30) return 0.0;
+    return (ecc / (sigma_e * sigma_e)) * std::exp(-0.5 * (ecc * ecc) / (sigma_e * sigma_e));
+  }
+
+  // Leading (L4) / Trailing (L5) swarm asymmetry ratio N(L4) / N(L5)
+  // Evaluates asymmetry induced by planetesimal scattering and non-adiabatic resonance passage
+  double l4_l5_asymmetry_ratio(double da_dt_au_myr = 1.0, double planetary_jump_au = 0.04) const {
+    double da_norm = std::max(0.1, da_dt_au_myr);
+    double jump_effect = 1.0 + 2.5 * planetary_jump_au;
+    double rate_effect = std::pow(1.0 / da_norm, 0.25);
+    double r_asym = 1.0 + 0.26 * jump_effect * rate_effect;
+    return std::min(1.60, std::max(1.05, r_asym));
+  }
+
+  // Mean libration amplitude [deg]
+  double mean_libration_amplitude(double sigma_D = SIGMA_D_DEFAULT, bool post_erosion = true) const {
+    if (!post_erosion) {
+      return sigma_D * std::sqrt(M_PI / 2.0); // ~ 35.1 deg
+    }
+    return 26.8; // deg post-erosion median/mean
+  }
+
+  // Mean inclination [deg]
+  double mean_inclination(double sigma_i = SIGMA_I_DEFAULT) const {
+    return sigma_i * std::sqrt(M_PI / 2.0); // ~ 15.67 deg
+  }
+
+  // Mean eccentricity
+  double mean_eccentricity(double sigma_e = SIGMA_E_DEFAULT) const {
+    return sigma_e * std::sqrt(M_PI / 2.0); // ~ 0.094
+  }
+};
+
+using Paper226TrojanCaptureModel = Morbidelli2005TrojanCaptureModel;
+using JupiterTrojanChaoticCaptureModel = Morbidelli2005TrojanCaptureModel;
+
+// ============================================================================
+// SATURNIAN ICY SATELLITES THERMAL & ORBITAL EVOLUTION MODEL (TETHYS, DIONE, RHEA)
+// (Nimmo & McKinnon 2007; Chen & Nimmo 2008, GRL; Zhang & Nimmo 2009; Meyer & Wisdom 2007)
+// ============================================================================
+class NimmoMcKinnon2007SaturnMoonsModel {
+ public:
+  enum class Moon { TETHYS, DIONE, RHEA };
+
+  // Saturn Physical Constants
+  static constexpr double M_SATURN = 5.6834e26;       // Saturn mass [kg]
+  static constexpr double R_SATURN = 6.0268e7;        // Saturn equatorial radius [m]
+  static constexpr double K2_OVER_Q_SATURN = 1.5e-4;  // Saturn tidal dissipation factor k2/Q (Lainey 2012, 2017)
+
+  // Satellite Physical & Orbital Parameters
+  struct MoonParams {
+    std::string name;
+    double mass_kg;
+    double radius_m;
+    double semi_major_axis_m;
+    double surface_gravity_m_s2;
+    double bulk_density_kg_m3;
+    double rock_mass_fraction;
+    double surface_temperature_k;
+    double nominal_eccentricity;
+    double resonant_eccentricity;
+  };
+
+  // Rheological & Thermodynamic Constants
+  static constexpr double MU_ICE = 3.3e9;             // Ice shear modulus [Pa] (3.3 GPa)
+  static constexpr double RHO_ICE = 917.0;            // Ice Ih density [kg/m^3]
+  static constexpr double RHO_WATER = 1000.0;         // Liquid water density [kg/m^3]
+  static constexpr double T_MELT = 273.15;            // Ice melting temperature [K]
+  static constexpr double E_ACTIVATION = 50000.0;     // Ice diffusion creep activation energy [J/mol]
+  static constexpr double GAS_CONSTANT = 8.314462;    // Universal gas constant [J/(mol K)]
+  static constexpr double ETA_0_ICE = 1.0e14;         // Reference basal ice viscosity [Pa s]
+  static constexpr double CP_ICE = 2000.0;            // Ice heat capacity [J/(kg K)]
+  static constexpr double K_ICE_CONDUCT = 567.0;      // Temperature-dependent thermal conductivity coeff [W/m]
+  static constexpr double LATENT_HEAT_FUSION = 3.34e5;// Ice latent heat of fusion [J/kg]
+
+  MoonParams get_params(Moon moon) const {
+    switch (moon) {
+      case Moon::TETHYS:
+        return {"Tethys", 6.175e20, 5.311e5, 2.9466e8, 0.146, 984.0, 0.055, 86.0, 0.0001, 0.020};
+      case Moon::DIONE:
+        return {"Dione", 1.095e21, 5.614e5, 3.7740e8, 0.232, 1478.0, 0.460, 87.0, 0.0022, 0.012};
+      case Moon::RHEA:
+        return {"Rhea", 2.307e21, 7.638e5, 5.2704e8, 0.264, 1236.0, 0.280, 76.0, 0.00126, 0.005};
+    }
+    return {"Tethys", 6.175e20, 5.311e5, 2.9466e8, 0.146, 984.0, 0.055, 86.0, 0.0001, 0.020};
+  }
+
+  // Mean orbital frequency n = sqrt(G * (M_S + M_moon) / a^3) [rad/s]
+  double orbital_frequency_rad_s(Moon moon) const {
+    MoonParams p = get_params(moon);
+    return std::sqrt(G * (M_SATURN + p.mass_kg) / std::pow(p.semi_major_axis_m, 3.0));
+  }
+
+  // Orbital period [days]
+  double orbital_period_days(Moon moon) const {
+    return (2.0 * M_PI / orbital_frequency_rad_s(moon)) / 86400.0;
+  }
+
+  // Temperature-dependent ice dynamic viscosity eta(T) [Pa s]
+  double ice_viscosity_pa_s(double T_k, double eta_base = ETA_0_ICE, double E_act = E_ACTIVATION) const {
+    double T = std::max(60.0, std::min(T_MELT, T_k));
+    double exponent = (E_act / GAS_CONSTANT) * (1.0 / T - 1.0 / T_MELT);
+    exponent = std::min(80.0, exponent);
+    return eta_base * std::exp(exponent);
+  }
+
+  // Maxwell relaxation time tau_M = eta / mu [s]
+  double maxwell_relaxation_time_s(double eta_pa_s, double mu_pa = MU_ICE) const {
+    return eta_pa_s / mu_pa;
+  }
+
+  // Effective rigidity parameter mu_tilde = (19 * mu) / (2 * rho * g * R)
+  double effective_rigidity_tilde(Moon moon, double mu_pa = MU_ICE) const {
+    MoonParams p = get_params(moon);
+    return (19.0 * mu_pa) / (2.0 * p.bulk_density_kg_m3 * p.surface_gravity_m_s2 * p.radius_m);
+  }
+
+  // Complex tidal Love number dissipation factor Im(k2) (Maxwell viscoelastic model)
+  // Im(k2) = (1.5 * mu_tilde * omega * tau_M) / ((1 + mu_tilde)^2 + (omega * tau_M)^2)
+  double im_k2_dissipation(Moon moon, double T_k, double mu_pa = MU_ICE) const {
+    double eta = ice_viscosity_pa_s(T_k);
+    double tau_m = maxwell_relaxation_time_s(eta, mu_pa);
+    double omega = orbital_frequency_rad_s(moon);
+    double x = omega * tau_m;
+    double mu_tilde = effective_rigidity_tilde(moon, mu_pa);
+
+    double numerator = 1.5 * mu_tilde * x;
+    double denominator = (1.0 + mu_tilde) * (1.0 + mu_tilde) + x * x;
+    return numerator / denominator;
+  }
+
+  // Peak Im(k2) Love number value at resonant Maxwell frequency
+  double peak_im_k2(Moon moon, double mu_pa = MU_ICE) const {
+    double mu_tilde = effective_rigidity_tilde(moon, mu_pa);
+    return (1.5 * mu_tilde) / (2.0 * (1.0 + mu_tilde));
+  }
+
+  // Viscosity for peak dissipation eta_peak = mu * (1 + mu_tilde) / omega [Pa s]
+  double peak_viscosity_pa_s(Moon moon, double mu_pa = MU_ICE) const {
+    double mu_tilde = effective_rigidity_tilde(moon, mu_pa);
+    double omega = orbital_frequency_rad_s(moon);
+    return (mu_pa * (1.0 + mu_tilde)) / omega;
+  }
+
+  // Total viscoelastic tidal heating power [Watts] (Peale 1979, Nimmo & McKinnon 2007)
+  // P_tide = (21/2) * (G * M_S^2 * R^5 * n / a^6) * e^2 * Im(k2)
+  double tidal_heating_power_watts(Moon moon, double eccentricity, double T_k) const {
+    MoonParams p = get_params(moon);
+    double n = orbital_frequency_rad_s(moon);
+    double im_k2 = im_k2_dissipation(moon, T_k);
+
+    double factor = 10.5 * G * M_SATURN * M_SATURN * std::pow(p.radius_m, 5.0) * n / std::pow(p.semi_major_axis_m, 6.0);
+    return factor * eccentricity * eccentricity * im_k2;
+  }
+
+  // Tidal heating power [GW] (1 GW = 1e9 W)
+  double tidal_heating_power_gw(Moon moon, double eccentricity, double T_k) const {
+    return tidal_heating_power_watts(moon, eccentricity, T_k) / 1.0e9;
+  }
+
+  // Tidal heating power [TW] (1 TW = 1e12 W)
+  double tidal_heating_power_tw(Moon moon, double eccentricity, double T_k) const {
+    return tidal_heating_power_watts(moon, eccentricity, T_k) / 1.0e12;
+  }
+
+  // Surface tidal heat flux [mW/m^2]
+  double surface_tidal_flux_mw_m2(Moon moon, double eccentricity, double T_k) const {
+    MoonParams p = get_params(moon);
+    double surface_area = 4.0 * M_PI * p.radius_m * p.radius_m;
+    return (tidal_heating_power_watts(moon, eccentricity, T_k) / surface_area) * 1.0e3;
+  }
+
+  // Radiogenic heating specific power [W/kg rock] at time t_gyr from formation
+  double radiogenic_specific_power_w_kg(double t_gyr) const {
+    const double h0[4] = {5.92e-11, 3.65e-12, 1.83e-11, 1.25e-11};
+    const double lambda_inv_gyr[4] = {0.554, 0.0495, 0.985, 0.155};
+
+    double total_h = 0.0;
+    for (int i = 0; i < 4; ++i) {
+      total_h += h0[i] * std::exp(-lambda_inv_gyr[i] * t_gyr);
+    }
+    return total_h;
+  }
+
+  // Total radiogenic power [GW] for a moon at time t_gyr
+  double radiogenic_power_gw(Moon moon, double t_gyr = 4.5) const {
+    MoonParams p = get_params(moon);
+    double rock_mass = p.mass_kg * p.rock_mass_fraction;
+    double h_spec = radiogenic_specific_power_w_kg(t_gyr);
+    return (rock_mass * h_spec) / 1.0e9;
+  }
+
+  // Conductive heat loss through spherical ice shell [Watts]
+  // Q_cond = 4 * pi * K_cond * ln(T_melt / T_surf) / (1 / (R - D) - 1 / R)
+  double conductive_heat_loss_watts(Moon moon, double d_shell_km) const {
+    MoonParams p = get_params(moon);
+    double d_m = std::max(1000.0, std::min(p.radius_m - 1000.0, d_shell_km * 1.0e3));
+    double r_base = p.radius_m - d_m;
+    double k_eff = (K_ICE_CONDUCT * std::log(T_MELT / p.surface_temperature_k)) / (T_MELT - p.surface_temperature_k);
+    double delta_t = T_MELT - p.surface_temperature_k;
+
+    return 4.0 * M_PI * k_eff * delta_t * (p.radius_m * r_base) / d_m;
+  }
+
+  // Conductive heat loss [GW]
+  double conductive_heat_loss_gw(Moon moon, double d_shell_km) const {
+    return conductive_heat_loss_watts(moon, d_shell_km) / 1.0e9;
+  }
+
+  // Convective Nusselt number Nu for stagnant lid convection (Solomatov 2000, Showman 2004)
+  double convective_nusselt_number(Moon moon, double d_shell_km, double T_base_k = T_MELT) const {
+    MoonParams p = get_params(moon);
+    double D_m = std::max(5000.0, d_shell_km * 1.0e3);
+    double delta_t = T_base_k - p.surface_temperature_k;
+    double delta_t_rh = (GAS_CONSTANT * T_base_k * T_base_k) / E_ACTIVATION;
+    double theta = (E_ACTIVATION * delta_t) / (GAS_CONSTANT * T_base_k * T_base_k);
+
+    double alpha = 1.6e-4;   // Thermal expansion [1/K]
+    double kappa = 1.25e-6;  // Thermal diffusivity [m^2/s]
+    double eta_b = ice_viscosity_pa_s(T_base_k);
+
+    double ra_rh = (RHO_ICE * p.surface_gravity_m_s2 * alpha * delta_t_rh * std::pow(D_m, 3.0)) / (kappa * eta_b);
+    double ra_cr = 20.0 * std::pow(theta, 4.0);
+
+    if (ra_rh * theta < ra_cr) {
+      return 1.0;  // Subcritical, pure conduction
+    }
+
+    double nu = 0.80 * std::pow(ra_rh, 0.25) / std::max(1.0, theta);
+    return std::max(1.0, nu);
+  }
+
+  // Total heat loss (conduction + convection) [GW]
+  double total_heat_loss_gw(Moon moon, double d_shell_km, double T_base_k = T_MELT) const {
+    double q_cond = conductive_heat_loss_gw(moon, d_shell_km);
+    double nu = convective_nusselt_number(moon, d_shell_km, T_base_k);
+    return q_cond * nu;
+  }
+
+  // Ocean Freezing & Volume Expansion Strain (Chen & Nimmo 2008, GRL)
+  // For Tethys: Ithaca Chasma represents global extensional strain from past ocean freezing
+  struct OceanFreezingTectonics {
+    double ocean_thickness_km;
+    double delta_volume_km3;
+    double volume_strain_fraction;
+    double surface_linear_strain_fraction;
+    double circumference_expansion_km;
+    double graben_width_equivalent_km;
+  };
+
+  OceanFreezingTectonics compute_ocean_freezing_strain(Moon moon, double ocean_thickness_km) const {
+    MoonParams p = get_params(moon);
+    double R = p.radius_m;
+    double r_ocean_base = std::max(1.0e3, R - ocean_thickness_km * 1.0e3);
+
+    // Liquid ocean volume
+    double v_ocean = (4.0 / 3.0) * M_PI * (std::pow(R, 3.0) - std::pow(r_ocean_base, 3.0));
+    double v_total = (4.0 / 3.0) * M_PI * std::pow(R, 3.0);
+
+    // Freezing expansion factor (rho_water - rho_ice) / rho_ice ~ +0.0905
+    double freeze_expansion = (RHO_WATER - RHO_ICE) / RHO_ICE;
+    double delta_v = v_ocean * freeze_expansion;
+
+    double dV_over_V = delta_v / v_total;
+    double eps_linear = dV_over_V / 3.0; // Isotropic linear strain
+    double delta_circumference_km = (2.0 * M_PI * R * eps_linear) / 1.0e3;
+
+    // Graben localized opening width across great circle (covering ~75% of circle)
+    double graben_width_km = delta_circumference_km * (1.0 / 0.75);
+
+    return {
+      ocean_thickness_km,
+      delta_v / 1.0e9,
+      dV_over_V,
+      eps_linear,
+      delta_circumference_km,
+      graben_width_km
+    };
+  }
+
+  // Inferred Elastic Thickness Te [km] and Heat Flux [mW/m^2] for Ithaca Chasma (Chen & Nimmo 2008)
+  double inferred_heat_flux_from_te_mw_m2(double Te_km, double T_bdt_k = 180.0, double T_surf_k = 86.0) const {
+    if (Te_km <= 0.0) return 0.0;
+    double Te_m = Te_km * 1.0e3;
+    double flux_w_m2 = (K_ICE_CONDUCT * std::log(T_bdt_k / T_surf_k)) / Te_m;
+    return flux_w_m2 * 1.0e3;
+  }
+
+  // State structure for coupled thermal-orbital evolution integration
+  struct CoupledEvolutionState {
+    double time_myr;
+    double eccentricity;
+    double core_temperature_k;
+    double ocean_thickness_km;
+    double tidal_power_gw;
+    double radiogenic_power_gw;
+    double heat_loss_gw;
+    double surface_flux_mw_m2;
+    double cum_extensional_strain;
+  };
+
+  // Coupled Thermal-Orbital Integration (Nimmo & McKinnon 2007, Chen & Nimmo 2008)
+  std::vector<CoupledEvolutionState> integrate_evolution(
+      Moon moon,
+      double t_res_start_myr = 0.0,
+      double t_res_end_myr = 60.0,
+      double t_total_myr = 300.0,
+      double dt_myr = 0.2,
+      double e_initial = 0.001,
+      double e_peak = 0.025,
+      double T_init_k = 180.0) const {
+    std::vector<CoupledEvolutionState> history;
+    MoonParams p = get_params(moon);
+
+    double t_myr = 0.0;
+    double e = e_initial;
+    double T = T_init_k;
+    double D_ocean = 0.0;
+
+    double SEC_PER_MYR = 1.0e6 * 365.25 * 86400.0;
+    double c_heat = p.mass_kg * CP_ICE; // Satellite bulk thermal capacity [J/K]
+
+    while (t_myr <= t_total_myr) {
+      double p_tide_gw = tidal_heating_power_gw(moon, e, T);
+      double p_rad_gw = radiogenic_power_gw(moon, 4.5 - (t_total_myr - t_myr) * 1.0e-3);
+      double d_shell_km = std::max(5.0, (p.radius_m / 1.0e3) - D_ocean);
+      double q_loss_gw = total_heat_loss_gw(moon, d_shell_km, T);
+      double flux_mw_m2 = surface_tidal_flux_mw_m2(moon, e, T) + (p_rad_gw * 1.0e9) / (4.0 * M_PI * p.radius_m * p.radius_m) * 1.0e3;
+
+      // Extensional strain from freezing
+      auto tect = compute_ocean_freezing_strain(moon, D_ocean);
+
+      history.push_back({
+        t_myr,
+        e,
+        T,
+        D_ocean,
+        p_tide_gw,
+        p_rad_gw,
+        q_loss_gw,
+        flux_mw_m2,
+        tect.surface_linear_strain_fraction
+      });
+
+      // Orbital eccentricity rate de/dt
+      double de_dt;
+      if (t_myr < t_res_start_myr) {
+        de_dt = 0.0;
+      } else if (t_myr <= t_res_end_myr) {
+        // Resonant pumping towards e_peak
+        de_dt = (e_peak - e) / (15.0 * SEC_PER_MYR);
+      } else {
+        // Post-resonance tidal damping: de/dt = -21/2 * (M_S/M) * (R/a)^5 * n * e * Im(k2)
+        double n = orbital_frequency_rad_s(moon);
+        double im_k2 = im_k2_dissipation(moon, T);
+        double damp_rate = 10.5 * (M_SATURN / p.mass_kg) * std::pow(p.radius_m / p.semi_major_axis_m, 5.0) * n * im_k2;
+        de_dt = -damp_rate * e;
+      }
+
+      // Thermal rate dT/dt
+      double net_power_w = (p_tide_gw + p_rad_gw - q_loss_gw) * 1.0e9;
+      double dT_dt = net_power_w / c_heat;
+
+      // Update state
+      double dt_sec = dt_myr * SEC_PER_MYR;
+      e += de_dt * dt_sec;
+      e = std::max(p.nominal_eccentricity, std::min(0.04, e));
+
+      T += dT_dt * dt_sec;
+      T = std::max(p.surface_temperature_k, std::min(T_MELT, T));
+
+      // Ocean thickness evolution
+      if (T >= T_MELT - 0.5) {
+        // Excess heat melts ice shell into ocean: d(D_ocean)/dt = net_power / (rho * L * 4 * pi * R^2)
+        double melt_rate_m_s = net_power_w / (RHO_ICE * LATENT_HEAT_FUSION * 4.0 * M_PI * p.radius_m * p.radius_m);
+        D_ocean += (melt_rate_m_s * dt_sec) / 1.0e3;
+        D_ocean = std::max(0.0, std::min(100.0, D_ocean));
+      } else if (D_ocean > 0.0) {
+        // Freezing rate
+        double freeze_rate_m_s = (q_loss_gw - p_tide_gw - p_rad_gw) * 1.0e9 / (RHO_ICE * LATENT_HEAT_FUSION * 4.0 * M_PI * p.radius_m * p.radius_m);
+        D_ocean -= (freeze_rate_m_s * dt_sec) / 1.0e3;
+        D_ocean = std::max(0.0, D_ocean);
+      }
+
+      t_myr += dt_myr;
+    }
+
+    return history;
+  }
+};
+
+using TethysDioneRheaEvolutionModel = NimmoMcKinnon2007SaturnMoonsModel;
+using NimmoMcKinnon2007Model = NimmoMcKinnon2007SaturnMoonsModel;
+using ChenNimmo2008IthacaChasmaModel = NimmoMcKinnon2007SaturnMoonsModel;
+using Paper215SaturnMoonsModel = NimmoMcKinnon2007SaturnMoonsModel;
+
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
+
