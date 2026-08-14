@@ -385,6 +385,39 @@ int main() {
   std::cout << "--> LTT 9779b Geometric Albedo A_g = " << ltt_albedo << std::endl;
   assert(std::abs(ltt_albedo - 0.80) < 0.1 && "LTT 9779b albedo mismatch!");
 
+  hot_jupiter::PlanetNinePositionPredictionEngine p9_pred_test_model;
+  double p9_ra = p9_pred_test_model.predicted_ra_deg();
+  double p9_mu = p9_pred_test_model.proper_motion_arcsec_yr();
+  std::cout << "--> Planet Nine Position Prediction: Peak RA = " << p9_ra << " deg, Proper Motion = " << p9_mu << " arcsec/yr" << std::endl;
+  assert(std::abs(p9_ra - 55.55) < 1.0 && "Planet Nine RA mismatch!");
+  assert(std::abs(p9_mu - 109.3) < 5.0 && "Planet Nine proper motion mismatch!");
+
+  hot_jupiter::OjakangasStevenson1989EnceladusModel ojakangas_model;
+  double ojakangas_p_tide = ojakangas_model.tidal_dissipation_power_gw(0.0107);
+  double ojakangas_q_cond = ojakangas_model.conductive_heat_loss_gw(20.0);
+  double ojakangas_omega_m_nom = ojakangas_model.maxwell_relaxation_frequency_rad_s(1.0e13);
+  double ojakangas_im_k2_nom = ojakangas_model.dissipation_love_number_im_k2(ojakangas_omega_m_nom);
+  std::cout << "--> Ojakangas & Stevenson (1989) Ice Shell: Tidal Power = " << ojakangas_p_tide
+            << " GW, Cond Heat Loss (20km) = " << ojakangas_q_cond
+            << " GW, Maxwell Freq = " << ojakangas_omega_m_nom
+            << " rad/s, Im(k2) = " << ojakangas_im_k2_nom << std::endl;
+  assert(std::abs(ojakangas_p_tide - 15.88) < 0.5 && "Ojakangas & Stevenson tidal power mismatch!");
+  assert(std::abs(ojakangas_q_cond - 29.27) < 1.0 && "Ojakangas & Stevenson conductive loss mismatch!");
+  assert(ojakangas_im_k2_nom > 0.001 && "Ojakangas & Stevenson Im(k2) mismatch!");
+
+  hot_jupiter::EuropaViscoelasticTidalModel europa_model;
+  double europa_p_tw = europa_model.total_tidal_power_tw(20000.0, 1.0);
+  double europa_flux_mw_m2 = europa_model.surface_heat_flux_mw_m2(20000.0, 1.0);
+  double europa_k2_over_q = europa_model.effective_k2_over_q(20000.0, 1.0);
+  std::cout << "--> Europa Viscoelastic Tidal Heating: Total Power = " << europa_p_tw
+            << " TW, Surface Flux = " << europa_flux_mw_m2
+            << " mW/m^2, Im(k2) = " << europa_k2_over_q << std::endl;
+  assert(europa_p_tw > 1.0 && europa_p_tw < 5.0 && "Europa tidal power out of expected range!");
+  assert(europa_flux_mw_m2 > 30.0 && europa_flux_mw_m2 < 150.0 && "Europa surface heat flux out of range!");
+  assert(europa_k2_over_q > 0.001 && europa_k2_over_q < 0.010 && "Europa Im(k2) out of range!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
+
+

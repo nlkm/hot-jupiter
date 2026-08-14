@@ -1324,6 +1324,61 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+alias(
+    name = "paper_204_solver",
+    actual = "//replications_ss/paper_204:paper_204_solver",
+)
+
+alias(
+    name = "paper_205_solver",
+    actual = "//replications_ss/paper_205:paper_205_solver",
+)
+
+alias(
+    name = "paper_195_solver",
+    actual = "//replications_ss/paper_195:paper_195_solver",
+)
+
+alias(
+    name = "paper_196_solver",
+    actual = "//replications_ss/paper_196:paper_196_solver",
+)
+
+alias(
+    name = "paper_197_solver",
+    actual = "//replications_ss/paper_197:paper_197_solver",
+)
+
+alias(
+    name = "paper_198_solver",
+    actual = "//replications_ss/paper_198:paper_198_solver",
+)
+
+alias(
+    name = "paper_199_solver",
+    actual = "//replications_ss/paper_199:paper_199_solver",
+)
+
+alias(
+    name = "paper_208_solver",
+    actual = "//replications_ss/paper_208:paper_208_solver",
+)
+
+alias(
+    name = "paper_212_solver",
+    actual = "//replications_ss/paper_212:paper_212_solver",
+)
+
+alias(
+    name = "paper_210_solver",
+    actual = "//replications_ss/paper_210:paper_210_solver",
+)
+
+alias(
+    name = "paper_213_solver",
+    actual = "//replications_ss/paper_213:paper_213_solver",
+)
+
 cc_binary(
     name = "saturn_ring_resonances_paper",
     srcs = ["replications_observational/paper_01/saturn_ring_resonances_paper.cpp"],
@@ -2256,3 +2311,41 @@ cc_binary(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+alias(
+    name = "paper_207_solver",
+    actual = "//replications_ss/paper_207:paper_207_solver",
+)
+
+alias(
+    name = "paper_200_solver",
+    actual = "//replications_ss/paper_200:paper_200_solver",
+)
+
+alias(
+    name = "paper_203_solver",
+    actual = "//replications_ss/paper_203:paper_203_solver",
+)
+
+alias(
+    name = "paper_209_solver",
+    actual = "//replications_ss/paper_209:paper_209_solver",
+)
+
+alias(
+    name = "paper_214_solver",
+    actual = "//replications_ss/paper_214:paper_214_solver",
+)
+
+alias(
+    name = "paper_211_solver",
+    actual = "//replications_ss/paper_211:paper_211_solver",
+)
+
+alias(
+    name = "paper_206_solver",
+    actual = "//replications_ss/paper_206:paper_206_solver",
+)
+
+
+
