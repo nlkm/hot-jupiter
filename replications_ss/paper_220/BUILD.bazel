@@ -1,0 +1,8 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "paper_220_solver",
+    srcs = ["paper_220.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = ["//:hot_jupiter_lib"],
+)

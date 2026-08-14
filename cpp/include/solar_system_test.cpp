@@ -416,6 +416,41 @@ int main() {
   assert(europa_flux_mw_m2 > 30.0 && europa_flux_mw_m2 < 150.0 && "Europa surface heat flux out of range!");
   assert(europa_k2_over_q > 0.001 && europa_k2_over_q < 0.010 && "Europa Im(k2) out of range!");
 
+  hot_jupiter::NiceModelResonantCrossingAnalyticalModel nice_bm_model;
+  double w1 = nice_bm_model.resonance_frequency_width_1(0.048);
+  double w2 = nice_bm_model.resonance_frequency_width_2(0.054);
+  double chirikov_s = nice_bm_model.chirikov_overlap_parameter(0.048, 0.054);
+  double e_s_crit = nice_bm_model.critical_saturn_eccentricity_overlap(0.048);
+  std::cout << "--> Batygin & Morbidelli (2011) 2:1 Crossing: w1 = " << w1
+            << " rad/s, w2 = " << w2 << " rad/s, Chirikov S = " << chirikov_s
+            << ", e_S critical = " << e_s_crit << std::endl;
+  assert(w1 > 0.0 && w2 > 0.0 && "Resonance widths should be positive!");
+  assert(chirikov_s > 1.0 && "Jupiter-Saturn 2:1 crossing should be in Chirikov overlap regime (S > 1)!");
+  assert(e_s_crit >= 0.0 && "Critical Saturn eccentricity should be non-negative!");
+
+  hot_jupiter::Gomes2005LateHeavyBombardmentModel lhb_model;
+  double t_inst = lhb_model.instability_delay_myr(1.5);
+  double r_res = lhb_model.resonance_crossing_semi_major_axis_ratio();
+  double p_rat = lhb_model.period_ratio(8.18, 5.45);
+  double fg_earth = lhb_model.gravitational_focusing_factor(11.186, 15.0);
+  double fg_moon = lhb_model.gravitational_focusing_factor(2.380, 15.0);
+  double mass_ratio_earth_moon = lhb_model.relative_impact_mass_ratio_vs_moon(6.371e6, 11.186, 15.0);
+  double m_moon_tot = lhb_model.cumulative_mass_delivered_kg("Moon", 1100.0);
+  double basins_tot = lhb_model.cumulative_lunar_basins(1100.0);
+
+  std::cout << "--> Gomes et al. (2005) LHB: Delay = " << t_inst
+            << " Myr, Res Ratio = " << r_res
+            << ", Init Period Ratio = " << p_rat
+            << ", Earth/Moon Impact Mass Ratio = " << mass_ratio_earth_moon
+            << ", Moon Total Mass Delivered = " << m_moon_tot / 1.0e18 << " x 10^18 kg"
+            << ", Basins Formed = " << basins_tot << std::endl;
+
+  assert(t_inst > 600.0 && t_inst < 1000.0 && "LHB instability delay out of expected range!");
+  assert(std::abs(r_res - 1.5874) < 0.001 && "2:1 resonance semi-major axis ratio mismatch!");
+  assert(mass_ratio_earth_moon > 18.0 && mass_ratio_earth_moon < 25.0 && "Earth-to-Moon impact mass ratio out of range!");
+  assert(m_moon_tot > 5.0e18 && m_moon_tot < 8.0e18 && "Delivered lunar mass out of expected LHB range!");
+  assert(std::abs(basins_tot - 42.0) < 1.0 && "Cumulative lunar basins count mismatch!");
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }

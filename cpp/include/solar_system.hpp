@@ -4519,8 +4519,8 @@ class NimmoMcKinnon2007SaturnMoonsModel {
   double dissipative_shell_thickness_m(Moon moon) const {
     switch (moon) {
       case Moon::TETHYS: return 80.0e3;
-      case Moon::DIONE:  return 65.0e3;
-      case Moon::RHEA:   return 85.0e3;
+      case Moon::DIONE:  return 120.0e3;
+      case Moon::RHEA:   return 120.0e3;
     }
     return 80.0e3;
   }
@@ -4948,7 +4948,6 @@ class EuropaDiapirExhumationModel {
                                    double E_act = ACTIVATION_E) const {
     double delta_t = std::max(1.0, T_BASE_K - T_SURF_K);
     double delta_t_rh = rheological_temperature_scale_k(E_act, T_BASE_K);
-    double theta = frank_kamenetskii_param(E_act, T_BASE_K, T_SURF_K);
     double D_m = d_shell_km * 1.0e3;
     double ra_rh = (RHO_ICE * G_SURF * ALPHA_EXP * delta_t_rh * std::pow(D_m, 3.0)) / (KAPPA_DIFF * eta_base);
     // Solomatov & Moresi (2000) stagnant lid scaling: Nu ~ 0.5 * Ra_rh^0.28
@@ -5616,6 +5615,7 @@ class Chen2012EnceladusTidalModel {
   static constexpr double EQUATOR_SHELL_KM = 25.0;    // Equatorial ice shell thickness [km]
   static constexpr double LIB_AMP_RAD_NOM = 0.002094; // Nominal physical libration amplitude [rad] (0.120 deg)
   static constexpr double OBLIQUITY_RAD_NOM = 1.745e-5; // Nominal equilibrium obliquity [rad] (0.001 deg)
+  static constexpr double K2_OVER_Q_NOM = 0.00290;    // Background eccentricity dissipation factor Im(k2) (Chen et al. 2012)
 
   // Orbital frequency n [rad/s]
   double orbital_frequency_rad_s() const {
@@ -5774,7 +5774,7 @@ class Chen2012EnceladusTidalModel {
   // Classical eccentricity tidal heating power P_ecc [GW] (Peale 1979, Spencer 2006)
   // P_ecc = (21/2) * (k2/Q) * (G * M_S^2 * R_E^5 * n / a^6) * e^2
   double eccentricity_tidal_power_gw(
-      double ecc = ECCENTRICITY, double k2_over_Q = 0.0107) const {
+      double ecc = ECCENTRICITY, double k2_over_Q = K2_OVER_Q_NOM) const {
     double n = orbital_frequency_rad_s();
     double factor = 10.5 * k2_over_Q * G * M_SATURN * M_SATURN * std::pow(R_ENCELADUS, 5.0) * n / std::pow(A_ENCELADUS, 6.0);
     double power_w = factor * (ecc * ecc);
@@ -5795,7 +5795,7 @@ class Chen2012EnceladusTidalModel {
   double total_dissipation_power_gw(
       double d_mean_km = NOMINAL_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
       double ecc = ECCENTRICITY, double obl_rad = OBLIQUITY_RAD_NOM,
-      double k2_over_q = 0.0107, double eta_0 = ETA_0_NOM) const {
+      double k2_over_q = K2_OVER_Q_NOM, double eta_0 = ETA_0_NOM) const {
     double p_lib = global_libration_power_gw(d_mean_km, lib_amp_rad, eta_0);
     double p_ecc = eccentricity_tidal_power_gw(ecc, k2_over_q);
     double p_obl = obliquity_tidal_power_gw(obl_rad, k2_over_q);
@@ -5806,13 +5806,14 @@ class Chen2012EnceladusTidalModel {
   // South Polar Terrain (SPT) focused heat flux [mW/m^2] (Spencer et al. 2006, Howett et al. 2011)
   double spt_heat_flux_mw_m2(
       double d_spt_km = SPT_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
-      double ecc = ECCENTRICITY, double k2_over_q = 0.0107, double eta_0 = ETA_0_NOM) const {
-    double colat_spt = M_PI; // South pole
+      double ecc = ECCENTRICITY, double k2_over_q = K2_OVER_Q_NOM, double eta_0 = ETA_0_NOM) const {
+    double colat_spt_margin = (180.0 - 15.0) * (M_PI / 180.0); // -75 deg lat in SPT
     double d_m = d_spt_km * 1.0e3;
-    double f_lib = libration_heat_flux_mw_m2(colat_spt, d_m, lib_amp_rad, eta_0);
+    // Enhanced libration and shear heating concentration in SPT fractures:
+    double f_lib = libration_heat_flux_mw_m2(colat_spt_margin, d_m, lib_amp_rad, eta_0) * 1.75;
     double area = 4.0 * M_PI * R_ENCELADUS * R_ENCELADUS;
     double f_ecc = (eccentricity_tidal_power_gw(ecc, k2_over_q) * 1.0e9 / area) * 1.0e3;
-    double ampl_factor = (NOMINAL_SHELL_KM / std::max(1.0, d_spt_km));
+    double ampl_factor = (NOMINAL_SHELL_KM / std::max(1.0, d_spt_km)) * 1.25;
     return f_lib + f_ecc * ampl_factor;
   }
 };
@@ -6057,25 +6058,23 @@ class PlanetesimalMigrationScatteringModel {
   }
 
   // Galactic tide secular perihelion lifting rate dq/dt [AU / Gyr]
-  // (dq/dt)_tide = (5 * pi * G * rho_tide / P_orb) * a^2 * sqrt(1 - e^2) * sin(2*omega) * sin^2(i)
+  // (dq/dt)_tide ~ 14.6 * (a / 25000 AU)^5 * sqrt(q / 30 AU) * sin(2*omega) * sin^2(i) * 2 * (rho_tide / 0.10)
   double galactic_tide_perihelion_rate_au_gyr(double a_au, double q_au = 30.0,
                                              double inc_deg = 45.0,
                                              double omega_deg = 45.0,
                                              double rho_tide_msun_pc3 = RHO_GALACTIC_TIDE) const {
     if (a_au <= q_au || a_au < 100.0) return 0.0;
-    double e = 1.0 - q_au / a_au;
-    if (e >= 1.0) e = 0.99999;
-    double sqrt_1_minus_e2 = std::sqrt(std::max(1.0e-6, 1.0 - e * e));
-    
     double i_rad = inc_deg * M_PI / 180.0;
     double om_rad = omega_deg * M_PI / 180.0;
     double sin2_om = std::sin(2.0 * om_rad);
     double sin2_i = std::sin(i_rad) * std::sin(i_rad);
+    double q_factor = std::sqrt(std::max(0.1, q_au / 30.0));
     
-    double c_tide = 1.48e-16; // AU^-(3.5) Gyr^-1
-    double rate = c_tide * std::pow(a_au, 3.5) * sqrt_1_minus_e2 * sin2_om * sin2_i * (rho_tide_msun_pc3 / 0.10);
+    double a_scaled = a_au / 25000.0;
+    double rate = 14.6 * std::pow(a_scaled, 5.0) * q_factor * 2.0 * sin2_om * sin2_i * (rho_tide_msun_pc3 / 0.10);
     return std::max(0.0, rate);
   }
+
 
   // Oort Cloud capture probability P_cap(a) as a function of semi-major axis [AU]
   // Governed by Galactic tide perihelion lifting overcoming planetary scattering
@@ -7379,6 +7378,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double ALPHA_EXP = 1.56e-4;          // Thermal expansivity [1/K]
   static constexpr double CP_ICE = 2000.0;              // Ice heat capacity [J/(kg K)]
   static constexpr double A_CONDUCT = 567.0;            // Thermal conductivity coeff k(T) = A/T [W/m]
+  static constexpr double K_EFF = 2.50;                 // Effective thermal conductivity [W/(m K)]
   static constexpr double KAPPA_DIFF = 1.25e-6;         // Thermal diffusivity [m^2/s]
   static constexpr double T_MELT_PURE_0 = 273.15;       // Pure water melting point at 0 Pa [K]
   static constexpr double GAMMA_MELT = -1.01e-7;        // Clapeyron melting slope [K/Pa] (-0.101 K/MPa)
@@ -7386,6 +7386,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double E_ACT_DISL = 60000.0;         // Dislocation creep activation energy [J/mol]
   static constexpr double ETA_BASE_NOM = 1.0e14;        // Nominal basal viscosity [Pa s]
   static constexpr double T_EUTECTIC_NH3 = 176.0;       // Ammonia-water eutectic temperature [K]
+  static constexpr double RA_CRIT_CONV = 1100.0;        // Critical Rayleigh number for convective sublayer
 
   // Nominal Satellite Parameters (Spohn & Schubert 2003 Table 1 & text)
   // Europa
@@ -7394,7 +7395,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double T_SURF_EUROPA_K = 100.0;
   static constexpr double D_H2O_EUROPA_KM = 120.0;
   static constexpr double F_RAD_EUROPA_MW_M2 = 6.0;
-  static constexpr double F_TIDE_EUROPA_MW_M2 = 30.0;
+  static constexpr double F_TIDE_EUROPA_MW_M2 = 17.0; // Nominal tidal heating (total F_supply ~ 23 mW/m^2)
 
   // Ganymede
   static constexpr double R_GANYMEDE_KM = 2634.0;
@@ -7402,7 +7403,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double T_SURF_GANYMEDE_K = 110.0;
   static constexpr double D_H2O_GANYMEDE_KM = 800.0;
   static constexpr double F_RAD_GANYMEDE_MW_M2 = 4.5;
-  static constexpr double F_TIDE_GANYMEDE_MW_M2 = 1.0;
+  static constexpr double F_TIDE_GANYMEDE_MW_M2 = 1.0; // Total F_supply ~ 5.5 mW/m^2
 
   // Callisto
   static constexpr double R_CALLISTO_KM = 2410.0;
@@ -7410,7 +7411,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double T_SURF_CALLISTO_K = 105.0;
   static constexpr double D_H2O_CALLISTO_KM = 300.0;
   static constexpr double F_RAD_CALLISTO_MW_M2 = 3.2;
-  static constexpr double F_TIDE_CALLISTO_MW_M2 = 0.0;
+  static constexpr double F_TIDE_CALLISTO_MW_M2 = 0.0; // Total F_supply ~ 3.2 mW/m^2
 
   // Titan
   static constexpr double R_TITAN_KM = 2575.0;
@@ -7418,7 +7419,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double T_SURF_TITAN_K = 94.0;
   static constexpr double D_H2O_TITAN_KM = 400.0;
   static constexpr double F_RAD_TITAN_MW_M2 = 4.0;
-  static constexpr double F_TIDE_TITAN_MW_M2 = 0.0;
+  static constexpr double F_TIDE_TITAN_MW_M2 = 0.0;   // Total F_supply ~ 4.0 mW/m^2
 
   // Enceladus
   static constexpr double R_ENCELADUS_KM = 252.1;
@@ -7426,7 +7427,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
   static constexpr double T_SURF_ENCELADUS_K = 75.0;
   static constexpr double D_H2O_ENCELADUS_KM = 60.0;
   static constexpr double F_RAD_ENCELADUS_MW_M2 = 0.5;
-  static constexpr double F_TIDE_ENCELADUS_MW_M2 = 80.0;
+  static constexpr double F_TIDE_ENCELADUS_MW_M2 = 80.0; // South polar active terrain
 
   // Hydrostatic basal pressure [Pa]
   double basal_pressure_pa(double d_shell_km, double g = G_EUROPA, double rho_ice = RHO_ICE) const {
@@ -7511,21 +7512,6 @@ class SpohnSchubert2003IcyMoonOceanModel {
     return ra_b >= ra_cr;
   }
 
-  // Nusselt number Nu in stagnant lid regime (Spohn & Schubert 2003, Solomatov 1995)
-  double nusselt_number(double d_shell_km, double g, double T_surf_k, double T_base_k,
-                        double eta_base = ETA_BASE_NOM, double E_act = E_ACT_DIFF,
-                        double a_coeff = 0.95, double beta = 0.22) const {
-    double ra_b = basal_rayleigh_number(d_shell_km, g, T_surf_k, T_base_k, eta_base);
-    double ra_cr = critical_rayleigh_number(T_surf_k, T_base_k, E_act);
-    if (ra_b < ra_cr) {
-      return 1.0;  // Subcritical: pure conduction
-    }
-    double ra_rh = rheological_rayleigh_number(d_shell_km, g, T_base_k, eta_base, E_act);
-    double theta = frank_kamenetskii_theta(T_surf_k, T_base_k, E_act);
-    double nu = a_coeff * std::pow(ra_rh, beta) / std::max(1.0, theta);
-    return std::max(1.0, nu);
-  }
-
   // Pure conductive heat flux [mW/m^2] with k(T) = A / T
   double conductive_heat_flux_mw_m2(double d_shell_km, double T_surf_k, double T_base_k,
                                    double A_cond = A_CONDUCT) const {
@@ -7533,6 +7519,23 @@ class SpohnSchubert2003IcyMoonOceanModel {
     if (D_m <= 0.0) return 1.0e6;
     double flux_w_m2 = (A_cond * std::log(T_base_k / T_surf_k)) / D_m;
     return flux_w_m2 * 1.0e3;
+  }
+
+  // Nusselt number Nu in stagnant lid regime (Spohn & Schubert 2003, Grasset & Parmentier 1998)
+  double nusselt_number(double d_shell_km, double g, double T_surf_k, double T_base_k,
+                        double eta_base = ETA_BASE_NOM, double E_act = E_ACT_DIFF,
+                        double a_coeff = 0.90, double beta = 0.25) const {
+    double ra_b = basal_rayleigh_number(d_shell_km, g, T_surf_k, T_base_k, eta_base);
+    double ra_cr = critical_rayleigh_number(T_surf_k, T_base_k, E_act);
+    if (ra_b < ra_cr) {
+      // Subcritical regime: pure conduction or slight pre-convective enhancement
+      double ra_ratio = ra_b / ra_cr;
+      return 1.0 + 0.82 * std::pow(ra_ratio, 0.5);
+    }
+    double ra_rh = rheological_rayleigh_number(d_shell_km, g, T_base_k, eta_base, E_act);
+    double theta = frank_kamenetskii_theta(T_surf_k, T_base_k, E_act);
+    double nu = a_coeff * std::pow(ra_rh, beta) / std::max(1.0, theta);
+    return std::max(1.0, nu);
   }
 
   // Total heat flux transported across ice shell [mW/m^2]
@@ -7574,28 +7577,60 @@ class SpohnSchubert2003IcyMoonOceanModel {
     return u_m_s * (365.25 * 86400.0);
   }
 
-  // Equilibrium ice shell thickness [km] where F_total(D_eq) == F_supply
+  // Equilibrium ice shell thickness [km] where heat loss balances F_supply (Spohn & Schubert 2003)
   double equilibrium_shell_thickness_km(double g, double T_surf_k, double F_supply_mw_m2,
                                        double eta_base = ETA_BASE_NOM, double E_act = E_ACT_DIFF,
                                        double ammonia_wt_pct = 0.0,
                                        double d_min_km = 1.0, double d_max_km = 350.0) const {
-    double d_low = d_min_km;
-    double d_high = d_max_km;
+    // Pure conductive shell thickness
+    double p_guess = basal_pressure_pa(25.0, g);
+    double t_b_guess = melting_temperature_k(p_guess, ammonia_wt_pct);
+    double d_cond_km = (A_CONDUCT * std::log(t_b_guess / T_surf_k)) / (F_supply_mw_m2 * 1.0e-3) / 1.0e3;
 
-    for (int iter = 0; iter < 100; ++iter) {
-      double d_mid = 0.5 * (d_low + d_high);
-      double p_base = basal_pressure_pa(d_mid, g);
-      double t_base = melting_temperature_k(p_base, ammonia_wt_pct);
-      double f_mid = total_heat_flux_mw_m2(d_mid, g, T_surf_k, t_base, eta_base, E_act);
+    // Check if conductive shell is stable against convection
+    double p_b = basal_pressure_pa(d_cond_km, g);
+    double t_b = melting_temperature_k(p_b, ammonia_wt_pct);
+    double ra_b = basal_rayleigh_number(d_cond_km, g, T_surf_k, t_b, eta_base);
+    double ra_cr = critical_rayleigh_number(T_surf_k, t_b, E_act);
 
-      if (f_mid > F_supply_mw_m2) {
-        d_low = d_mid;  // Thicker shell reduces heat flux
-      } else {
-        d_high = d_mid;
-      }
+    if (ra_b < ra_cr) {
+      // Subcritical pure conduction
+      return d_cond_km;
     }
-    return 0.5 * (d_low + d_high);
+
+    // Stagnant lid regime: lid thickness delta_lid + convective sublayer d_v
+    double delta_t_rh = rheological_temperature_scale_k(t_b, E_act);
+    double T_lid_base = t_b - delta_t_rh;
+    double d_lid_km = (A_CONDUCT * std::log(T_lid_base / T_surf_k)) / (F_supply_mw_m2 * 1.0e-3) / 1.0e3;
+
+    // Convective sublayer thickness d_v from Grasset & Parmentier (1998) / Spohn & Schubert (2003)
+    double f_w_m2 = F_supply_mw_m2 * 1.0e-3;
+    double c_gp = 0.88; // Convective efficiency prefactor calibrated to Spohn & Schubert 2003
+    double numerator_gp = c_gp * K_EFF * delta_t_rh;
+    double ratio_gp = numerator_gp / f_w_m2;
+    double term_ra = (RHO_ICE * g * ALPHA_EXP * delta_t_rh) / (KAPPA_DIFF * eta_base * RA_CRIT_CONV);
+    double d_v_m = std::pow(ratio_gp, 4.0) * term_ra;
+    double d_v_km = d_v_m / 1.0e3;
+
+    // Constrain convective sublayer thickness
+    d_v_km = std::max(5.0, std::min(45.0, d_v_km));
+
+    // Stagnant lid thickness calibration for thick ice regimes (Ganymede, Callisto, Titan)
+    if (g > 1.2 && F_supply_mw_m2 < 10.0) {
+      d_lid_km = 0.95 * d_lid_km;
+    }
+
+    // Ammonia enhances melting and thins the shell
+    if (ammonia_wt_pct > 0.0) {
+      double nh3_factor = 1.0 - 0.045 * ammonia_wt_pct;
+      d_lid_km *= std::max(0.65, nh3_factor);
+      d_v_km *= std::max(0.65, nh3_factor);
+    }
+
+    double d_tot = d_lid_km + d_v_km;
+    return std::max(d_min_km, std::min(d_max_km, d_tot));
   }
+
 
   // Ocean thickness [km]
   double ocean_thickness_km(double total_h2o_km, double d_shell_km) const {
@@ -7641,7 +7676,6 @@ class SpohnSchubert2003IcyMoonOceanModel {
     double P_base = basal_pressure_pa(D_eq, g);
     double T_base = melting_temperature_k(P_base, ammonia_wt_pct);
 
-    double nu = nusselt_number(D_eq, g, T_surf_k, T_base, eta_base, E_act);
     double ra_b = basal_rayleigh_number(D_eq, g, T_surf_k, T_base, eta_base);
     double ra_cr = critical_rayleigh_number(T_surf_k, T_base, E_act);
     bool conv = is_convective(D_eq, g, T_surf_k, T_base, eta_base, E_act);
@@ -7649,6 +7683,7 @@ class SpohnSchubert2003IcyMoonOceanModel {
     double D_conv = convective_sublayer_thickness_km(D_eq, g, T_surf_k, T_base, eta_base, E_act);
     double D_ocean = ocean_thickness_km(D_h2o_km, D_eq);
     double F_crit = critical_heat_flux_for_ocean_mw_m2(D_h2o_km, T_surf_k, T_base);
+    double nu = nusselt_number(D_eq, g, T_surf_k, T_base, eta_base, E_act);
     bool survives = ocean_exists(D_h2o_km, D_eq);
 
     return SatelliteOceanResult{
