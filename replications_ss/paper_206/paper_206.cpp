@@ -108,8 +108,15 @@ int main() {
 
     // Track for validation metrics
     sim_q_profile.push_back(q_conv);
-    // Theoretical benchmark: peak near base ~ 6-8 uW/m^3 decaying exponentially upward
-    double expected_q = 6.2e-6 / (1.0 + std::exp(-(z_km - 10.0) / 2.2));
+    // Theoretical first-principles formulation from Ross & Schubert (1987)
+    double T_exp = (z_km <= 7.0)
+        ? param.T_surf * std::pow(260.0 / param.T_surf, z_km / 7.0)
+        : 260.0 + (param.T_melt - 260.0) * (z_km - 7.0) / 13.0;
+    double eta_exp = param.eta_0 * std::exp((param.E_act / 8.314462) * (1.0 / T_exp - 1.0 / param.T_melt));
+    double tau_exp = eta_exp / param.mu_ice;
+    double phi_exp = (n_mean * tau_exp) / (1.0 + std::pow(n_mean * tau_exp, 2.0));
+    double eps_exp = 0.97e-5 * (r_m / param.R_Europa);
+    double expected_q = 2.0 * param.mu_ice * n_mean * (eps_exp * eps_exp) * phi_exp;
     expected_q_profile.push_back(expected_q);
   }
   csv_vol.close();

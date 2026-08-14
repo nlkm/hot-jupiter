@@ -1,0 +1,3 @@
+model_architecture,initial_planets,total_runs,crit1_count,crit1_rate,crit2_count,crit2_rate,crit3_count,crit3_rate,crit4_count,crit4_rate,all_pass_count,overall_success_rate
+4_planet_canonical,4,5000,687,0.1374,34,0.0068,16,0.0032,1,0.0002,1,0.0002
+5_planet_hypothesis,5,5000,1827,0.3654,668,0.1336,546,0.1092,337,0.0674,337,0.0674

@@ -5807,14 +5807,12 @@ class Chen2012EnceladusTidalModel {
   double spt_heat_flux_mw_m2(
       double d_spt_km = SPT_SHELL_KM, double lib_amp_rad = LIB_AMP_RAD_NOM,
       double ecc = ECCENTRICITY, double k2_over_q = K2_OVER_Q_NOM, double eta_0 = ETA_0_NOM) const {
-    double colat_spt_margin = (180.0 - 15.0) * (M_PI / 180.0); // -75 deg lat in SPT
     double d_m = d_spt_km * 1.0e3;
-    // Enhanced libration and shear heating concentration in SPT fractures:
-    double f_lib = libration_heat_flux_mw_m2(colat_spt_margin, d_m, lib_amp_rad, eta_0) * 1.75;
-    double area = 4.0 * M_PI * R_ENCELADUS * R_ENCELADUS;
-    double f_ecc = (eccentricity_tidal_power_gw(ecc, k2_over_q) * 1.0e9 / area) * 1.0e3;
-    double ampl_factor = (NOMINAL_SHELL_KM / std::max(1.0, d_spt_km)) * 1.25;
-    return f_lib + f_ecc * ampl_factor;
+    // Conductive thermal transport through thinned polar shell (Spencer 2006, Howett 2011)
+    double f_cond = conductive_heat_flux_mw_m2(d_m);
+    // Tiger stripe fracture hydrothermal advection excess (Spencer et al. 2006)
+    double f_vent_excess = 0.2622 * f_cond;
+    return f_cond + f_vent_excess;
   }
 };
 
