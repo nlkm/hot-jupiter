@@ -1,0 +1,9 @@
+satellite,layer_name,r_inner_km,r_outer_km,density_kg_m3,state
+Ganymede,Iron-Sulfur Core,0,700,7200,Molten/Solid metallic
+Ganymede,Silicate Mantle,700,1750,3450,Solid convective rock
+Ganymede,High-Pressure Ice Shell,1750,2434,1310,High-pressure ice (VI/VII)
+Ganymede,Subsurface Ocean,2434,2534,1020,Liquid water ocean
+Ganymede,Ice I Crust,2534,2634,920,Brittle/ductile Ice I
+Callisto,Mixed Rock-Ice Interior,0,2100,2150,Homogeneous ice-silicate mixture
+Callisto,Subsurface Ocean,2100,2250,1020,Liquid water ocean
+Callisto,Ice I Crust,2250,2410,920,Brittle cratered Ice I

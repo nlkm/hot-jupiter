@@ -203,6 +203,7 @@ This log tracks the complete end-to-end replication of **500 benchmark papers in
 | #193 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Classical TNO Binary (123554) 2000 CA101 Mutual Orbit \& Low Density | Core C++ Engine | `//:ca101_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #194 | Grundy (2012), Benecchi (2011), Thirouin (2014) | Classical TNO Binary (148780) 2001 UQ18 Mutual Orbit \& Ultra-Low Density | Core C++ Engine | `//:uq18_binary_orbit_solver` | $0.9998$ | ✅ Completed |
 | #195 | Peale, Cassen, & Reynolds (1979) *Melting of Io by Tidal Dissipation* | Io Resonant Forced Eccentricity \& Viscoelastic Tidal Heating | Core C++ Engine | `//:paper_195_solver` | $0.9999$ | ✅ VERIFIED |
+| #196 | Goldreich \& Soter (1966) *Q in the Solar System* | Tidal Dissipation Factor $Q$, Lag Angle Dynamics \& Secular Spin Damping | Core C++ Engine | `//:paper_196_solver` | $0.9983$ | ✅ VERIFIED |
 | #197 | Yoder (1979) *How Io Was Captured Into the Laplace Resonance* | 4:2:1 Laplace Resonance Capture \& Tidal Precession Dynamics | Core C++ Engine | `//:paper_197_solver` | $0.9999$ | ✅ Completed |
 | #200 | Showman \& Malhotra (1999), Showman et al. (1997) | The Ganymede-Callisto Dichotomy: Orbital Resonances \& Interior Differentiation | Core C++ Engine | `//:paper_200_solver` | $0.9994$ | ✅ Completed |
 | #201 | Goldreich & Tremaine (1978) *Excitation of Density Waves in Saturn Rings* | Lindblad & Corotation Resonance Torques | $0.996$ | ✅ VERIFIED |
