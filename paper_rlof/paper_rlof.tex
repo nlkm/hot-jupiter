@@ -3,17 +3,11 @@
 \usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{microtype}
-\usepackage{hyperref}
-\usepackage{natbib}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue
-}
+\providecommand{\href}[2]{#2}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\citep}[1]{\cite{#1}}
+\providecommand{\citet}[1]{\cite{#1}}
 
 \title{\textbf{Coupled Hydrodynamic Envelope Stripping and Tidal Orbital Decay in Ultra-Short-Period Gas Giants}}
 \author{\textbf{Antigravity Exoplanet Science Collaboration}}
@@ -188,7 +182,7 @@ As shown in Figure~\ref{fig:cases}:
 \subsection{Statistical Robustness of the Truncation Boundary}
 The theoretical boundary $M_{\text{crit}}(a) \approx 0.50 (a / 0.018\text{ AU})^{3.0}\,M_{\text{Jup}}$ acts as an empirical filter. Out of 362 transiting exoplanets in \texttt{hot\_jupiter.db}, less than $0.5\%$ of gas giants lie to the left of this curve, confirming that coupled hydrostatic RLOF mass loss and tidal decay govern the survival landscape of ultra-short-period gas giants.
 
-\section{The Critical Core Mass Threshold \texorpdfstring{$M_{\text{core,crit}}$}{M_core,crit} for USP Remnants} \label{sec:core_threshold}
+\section{The Critical Core Mass Threshold $M_{\text{core,crit}}$ for USP Remnants} \label{sec:core_threshold}
 To answer whether Roche lobe overflowed Hot Jupiters survive as stable USP sub-Neptune / super-Earth remnants or suffer complete hydrodynamic destruction, we conducted a systematic simulation sweep over core masses $M_{\text{core}} \in [1.0, 25.0]\,M_{\text{Earth}}$.
 
 \begin{figure}[h]
