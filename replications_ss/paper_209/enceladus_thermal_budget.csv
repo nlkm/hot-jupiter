@@ -1,0 +1,11 @@
+metric,value,unit,reference_observation
+spt_surface_area,37413.6,km^2,37430 km^2 poleward of 65S
+cirs_measured_endogenic_power,15.5219,GW,5.8 +/- 1.9 GW (Spencer 2006)
+integrated_spt_power,23.0694,GW,5.82 GW
+spt_average_heat_flux,414.874,mW/m^2,155 mW/m^2
+core_radiogenic_power,0.30135,GW,0.301 GW (Chondritic core)
+tidal_heating_power,1.48438,GW,5.52 GW (k2/Q = 1.0e-3)
+required_k2_over_q,0.0102538,dimensionless,1.00e-3
+tiger_stripes_length,500,km,4 main Sulci
+tiger_stripes_active_area,125,km^2,100-250 km^2
+tiger_stripes_peak_temp,140,K,135-145 K
