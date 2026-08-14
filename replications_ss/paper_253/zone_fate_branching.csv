@@ -1,0 +1,5 @@
+planet_zone,a_inner_au,a_outer_au,primordial_mass_mearth,safronov_number,rms_energy_kick_au_inv,f_ejection,f_oort_total,f_oort_inner,f_oort_outer,f_collision,f_scattered_disk,m_ejected_mearth,m_oort_total_mearth,m_oort_inner_mearth,m_oort_outer_mearth
+"Jupiter (4-8 AU)",4.0,8.0,8.50,10.3955,2.7495e-04,0.9550,0.0300,0.0186,0.0114,0.0150,0.0000,8.117,0.255,0.158,0.097
+"Saturn (8-15 AU)",8.0,15.0,8.50,6.7985,4.4712e-05,0.8500,0.1000,0.0620,0.0380,0.0300,0.0200,7.225,0.850,0.527,0.323
+"Uranus (15-24 AU)",15.0,24.0,7.00,4.9065,3.4085e-06,0.6800,0.1850,0.1147,0.0703,0.0350,0.1000,4.760,1.295,0.803,0.492
+"Neptune (24-36 AU)",24.0,36.0,11.00,9.3557,2.5676e-06,0.6050,0.2100,0.1302,0.0798,0.0350,0.1500,6.655,2.310,1.432,0.878
