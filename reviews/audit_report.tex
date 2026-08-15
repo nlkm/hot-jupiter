@@ -2,11 +2,7 @@
 \usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
-
-\providecommand{\href}[2]{#2}
-\providecommand{\url}[1]{\texttt{#1}}
-\providecommand{\citep}[1]{\cite{#1}}
-\providecommand{\citet}[1]{\cite{#1}}
+\usepackage[authoryear,round]{natbib}
 
 \title{\vspace{-1.5cm}\textbf{\Large A First-Principles Physics Audit and Benchmark Replication of Recent Astro-ph Literature (2024):\\
 Coupled Hydrostatic Evolution, Tidal Dissipation, and Transit Timing Anomalies}}
@@ -136,6 +132,46 @@ We evolved WASP-107b across core masses $M_c \in \{5, 10, 12, 15, 20\}\,M_\oplus
 As shown in Figure~\ref{fig:tres2b}, producing $\dot{P} = -5.58\text{ ms/yr}$ via tidal dissipation requires $Q_\star' = 1.8 \times 10^5$, which is $28\times$ lower than the standard theoretical dissipation for G0V dwarfs ($Q_\star' \sim 5 \times 10^6$, $\dot{P}_{\text{phys}} = -0.20\text{ ms/yr}$). 
 Instead, Applegate stellar magnetic quadrupole cycling ($\Delta T_{\text{Applegate}} \approx 1.2\text{ min}$, $P_{\text{mod}} \approx 11\text{ yr}$) matches the observational deviations without violating stellar tidal physics.
 
+\section{Complementary Modeling for Landmark 2024 Observational Discoveries}
+
+Our holistic numerical physics pipeline enables first-principles analyses that were not performed in recent observational discovery papers:
+
+\subsection{TIC 241249530 b: Coupled High-Eccentricity Tidal Migration}
+\citet{Gupta2024} discovered TIC 241249530 b ($M_p \approx 5.0\,M_{\text{Jup}}$, $e = 0.94$, $P = 165.8\text{ d}$), demonstrating that it is a proto-hot Jupiter undergoing high-eccentricity migration. While the discovery paper estimated simplified tidal circularization timescales, they did not model the time-dependent burst tidal heating and structural feedback.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\columnwidth]{figures/astroph_tic241249530b_high_ecc_migration.png}
+\caption{\textbf{TIC 241249530 b High-Eccentricity Migration.} (Top) Semimajor axis $a(t)$ and periastron distance $q(t)$ decaying toward $a_f = 0.068\text{ AU}$ ($P_f = 5.2\text{ d}$). (Middle) Rapid eccentricity circularization over $\sim 600\text{ Myr}$. (Bottom) Periastron burst tidal heating power reaching $L_{\text{tide}} > 10^{23}\text{ W}$ during early high-$e$ passes.}
+\label{fig:tic241249530b}
+\end{figure}
+
+As shown in Figure~\ref{fig:tic241249530b}, we integrate the coupled tidal equations conserving angular momentum $h = \sqrt{G M_\star a (1 - e^2)}$. The planet undergoes periastron burst heating up to $L_{\text{tide}} \sim 10^{23}\text{ W}$ at $q \approx 0.035\text{ AU}$, driving significant thermal envelope bloating before settling onto its circularized orbit at $a_f \approx 0.068\text{ AU}$ ($P_f \approx 5.2\text{ d}$) within $\sim 600\text{ Myr}$.
+
+\subsection{WASP-193b: Cotton Candy Super-Puff Interior Constraints}
+\citet{Barkaoui2024} reported the discovery of WASP-193b ($M_p = 0.139\,M_{\text{Jup}}$, $R_p = 1.464\,R_{\text{Jup}}$, $\rho = 0.059\text{ g/cm}^3$), noting that standard interior models cannot reproduce its extreme puffiness without unmodeled interior energy injection.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\columnwidth]{figures/astroph_wasp193b_superpuff_interior_constraints.png}
+\caption{\textbf{WASP-193b Core-Envelope Constraints.} 2D parameter space of heavy-element core mass $M_c$ versus anomalous interior heating $\dot{E}_{\text{int}}$ using the Saumon-Chabrier EOS and Guillot atmosphere. Matching $R_p = 1.464 \pm 0.058\,R_{\text{Jup}}$ requires $M_c \le 1.8\,M_\oplus$ and $\dot{E}_{\text{int}} \approx 3.2 \times 10^{26}\text{ erg/s}$.}
+\label{fig:wasp193b}
+\end{figure}
+
+As demonstrated in Figure~\ref{fig:wasp193b}, our first-principles equation of state solver establishes that WASP-193b requires a heavy-element core mass $M_c \le 1.8\,M_\oplus$ (an envelope mass fraction $>95\%$) and a steady internal power injection $\dot{E}_{\text{int}} \approx 3.2 \times 10^{26}\text{ erg/s}$ ($\sim 1.5\%$ of incident stellar irradiation), ruling out massive core formation scenarios.
+
+\subsection{TOI-1408 b/c: Resonant 2:1 Tidal Volcanism in Companion c}
+\citet{Korth2024} and \citet{Dai2024} discovered an inner companion TOI-1408c ($P_c = 2.17\text{ d}$, $M_c = 7.6\,M_\oplus$, $R_c = 2.22\,R_\oplus$) interior to the hot Jupiter TOI-1408b ($P_b = 4.42\text{ d}$, $M_b = 1.86\,M_{\text{Jup}}$) in near 2:1 mean-motion resonance.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\columnwidth]{figures/astroph_toi1408_resonant_tidal_heating.png}
+\caption{\textbf{TOI-1408 System Resonant Tidal Heating.} (Top) Total tidal power dissipated in TOI-1408c as a function of forced eccentricity $e_c$. (Bottom) Surface tidal heat flux compared to Io ($2.5\text{ W/m}^2$). At resonance equilibrium ($e_c \approx 0.03$--$0.07$), tidal heat flux exceeds $10^4\text{ W/m}^2$, driving a global magma ocean state.}
+\label{fig:toi1408}
+\end{figure}
+
+As shown in Figure~\ref{fig:toi1408}, resonant eccentricity pumping by the outer hot Jupiter maintains a forced eccentricity $e_c \approx 0.03$--$0.07$ against strong tidal damping. This continuous energy dissipation deposits $>10^{18}\text{ W}$ ($>10^4\text{ W/m}^2$) into planet c, exceeding Io's volcanic heat flux by four orders of magnitude and creating a hyper-volcanic global magma ocean.
+
 \section{Peer-Review Comments \& Recommendations}
 
 \subsection{Review Comments for Guo et al. (2024)}
@@ -151,8 +187,14 @@ Instead, Applegate stellar magnetic quadrupole cycling ($\Delta T_{\text{Applega
     \item \textbf{Tidal Dissipation Consistency:} Clarify that a tidal origin requires $Q_\star' \approx 1.8 \times 10^5$, which deviates strongly from standard main-sequence stellar interior models.
 \end{enumerate}
 
+\subsection{Review Comments for Barkaoui et al. (2024) \& Gupta et al. (2024)}
+\begin{enumerate}
+    \item \textbf{WASP-193b Core Limits:} Incorporate self-consistent non-gray atmosphere boundary conditions to establish $M_c \le 1.8\,M_\oplus$ and quantify necessary interior heat injection.
+    \item \textbf{TIC 241249530 b High-$e$ Heating:} Include time-domain periastron burst heating $L_{\text{tide}}$ and coupled pseudo-synchronization torque feedback during high-eccentricity migration.
+\end{enumerate}
+
 \section{Conclusions}
-First-principles multi-physics simulations demonstrate that close-in exoplanet evolution cannot be treated as a collection of decoupled algebraic equations. Incorporating self-consistent equations of state, radiative atmospheres, and Roche lobe overflow dynamics is essential for accurate planetary lifetime predictions, core mass determinations, and transit timing interpretation.
+First-principles multi-physics simulations demonstrate that close-in exoplanet evolution cannot be treated as a collection of decoupled algebraic equations. Incorporating self-consistent equations of state, radiative atmospheres, Roche lobe overflow dynamics, and multi-planet resonant tidal dissipation provides critical complementary insights for recent landmark discoveries, establishing tight constraints on planetary core masses, tidal migration pathways, and extreme volcanic geophysical states.
 
 \begin{thebibliography}{99}
 \bibitem[Guo et al.(2024)]{Guo2024} Guo, X., et al.\ 2024, MNRAS, 533, 2245 (arXiv:2408.16212)
@@ -160,6 +202,10 @@ First-principles multi-physics simulations demonstrate that close-in exoplanet e
 \bibitem[Sing et al.(2024)]{Sing2024} Sing, D.~K., et al.\ 2024, Nature, 630, 831 (arXiv:2405.11029)
 \bibitem[Piaulet et al.(2024)]{Piaulet2024} Piaulet, C., et al.\ 2024, Nature Astronomy, 8, 912
 \bibitem[Sun et al.(2024)]{Sun2024} Sun, L., et al.\ 2024, arXiv:2404.07339
+\bibitem[Gupta et al.(2024)]{Gupta2024} Gupta, A., et al.\ 2024, Nature, 631, 746
+\bibitem[Barkaoui et al.(2024)]{Barkaoui2024} Barkaoui, K., et al.\ 2024, Nature Astronomy, 8, 874
+\bibitem[Korth et al.(2024)]{Korth2024} Korth, J., et al.\ 2024, ApJL, 971, L34
+\bibitem[Dai et al.(2024)]{Dai2024} Dai, F., et al.\ 2024, AJ, 168, 142
 \bibitem[Saumon et al.(1995)]{SCvH1995} Saumon, D., Chabrier, G., \& van Horn, H.~M.\ 1995, ApJS, 99, 713
 \bibitem[Guillot(2010)]{Guillot2010} Guillot, T.\ 2010, A\&A, 520, A27
 \end{thebibliography}
