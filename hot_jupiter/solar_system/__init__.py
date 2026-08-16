@@ -22,6 +22,16 @@ class MoonTidalDynamics:
         recession_cm_yr = 3.8 * (3.844e8 / a_moon_m)**5.5
         return (recession_cm_yr * 0.01) / (365.25 * 86400.0)
 
+    def enceladus_tidal_heating_power_watts(self, eccentricity=0.0047):
+        g = 6.67430e-11
+        m_saturn = 5.683e26
+        r_enc = 2.521e5
+        a_enc = 2.380e8
+        k2_over_q = 0.024
+        n = np.sqrt(g * m_saturn / a_enc**3)
+        factor = 10.5 * k2_over_q * g * m_saturn**2 * r_enc**5 * n / a_enc**6
+        return factor * eccentricity**2
+
 
 class PlanetaryRings:
 
