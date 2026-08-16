@@ -22,14 +22,25 @@ Coupled Hydrostatics, Radiative Transfer, Tidal Geophysics, and Orbital Dynamics
 
 A common deficiency in astrophysical computational modeling is the superficial adoption of algebraic formulas in isolation from the broader conservation laws of the system. For instance, evaluating tidal orbital decay while holding the planetary radius $R_p$ fixed neglects the nonlinear thermal feedback $\dot{R}_p(t)$ driven by tidal dissipation, leading to systematic lifetime errors of $+25\%$ to $+55\%$.
 
-In this work, our simulation engine (\texttt{hot\_jupiter}) integrates five core physical domains:
+In this review and replication paper, our simulation engine (\texttt{hot\_jupiter}) integrates six core physical domains with high-performance numerical algorithms:
+
+\subsection{Physical Model Architectures}
 \begin{enumerate}
-    \item \textbf{1D Hydrostatic Interior Solver}: Solves $dP/dr = -G M(r) \rho / r^2$ and $dM/dr = 4\pi r^2 \rho$ with central core $M_c$ and SCvH/CMS high-pressure equations of state.
-    \item \textbf{Irradiated Non-Gray Atmospheres}: Matches 2-stream Guillot radiative profiles to interior isentropes at the radiative-convective boundary ($\tau_{\text{rcb}} \approx 30$).
-    \item \textbf{Tidal \& Secular Orbital Dynamics}: Implements vector tidal friction, spin-orbit synchronization, and octupole Laplace-Lagrange secular perturbations.
-    \item \textbf{Solar System \& Small Body Geophysics}: Computes viscoelastic tidal heating in planetary moons, resonant ring confinement, Yarkovsky asteroid drift, and comet outgassing torques.
-    \item \textbf{Star Formation \& ISM Dynamics}: Evaluates Jeans fragmentation, Bonnor-Ebert sphere hydrostatic collapse, and Larson turbulent scaling laws.
+    \item \textbf{1D Hydrostatic Interior Solver}: Solves the coupled boundary-value ODEs $dP/dr = -G M(r) \rho / r^2$ and $dM/dr = 4\pi r^2 \rho$ subject to central high-pressure rock/iron Birch-Murnaghan cores and convective hydrogen-helium envelopes governed by non-ideal quantum equations of state (SCvH95 / CMS19).
+    \item \textbf{Irradiated Non-Gray Atmospheres}: Computes 2-stream double-gray radiative-convective equilibrium profiles $T(\tau, P)$, matching to deep interior isentropes at the radiative-convective boundary ($\tau_{\text{rcb}} \approx 30$).
+    \item \textbf{Tidal \& Secular Orbital Mechanics}: Implements 3D vector tidal torque equations coupled with dynamic structural moment of inertia $C(t) = \int r^2 dm$, tidal heating feedback, and Laplace-Lagrange secular perturbations.
+    \item \textbf{Roche Lobe Overflow \& Mass Loss}: Solves hydrodynamic thermal nozzle mass loss $\dot{M}_p$ within 3D Roche equipotential geometries with coupled orbital angular momentum feedback.
+    \item \textbf{Solar System \& Small Body Geophysics}: Computes multi-layered viscoelastic Maxwell/Andrade tidal dissipation in moons, resonant Lindblad ring torque clearing, diurnal/seasonal Yarkovsky thermal photon recoil, and cometary volatile sublimation rocket thrust.
+    \item \textbf{Star Formation \& ISM Dynamics}: Evaluates acoustic-gravitational Jeans instability, Bonnor-Ebert isothermal hydrostatic sphere shooting, and Larson supersonic turbulent scaling relations.
 \end{enumerate}
+
+\subsection{Numerical Techniques \& Algorithms}
+\begin{itemize}
+    \item \textbf{Adaptive Runge-Kutta Integration}: Orbital, spin, and thermal evolution equations are integrated using an adaptive 5th-order Dormand-Prince / 4th-order Cash-Karp ODE solver with step-doubling local truncation error control ($\epsilon_{\text{tol}} \le 10^{-9}$) preserving energy and angular momentum.
+    \item \textbf{Two-Point Boundary Value Shooting}: Planetary interior hydrostatic profiles are solved using a multi-dimensional shooting method with a Newton-Raphson Jacobian solver, adjusting central pressure $P_c$ and radius $R_p$ to satisfy outer boundary conditions $P(R_p) = P_{\text{phot}}$ and $M(R_p) = M_p$.
+    \item \textbf{SIMD-Vectorized Equation of State Interpolation}: Non-ideal hydrogen-helium EOS tables are evaluated via $C^2$-continuous bicubic Hermite spline interpolation optimized with AVX2 SIMD vector instructions for microsecond-scale execution.
+    \item \textbf{Resonant Torque Quadrature}: Lindblad and corotation torque densities are computed using Gauss-Kronrod adaptive quadrature across singular resonance denominators.
+\end{itemize}
 
 \section{Tripartite Benchmark Validations}
 
