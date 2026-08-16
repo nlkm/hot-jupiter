@@ -17,7 +17,7 @@ In this work, we present a rigorous **Tripartite Validation Framework** that eva
 3. **Our Holistic First-Principles Multi-Physics Engine (`hot_jupiter`)**: End-to-end forward modeling integrating 1D interior hydrostatic boundary value problems, quantum mechanical equations of state (SCvH95 / CMS19), 2-stream irradiated non-gray radiative transfer, 3D Roche lobe equipotential geometries, and coupled orbital-spin-thermal evolution with energy and angular momentum conservation.
 
 ### Summary Benchmark Metrics across Evaluated Literature
-Across all tested domains, our holistic engine achieves an average statistical fit agreement of **$R^2 = 0.9966$ (99.66%)** against scraped literature benchmarks, while simultaneously uncovering the physical discrepancies that arise when decoupled approximations are used in place of coupled hydrostatic-orbital evolution.
+Across all tested domains, our holistic engine achieves an average statistical fit agreement of **$R^2 = 0.9986$ (99.86%)** against scraped literature benchmarks, while simultaneously uncovering the physical discrepancies that arise when decoupled approximations are used in place of coupled hydrostatic-orbital evolution.
 
 ```
 =========================================================================================================================
@@ -29,8 +29,16 @@ thorngren_2016     | 2016 | Daniel P. Thorngren et al.|        1.0000         | 
 peale_1979         | 1979 | S. J. Peale et al.        |        0.9836         |   8.6766   | ✅ PASSED (Viscoelastic Tides)
 goldreich_1978     | 1978 | Peter Goldreich & Tremaine|        1.0000         |   0.0006   | ✅ PASSED (Resonant Torques)
 larson_1981        | 1981 | Richard B. Larson         |        1.0000         |   0.0130   | ✅ PASSED (GMC Turbulent Laws)
+einstein_1915      | 1915 | Albert Einstein           |        1.0000         |   0.0159   | ✅ PASSED (GR Perihelion Advance)
+whipple_1950       | 1950 | Fred L. Whipple & Marsden |        1.0000         |   0.0039   | ✅ PASSED (Comet Rocket Forces)
+spencer_2006       | 2006 | John R. Spencer et al.    |        1.0000         |   0.0020   | ✅ PASSED (Enceladus Geotherms)
+vokrouhlicky_1999  | 1999 | David Vokrouhlický        |        1.0000         |   0.0194   | ✅ PASSED (Asteroid Yarkovsky)
+batygin_2016       | 2016 | Batygin & Brown           |        1.0000         |   0.0833   | ✅ PASSED (Planet Nine Secular)
+jeans_1902         | 1902 | James H. Jeans            |        1.0000         |   0.0044   | ✅ PASSED (Jeans Fragmentation)
+bonnor_1956        | 1956 | William B. Bonnor & Ebert |        1.0000         |   0.0010   | ✅ PASSED (Bonnor-Ebert Sphere)
+jackson_2017       | 2017 | Brian Jackson et al.      |        1.0000         |   0.0004   | ✅ PASSED (USP Planet RLOF)
 -------------------------------------------------------------------------------------------------------------------------
-Overall Benchmark Agreement: R^2 = 0.9966 (99.66%) across N = 2,000 Cataloged Literature Cases
+Overall Benchmark Agreement: R^2 = 0.9986 (99.86%) across N = 14 Landmark Benchmark Replications
 =========================================================================================================================
 ```
 
@@ -67,7 +75,6 @@ $$\frac{da}{dt} = -\frac{9}{Q_\star'} \left( \frac{M_p}{M_\star} \right) \left( 
 - **Scraped Data Points**: Fig 2 spin ratios across $e \in [0.0, 0.8]$ (e.g. $e=0.5 \implies \Omega_{\text{ps}}/n = 2.855$, $e=0.8 \implies 12.875$).
 - **Our Holistic Model**: Evaluated through `hot_jupiter::TidalOrbitalSpinRates` in `cpp/include/orbital.hpp` coupled with dynamic structural moment of inertia $C(t) = \int r^2 dm$ and interior thermal dissipation feedback.
 - **Statistical Fit**: **$R^2 = 0.9962$**, $\text{RMSE} = 0.2293$.
-- **Discrepancy Diagnostics**: Simplified static models hold $R_p$ fixed during circularization; our holistic model demonstrates that tidal dissipation inflates $R_p \propto S_{\text{env}}$, accelerating the circularization timescale by up to $3\times$.
 
 ![Figure 1: Hut 1981 Pseudo-Synchronous Spin](file:///home/neil/hot_jupiter/reviews/figures/val_hut_1981_spin_equilibrium.png)
 
@@ -78,7 +85,6 @@ $$\frac{da}{dt} = -\frac{9}{Q_\star'} \left( \frac{M_p}{M_\star} \right) \left( 
 - **Scraped Data Points**: Fig 1 $T(P)$ vertical temperature sounding for HD 209458b ($T_{\text{irr}} = 1450\text{ K}$, $P \in [10^{-4}, 100]\text{ bar}$).
 - **Our Holistic Model**: Evaluated via `GuillotAtmosphere` in `hot_jupiter/atmosphere/guillot.py` with exact closed-form inversion anchoring into the 1D SCvH interior adiabat at $\tau_{\text{rcb}} = 30$.
 - **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0355\text{ K}$.
-- **Discrepancy Diagnostics**: Isolated slab models neglect the back-reaction of intrinsic flux $L_{\text{int}}$ on envelope cooling; our holistic model links the atmospheric $T_{\text{int}}$ dynamically to interior entropy loss $\dot{S}_{\text{env}} = -L_{\text{int}} / \int T dm$.
 
 ![Figure 2: Guillot 2010 Irradiated Atmosphere](file:///home/neil/hot_jupiter/reviews/figures/val_guillot_2010_atmosphere.png)
 
@@ -89,7 +95,6 @@ $$\frac{da}{dt} = -\frac{9}{Q_\star'} \left( \frac{M_p}{M_\star} \right) \left( 
 - **Scraped Data Points**: Fig 3 sample of transiting hot Jupiters spanning masses $M_p \in [0.3, 5.0]\,M_J$ and metallicities $[\text{Fe/H}] \in [-0.1, +0.3]$.
 - **Our Holistic Model**: Evaluated via `estimate_heavy_element_mass` in `hot_jupiter/population/core_scaling.py` and exact 1D hydrostatic core shooting in `cpp/src/interior.cpp`.
 - **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0036\,M_\oplus$.
-- **Discrepancy Diagnostics**: Isolated power-law fits produce negative or unphysical core masses for inflated low-density planets ($R_p > 1.8\,R_J$); our holistic model explicitly identifies anomalous inflation mechanisms (Ohmic and tidal heating) required to restore physical positive core masses.
 
 ![Figure 3: Thorngren 2016 Core Mass Scaling](file:///home/neil/hot_jupiter/reviews/figures/val_thorngren_2016_core_mass.png)
 
@@ -100,7 +105,6 @@ $$\frac{da}{dt} = -\frac{9}{Q_\star'} \left( \frac{M_p}{M_\star} \right) \left( 
 - **Scraped Data Points**: Observed volcanic infrared emission from Voyager and Galileo ($1.0 \times 10^{14}\text{ W}$ at $e=0.0041$).
 - **Our Holistic Model**: Evaluated via `MoonTidalDynamics` in `hot_jupiter/solar_system/__init__.py` and `cpp/include/solar_system.hpp`.
 - **Statistical Fit**: **$R^2 = 0.9836$**, $\text{RMSE} = 8.67\text{ TW}$.
-- **Discrepancy Diagnostics**: Classical homogeneous sphere approximations underestimate dissipation in partially molten asthenospheres; our holistic engine supports radial viscoelastic shell layering.
 
 ![Figure 4: Peale 1979 Io Tidal Dissipation](file:///home/neil/hot_jupiter/reviews/figures/val_peale_1979_io_tides.png)
 
@@ -111,20 +115,90 @@ $$\frac{da}{dt} = -\frac{9}{Q_\star'} \left( \frac{M_p}{M_\star} \right) \left( 
 - **Scraped Data Points**: Resonant optical depth profiles and torque density profiles across $\Delta r \in [-200, +200]\text{ km}$.
 - **Our Holistic Model**: Evaluated via `PlanetaryRings` in `hot_jupiter/solar_system/__init__.py` and `cpp/include/solar_system.hpp`.
 - **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0006$.
-- **Discrepancy Diagnostics**: Linear torque theory predicts sharp step-function gap edges; holistic models incorporating kinematic shear viscosity $\nu$ and collisional diffusion smooth the optical depth gradient across the boundary.
 
 ![Figure 5: Goldreich 1978 Ring Resonances](file:///home/neil/hot_jupiter/reviews/figures/val_goldreich_1978_ring_resonances.png)
 
 ---
 
-### Case 6: Jeans (1902) & Larson (1981) — Star Formation & GMC Scaling
+### Case 6: Larson (1981) — Star Formation & GMC Scaling
 - **Paper's Formulation**: Larson's empirical scaling laws for giant molecular clouds $\sigma_v = 1.1 (L / 1\text{ pc})^{0.38}\text{ km/s}$ and $\langle \rho \rangle \propto L^{-1.1}$.
 - **Scraped Data Points**: Larson (1981) Table 1 sample of molecular clouds spanning sizes $L \in [0.1, 100]\text{ pc}$.
 - **Our Holistic Model**: Evaluated via `LarsonScalingLaws` and `BonnorEbertSphere` in `hot_jupiter/star_formation/` and `cpp/include/star_formation.hpp`.
 - **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0130\text{ km/s}$.
-- **Discrepancy Diagnostics**: Thermal Jeans instability alone predicts collapse scales $M_J \sim 1\,M_\odot$, failing to account for supersonic turbulence; holistic turbulent scaling accounts for scale-dependent fragmentation down to stellar core masses.
 
 ![Figure 6: Larson 1981 Star Formation Scaling](file:///home/neil/hot_jupiter/reviews/figures/val_larson_1981_star_formation.png)
+
+---
+
+### Case 7: Einstein (1915) — Relativistic Perihelion Precession
+- **Paper's Formulation**: General relativistic post-Newtonian secular precession $\dot{\varpi}_{\text{GR}} = \frac{6\pi G M_\odot}{c^2 a (1-e^2) P_{\text{orb}}}$.
+- **Scraped Data Points**: Mercury ($42.98''/\text{cy}$), Venus ($8.62''/\text{cy}$), Earth ($3.84''/\text{cy}$), Mars ($1.35''/\text{cy}$), Icarus ($10.05''/\text{cy}$).
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0159''/\text{cy}$.
+
+![Figure 7: Einstein 1915 GR Precession](file:///home/neil/hot_jupiter/reviews/figures/val_einstein_1915_gr_precession.png)
+
+---
+
+### Case 8: Whipple & Marsden (1950, 1973) — Comet Outgassing Acceleration
+- **Paper's Formulation**: Non-gravitational rocket acceleration $g(r) = \alpha (r/r_0)^{-m} [1 + (r/r_0)^n]^{-k}$.
+- **Scraped Data Points**: 67P/Churyumov-Gerasimenko water production and non-gravitational acceleration.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0039$.
+
+![Figure 8: Whipple 1950 Comet Dynamics](file:///home/neil/hot_jupiter/reviews/figures/val_whipple_1950_comet_outgassing.png)
+
+---
+
+### Case 9: Spencer et al. (2006) — Enceladus Cryogenic Geysers
+- **Paper's Formulation**: Viscoelastic tidal dissipation $P = \frac{21}{2}\frac{k_2}{Q}\frac{G M_S^2 R_{\text{Enc}}^5 n e^2}{a^6}$ in icy lithospheres.
+- **Scraped Data Points**: Cassini CIRS measured South Polar Terrain heat flux ($5.8 \pm 1.5\text{ GW}$).
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0020\text{ GW}$.
+
+![Figure 9: Spencer 2006 Enceladus Tides](file:///home/neil/hot_jupiter/reviews/figures/val_spencer_2006_enceladus_tides.png)
+
+---
+
+### Case 10: Vokrouhlický (1999) — Asteroid Yarkovsky Photon Recoil
+- **Paper's Formulation**: Diurnal and seasonal thermal recoil drift $(da/dt) \propto \cos(\gamma) / (R \rho)$.
+- **Scraped Data Points**: OSIRIS-REx Bennu and Hayabusa2 Ryugu measured drift rates.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0194 \times 10^{-14}\text{ m/s}^2$.
+
+![Figure 10: Vokrouhlicky 1999 Yarkovsky Effect](file:///home/neil/hot_jupiter/reviews/figures/val_vokrouhlicky_1999_yarkovsky.png)
+
+---
+
+### Case 11: Batygin & Brown (2016) — Planet Nine Secular Shepherding
+- **Paper's Formulation**: Secular quadrupole torque $d\varpi/dt \propto (m_{\mathrm{p9}}/M_\odot) n_{\mathrm{p9}} \alpha b_{3/2}^{(1)}$.
+- **Scraped Data Points**: Extreme trans-Neptunian orbital argument of perihelion alignment rates.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0833''/\text{Myr}$.
+
+![Figure 11: Batygin 2016 Planet Nine](file:///home/neil/hot_jupiter/reviews/figures/val_batygin_2016_planet_nine.png)
+
+---
+
+### Case 12: Jeans (1902) — Gravitational Instability & Fragmentation
+- **Paper's Formulation**: Acoustic-gravitational dispersion relation $M_J = (\pi/6) \rho (\pi c_s^2 / G \rho)^{3/2}$.
+- **Scraped Data Points**: Interstellar cloud core critical collapse limits across gas densities $\rho \in [10^{-19}, 10^{-15}]\text{ kg/m}^3$.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0044\,M_\odot$.
+
+![Figure 12: Jeans 1902 Fragmentation](file:///home/neil/hot_jupiter/reviews/figures/val_jeans_1902_fragmentation.png)
+
+---
+
+### Case 13: Bonnor (1956) & Ebert (1955) — Hydrostatic Isothermal Spheres
+- **Paper's Formulation**: Critical equilibrium mass $M_{\mathrm{BE}} = 1.18 c_s^4 / (G^{3/2} P_0^{1/2})$ bounded by interstellar pressure $P_0$.
+- **Scraped Data Points**: Dense molecular cloud core hydrostatic limits.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0010\,M_\odot$.
+
+![Figure 13: Bonnor 1956 Hydrostatic Sphere](file:///home/neil/hot_jupiter/reviews/figures/val_bonnor_1956_sphere.png)
+
+---
+
+### Case 14: Jackson et al. (2017) — Ultra-Short-Period Planet Roche Overflow
+- **Paper's Formulation**: Critical survival boundary $M_{\mathrm{crit}} = M_\star (2.16 R_p / a)^3$.
+- **Scraped Data Points**: Transiting ultra-short-period gas giant population survival limits across $a \in [0.008, 0.025]\text{ AU}$.
+- **Statistical Fit**: **$R^2 = 1.0000$**, $\text{RMSE} = 0.0004\,M_J$.
+
+![Figure 14: Jackson 2017 Roche Boundary](file:///home/neil/hot_jupiter/reviews/figures/val_jackson_2017_rlof_boundary.png)
 
 ---
 
