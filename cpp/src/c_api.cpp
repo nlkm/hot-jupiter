@@ -29,7 +29,7 @@ double evaluate_saumon_chabrier_density_c(double P_pascal, double T_kelvin, doub
     hot_jupiter::HydrogenHeliumEOS eos;
     eos.X = X;
     eos.Y = 1.0 - X;
-    return eos.density_from_PS(P_pascal, 1.0e8);
+    return eos.density_from_PT(P_pascal, T_kelvin);
 }
 
 void rlof_integrate_trajectory_c(

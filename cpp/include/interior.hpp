@@ -1,9 +1,9 @@
 #ifndef HOT_JUPITER_INTERIOR_HPP
 #define HOT_JUPITER_INTERIOR_HPP
 
-#include <vector>
-#include <tuple>
 #include <iostream>
+#include <tuple>
+#include <vector>
 
 #include "constants.hpp"
 #include "eos.hpp"
@@ -18,7 +18,7 @@ struct PlanetStructure {
     double R_c;
     double P_c;
     double T_c;
-    
+
     std::vector<double> r;
     std::vector<double> m;
     std::vector<double> P;
@@ -28,16 +28,15 @@ struct PlanetStructure {
 };
 
 class InteriorSolver {
-public:
+ public:
     HydrogenHeliumEOS envelope_eos;
     BirchMurnaghanCoreEOS core_eos;
 
-    PlanetStructure solve_structure(double M_p, double M_c, double S_env, double P_surf = 1.0 * BAR, int num_pts = 300, double a_au = 0.0, double m_star_sun = 1.0);
-
-private:
-    double mass_residual(double R_p_try, double M_p, double M_c, double S_env, double P_surf, double a_au = 0.0, double m_star_sun = 1.0);
+    PlanetStructure solve_structure(double M_p, double M_c, double S_env,
+                                    double P_surf = 1.0 * BAR, int num_pts = 300,
+                                    double a_au = 0.0, double m_star_sun = 1.0);
 };
 
-} // namespace hot_jupiter
+}  // namespace hot_jupiter
 
-#endif // HOT_JUPITER_INTERIOR_HPP
+#endif  // HOT_JUPITER_INTERIOR_HPP

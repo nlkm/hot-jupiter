@@ -24,11 +24,10 @@ int main() {
     double M_c = 12.0 * M_EARTH;
     double a_jup = 5.204 * AU;
 
-    double S_final = 1.12e4;
+    double S_final = 1.33e5;
 
     std::cout << "Solving present-day 1D hydrostatic structure at t = 4.56 Gyr..." << std::endl;
     PlanetStructure st = solver.solve_structure(M_p, M_c, S_final);
-    st.R_p = 1.000 * R_JUP;
 
     double F_inc = stellar_model.incident_flux(a_jup, 4.56 * GYR);
     double T_irr = atmosphere.T_irr_from_flux(F_inc, atmosphere.A_b);
