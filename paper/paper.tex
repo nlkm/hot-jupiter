@@ -3,18 +3,14 @@
 \usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{hyperref}
-\usepackage{pdflscape}
-\usepackage{rotating}
 \usepackage{longtable}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue
-}
+\makeatletter
+\providecommand{\toprule}{\hline\hline}
+\providecommand{\midrule}{\hline}
+\providecommand{\bottomrule}{\hline\hline}
+\providecommand{\href}[2]{#2}
+\providecommand{\url}[1]{\texttt{#1}}
+\makeatother
 
 \title{\textbf{Testing Incremental Physical Inflation Mechanisms in Hot Jupiter Radius Demographics: A Coupled Thermal Evolution and Population Synthesis Study}}
 

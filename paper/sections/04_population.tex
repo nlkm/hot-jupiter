@@ -33,7 +33,7 @@ Rather than relying on ad-hoc uniform sampling, all initial conditions for the $
 \subsection{Full NASA Exoplanet Archive Observational Benchmark Sample}
 To perform a comprehensive quantitative Kolmogorov-Smirnov (KS) metric comparison, we compiled the complete sample of \textbf{all $N = 342$ confirmed transiting Hot Jupiters} in the NASA Exoplanet Archive meeting the strict selection criteria: orbital period $P < 10\text{ days}$, semi-major axis $a < 0.10\text{ AU}$, measured planetary mass ($M_p > 0.1\,M_{\mathrm{Jup}}$), and measured planetary radius ($R_p > 0.5\,R_{\mathrm{Jup}}$). Table~\ref{tab:observational_sample} lists the physical parameters for the top benchmark systems representing this $342$-planet catalog (the full $342$-planet machine-readable dataset is exported to \texttt{outputs/nasa\_exoplanet\_archive\_hot\_jupiters\_342.csv}).
 
-\begin{sidewaystable*}[p]
+\begin{table*}[t!]
 \centering
 \caption{Representative subset of benchmark transiting Hot Jupiters from the full $N = 342$ NASA Exoplanet Archive sample ($P < 10\text{ d}, a < 0.10\text{ AU}$) used for the Kolmogorov-Smirnov (KS) demographic evaluation.}
 \label{tab:observational_sample}
@@ -64,7 +64,7 @@ HAT-P-7b    & F8V & 2.2047 & 0.03790 & $1.80 \pm 0.05$ & $1.42 \pm 0.03$ & 2200 
 WASP-10b    & K5V & 3.0928 & 0.03710 & $3.06 \pm 0.20$ & $1.08 \pm 0.04$ & 970  & Christian et al. (2009) \\
 \bottomrule
 \end{tabular}
-\end{sidewaystable*}
+\end{table*}
 
 \subsection{Statistical Progression Across 6 Model Stages}
 
@@ -75,7 +75,7 @@ WASP-10b    & K5V & 3.0928 & 0.03710 & $3.06 \pm 0.20$ & $1.08 \pm 0.04$ & 970  
     \label{fig:incremental_comparison}
 \end{figure}
 
-\begin{sidewaystable*}[p]
+\begin{table*}[t!]
 \centering
 \caption{Statistical progression across incremental model stages ($N = 10,000$ evolutions per stage) evaluated against the full $N = 342$ NASA Exoplanet Archive confirmed Hot Jupiter catalog.}
 \label{tab:incremental_results}
@@ -94,7 +94,7 @@ Stage 5: Full Model + Selection & Full model + Transit selection $W_{\mathrm{tra
 \textbf{Observed Catalog ($N = 342$)} & \textbf{NASA Exoplanet Archive Confirmed Hot Jupiters} & \textbf{$1.48 \pm 0.25$} & -- & -- \\
 \bottomrule
 \end{tabular}
-\end{sidewaystable*}
+\end{table*}
 
 As shown in Figure~\ref{fig:incremental_comparison} and Table~\ref{tab:incremental_results}:
 1. **Stage 0 \& Stage 1**: Non-irradiated planets contract rapidly to $\sim 1.02\,R_{\mathrm{Jup}}$. Surface irradiation provides moderate inflation ($\bar{R}_p \approx 1.15\,R_{\mathrm{Jup}}$), but fails to match observed radii ($p < 0.01$).
