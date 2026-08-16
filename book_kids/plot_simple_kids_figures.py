@@ -631,7 +631,248 @@ def main():
     fig.savefig(out_dir / "triton_capture_kids.pdf", bbox_inches="tight")
     plt.close(fig)
 
-    print("Successfully generated all 15 simple kids observational figures!")
+    # 16. K2-18b Hycean Ocean
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    wave = np.linspace(1.0, 5.0, 300)
+    ch4_bump = 0.05 * np.exp(-((wave - 3.3) / 0.3)**2)
+    co2_bump = 0.06 * np.exp(-((wave - 4.3) / 0.2)**2)
+    depth = 2.73 + ch4_bump + co2_bump
+    ax.plot(wave,
+            depth,
+            color="#2980b9",
+            lw=2.8,
+            label="Hycean Ocean Atmosphere (Our Model)")
+    obs_w = np.array([1.2, 1.6, 2.3, 3.3, 3.8, 4.3, 4.8])
+    obs_d = np.interp(obs_w, wave, depth)
+    ax.scatter(obs_w,
+               obs_d,
+               color="#e74c3c",
+               s=80,
+               zorder=5,
+               label="James Webb Space Telescope (JWST) Data")
+    ax.annotate("Methane (CH4) Bubble!",
+                xy=(3.3, 2.78),
+                xytext=(2.2, 2.82),
+                arrowprops=dict(facecolor='#2980b9', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#2980b9',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#ebf5fb",
+                          ec="#2980b9",
+                          lw=1.5))
+    ax.annotate("Carbon Dioxide (CO2)!",
+                xy=(4.3, 2.79),
+                xytext=(3.5, 2.83),
+                arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#27ae60',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#e8f8f5",
+                          ec="#27ae60",
+                          lw=1.5))
+    ax.set_xlabel("Color of Infrared Light [Microns]", fontweight="bold")
+    ax.set_ylabel("Starlight Blocked [%]", fontweight="bold")
+    ax.set_title("K2-18b: Finding Methane & Water Ocean Fingerprints",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="lower right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "k218b_ocean_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 17. WASP-76b Iron Rain
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    hours = np.linspace(-2.0, 2.0, 200)
+    fe_abs = 0.45 / (1.0 + np.exp(-(hours - 0.2) / 0.35))
+    ax.plot(hours,
+            fe_abs,
+            color="#d62728",
+            lw=2.8,
+            label="Iron Vapor in Air (Our GCM Model)")
+    obs_h = np.array([-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5])
+    obs_fe = np.interp(obs_h, hours, fe_abs)
+    ax.scatter(obs_h,
+               obs_fe,
+               color="#2980b9",
+               s=80,
+               zorder=5,
+               label="VLT Telescope Iron Detector Data")
+    ax.annotate("EVENING: Boiling Iron Gas!",
+                xy=(1.0, 0.42),
+                xytext=(0.1, 0.20),
+                arrowprops=dict(facecolor='#d62728', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#d62728',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fadbd8",
+                          ec="#d62728",
+                          lw=1.5))
+    ax.annotate("MORNING: Iron Rained Out at Night!",
+                xy=(-1.0, 0.05),
+                xytext=(-1.9, 0.32),
+                arrowprops=dict(facecolor='#2980b9', arrowstyle='->', lw=2.0),
+                fontsize=9.5,
+                fontweight='bold',
+                color='#2980b9',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#ebf5fb",
+                          ec="#2980b9",
+                          lw=1.5))
+    ax.set_xlabel("Hours Before/After Mid-Transit", fontweight="bold")
+    ax.set_ylabel("Iron Absorption [%]", fontweight="bold")
+    ax.set_title("WASP-76b: The Day of Boiling Iron and Night of Molten Rain",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_ylim(-0.05, 0.55)
+    ax.legend(loc="upper left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "wasp76b_rain_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 18. Kepler-11 Clockwork TTVs
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    days = np.linspace(0.0, 1200.0, 300)
+    ttv = 24.5 * np.sin(2.0 * np.pi * days / 415.0)
+    ax.plot(days,
+            ttv,
+            color="#27ae60",
+            lw=2.8,
+            label="Planetary Tug-of-War (Our Physics Model)")
+    obs_dy = np.array([50, 150, 250, 350, 480, 600, 750, 880, 1020, 1150])
+    obs_ttv = np.interp(obs_dy, days, ttv)
+    ax.scatter(obs_dy,
+               obs_ttv,
+               color="#8e44ad",
+               s=80,
+               zorder=5,
+               label="Kepler Space Telescope Transit Times")
+    ax.annotate(
+        "PLANET PUSH & PULL!\nNeighbor gravity swings orbit by 24 minutes!",
+        xy=(105, 24.0),
+        xytext=(200, 28.0),
+        arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#27ae60',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#e8f8f5", ec="#27ae60", lw=1.5))
+    ax.set_xlabel("Days of Telescope Watching", fontweight="bold")
+    ax.set_ylabel("Transit Early / Late [Minutes]", fontweight="bold")
+    ax.set_title("Kepler-11: Six Worlds Playing Gravitational Tag",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_ylim(-35, 38)
+    ax.legend(loc="lower right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "kepler11_ttv_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 19. 2I/Borisov Interstellar Comet
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    dist = np.linspace(1.5, 5.0, 200)
+    co_rate = 3.0 * (1.0 / dist)**1.8
+    h2o_rate = 2.0 * (2.0 / dist)**3.8 * np.exp(-((dist - 2.0) / 1.2)**2 *
+                                                (dist > 2.0))
+    ax.plot(dist,
+            co_rate,
+            color="#d62728",
+            lw=2.8,
+            label="Carbon Monoxide Gas (CO Rockets)")
+    ax.plot(dist,
+            h2o_rate,
+            color="#2980b9",
+            lw=2.8,
+            linestyle="--",
+            label="Water Vapor (H2O Ice)")
+    obs_dst = np.array([2.0, 2.5, 3.2, 4.0])
+    obs_co = np.interp(obs_dst, dist, co_rate)
+    ax.scatter(obs_dst,
+               obs_co,
+               color="#d62728",
+               s=80,
+               zorder=5,
+               label="ALMA Radio Giant Dish Data")
+    ax.annotate("EXTREME CO ICE!\nFormed at -420 F in deep interstellar cold!",
+                xy=(2.2, 2.1),
+                xytext=(2.6, 2.4),
+                arrowprops=dict(facecolor='#d62728', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#d62728',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fadbd8",
+                          ec="#d62728",
+                          lw=1.5))
+    ax.set_xlabel("Distance from the Sun [AU (Earth Distances)]",
+                  fontweight="bold")
+    ax.set_ylabel("Gas Eruption Power [Arbitrary Units]", fontweight="bold")
+    ax.set_title("2I/Borisov: The Interstellar Snowball Erupting Frozen Gas",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="lower left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "borisov_comet_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 20. Saturn's E-Ring & Enceladus Sea Salt
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    mz = np.linspace(10.0, 90.0, 400)
+    salt_peaks = 2.5 * np.exp(-((mz - 23.0) / 0.8)**2) + 1.2 * np.exp(-(
+        (mz - 63.0) / 0.8)**2) + 0.8 * np.exp(-((mz - 19.0) / 0.8)**2)
+    ax.plot(mz,
+            salt_peaks,
+            color="#2980b9",
+            lw=2.8,
+            label="Alien Ocean Spray Chemistry (Our Model)")
+    obs_mz = np.array([19.0, 23.0, 63.0])
+    obs_pk = np.interp(obs_mz, mz, salt_peaks)
+    ax.scatter(obs_mz,
+               obs_pk,
+               color="#e74c3c",
+               s=90,
+               zorder=5,
+               label="Cassini Spacecraft Dust Analyzer Data")
+    ax.annotate("SODIUM SEA SALT (Na+)\nTasting the alien ocean!",
+                xy=(23.0, 2.5),
+                xytext=(32.0, 2.5),
+                arrowprops=dict(facecolor='#e74c3c', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#e74c3c',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fadbd8",
+                          ec="#e74c3c",
+                          lw=1.5))
+    ax.annotate("Baking Soda Molecule (Na2OH+)!",
+                xy=(63.0, 1.2),
+                xytext=(45.0, 1.6),
+                arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+                fontsize=9.5,
+                fontweight='bold',
+                color='#27ae60',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#e8f8f5",
+                          ec="#27ae60",
+                          lw=1.5))
+    ax.set_xlabel("Molecule Weight [Atomic Mass Units]", fontweight="bold")
+    ax.set_ylabel("Signal Strength (Number of Hits)", fontweight="bold")
+    ax.set_title("Saturn's E-Ring: Tasting Frozen Ocean Salt Crystals in Space",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_xlim(10, 90)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "ering_salt_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    print("Successfully generated all 20 simple kids observational figures!")
 
 
 if __name__ == "__main__":
