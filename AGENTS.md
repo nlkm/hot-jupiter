@@ -1,7 +1,8 @@
 # Repository Rules & Development Standards
 
-## 1. Atomic Commits Policy
+## 1. Atomic Commits & Immediate Push Policy
 - All git commits MUST be fine-grained and atomic (one logical change per commit).
+- Every git commit MUST be pushed to GitHub immediately (`git push origin <branch>`).
 - When implementing a feature or paper replication, plan out a sequence of separate atomic commits:
   1. Core C++ physics header addition
   2. Bazel `BUILD.bazel` target & C++ unit test addition
