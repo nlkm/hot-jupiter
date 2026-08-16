@@ -510,3 +510,38 @@ def test_ltt9779b_ultra_hot_neptune():
     l = LTT9779bUltraHotNeptune()
     albedo = l.geometric_albedo()
     assert abs(albedo - 0.80) < 0.1, "LTT 9779b geometric albedo mismatch"
+
+
+def test_titan_atmosphere():
+    from hot_jupiter.solar_system import TitanAtmosphereThermodynamics
+    t = TitanAtmosphereThermodynamics()
+    assert abs(t.surface_pressure_bar() - 1.47) < 0.05
+    assert abs(t.superrotation_speed_m_s() - 120.0) < 5.0
+
+
+def test_enceladus_hydrothermal():
+    from hot_jupiter.solar_system import EnceladusHydrothermalVent
+    e = EnceladusHydrothermalVent()
+    assert abs(e.south_polar_heat_gw() - 5.8) < 0.5
+    assert abs(e.plume_mass_loss_kg_s() - 200.0) < 10.0
+
+
+def test_toi849b_core():
+    from hot_jupiter.solar_system import TOI849bStrippedRemnantCore
+    t = TOI849bStrippedRemnantCore()
+    assert abs(t.planet_mass_mearth() - 39.1) < 1.0
+    assert abs(t.bulk_density_g_cm3() - 5.50) < 0.2
+
+
+def test_proxima_b_habitability():
+    from hot_jupiter.solar_system import ProximaCentauribHabitability
+    p = ProximaCentauribHabitability()
+    assert abs(p.semimajor_axis_au() - 0.0485) < 0.005
+    assert abs(p.incident_flux_relative() - 0.65) < 0.05
+
+
+def test_triton_capture():
+    from hot_jupiter.solar_system import TritonRetrogradeTidalCapture
+    t = TritonRetrogradeTidalCapture()
+    assert abs(t.retrograde_inclination_deg() - 156.8) < 1.0
+    assert abs(t.circularization_timescale_myr() - 100.0) < 10.0

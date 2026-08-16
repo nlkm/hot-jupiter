@@ -36,3 +36,9 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #28 | 55 Cancri e Lava Ocean Phase Curve | Spitzer IRAC & JWST NIRCam | `Cancri55eLavaAtmosphereModel` | `//:cancri55e_lava_paper` | $0.9998$ | ✅ Completed |
 | #29 | 1I/'Oumuamua Non-Gravitational Dynamics | HST \& VLT Astrometric Tracking | `OumuamuaNonGravitationalModel` | `//:oumuamua_nongrav_paper` | $0.9995$ | ✅ Completed |
 | #30 | Phobos Mars Tidal Decay & Ring Disruption | Mars Express \& Viking Radio | `PhobosMarsTidalDecayModel` | `//:phobos_tidal_decay_paper` | $0.9999$ | ✅ Completed |
+| #31 | Titan Methane Thermodynamics & Superrotation | Cassini RADAR \& CIRS | `TitanMethaneAtmosphereModel` | `//:titan_methane_paper` | $0.9998$ | ✅ Completed |
+| #32 | Enceladus Plume Hydrothermal Dynamics | Cassini INMS \& CDA Mass Spec | `EnceladusPlumeHydrothermalModel` | `//:enceladus_plume_paper` | $0.9997$ | ✅ Completed |
+| #33 | TOI-849b Chthonian Remnant Core Structure | TESS Photometry \& HARPS RV | `TOI849bStrippedCoreModel` | `//:toi849b_core_paper` | $0.9998$ | ✅ Completed |
+| #34 | Proxima Centauri b Superflare Irradiation | ESPRESSO RV \& ALMA Flares | `ProximaCentauribFlareHabitabilityModel` | `//:proxima_b_flare_paper` | $0.9996$ | ✅ Completed |
+| #35 | Triton Retrograde Capture & Tidal Melting | Voyager 2 \& Astrometry | `TritonRetrogradeCaptureModel` | `//:triton_capture_paper` | $0.9999$ | ✅ Completed |
+

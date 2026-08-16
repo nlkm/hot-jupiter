@@ -1589,6 +1589,42 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "titan_methane_paper",
+    srcs = ["replications_observational/paper_31/titan_methane_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "enceladus_plume_paper",
+    srcs = ["replications_observational/paper_32/enceladus_plume_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "toi849b_core_paper",
+    srcs = ["replications_observational/paper_33/toi849b_core_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "proxima_b_flare_paper",
+    srcs = ["replications_observational/paper_34/proxima_b_flare_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "triton_capture_paper",
+    srcs = ["replications_observational/paper_35/triton_capture_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 # Adjacent Module Unit Tests
 cc_test(
     name = "c_api_test",

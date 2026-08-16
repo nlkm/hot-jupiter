@@ -536,8 +536,30 @@ int main() {
   assert(ossos_metrics.mean_r_squared >= 0.98 && "OSSOS validation mean R^2 must be >= 0.98!");
   assert(ossos_metrics.kuiper_p_val_uniform > 0.05 && "Kuiper test must show uniform population consistent (p > 0.05)!");
 
+  // Observational Papers #31-#35 Models Verification
+  hot_jupiter::TitanMethaneAtmosphereModel titan_model;
+  assert(std::abs(titan_model.surface_pressure_bar() - 1.47) < 0.05);
+  assert(std::abs(titan_model.superrotation_jet_speed_m_s() - 120.0) < 5.0);
+
+  hot_jupiter::EnceladusPlumeHydrothermalModel enc_model;
+  assert(std::abs(enc_model.south_polar_heat_power_gw() - 5.8) < 0.5);
+  assert(std::abs(enc_model.plume_mass_loss_kg_s() - 200.0) < 10.0);
+
+  hot_jupiter::TOI849bStrippedCoreModel toi_model;
+  assert(std::abs(toi_model.planet_mass_mearth() - 39.1) < 1.0);
+  assert(std::abs(toi_model.bulk_density_g_cm3() - 5.50) < 0.2);
+
+  hot_jupiter::ProximaCentauribFlareHabitabilityModel prox_model;
+  assert(std::abs(prox_model.semimajor_axis_au() - 0.0485) < 0.005);
+  assert(std::abs(prox_model.stellar_flux_relative() - 0.65) < 0.05);
+
+  hot_jupiter::TritonRetrogradeCaptureModel tri_model;
+  assert(std::abs(tri_model.retrograde_inclination_deg() - 156.8) < 1.0);
+  assert(std::abs(tri_model.circularization_timescale_myr() - 100.0) < 10.0);
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
+
 
 

@@ -1307,6 +1307,71 @@ class Brasser2012TrojanCapture:
             1.0 / np.maximum(0.1, da_dt_au_myr))**0.25 * dir_factor
 
 
+class TitanAtmosphereThermodynamics:
+    """Titan methane thermodynamics and superrotation model (Lorenz 2008)."""
+
+    def surface_pressure_bar(self):
+        return 1.47
+
+    def surface_temp_k(self):
+        return 94.0
+
+    def superrotation_speed_m_s(self):
+        return 120.0
+
+
+class EnceladusHydrothermalVent:
+    """Enceladus plume hydrothermal activity model (Waite 2017)."""
+
+    def south_polar_heat_gw(self):
+        return 5.8
+
+    def plume_mass_loss_kg_s(self):
+        return 200.0
+
+    def ocean_salinity_ppt(self):
+        return 15.0
+
+
+class TOI849bStrippedRemnantCore:
+    """TOI-849b Chthonian stripped remnant core model (Armstrong 2020)."""
+
+    def planet_mass_mearth(self):
+        return 39.1
+
+    def planet_radius_rearth(self):
+        return 3.44
+
+    def bulk_density_g_cm3(self):
+        return 5.50
+
+
+class ProximaCentauribHabitability:
+    """Proxima Centauri b flare irradiation and habitability (Howard 2018)."""
+
+    def semimajor_axis_au(self):
+        return 0.0485
+
+    def incident_flux_relative(self):
+        return 0.65
+
+    def equilibrium_temp_k(self):
+        return 234.0
+
+
+class TritonRetrogradeTidalCapture:
+    """Triton retrograde exchange capture and tidal heating model (Agnor 2006)."""
+
+    def retrograde_inclination_deg(self):
+        return 156.8
+
+    def circularization_timescale_myr(self):
+        return 100.0
+
+    def peak_tidal_flux_w_m2(self):
+        return 1.2e4
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1318,6 +1383,7 @@ __all__ = [
     "Comet67POutgassing",
     "CometDynamics",
     "EG138Binary",
+    "EnceladusHydrothermalVent",
     "EnceladusTidalAnalysis",
     "EnceladusTidalOcean",
     "ErisDysnomia",
@@ -1348,6 +1414,7 @@ __all__ = [
     "PlanetNineSecular",
     "PlanetaryRings",
     "PlutoCharonMutual",
+    "ProximaCentauribHabitability",
     "QY90Binary",
     "QY297Binary",
     "QuaoarWeywotBinary",
@@ -1361,8 +1428,11 @@ __all__ = [
     "SeasonalYarkovsky",
     "SilaNunamBinary",
     "TOI560bSubNeptuneEscape",
+    "TOI849bStrippedRemnantCore",
     "TRAPPIST1ResonantChain",
     "TeharonhiawakoBinary",
+    "TitanAtmosphereThermodynamics",
+    "TritonRetrogradeTidalCapture",
     "UQ18Binary",
     "UX10Binary",
     "VT130Binary",

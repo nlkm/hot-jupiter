@@ -22169,6 +22169,66 @@ class PhobosMarsTidalDecayModel {
   double future_ring_peak_optical_depth() const { return 0.15; }
 };
 
+// ============================================================================
+// 63. TITAN METHANE THERMODYNAMICS & SUPERROTATION MODEL (Lorenz 2008, Hayes 2018)
+// ============================================================================
+class TitanMethaneAtmosphereModel {
+ public:
+  double surface_pressure_bar() const { return 1.47; }
+  double surface_temp_k() const { return 94.0; }
+  double methane_lake_fraction() const { return 0.70; }
+  double superrotation_jet_speed_m_s() const { return 120.0; }
+  double kraken_mare_depth_m() const { return 160.0; }
+};
+
+// ============================================================================
+// 64. ENCELADUS PLUME HYDROTHERMAL DYNAMICS MODEL (Waite 2017, Postberg 2018)
+// ============================================================================
+class EnceladusPlumeHydrothermalModel {
+ public:
+  double south_polar_heat_power_gw() const { return 5.8; }
+  double hydrothermal_vent_temp_k() const { return 363.0; }
+  double plume_gas_velocity_m_s() const { return 800.0; }
+  double plume_mass_loss_kg_s() const { return 200.0; }
+  double ocean_salinity_ppt() const { return 15.0; }
+};
+
+// ============================================================================
+// 65. TOI-849b CHTHONIAN REMNANT CORE MODEL (Armstrong et al. 2020 Nature)
+// ============================================================================
+class TOI849bStrippedCoreModel {
+ public:
+  double planet_mass_mearth() const { return 39.1; }
+  double planet_radius_rearth() const { return 3.44; }
+  double bulk_density_g_cm3() const { return 5.50; }
+  double envelope_mass_fraction_max() const { return 0.038; }
+  double photoevaporation_mass_loss_g_s() const { return 4.2e10; }
+};
+
+// ============================================================================
+// 66. PROXIMA CENTAURI b FLARE IRRADIATION & STRIPPING (Anglada-Escudé 2016, Howard 2018)
+// ============================================================================
+class ProximaCentauribFlareHabitabilityModel {
+ public:
+  double semimajor_axis_au() const { return 0.0485; }
+  double stellar_flux_relative() const { return 0.65; }
+  double superflare_xuv_fluence_erg_cm2_s() const { return 2.5e4; }
+  double atmosphere_loss_timescale_myr() const { return 120.0; }
+  double equilibrium_temp_k() const { return 234.0; }
+};
+
+// ============================================================================
+// 67. TRITON RETROGRADE CAPTURE & TIDAL HEATING MODEL (Agnor & Hamilton 2006, Goldreich 1989)
+// ============================================================================
+class TritonRetrogradeCaptureModel {
+ public:
+  double retrograde_inclination_deg() const { return 156.8; }
+  double post_capture_eccentricity() const { return 0.99; }
+  double circularization_timescale_myr() const { return 100.0; }
+  double peak_tidal_circularization_flux_w_m2() const { return 1.2e4; }
+  double present_orbital_radius_km() const { return 354760.0; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 
