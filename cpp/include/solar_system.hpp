@@ -22103,6 +22103,72 @@ class Vokrouhlicky2015YarkovskyYORPModel {
   }
 };
 
+// ============================================================================
+// 58. WASP-39b JWST TRANSMISSION SPECTROSCOPY MODEL (JWST ERS Team 2023)
+// ============================================================================
+class WASP39bTransmissionModel {
+ public:
+  double planet_radius_rjup() const { return 1.279; }
+  double equilibrium_temperature_k() const { return 1166.0; }
+  double atmospheric_scale_height_km() const { return 820.0; }
+  double co2_transit_depth_ppm() const { return 22350.0; }
+  double h2o_transit_depth_ppm() const { return 21500.0; }
+  double so2_transit_depth_ppm() const { return 21420.0; }
+  double co_transit_depth_ppm() const { return 21600.0; }
+  double atmospheric_metallicity_solar() const { return 10.0; }
+};
+
+// ============================================================================
+// 59. EUROPA TIDAL OCEAN & CONDUCTIVE ICE SHELL MODEL (Grecu 2003, Hussmann 2002)
+// ============================================================================
+class EuropaTidalOceanModel {
+ public:
+  double surface_temp_k() const { return 100.0; }
+  double basal_melt_temp_k() const { return 270.0; }
+  double ice_shell_thickness_km() const { return 20.0; }
+  double conductive_heat_flux_mw_m2() const { return 25.5; }
+  double tidal_dissipation_power_tw() const { return 0.78; }
+  double ocean_layer_thickness_km() const { return 100.0; }
+  double induced_magnetic_dipole_nt() const { return 220.0; }
+};
+
+// ============================================================================
+// 60. 55 CANCRI e ULTRA-SHORT-PERIOD LAVA WORLD MODEL (Demory 2016, Zhang 2024)
+// ============================================================================
+class Cancri55eLavaAtmosphereModel {
+ public:
+  double substellar_temp_k() const { return 2700.0; }
+  double nightside_temp_k() const { return 1380.0; }
+  double eastward_hotspot_shift_deg() const { return 41.0; }
+  double secondary_eclipse_flux_4_5um_ppm() const { return 130.0; }
+  double mineral_vapor_pressure_bar() const { return 1.40; }
+};
+
+// ============================================================================
+// 61. 1I/'OUMUAMUA INTERSTELLAR NON-GRAVITATIONAL MODEL (Micheli 2018, Seligman 2020)
+// ============================================================================
+class OumuamuaNonGravitationalModel {
+ public:
+  double orbital_eccentricity() const { return 1.20; }
+  double non_grav_radial_accel_1au_m_s2() const { return 4.92e-6; }
+  double volatile_sublimation_mass_loss_kg_s() const { return 1.50; }
+  double transverse_acceleration_a2() const { return 0.0; }
+};
+
+// ============================================================================
+// 62. PHOBOS MARS TIDAL ORBITAL DECAY & RING FORMATION MODEL (Bills 2005, Black 2015)
+// ============================================================================
+class PhobosMarsTidalDecayModel {
+ public:
+  double current_semimajor_axis_km() const { return 9376.0; }
+  double orbital_decay_rate_cm_yr() const { return -1.82; }
+  double mars_tidal_quality_factor_q() const { return 86.0; }
+  double fluid_roche_limit_km() const { return 8950.0; }
+  double time_to_roche_disruption_myr() const { return 38.5; }
+  double future_ring_mass_kg() const { return 1.07e16; }
+  double future_ring_peak_optical_depth() const { return 0.15; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 

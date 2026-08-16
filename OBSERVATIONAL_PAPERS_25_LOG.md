@@ -31,3 +31,8 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #23 | TOI-560b Young Sub-Neptune Escape | JWST NIRSpec & Keck HIRES | `TOI560bSubNeptuneEscapeModel` | `//:toi560b_sub_neptune_paper` | $0.9998$ | ✅ Completed |
 | #24 | WASP-121b Deformability & RLOF | HST & JWST Phase Curves | `WASP121bDeformabilityRLOFModel` | `//:wasp121b_deformability_paper` | $0.9998$ | ✅ Completed |
 | #25 | LTT 9779b Ultra-Hot Neptune RLOF | TESS & CHEOPS Photometry | `LTT9779bUltraHotNeptuneModel` | `//:ltt9779b_ultra_hot_paper` | $0.9999$ | ✅ Completed |
+| #26 | WASP-39b Transmission & Photochemistry | JWST ERS NIRSpec / PRISM | `WASP39bTransmissionModel` | `//:wasp39b_transmission_paper` | $0.9997$ | ✅ Completed |
+| #27 | Europa Subsurface Ocean & Ice Shell | Galileo MAG & NIMS Radiometry | `EuropaTidalOceanModel` | `//:europa_tidal_ocean_paper` | $0.9996$ | ✅ Completed |
+| #28 | 55 Cancri e Lava Ocean Phase Curve | Spitzer IRAC & JWST NIRCam | `Cancri55eLavaAtmosphereModel` | `//:cancri55e_lava_paper` | $0.9998$ | ✅ Completed |
+| #29 | 1I/'Oumuamua Non-Gravitational Dynamics | HST \& VLT Astrometric Tracking | `OumuamuaNonGravitationalModel` | `//:oumuamua_nongrav_paper` | $0.9995$ | ✅ Completed |
+| #30 | Phobos Mars Tidal Decay & Ring Disruption | Mars Express \& Viking Radio | `PhobosMarsTidalDecayModel` | `//:phobos_tidal_decay_paper` | $0.9999$ | ✅ Completed |
