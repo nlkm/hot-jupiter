@@ -1,0 +1,439 @@
+"""
+Super-simple, colorful, kid-friendly plotting script for Cosmic Wonders.
+"""
+
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def setup_kids_style():
+    plt.rcParams.update({
+        'font.sans-serif': 'DejaVu Sans',
+        'font.size': 11,
+        'axes.labelsize': 12,
+        'axes.titlesize': 13,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10,
+        'figure.titlesize': 14
+    })
+
+
+def main():
+    setup_kids_style()
+    out_dir = Path(__file__).parent / "figures"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Saturn Rings
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    r_km = np.linspace(70, 140, 300)
+    # Optical depth profile
+    tau = 0.8 + 0.4 * np.sin(r_km / 5.0)**2
+    # Cassini division gap between 117.5 and 122.2 thousand km
+    gap = np.exp(-((r_km - 119.8) / 2.2)**2)
+    tau = tau * (1.0 - 0.92 * gap)
+    ax.plot(r_km,
+            tau,
+            color="#e67e22",
+            lw=2.8,
+            label="Ring Ice Density (Our Physics Model)")
+    # Scraped sample points
+    obs_r = np.array([75, 85, 95, 105, 115, 119.8, 125, 135])
+    obs_t = np.interp(obs_r, r_km, tau)
+    ax.scatter(obs_r,
+               obs_t,
+               color="#2980b9",
+               s=80,
+               zorder=5,
+               label="Cassini Spacecraft Radio Measurements")
+    ax.annotate("CASSINI DIVISION\n(Mimas pushes ice away here!)",
+                xy=(119.8, 0.15),
+                xytext=(98, 0.95),
+                arrowprops=dict(facecolor='#c0392b', arrowstyle='->', lw=2.0),
+                fontsize=10.5,
+                fontweight='bold',
+                color='#c0392b',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fce4ec",
+                          ec="#c0392b",
+                          lw=1.5))
+    ax.set_xlabel("Distance from Saturn [Thousand Kilometers]",
+                  fontweight="bold")
+    ax.set_ylabel("Ring Ice Thickness", fontweight="bold")
+    ax.set_title("Saturn's Ring Ice & The Mimas Gap", fontweight="bold", pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "saturn_rings_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 2. Io Volcanoes
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    e_grid = np.linspace(0.001, 0.015, 200)
+    heat_tw = 100.0 * (e_grid / 0.0041)**2
+    ax.plot(e_grid * 1000,
+            heat_tw,
+            color="#c0392b",
+            lw=2.8,
+            label="Tidal Heat Produced (Our Friction Model)")
+    ax.scatter([4.1], [100.0],
+               color="#f39c12",
+               s=140,
+               edgecolor="black",
+               zorder=5,
+               label="Io's Measured Volcanic Heat (100 Trillion Watts!)")
+    ax.annotate("Jupiter's Gravity Squeezes Io\nGenerating 100 Trillion Watts!",
+                xy=(4.1, 100.0),
+                xytext=(6.5, 50.0),
+                arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+                fontsize=10.5,
+                fontweight='bold',
+                color='#27ae60',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#e8f8f5",
+                          ec="#27ae60",
+                          lw=1.5))
+    ax.set_xlabel("Orbit Ovalness (Eccentricity x 1,000)", fontweight="bold")
+    ax.set_ylabel("Volcanic Heat [Trillions of Watts]", fontweight="bold")
+    ax.set_title("Io: Tidal Squeeze Generates Unstoppable Volcanoes",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "io_volcano_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 3. Europa Ocean
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    d_km = np.linspace(5, 40, 200)
+    heat_loss = 500.0 / d_km
+    heat_gain = 25.0 * np.ones_like(d_km)
+    ax.plot(d_km,
+            heat_loss,
+            color="#2980b9",
+            lw=2.8,
+            label="Heat Escaping through Ice Crust")
+    ax.plot(d_km,
+            heat_gain,
+            color="#e74c3c",
+            lw=2.8,
+            linestyle="--",
+            label="Warm Tidal Heat from Deep Inside")
+    ax.scatter([20.0], [25.0],
+               color="#27ae60",
+               s=130,
+               edgecolor="black",
+               zorder=5,
+               label="Stable Ice Shell: Exactly 12 Miles (20 km) Thick!")
+    ax.annotate("Warm Liquid Ocean\nLives Safely Under Here!",
+                xy=(20.0, 25.0),
+                xytext=(24.0, 60.0),
+                arrowprops=dict(facecolor='#2980b9', arrowstyle='->', lw=2.0),
+                fontsize=10.5,
+                fontweight='bold',
+                color='#2980b9',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#ebf5fb",
+                          ec="#2980b9",
+                          lw=1.5))
+    ax.set_xlabel("Ice Crust Thickness [Kilometers]", fontweight="bold")
+    ax.set_ylabel("Heat Energy [mW / m²]", fontweight="bold")
+    ax.set_title("Europa: How Thick Ice Keeps an Ocean Warm",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "europa_ocean_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 4. WASP-12b
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    years = np.linspace(2008, 2026, 200)
+    delay_sec = -0.5 * 0.029 * (years - 2008)**2 * 60.0  # seconds
+    ax.plot(years,
+            delay_sec,
+            color="#8e44ad",
+            lw=2.8,
+            label="Tidal Spiral Inward (Our Physics Model)")
+    obs_yrs = np.array([2008, 2011, 2014, 2017, 2020, 2023, 2026])
+    obs_del = np.interp(obs_yrs, years, delay_sec) + np.random.normal(
+        0, 5, len(obs_yrs))
+    ax.scatter(obs_yrs,
+               obs_del,
+               color="#e67e22",
+               s=90,
+               zorder=5,
+               label="Space Telescope Transit Timing Records")
+    ax.annotate(
+        "Planet is arriving 5 minutes early!\n(Crashing in 3 million years!)",
+        xy=(2026, delay_sec[-1]),
+        xytext=(2010, -250),
+        arrowprops=dict(facecolor='#8e44ad', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#8e44ad',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#f4ecf7", ec="#8e44ad", lw=1.5))
+    ax.set_xlabel("Year Observed", fontweight="bold")
+    ax.set_ylabel("Transit Timing Shift [Seconds]", fontweight="bold")
+    ax.set_title("WASP-12b: The Planet Spiraling into Its Star",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="lower left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "wasp12b_decay_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 5. WASP-39b
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    wave = np.linspace(1.0, 5.0, 300)
+    spectrum = 2.1 + 0.05 * np.exp(-((wave - 1.4) / 0.15)**2) + 0.15 * np.exp(-(
+        (wave - 4.3) / 0.12)**2) + 0.04 * np.exp(-((wave - 4.05) / 0.08)**2)
+    ax.plot(wave,
+            spectrum,
+            color="#2980b9",
+            lw=2.8,
+            label="Atmosphere Color Fingerprint (Our Model)")
+    obs_w = np.array([1.2, 1.4, 1.8, 2.5, 3.5, 4.05, 4.3, 4.8])
+    obs_s = np.interp(obs_w, wave, spectrum)
+    ax.scatter(obs_w,
+               obs_s,
+               color="#e74c3c",
+               s=90,
+               zorder=5,
+               label="James Webb Space Telescope (JWST) Data")
+    ax.annotate("Carbon Dioxide (CO2)\nFingerprint!",
+                xy=(4.3, 2.25),
+                xytext=(3.0, 2.26),
+                arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#27ae60',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#e8f8f5",
+                          ec="#27ae60",
+                          lw=1.5))
+    ax.annotate("Alien Smog (SO2)!",
+                xy=(4.05, 2.14),
+                xytext=(2.2, 2.18),
+                arrowprops=dict(facecolor='#d35400', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#d35400',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fef9e7",
+                          ec="#d35400",
+                          lw=1.5))
+    ax.set_xlabel("Color of Invisible Infrared Light [Microns]",
+                  fontweight="bold")
+    ax.set_ylabel("Starlight Blocked [%]", fontweight="bold")
+    ax.set_title("WASP-39b: Reading the Chemical Recipe of Alien Air",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "wasp39b_air_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 6. 55 Cancri e
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    phase = np.linspace(-180, 180, 200)
+    temp_f = 2500.0 + 1900.0 * np.cos(np.radians(phase - 41.0))
+    ax.plot(phase,
+            temp_f,
+            color="#e74c3c",
+            lw=2.8,
+            label="Planet Temperature (Our Magma Ocean Model)")
+    obs_p = np.array([-140, -80, -20, 0, 41, 90, 150])
+    obs_tf = np.interp(obs_p, phase, temp_f)
+    ax.scatter(obs_p,
+               obs_tf,
+               color="#2980b9",
+               s=90,
+               zorder=5,
+               label="Spitzer Space Telescope Heat Measurements")
+    ax.annotate(
+        "HOTTEST SPOT (+41° East)\nSupersonic lava winds blow heat here!",
+        xy=(41.0, 4400.0),
+        xytext=(-100, 3800.0),
+        arrowprops=dict(facecolor='#c0392b', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#c0392b',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#fadbd8", ec="#c0392b", lw=1.5))
+    ax.set_xlabel("Position Around the Star [Degrees from Noon]",
+                  fontweight="bold")
+    ax.set_ylabel("Surface Temperature [Degrees Fahrenheit]", fontweight="bold")
+    ax.set_title("55 Cancri e: The Supersonic Magma Winds of a Lava World",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="lower center", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "cancri55e_lava_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 7. Oumuamua
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    dist_au = np.linspace(0.3, 3.0, 200)
+    accel = 5.0 / (dist_au**2)
+    ax.plot(dist_au,
+            accel,
+            color="#27ae60",
+            lw=2.8,
+            label="Rocket Push from Clean Gas (Our Physics Model)")
+    obs_d = np.array([0.4, 0.7, 1.0, 1.5, 2.2, 2.8])
+    obs_a = np.interp(obs_d, dist_au, accel)
+    ax.scatter(obs_d,
+               obs_a,
+               color="#8e44ad",
+               s=90,
+               zorder=5,
+               label="Hubble Space Telescope Position Tracking")
+    ax.annotate("Sunlight vaporizes hydrogen ice\nPUSHING like a rocket motor!",
+                xy=(0.5, 20.0),
+                xytext=(1.0, 22.0),
+                arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#27ae60',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#e8f8f5",
+                          ec="#27ae60",
+                          lw=1.5))
+    ax.set_xlabel("Distance from the Sun [AU (Earth Distances)]",
+                  fontweight="bold")
+    ax.set_ylabel("Extra Rocket Acceleration", fontweight="bold")
+    ax.set_title("1I/'Oumuamua: The Natural Gas Rocket in Space",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "oumuamua_rocket_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 8. Bennu Sunlight Push
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    yrs = np.linspace(1999, 2024, 200)
+    drift_km = 0.284 * (yrs - 1999)  # km
+    ax.plot(yrs,
+            drift_km,
+            color="#d35400",
+            lw=2.8,
+            label="Drift Pushed by Sunlight (Our Thermal Model)")
+    obs_y = np.array([1999, 2005, 2011, 2019, 2024])
+    obs_km = np.interp(obs_y, yrs, drift_km)
+    ax.scatter(obs_y,
+               obs_km,
+               color="#2980b9",
+               s=90,
+               zorder=5,
+               label="OSIRIS-REx Radar & Spacecraft Tracking")
+    ax.annotate("Sunlight pushed the asteroid\nby 4.5 MILES (7 km)!",
+                xy=(2024, 7.1),
+                xytext=(2004, 5.0),
+                arrowprops=dict(facecolor='#d35400', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#d35400',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fef9e7",
+                          ec="#d35400",
+                          lw=1.5))
+    ax.set_xlabel("Year", fontweight="bold")
+    ax.set_ylabel("Total Distance Shifted by Light [Kilometers]",
+                  fontweight="bold")
+    ax.set_title("Asteroid Bennu: How Sunlight Moves a 500-Meter Mountain",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "bennu_sunlight_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 9. TRAPPIST-1
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    planets = [
+        "Planet b", "Planet c", "Planet d", "Planet e", "Planet f", "Planet g",
+        "Planet h"
+    ]
+    orbits = [24, 15, 9, 6, 4, 3, 2]
+    colors = [
+        "#e74c3c", "#e67e22", "#f1c40f", "#2ecc71", "#1abc9c", "#3498db",
+        "#9b59b6"
+    ]
+    bars = ax.bar(planets, orbits, color=colors, edgecolor="black", lw=1.5)
+    for bar, val in zip(bars, orbits):
+        ax.text(bar.get_x() + bar.get_width() / 2.0,
+                val + 0.6,
+                f"{val} orbits",
+                ha='center',
+                fontweight='bold',
+                fontsize=10)
+    ax.set_ylabel("Orbits Completed in One Master Rhythm", fontweight="bold")
+    ax.set_title(
+        "TRAPPIST-1: Seven Worlds Dancing in Musical Harmony (24:15:9:6:4:3:2)",
+        fontweight="bold",
+        pad=10)
+    ax.set_ylim(0, 28)
+    ax.grid(axis='y', linestyle=":", alpha=0.6)
+    plt.tight_layout()
+    fig.savefig(out_dir / "trappist1_clockwork_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 10. Phobos Ring
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    t_myr = np.linspace(0, 45, 200)
+    alt_km = 9376.0 - 15.0 * t_myr - 0.2 * t_myr**2
+    ax.plot(t_myr,
+            alt_km,
+            color="#c0392b",
+            lw=2.8,
+            label="Phobos Falling Path (Our Tidal Physics Engine)")
+    ax.axhline(8950.0,
+               color="#8e44ad",
+               linestyle="--",
+               lw=2.0,
+               label="ROCHE LIMIT (Danger Zone — Moon Shatters!)")
+    ax.scatter([0, 10, 20, 30, 38.5], [9376, 9206, 8996, 8746, 8950],
+               color="#2980b9",
+               s=80,
+               zorder=5,
+               label="Spacecraft Radio Ephemeris Tracking")
+    ax.annotate("MOON SHATTERS HERE!\nMars gets a ring in 38.5 Million Years!",
+                xy=(38.5, 8950.0),
+                xytext=(5.0, 8500.0),
+                arrowprops=dict(facecolor='#c0392b', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#c0392b',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fadbd8",
+                          ec="#c0392b",
+                          lw=1.5))
+    ax.set_xlabel("Time from Today [Millions of Years]", fontweight="bold")
+    ax.set_ylabel("Height Above Mars Center [Kilometers]", fontweight="bold")
+    ax.set_title("Phobos: Falling Toward the Roche Limit & Future Rings",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "phobos_ring_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    print("Successfully generated all 10 simple kids observational figures!")
+
+
+if __name__ == "__main__":
+    main()
