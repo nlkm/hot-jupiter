@@ -41,9 +41,10 @@ class GuillotAtmosphere(BaseAtmosphere):
         term_int = (3.0 / 4.0) * (T_int**4) * (tau_arr + 2.0 / 3.0)
 
         # Term 2: Irradiated stellar flux term
-        g_tau = self.gamma * tau_arr
-        bracket = (2.0 / 3.0) + (2.0 / (3.0 * self.gamma)) * (
-            1.0 + (g_tau / 2.0 - 1.0) * np.exp(-g_tau))
+        bracket = (2.0 / 3.0) + (1.0 / (self.gamma * np.sqrt(3.0))
+                                ) + (self.gamma / np.sqrt(3.0) - 1.0 /
+                                     (self.gamma * np.sqrt(3.0))) * np.exp(
+                                         -self.gamma * tau_arr * np.sqrt(3.0))
         term_irr = (3.0 / 4.0) * (T_irr**4) * bracket
 
         T4 = np.maximum(1.0, term_int + term_irr)
@@ -83,9 +84,10 @@ class GuillotAtmosphere(BaseAtmosphere):
         T_target = float(
             self.envelope_eos.temperature_from_PS(P_rcb, S_env, 0.75, 0.25))
 
-        g_tau = self.gamma * tau_rcb
-        bracket = (2.0 / 3.0) + (2.0 / (3.0 * self.gamma)) * (
-            1.0 + (g_tau / 2.0 - 1.0) * np.exp(-g_tau))
+        bracket = (2.0 / 3.0) + (1.0 / (self.gamma * np.sqrt(3.0))
+                                ) + (self.gamma / np.sqrt(3.0) - 1.0 /
+                                     (self.gamma * np.sqrt(3.0))) * np.exp(
+                                         -self.gamma * tau_rcb * np.sqrt(3.0))
         term_irr = (3.0 / 4.0) * (T_irr**4) * bracket
         coeff_int = (3.0 / 4.0) * (tau_rcb + 2.0 / 3.0)
 

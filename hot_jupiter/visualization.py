@@ -3,6 +3,7 @@ Publication-Grade Visualization Engine & Design System for LaTeX / Astronomy Pap
 Implements unified rcParams, curated color palettes, panel labeling, and vector figure exports.
 """
 
+from pathlib import Path
 from typing import ClassVar
 
 import matplotlib.pyplot as plt
@@ -353,3 +354,42 @@ def plot_multi_planet_system_evolution(
     if savepath:
         PaperStyle.save_figure(fig, savepath)
     return fig
+
+
+def apply_paper_style():
+    """Apply global publication style."""
+    PaperStyle.apply()
+
+
+def get_color(name: str) -> str:
+    """Retrieve color from curated publication palette."""
+    palette = {
+        "navy": "#1f4e78",
+        "teal": "#1b9e77",
+        "coral": "#d95f02",
+        "violet": "#7570b3",
+        "slate": "#666666",
+        "crimson": "#b2182b",
+        "gold": "#d9a74a",
+    }
+    return palette.get(name, PaperStyle.COLORS.get(name, "#1f4e78"))
+
+
+def create_figure(figsize: tuple[float,
+                                 float] = (7,
+                                           5)) -> tuple[plt.Figure, plt.Axes]:
+    """Create styled single-panel figure and axes."""
+    PaperStyle.apply()
+    fig, ax = plt.subplots(figsize=figsize)
+    return fig, ax
+
+
+def panel_label(ax: plt.Axes, label: str, loc: str = "top left"):
+    """Add bold panel label."""
+    loc_str = loc.replace("-", " ")
+    PaperStyle.add_panel_label(ax, label, loc_str)
+
+
+def save_paper_figure(fig: plt.Figure, filepath: str | Path):
+    """Save figure to PNG and vector PDF."""
+    PaperStyle.save_figure(fig, str(filepath))
