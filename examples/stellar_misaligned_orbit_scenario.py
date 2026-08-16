@@ -143,7 +143,6 @@ def run_stellar_misaligned_scenario():
                     color="#d62728",
                     lw=2)
     axes[0, 0].set_ylabel(r"Planet Radius $R_p$ [$R_{\mathrm{Jup}}$]")
-    axes[0, 0].set_xscale("log")
     axes[0, 0].grid(True, alpha=0.3)
     axes[0, 0].legend(loc="best")
 
@@ -151,7 +150,6 @@ def run_stellar_misaligned_scenario():
     axes[0, 1].plot(res_2.t_gyr, res_2.a_au, color="#ff7f0e", lw=2)
     axes[0, 1].plot(res_3.t_gyr, res_3.a_au, color="#d62728", lw=2)
     axes[0, 1].set_ylabel(r"Semi-Major Axis $a$ [AU]")
-    axes[0, 1].set_xscale("log")
     axes[0, 1].grid(True, alpha=0.3)
 
     axes[1, 0].plot(res_1.t_gyr, res_1.obliquity_deg, color="#1f77b4", lw=2)
@@ -159,7 +157,6 @@ def run_stellar_misaligned_scenario():
     axes[1, 0].plot(res_3.t_gyr, res_3.obliquity_deg, color="#d62728", lw=2)
     axes[1, 0].set_xlabel("Age [Gyr]")
     axes[1, 0].set_ylabel(r"Stellar Obliquity $\psi_*$ [deg]")
-    axes[1, 0].set_xscale("log")
     axes[1, 0].grid(True, alpha=0.3)
 
     axes[1, 1].plot(res_1.t_gyr,
@@ -176,7 +173,6 @@ def run_stellar_misaligned_scenario():
                     lw=2)
     axes[1, 1].set_xlabel("Age [Gyr]")
     axes[1, 1].set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
-    axes[1, 1].set_xscale("log")
     axes[1, 1].set_yscale("log")
     axes[1, 1].grid(True, alpha=0.3, which="both")
 

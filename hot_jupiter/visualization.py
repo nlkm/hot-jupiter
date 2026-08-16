@@ -115,14 +115,12 @@ def plot_evolution_track(
     ax1 = axes[0, 0]
     ax1.plot(t_gyr, result.R_p_jup, color=PaperStyle.COLORS['GAS_GIANT'], lw=2)
     ax1.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
-    ax1.set_xscale("log")
     PaperStyle.add_panel_label(ax1, "a")
 
     # Panel 2: Intrinsic Luminosity vs Time
     ax2 = axes[0, 1]
     ax2.plot(t_gyr, result.L_int_sun, color=PaperStyle.COLORS['ZONE_I'], lw=2)
     ax2.set_ylabel(r"Luminosity $L_{\mathrm{int}}$ [$L_\odot$]")
-    ax2.set_xscale("log")
     ax2.set_yscale("log")
     PaperStyle.add_panel_label(ax2, "b")
 
@@ -141,7 +139,6 @@ def plot_evolution_track(
              label=r"$T_{\mathrm{int}}$")
     ax3.set_xlabel("Age [Gyr]")
     ax3.set_ylabel("Temperature [K]")
-    ax3.set_xscale("log")
     ax3.legend(loc="best")
     PaperStyle.add_panel_label(ax3, "c")
 
@@ -150,7 +147,6 @@ def plot_evolution_track(
     ax4.plot(t_gyr, result.S, color=PaperStyle.COLORS['ZONE_II'], lw=2)
     ax4.set_xlabel("Age [Gyr]")
     ax4.set_ylabel(r"Entropy $S$ [J kg$^{-1}$ K$^{-1}$]")
-    ax4.set_xscale("log")
     PaperStyle.add_panel_label(ax4, "d")
 
     plt.tight_layout()
@@ -231,7 +227,6 @@ def plot_coupled_orbital_spin_evolution(
     ax1 = axes[0, 0]
     ax1.plot(t_gyr, result.R_p_jup, color=PaperStyle.COLORS['GAS_GIANT'], lw=2)
     ax1.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
-    ax1.set_xscale("log")
     PaperStyle.add_panel_label(ax1, "a")
 
     # Panel 2: Semi-major axis & Eccentricity
@@ -250,7 +245,6 @@ def plot_coupled_orbital_spin_evolution(
                   label="e")
     ax2.set_ylabel("Semi-major Axis a [AU]")
     ax2_twin.set_ylabel("Eccentricity e")
-    ax2.set_xscale("log")
     PaperStyle.add_panel_label(ax2, "b")
 
     # Panel 3: Rotation Period & Obliquity
@@ -262,7 +256,6 @@ def plot_coupled_orbital_spin_evolution(
              label=r"$P_{\mathrm{rot}}$ [hrs]")
     ax3.set_xlabel("Age [Gyr]")
     ax3.set_ylabel(r"Rotation Period $P_{\mathrm{rot}}$ [hrs]")
-    ax3.set_xscale("log")
     PaperStyle.add_panel_label(ax3, "c")
 
     # Panel 4: Tidal Power
@@ -273,7 +266,6 @@ def plot_coupled_orbital_spin_evolution(
              lw=2)
     ax4.set_xlabel("Age [Gyr]")
     ax4.set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
-    ax4.set_xscale("log")
     ax4.set_yscale("log")
     PaperStyle.add_panel_label(ax4, "d")
 
@@ -309,7 +301,6 @@ def plot_multi_planet_system_evolution(
                  lw=2,
                  label=f"Planet {name}")
     ax1.set_ylabel("Semi-major Axis a [AU]")
-    ax1.set_xscale("log")
     ax1.legend(loc="best")
     PaperStyle.add_panel_label(ax1, "a")
 
@@ -319,7 +310,6 @@ def plot_multi_planet_system_evolution(
         c = colors[i % len(colors)]
         ax2.plot(t_gyr, result.e[name], color=c, lw=2, label=f"Planet {name}")
     ax2.set_ylabel("Eccentricity e")
-    ax2.set_xscale("log")
     PaperStyle.add_panel_label(ax2, "b")
 
     # Panel 3: Radii
@@ -333,7 +323,6 @@ def plot_multi_planet_system_evolution(
                  label=f"Planet {name}")
     ax3.set_xlabel("Age [Gyr]")
     ax3.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
-    ax3.set_xscale("log")
     PaperStyle.add_panel_label(ax3, "c")
 
     # Panel 4: Effective Temperature
@@ -347,7 +336,6 @@ def plot_multi_planet_system_evolution(
                  label=f"Planet {name}")
     ax4.set_xlabel("Age [Gyr]")
     ax4.set_ylabel(r"Effective Temp $T_{\mathrm{eff}}$ [K]")
-    ax4.set_xscale("log")
     PaperStyle.add_panel_label(ax4, "d")
 
     plt.tight_layout()

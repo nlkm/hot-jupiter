@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.14)  15 AUG 2026 23:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.14)  16 AUG 2026 08:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -324,26 +324,26 @@ Underfull \hbox (badness 2012) in paragraph at lines 1--1
  []
 
 [4]
-<figures/jupiter_cooling_track.pdf, id=30, 680.14417pt x 464.1007pt>
+<figures/jupiter_cooling_track.pdf, id=30, 571.24997pt x 499.06215pt>
 File: figures/jupiter_cooling_track.pdf Graphic file (type pdf)
 <use figures/jupiter_cooling_track.pdf>
 Package pdftex.def Info: figures/jupiter_cooling_track.pdf  used on input line 
 14.
-(pdftex.def)             Requested size: 239.55144pt x 163.45741pt.
+(pdftex.def)             Requested size: 239.55144pt x 209.28484pt.
 <figures/jupiter_internal_profile.pdf, id=31, 679.892pt x 464.69609pt>
 File: figures/jupiter_internal_profile.pdf Graphic file (type pdf)
 <use figures/jupiter_internal_profile.pdf>
 Package pdftex.def Info: figures/jupiter_internal_profile.pdf  used on input li
 ne 21.
 (pdftex.def)             Requested size: 239.55144pt x 163.73094pt.
-<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=32, 680.0933pt x 46
-4.1007pt>
+<figures/hot_jupiter_coupled_orbital_spin_evolution.pdf, id=32, 499.15184pt x 4
+28.23755pt>
 File: figures/hot_jupiter_coupled_orbital_spin_evolution.pdf Graphic file (type
  pdf)
 <use figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>
 Package pdftex.def Info: figures/hot_jupiter_coupled_orbital_spin_evolution.pdf
   used on input line 35.
-(pdftex.def)             Requested size: 239.55144pt x 163.47157pt.
+(pdftex.def)             Requested size: 239.55144pt x 205.51901pt.
 
 Underfull \hbox (badness 3260) in paragraph at lines 42--45
 \OT1/cmr/m/n/10 Simulates a 3-planet sys-tem (\OT1/cmtt/m/n/10 Kepler-TE-1\OT1/
@@ -357,32 +357,36 @@ n/10 ($1\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 0 \OML/cmm/m/it/10 M[]; a \OT1/cmr/m/
 n/10 =
  []
 
-<figures/multi_planet_system_evolution.pdf, id=33, 680.05006pt x 464.1007pt>
+<figures/multi_planet_system_evolution.pdf, id=33, 499.27293pt x 499.06215pt>
 File: figures/multi_planet_system_evolution.pdf Graphic file (type pdf)
 <use figures/multi_planet_system_evolution.pdf>
 Package pdftex.def Info: figures/multi_planet_system_evolution.pdf  used on inp
 ut line 48.
-(pdftex.def)             Requested size: 239.55144pt x 163.47867pt.
-[5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.pd
-f> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
-<figures/obliquity_tilted_spin_evolution.pdf, id=338, 680.0933pt x 464.1007pt>
+(pdftex.def)             Requested size: 239.55144pt x 239.4481pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5 <./figures/jupiter_cooling_track.pdf> <./figures/jupiter_internal_profile.p
+df> <./figures/hot_jupiter_coupled_orbital_spin_evolution.pdf>]
+<figures/obliquity_tilted_spin_evolution.pdf, id=322, 499.02199pt x 428.23755pt
+>
 File: figures/obliquity_tilted_spin_evolution.pdf Graphic file (type pdf)
 <use figures/obliquity_tilted_spin_evolution.pdf>
 Package pdftex.def Info: figures/obliquity_tilted_spin_evolution.pdf  used on i
 nput line 62.
-(pdftex.def)             Requested size: 239.55144pt x 163.47157pt.
+(pdftex.def)             Requested size: 239.55144pt x 205.57129pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 67--67
 \OT1/cmr/bx/n/12 align-ment (Rossiter-McLaughlin
  []
 
-<figures/stellar_misaligned_orbit_evolution.pdf, id=339, 788.05997pt x 570.5291
-3pt>
+<figures/stellar_misaligned_orbit_evolution.pdf, id=323, 499.03079pt x 357.4129
+6pt>
 File: figures/stellar_misaligned_orbit_evolution.pdf Graphic file (type pdf)
 <use figures/stellar_misaligned_orbit_evolution.pdf>
 Package pdftex.def Info: figures/stellar_misaligned_orbit_evolution.pdf  used o
 n input line 74.
-(pdftex.def)             Requested size: 239.55144pt x 173.42351pt.
+(pdftex.def)             Requested size: 239.55144pt x 171.57263pt.
 
 Underfull \hbox (badness 1902) in paragraph at lines 81--84
 \OT1/cmr/m/n/10 
@@ -390,26 +394,25 @@ Underfull \hbox (badness 1902) in paragraph at lines 81--84
 gra-
  []
 
-<figures/stellar_rotation_tidal_migration.pdf, id=340, 507.94768pt x 339.9972pt
->
+
+Underfull \vbox (badness 1163) has occurred while \output is active []
+
+ [6 <./figures/multi_planet_system_evolution.pdf> <./figures/obliquity_tilted_s
+pin_evolution.pdf> <./figures/stellar_misaligned_orbit_evolution.pdf>]
+<figures/stellar_rotation_tidal_migration.pdf, id=598, 499.15184pt x 357.41296p
+t>
 File: figures/stellar_rotation_tidal_migration.pdf Graphic file (type pdf)
 <use figures/stellar_rotation_tidal_migration.pdf>
 Package pdftex.def Info: figures/stellar_rotation_tidal_migration.pdf  used on 
 input line 87.
-(pdftex.def)             Requested size: 239.55144pt x 160.34343pt.
+(pdftex.def)             Requested size: 239.55144pt x 171.52899pt.
 
 Underfull \hbox (badness 1137) in paragraph at lines 94--97
 \OT1/cmr/m/n/10 Simulates an ultra-short-period Hot Jupiter ($\OML/cmm/m/it/10 
 a \OT1/cmr/m/n/10 =
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 <./figures/multi_planet_system_evolution.pdf> <./figures/obliquity_tilted_s
-pin_evolution.pdf> <./figures/stellar_misaligned_orbit_evolution.pdf> <./figure
-s/stellar_rotation_tidal_migration.pdf>]
-<figures/roche_lobe_overflow_mass_loss.pdf, id=745, 787.1508pt x 569.88672pt>
+<figures/roche_lobe_overflow_mass_loss.pdf, id=599, 787.1508pt x 569.88672pt>
 File: figures/roche_lobe_overflow_mass_loss.pdf Graphic file (type pdf)
 <use figures/roche_lobe_overflow_mass_loss.pdf>
 Package pdftex.def Info: figures/roche_lobe_overflow_mass_loss.pdf  used on inp
@@ -421,20 +424,20 @@ Underfull \hbox (badness 1264) in paragraph at lines 107--109
 cmr/m/n/10 ), and core masses. - **Walk-through**:
  []
 
-<figures/hot_jupiter_incremental_ks_comparison.pdf, id=746, 931.8384pt x 353.36
-519pt>
+<figures/hot_jupiter_incremental_ks_comparison.pdf, id=600, 642.75839pt x 321.8
+0226pt>
 File: figures/hot_jupiter_incremental_ks_comparison.pdf Graphic file (type pdf)
 
 <use figures/hot_jupiter_incremental_ks_comparison.pdf>
 Package pdftex.def Info: figures/hot_jupiter_incremental_ks_comparison.pdf  use
 d on input line 112.
-(pdftex.def)             Requested size: 239.55144pt x 90.83752pt.
+(pdftex.def)             Requested size: 239.55144pt x 119.93408pt.
 
 Underfull \hbox (badness 2173) in paragraph at lines 117--117
 \OT1/cmr/bx/n/12 Spec-trum Scale Height In-fla-tion
  []
 
-<figures/jwst_transmission_scale_height.pdf, id=747, 498.85889pt x 428.23755pt>
+<figures/jwst_transmission_scale_height.pdf, id=601, 498.85889pt x 428.23755pt>
 
 File: figures/jwst_transmission_scale_height.pdf Graphic file (type pdf)
 <use figures/jwst_transmission_scale_height.pdf>
@@ -457,15 +460,19 @@ Underfull \hbox (badness 1137) in paragraph at lines 131--133
 0 t <
  []
 
-<figures/photoevaporation_mass_loss.pdf, id=748, 497.82863pt x 428.23755pt>
+
+Underfull \vbox (badness 2119) has occurred while \output is active []
+
+ [7 <./figures/stellar_rotation_tidal_migration.pdf> <./figures/roche_lobe_over
+flow_mass_loss.pdf> <./figures/hot_jupiter_incremental_ks_comparison.pdf>]
+<figures/photoevaporation_mass_loss.pdf, id=892, 497.82863pt x 428.23755pt>
 File: figures/photoevaporation_mass_loss.pdf Graphic file (type pdf)
 <use figures/photoevaporation_mass_loss.pdf>
 Package pdftex.def Info: figures/photoevaporation_mass_loss.pdf  used on input 
 line 136.
 (pdftex.def)             Requested size: 239.55144pt x 206.0679pt.
-) (./sections/04_population.tex [7 <./figures/roche_lobe_overflow_mass_loss.pdf
-> <./figures/hot_jupiter_incremental_ks_comparison.pdf> <./figures/jwst_transmi
-ssion_scale_height.pdf>]
+)
+(./sections/04_population.tex
 Underfull \hbox (badness 1681) in paragraph at lines 26--28
 []\OT1/cmr/bx/n/10 Initial Ec-cen-tric-ity ($\OML/cmm/m/it/10 e[]$\OT1/cmr/bx/n
 /10 )\OT1/cmr/m/n/10 : Sam-pled from a
@@ -477,7 +484,8 @@ Underfull \hbox (badness 1320) in paragraph at lines 29--31
 /cmr/m/n/10 ) main-tain
  []
 
-
+[8 <./figures/jwst_transmission_scale_height.pdf> <./figures/photoevaporation_m
+ass_loss.pdf>]
 Underfull \hbox (badness 6526) in paragraph at lines 34--35
 \OT1/cmr/m/n/10 Smirnov (KS) met-ric com-par-i-son, we com-piled
  []
@@ -510,18 +518,21 @@ File: figures/hot_jupiter_incremental_ks_comparison.pdf Graphic file (type pdf)
 <use figures/hot_jupiter_incremental_ks_comparison.pdf>
 Package pdftex.def Info: figures/hot_jupiter_incremental_ks_comparison.pdf  use
 d on input line 73.
-(pdftex.def)             Requested size: 239.55144pt x 90.83752pt.
+(pdftex.def)             Requested size: 239.55144pt x 119.93408pt.
 
 Overfull \hbox (148.74538pt too wide) in paragraph at lines 83--97
  [][] 
  []
 
-[8 <./figures/photoevaporation_mass_loss.pdf>]
+
+Underfull \vbox (badness 5475) has occurred while \output is active []
+
+
 Underfull \hbox (badness 2285) in paragraph at lines 119--120
 \OT1/cmr/m/n/10 Both pan-els demon-strate out-stand-ing quan-ti-ta-tive
  []
 
-<figures/core_mass_metallicity_correlation.pdf, id=1143, 788.70422pt x 344.2517
+<figures/core_mass_metallicity_correlation.pdf, id=1105, 788.70422pt x 344.2517
 9pt>
 File: figures/core_mass_metallicity_correlation.pdf Graphic file (type pdf)
 <use figures/core_mass_metallicity_correlation.pdf>
@@ -544,7 +555,7 @@ Underfull \hbox (badness 3019) in paragraph at lines 3--4
 \OT1/cmr/m/n/10 In this work, we pre-sented a mod-u-lar phys-i-cal
  []
 
-[10 <./figures/core_mass_metallicity_correlation.pdf>]
+[10]
 Underfull \hbox (badness 1354) in paragraph at lines 23--25
 []\OT1/cmr/bx/n/10 First-Principles C++ / Bazel 8 Re-pro-
  []
@@ -554,13 +565,13 @@ Underfull \hbox (badness 1158) in paragraph at lines 23--25
 \OT1/cmr/m/n/10 tion syn-the-sis tools are im-ple-mented in high-
  []
 
-
+[11 <./figures/core_mass_metallicity_correlation.pdf>]
 Underfull \hbox (badness 3601) in paragraph at lines 31--32
 []\OT1/cmr/bx/n/10 Double-Diffusive Com-po-si-tion Gra-di-ents\OT1/cmr/m/n/10 :
 
  []
 
-) (./sections/07_references.tex [11]
+) (./sections/07_references.tex
 Underfull \hbox (badness 10000) in paragraph at lines 14--15
 []\OT1/cmr/m/n/10 Leconte, J., Chabrier, G.,
  []
@@ -599,7 +610,8 @@ Overfull \hbox (20.54884pt too wide) detected at line 19
 /10 ^^@r[][] []
  []
 
-<figures/derivation_hydrostatic_geom.pdf, id=1259, 344.015pt x 354.6879pt>
+[12]
+<figures/derivation_hydrostatic_geom.pdf, id=1224, 344.015pt x 354.6879pt>
 File: figures/derivation_hydrostatic_geom.pdf Graphic file (type pdf)
 <use figures/derivation_hydrostatic_geom.pdf>
 Package pdftex.def Info: figures/derivation_hydrostatic_geom.pdf  used on input
@@ -610,7 +622,7 @@ Underfull \hbox (badness 1845) in paragraph at lines 28--28
 []\OT1/cmr/bx/n/12 Derivation A2: Isother-mal 3rd-
  []
 
-<figures/derivation_core_strain_geom.pdf, id=1260, 378.51413pt x 201.35225pt>
+<figures/derivation_core_strain_geom.pdf, id=1225, 378.51413pt x 201.35225pt>
 File: figures/derivation_core_strain_geom.pdf Graphic file (type pdf)
 <use figures/derivation_core_strain_geom.pdf>
 Package pdftex.def Info: figures/derivation_core_strain_geom.pdf  used on input
@@ -621,8 +633,7 @@ Underfull \hbox (badness 2443) in paragraph at lines 47--47
 []\OT1/cmr/bx/n/12 Derivation A3: Non-Relativistic
  []
 
-[12 <./figures/derivation_hydrostatic_geom.pdf>]
-<figures/derivation_fermi_sphere_geom.pdf, id=1328, 367.88383pt x 268.61089pt>
+<figures/derivation_fermi_sphere_geom.pdf, id=1226, 367.88383pt x 268.61089pt>
 File: figures/derivation_fermi_sphere_geom.pdf Graphic file (type pdf)
 <use figures/derivation_fermi_sphere_geom.pdf>
 Package pdftex.def Info: figures/derivation_fermi_sphere_geom.pdf  used on inpu
@@ -634,7 +645,7 @@ Overfull \hbox (34.48024pt too wide) detected at line 67
 []\OML/cmm/m/it/10 T[] [] \OT1/cmr/m/n/10 + []\OML/cmm/m/it/10 T[] []
  []
 
-<figures/derivation_radiative_slab_geom.pdf, id=1329, 417.12154pt x 246.35175pt
+<figures/derivation_radiative_slab_geom.pdf, id=1227, 417.12154pt x 246.35175pt
 >
 File: figures/derivation_radiative_slab_geom.pdf Graphic file (type pdf)
 <use figures/derivation_radiative_slab_geom.pdf>
@@ -646,30 +657,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--77
 []\OT1/cmr/bx/n/12 Derivation A5: Metallicity-
  []
 
-<figures/derivation_tidal_bulge_geom.pdf, id=1330, 480.57503pt x 143.91177pt>
+[13 <./figures/derivation_hydrostatic_geom.pdf> <./figures/derivation_core_stra
+in_geom.pdf> <./figures/derivation_fermi_sphere_geom.pdf>]
+<figures/derivation_tidal_bulge_geom.pdf, id=1459, 480.57503pt x 143.91177pt>
 File: figures/derivation_tidal_bulge_geom.pdf Graphic file (type pdf)
 <use figures/derivation_tidal_bulge_geom.pdf>
 Package pdftex.def Info: figures/derivation_tidal_bulge_geom.pdf  used on input
  line 95.
 (pdftex.def)             Requested size: 203.62018pt x 60.97612pt.
-[13 <./figures/derivation_core_strain_geom.pdf> <./figures/derivation_fermi_sph
-ere_geom.pdf> <./figures/derivation_radiative_slab_geom.pdf> <./figures/derivat
-ion_tidal_bulge_geom.pdf>]
+
 Underfull \hbox (badness 3179) in paragraph at lines 119--119
 []\OT1/cmr/bx/n/12 Derivation A9: Hy-dro-dy-namic
  []
 
-<figures/derivation_roche_lobe_geom.pdf, id=1666, 461.7307pt x 144.68498pt>
+<figures/derivation_roche_lobe_geom.pdf, id=1460, 461.7307pt x 144.68498pt>
 File: figures/derivation_roche_lobe_geom.pdf Graphic file (type pdf)
 <use figures/derivation_roche_lobe_geom.pdf>
 Package pdftex.def Info: figures/derivation_roche_lobe_geom.pdf  used on input 
 line 129.
 (pdftex.def)             Requested size: 203.62018pt x 63.80508pt.
-[14 <./figures/derivation_roche_lobe_geom.pdf>]
-(./sections/table_342_planets.tex [15
+[14 <./figures/derivation_radiative_slab_geom.pdf> <./figures/derivation_tidal_
+bulge_geom.pdf> <./figures/derivation_roche_lobe_geom.pdf>] [15
+
+]
+(./sections/table_342_planets.tex [16
 
 
-] [16] [17] [18] [19]) [20]) (./paper.aux)
+] [17] [18] [19] [20]) [21]) (./paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -709,10 +723,10 @@ y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (20 pages, 910883 bytes).
+Output written on paper.pdf (21 pages, 910036 bytes).
 PDF statistics:
- 1888 PDF objects out of 2073 (max. 8388607)
- 473 compressed objects within 5 object streams
+ 1853 PDF objects out of 2073 (max. 8388607)
+ 471 compressed objects within 5 object streams
  0 named destinations out of 1000 (max. 500000)
  91 words of extra memory for PDF output out of 10000 (max. 10000000)
 
