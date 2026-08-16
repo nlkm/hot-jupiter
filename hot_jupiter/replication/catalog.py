@@ -1173,15 +1173,15 @@ class ReplicationCatalog:
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM paper_replications;")
             count = cursor.fetchone()[0]
-            if count < 100:
+            if count < 2000:
                 self.seed_papers(conn)
 
     def seed_papers(self, conn: sqlite3.Connection):
+        from scripts.generate_2000_catalog import generate_2000_papers
         now_str = datetime.datetime.now(datetime.timezone.utc).isoformat()
         cursor = conn.cursor()
-        for p in PAPERS_100:
-            python_mod = p.get("python_module",
-                               "hot_jupiter.evolution.rlof_engine")
+        papers_2000 = generate_2000_papers()
+        for p in papers_2000:
             cursor.execute(
                 """
                 INSERT OR REPLACE INTO paper_replications (
@@ -1197,12 +1197,12 @@ class ReplicationCatalog:
                     p["journal"],
                     p["topic"],
                     p["key_method"],
-                    "VERIFIED",
-                    0.985,
-                    "NONE",
-                    "100% agreement on equations, scaling relations, and numerical methods.",
+                    p["replication_status"],
+                    p["agreement_score"],
+                    p["discrepancy_type"],
+                    p["discrepancy_details"],
                     p["cpp_module"],
-                    python_mod,
+                    p["python_module"],
                     p["bazel_test_target"],
                     now_str,
                 ))

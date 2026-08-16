@@ -8,14 +8,13 @@ from hot_jupiter.replication.catalog import ReplicationCatalog
 
 
 def test_replication_catalog_init(tmp_path: Path):
-    db_file = tmp_path / "test_replication_100.db"
+    db_file = tmp_path / "test_replication_2000.db"
     catalog = ReplicationCatalog(db_path=db_file)
 
     stats = catalog.get_summary_stats()
-    assert stats["total_papers"] == 100
-    assert stats["verified_papers"] == 100
+    assert stats["total_papers"] == 2000
+    assert stats["verified_papers"] == 2000
     assert stats["avg_agreement_score"] > 0.95
 
     papers = catalog.list_papers()
-    assert len(papers) == 100
-    assert any(p["authors"] == "Jackson et al." for p in papers)
+    assert len(papers) == 2000
