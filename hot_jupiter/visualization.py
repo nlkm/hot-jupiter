@@ -6,6 +6,7 @@ Implements unified rcParams, curated color palettes, panel labeling, and vector 
 from typing import ClassVar
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from hot_jupiter.constants import R_JUP
 from hot_jupiter.evolution import EvolutionResult
@@ -205,6 +206,147 @@ def plot_internal_profile(
     ax4.set_xlabel(r"Radius $r$ [$R_{\mathrm{Jup}}$]")
     ax4.set_ylabel(
         r"$\nabla_{\mathrm{ad}} \equiv (\partial \ln T / \partial \ln P)_s$")
+    PaperStyle.add_panel_label(ax4, "d")
+
+    plt.tight_layout()
+    if savepath:
+        PaperStyle.save_figure(fig, savepath)
+    return fig
+
+
+def plot_coupled_orbital_spin_evolution(
+    result,
+    title: str = "Coupled Thermal, Orbital Element & Spin Vector Evolution",
+    savepath: str | None = None,
+) -> plt.Figure:
+    """Plot 4-panel coupled dynamical evolution track."""
+    PaperStyle.apply()
+    fig, axes = plt.subplots(2, 2, figsize=(9.5, 6.5), sharex=True)
+    fig.suptitle(title, fontsize=12.5, fontweight="bold")
+
+    t_gyr = result.t_gyr
+
+    # Panel 1: Radius
+    ax1 = axes[0, 0]
+    ax1.plot(t_gyr, result.R_p_jup, color=PaperStyle.COLORS['GAS_GIANT'], lw=2)
+    ax1.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+    ax1.set_xscale("log")
+    PaperStyle.add_panel_label(ax1, "a")
+
+    # Panel 2: Semi-major axis & Eccentricity
+    ax2 = axes[0, 1]
+    ax2.plot(t_gyr,
+             result.a_au,
+             color=PaperStyle.COLORS['ZONE_I'],
+             lw=2,
+             label="a [AU]")
+    ax2_twin = ax2.twinx()
+    ax2_twin.plot(t_gyr,
+                  result.e,
+                  color=PaperStyle.COLORS['ZONE_III'],
+                  lw=1.5,
+                  ls="--",
+                  label="e")
+    ax2.set_ylabel("Semi-major Axis a [AU]")
+    ax2_twin.set_ylabel("Eccentricity e")
+    ax2.set_xscale("log")
+    PaperStyle.add_panel_label(ax2, "b")
+
+    # Panel 3: Rotation Period & Obliquity
+    ax3 = axes[1, 0]
+    ax3.plot(t_gyr,
+             result.P_rot_hrs,
+             color=PaperStyle.COLORS['ZONE_II'],
+             lw=2,
+             label=r"$P_{\mathrm{rot}}$ [hrs]")
+    ax3.set_xlabel("Age [Gyr]")
+    ax3.set_ylabel(r"Rotation Period $P_{\mathrm{rot}}$ [hrs]")
+    ax3.set_xscale("log")
+    PaperStyle.add_panel_label(ax3, "c")
+
+    # Panel 4: Tidal Power
+    ax4 = axes[1, 1]
+    ax4.plot(t_gyr,
+             np.maximum(result.P_tidal, 1.0),
+             color=PaperStyle.COLORS['HIGHLIGHT'],
+             lw=2)
+    ax4.set_xlabel("Age [Gyr]")
+    ax4.set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
+    ax4.set_xscale("log")
+    ax4.set_yscale("log")
+    PaperStyle.add_panel_label(ax4, "d")
+
+    plt.tight_layout()
+    if savepath:
+        PaperStyle.save_figure(fig, savepath)
+    return fig
+
+
+def plot_multi_planet_system_evolution(
+    result,
+    title: str = "Coupled Multi-Planet System Evolution",
+    savepath: str | None = None,
+) -> plt.Figure:
+    """Plot 4-panel multi-planet system evolution track."""
+    PaperStyle.apply()
+    fig, axes = plt.subplots(2, 2, figsize=(9.5, 6.5), sharex=True)
+    fig.suptitle(title, fontsize=12.5, fontweight="bold")
+
+    t_gyr = result.t_gyr
+    colors = [
+        PaperStyle.COLORS['GAS_GIANT'], PaperStyle.COLORS['ZONE_I'],
+        PaperStyle.COLORS['ZONE_III']
+    ]
+
+    # Panel 1: Semi-major axes
+    ax1 = axes[0, 0]
+    for i, name in enumerate(result.planet_names):
+        c = colors[i % len(colors)]
+        ax1.plot(t_gyr,
+                 result.a_au[name],
+                 color=c,
+                 lw=2,
+                 label=f"Planet {name}")
+    ax1.set_ylabel("Semi-major Axis a [AU]")
+    ax1.set_xscale("log")
+    ax1.legend(loc="best")
+    PaperStyle.add_panel_label(ax1, "a")
+
+    # Panel 2: Eccentricities
+    ax2 = axes[0, 1]
+    for i, name in enumerate(result.planet_names):
+        c = colors[i % len(colors)]
+        ax2.plot(t_gyr, result.e[name], color=c, lw=2, label=f"Planet {name}")
+    ax2.set_ylabel("Eccentricity e")
+    ax2.set_xscale("log")
+    PaperStyle.add_panel_label(ax2, "b")
+
+    # Panel 3: Radii
+    ax3 = axes[1, 0]
+    for i, name in enumerate(result.planet_names):
+        c = colors[i % len(colors)]
+        ax3.plot(t_gyr,
+                 result.R_p_jup[name],
+                 color=c,
+                 lw=2,
+                 label=f"Planet {name}")
+    ax3.set_xlabel("Age [Gyr]")
+    ax3.set_ylabel(r"Radius $R_p$ [$R_{\mathrm{Jup}}$]")
+    ax3.set_xscale("log")
+    PaperStyle.add_panel_label(ax3, "c")
+
+    # Panel 4: Effective Temperature
+    ax4 = axes[1, 1]
+    for i, name in enumerate(result.planet_names):
+        c = colors[i % len(colors)]
+        ax4.plot(t_gyr,
+                 result.T_eff[name],
+                 color=c,
+                 lw=2,
+                 label=f"Planet {name}")
+    ax4.set_xlabel("Age [Gyr]")
+    ax4.set_ylabel(r"Effective Temp $T_{\mathrm{eff}}$ [K]")
+    ax4.set_xscale("log")
     PaperStyle.add_panel_label(ax4, "d")
 
     plt.tight_layout()

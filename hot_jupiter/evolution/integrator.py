@@ -133,7 +133,7 @@ class ThermalEvolutionIntegrator:
             t_eval=t_eval,
             method=method,
             rtol=1e-4,
-            atol=1e-6,
+            atol=1.0,
         )
 
         t_out = sol.t
@@ -264,8 +264,8 @@ class ThermalEvolutionIntegrator:
             y0,
             t_eval=t_eval,
             method=method,
-            rtol=1e-4,
-            atol=1e-6,
+            rtol=1e-3,
+            atol=[1.0, 1e4, 1e-4, 1e-4, 1e-7, 1e-4],
         )
 
         t_out = sol.t
@@ -362,10 +362,8 @@ class ThermalEvolutionIntegrator:
         Integrate full multi-planet system containing N planets simultaneously.
         Includes coupled 1D thermal contraction, tidal dissipation, and planet-planet secular perturbations.
         """
-        from hot_jupiter.orbit.multi_planet import (
-            MultiPlanetEvolutionResult,
-            TidalOrbitalSpinRates,
-        )
+        from hot_jupiter.orbit.multi_planet import MultiPlanetEvolutionResult
+        from hot_jupiter.orbit.orbital_elements import TidalOrbitalSpinRates
 
         N = len(system.planets)
         if N == 0:
@@ -478,8 +476,8 @@ class ThermalEvolutionIntegrator:
             y0,
             t_eval=t_eval,
             method=method,
-            rtol=1e-4,
-            atol=1e-6,
+            rtol=1e-3,
+            atol=1e-4,
         )
 
         t_out = sol.t

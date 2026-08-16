@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from hot_jupiter.constants import AU, DAY, HOUR, M_SUN, G
+from hot_jupiter.constants import AU, DAY, HOUR, M_SUN, YEAR, G
 
 
 @dataclass
@@ -116,45 +116,37 @@ class TidalOrbitalSpinRates:
             return 0.0, 0.0, 0.0, 0.0
 
         n = np.sqrt(G * M_star / (a**3))  # Mean motion [rad/s]
-        cos_eps = np.cos(obliquity)
         sin_eps = np.sin(obliquity)
 
-        # Dimensionless scale factor K_tide = (k2/Q) * (M_star / M_p) * (R_p / a)^5 * n
-        R_over_a_5 = (R_p / a)**5
-        scale_tide = self.k2_over_Q * (M_star / M_p) * R_over_a_5 * n
+        # Hut (1981) pseudo-synchronous spin rate
+        e2 = float(np.clip(e**2, 0.0, 0.98))
+        f_ps = (1.0 + 7.5 * e2 + 5.625 * (e2**2) + 0.3125 *
+                (e2**3)) / (((1.0 - e2)**1.5) * (1.0 + 3.0 * e2 + 0.375 *
+                                                 (e2**2)))
+        Omega_ps = n * f_ps
 
-        # 1. Semi-major axis decay da/dt
-        # da/dt = - 28.5 * scale_tide * a * e^2 + 3 * scale_tide * a * ( (Omega_rot/n)*cos_eps - 1 )
-        tide_e_a = -28.5 * scale_tide * a * (e**2)
-        tide_spin_a = 3.0 * scale_tide * a * (
-            (Omega_rot / max(n, 1e-15)) * cos_eps - 1.0)
-        da_dt = tide_e_a + tide_spin_a
-
-        # 2. Eccentricity damping de/dt
-        # de/dt = - 10.5 * scale_tide * e * [ 1 - (11/18)*(Omega_rot/n)*cos_eps ]
-        de_dt = -10.5 * scale_tide * e * (1.0 - (11.0 / 18.0) *
-                                          (Omega_rot / max(n, 1e-15)) * cos_eps)
-        if e <= 1e-8 and de_dt < 0:
-            de_dt = 0.0  # Clamp at circular orbit
-
-        # Moment of inertia I_p = C_moment * M_p * R_p^2
-        I_p = self.C_moment * M_p * (R_p**2)
-
-        # Torque coefficient T_coeff = (3/2) * (k2/Q) * (G * M_star^2 * R_p^5) / a^6
-        T_coeff = 1.5 * self.k2_over_Q * G * (M_star**2) * (R_p**5) / (a**6)
-
-        # 3. Spin magnitude evolution dOmega_rot/dt
-        # dOmega/dt = - (T_coeff / I_p) * (Omega_rot - n * cos_eps) - 2 * (Omega_rot / R_p) * dR_dt
-        dOmega_tide = -(T_coeff / max(I_p, 1e-10)) * (Omega_rot - n * cos_eps)
+        # Hut (1981) tidal spin synchronization timescale (~ 50 Myr for Hot Jupiters)
+        tau_spin = 5.0e7 * YEAR
+        dOmega_tide = (Omega_ps - Omega_rot) / tau_spin
         dOmega_contraction = -(2.0 * Omega_rot /
                                R_p) * dR_dt if dR_dt != 0 else 0.0
         dOmega_dt = dOmega_tide + dOmega_contraction
 
-        # 4. Obliquity damping dobliquity/dt
-        # dobl/dt = - (T_coeff / I_p) * (n / Omega_rot) * sin_eps
-        dobl_dt = -(T_coeff / max(I_p, 1e-10)) * (
-            n / max(Omega_rot, 1e-15)) * sin_eps
-        if obliquity <= 1e-6 and dobl_dt < 0:
+        R_over_a_5 = (R_p / a)**5
+        scale_tide = self.k2_over_Q * (M_star / M_p) * R_over_a_5 * n
+
+        # Hut (1981) tidal eccentricity damping & orbital energy dissipation (da/dt <= 0)
+        de_dt = -27.0 * scale_tide * e * (
+            (1.0 - e2)**(-6.5)) * (1.0 + 3.75 * e2 + 0.9375 * (e2**2))
+        if e <= 1.0e-6 and de_dt < 0:
+            de_dt = 0.0
+
+        # Conservation of angular momentum under circularization: da/dt = (2 a e / (1 - e^2)) de/dt
+        da_dt = (2.0 * a * e / max(1.0 - e2, 1e-6)) * de_dt
+
+        # Obliquity damping
+        dobl_dt = -(sin_eps / tau_spin)
+        if obliquity <= 1.0e-6 and dobl_dt < 0:
             dobl_dt = 0.0
 
         return float(da_dt), float(de_dt), float(dOmega_dt), float(dobl_dt)

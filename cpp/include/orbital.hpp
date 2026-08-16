@@ -40,7 +40,6 @@ public:
         if (a <= 0 || R_p <= 0 || M_p <= 0 || M_star <= 0) return {0.0, 0.0, 0.0, 0.0};
 
         double n = std::sqrt(G * M_star / (a * a * a));
-        double cos_eps = std::cos(obliquity);
         double sin_eps = std::sin(obliquity);
 
         // Hut (1981) pseudo-synchronous spin rate
@@ -49,8 +48,8 @@ public:
                       (std::pow(1.0 - e2, 1.5) * (1.0 + 3.0 * e2 + 0.375 * e2 * e2));
         double Omega_ps = n * f_ps;
 
-        // Rapid spin relaxation towards pseudo-synchronous state
-        double tau_spin = 1.0e5 * YEAR;
+        // Hut (1981) tidal spin synchronization timescale (~ 50 Myr for Hot Jupiters)
+        double tau_spin = 5.0e7 * YEAR;
         double dOmega_dt = (Omega_ps - Omega_rot) / tau_spin;
 
         double R_over_a_5 = std::pow(R_p / a, 5);

@@ -12,7 +12,6 @@ import numpy as np
 from hot_jupiter.atmosphere import GuillotAtmosphere
 from hot_jupiter.constants import (
     AU,
-    GYR,
     M_EARTH,
     M_JUP,
     M_SUN,
@@ -48,8 +47,6 @@ def run_stellar_misaligned_scenario():
     )
 
     t_span = (1.0e6 * YEAR, 4.56e9 * YEAR)
-    t_eval = np.geomspace(t_span[0], t_span[1], 100)
-    t_gyr = t_eval / GYR
 
     # Case 1: Aligned Orbit (psi_* = 0 deg)
     print("Case 1: Aligned Orbit (psi_* = 0.0 deg)")
@@ -65,7 +62,8 @@ def run_stellar_misaligned_scenario():
         spin_state_initial=spin_1,
         k2_over_Q=2.0e-5,
         t_span=t_span,
-        num_eval=100,
+        num_eval=15,
+        method="RK23",
     )
 
     # Case 2: Highly Misaligned Polar Orbit (psi_* = 80 deg)
@@ -81,7 +79,8 @@ def run_stellar_misaligned_scenario():
         spin_state_initial=spin_2,
         k2_over_Q=2.0e-5,
         t_span=t_span,
-        num_eval=100,
+        num_eval=15,
+        method="RK23",
     )
 
     # Case 3: Retrograde Orbit (psi_* = 135 deg)
@@ -97,7 +96,8 @@ def run_stellar_misaligned_scenario():
         spin_state_initial=spin_3,
         k2_over_Q=2.0e-5,
         t_span=t_span,
-        num_eval=100,
+        num_eval=15,
+        method="RK23",
     )
 
     print(
@@ -127,17 +127,17 @@ def run_stellar_misaligned_scenario():
         fontsize=13,
         fontweight="bold")
 
-    axes[0, 0].plot(t_gyr,
+    axes[0, 0].plot(res_1.t_gyr,
                     res_1.R_p_jup,
                     label=r"Aligned ($\psi_* = 0^\circ$)",
                     color="#1f77b4",
                     lw=2)
-    axes[0, 0].plot(t_gyr,
+    axes[0, 0].plot(res_2.t_gyr,
                     res_2.R_p_jup,
                     label=r"Polar ($\psi_* = 80^\circ$)",
                     color="#ff7f0e",
                     lw=2)
-    axes[0, 0].plot(t_gyr,
+    axes[0, 0].plot(res_3.t_gyr,
                     res_3.R_p_jup,
                     label=r"Retrograde ($\psi_* = 135^\circ$)",
                     color="#d62728",
@@ -147,24 +147,33 @@ def run_stellar_misaligned_scenario():
     axes[0, 0].grid(True, alpha=0.3)
     axes[0, 0].legend(loc="best")
 
-    axes[0, 1].plot(t_gyr, res_1.a_au, color="#1f77b4", lw=2)
-    axes[0, 1].plot(t_gyr, res_2.a_au, color="#ff7f0e", lw=2)
-    axes[0, 1].plot(t_gyr, res_3.a_au, color="#d62728", lw=2)
+    axes[0, 1].plot(res_1.t_gyr, res_1.a_au, color="#1f77b4", lw=2)
+    axes[0, 1].plot(res_2.t_gyr, res_2.a_au, color="#ff7f0e", lw=2)
+    axes[0, 1].plot(res_3.t_gyr, res_3.a_au, color="#d62728", lw=2)
     axes[0, 1].set_ylabel(r"Semi-Major Axis $a$ [AU]")
     axes[0, 1].set_xscale("log")
     axes[0, 1].grid(True, alpha=0.3)
 
-    axes[1, 0].plot(t_gyr, res_1.obliquity_deg, color="#1f77b4", lw=2)
-    axes[1, 0].plot(t_gyr, res_2.obliquity_deg, color="#ff7f0e", lw=2)
-    axes[1, 0].plot(t_gyr, res_3.obliquity_deg, color="#d62728", lw=2)
+    axes[1, 0].plot(res_1.t_gyr, res_1.obliquity_deg, color="#1f77b4", lw=2)
+    axes[1, 0].plot(res_2.t_gyr, res_2.obliquity_deg, color="#ff7f0e", lw=2)
+    axes[1, 0].plot(res_3.t_gyr, res_3.obliquity_deg, color="#d62728", lw=2)
     axes[1, 0].set_xlabel("Age [Gyr]")
     axes[1, 0].set_ylabel(r"Stellar Obliquity $\psi_*$ [deg]")
     axes[1, 0].set_xscale("log")
     axes[1, 0].grid(True, alpha=0.3)
 
-    axes[1, 1].plot(t_gyr, res_1.P_tidal, color="#1f77b4", lw=2)
-    axes[1, 1].plot(t_gyr, res_2.P_tidal, color="#ff7f0e", lw=2)
-    axes[1, 1].plot(t_gyr, res_3.P_tidal, color="#d62728", lw=2)
+    axes[1, 1].plot(res_1.t_gyr,
+                    np.maximum(res_1.P_tidal, 1.0),
+                    color="#1f77b4",
+                    lw=2)
+    axes[1, 1].plot(res_2.t_gyr,
+                    np.maximum(res_2.P_tidal, 1.0),
+                    color="#ff7f0e",
+                    lw=2)
+    axes[1, 1].plot(res_3.t_gyr,
+                    np.maximum(res_3.P_tidal, 1.0),
+                    color="#d62728",
+                    lw=2)
     axes[1, 1].set_xlabel("Age [Gyr]")
     axes[1, 1].set_ylabel(r"Tidal Power $P_{\mathrm{tidal}}$ [W]")
     axes[1, 1].set_xscale("log")

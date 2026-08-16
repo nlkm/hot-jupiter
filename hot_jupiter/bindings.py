@@ -229,12 +229,12 @@ def solve_interior_profile_detailed_cpp(
 
     n = res.num_layers
     profile_data = {
-        "r": [r_arr[i] for i in range(n)],
-        "m": [m_arr[i] for i in range(n)],
-        "P": [P_arr[i] for i in range(n)],
-        "rho": [rho_arr[i] for i in range(n)],
-        "T": [T_arr[i] for i in range(n)],
-        "nabla_ad": [nad_arr[i] for i in range(n)],
+        "r": np.ctypeslib.as_array(r_arr)[:n].copy(),
+        "m": np.ctypeslib.as_array(m_arr)[:n].copy(),
+        "P": np.ctypeslib.as_array(P_arr)[:n].copy(),
+        "rho": np.ctypeslib.as_array(rho_arr)[:n].copy(),
+        "T": np.ctypeslib.as_array(T_arr)[:n].copy(),
+        "nabla_ad": np.ctypeslib.as_array(nad_arr)[:n].copy(),
     }
     return profile_data, res
 
@@ -265,10 +265,10 @@ def simulate_population_cpp(num_planets: int = 1000,
                                    m_remnant_arr, z_bulk_arr, outcome_arr)
 
     return {
-        "m_p_init": [m_init_arr[i] for i in range(num_planets)],
-        "a_init": [a_init_arr[i] for i in range(num_planets)],
-        "m_core": [m_core_arr[i] for i in range(num_planets)],
-        "m_remnant": [m_remnant_arr[i] for i in range(num_planets)],
-        "z_bulk": [z_bulk_arr[i] for i in range(num_planets)],
-        "outcome": [outcome_arr[i] for i in range(num_planets)],
+        "m_p_init": np.ctypeslib.as_array(m_init_arr).copy(),
+        "a_init": np.ctypeslib.as_array(a_init_arr).copy(),
+        "m_core": np.ctypeslib.as_array(m_core_arr).copy(),
+        "m_remnant": np.ctypeslib.as_array(m_remnant_arr).copy(),
+        "z_bulk": np.ctypeslib.as_array(z_bulk_arr).copy(),
+        "outcome": np.ctypeslib.as_array(outcome_arr).copy(),
     }

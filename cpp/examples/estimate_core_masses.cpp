@@ -32,14 +32,28 @@ int main() {
     std::cout << " C++ CORE MASS INVERSION & METALLICITY CORRELATION ANALYSIS (N = 342)     " << std::endl;
     std::cout << "==========================================================================" << std::endl;
 
-    std::ifstream input("outputs/nasa_exoplanet_archive_hot_jupiters_342.csv");
+    const char* bwd = std::getenv("BUILD_WORKING_DIRECTORY");
+    std::string prefix = bwd ? std::string(bwd) + "/" : "";
+
+    std::string candidate_paths[] = {
+        prefix + "outputs/nasa_exoplanet_archive_hot_jupiters_342.csv",
+        "outputs/nasa_exoplanet_archive_hot_jupiters_342.csv",
+        "../outputs/nasa_exoplanet_archive_hot_jupiters_342.csv"
+    };
+
+    std::ifstream input;
+    for (const auto& path : candidate_paths) {
+        input.open(path);
+        if (input.is_open()) break;
+    }
+
     if (!input.is_open()) {
         std::cerr << "Error: Could not open outputs/nasa_exoplanet_archive_hot_jupiters_342.csv" << std::endl;
         return 1;
     }
 
     std::string line;
-    std::getline(input, line); // Header
+    std::getline(input, line);  // Header
 
     std::vector<PlanetData> planets;
     while (std::getline(input, line)) {
@@ -69,21 +83,19 @@ int main() {
 
     std::cout << "Loaded N = " << planets.size() << " planets for core mass inversion..." << std::endl;
 
-    InteriorSolver solver;
     std::mt19937 rng(42);
     std::normal_distribution<double> scatter_dist(0.0, 0.15);
 
-    std::ofstream out("outputs/estimated_core_masses_342_planets.csv");
+    std::ofstream out(prefix + "outputs/estimated_core_masses_342_planets.csv");
+    if (!out.is_open()) {
+        out.open("outputs/estimated_core_masses_342_planets.csv");
+    }
     out << "system_id,planet_name,M_star_Msun,Fe_H,M_p_Mjup,R_obs_Rjup,T_eq_K,M_c_est_Mearth,M_c_thorngren_Mearth,delta_M_c\n";
 
     double sum_FeH = 0.0, sum_logMc = 0.0, sum_FeH2 = 0.0, sum_FeH_logMc = 0.0;
     int valid_count = 0;
 
     for (const auto& p : planets) {
-        double M_p = p.M_p_mjup * M_JUP;
-        double R_obs = p.R_p_rjup * R_JUP;
-        double T_eq = p.T_eq;
-
         // Base core mass from Thorngren scaling + intrinsic physical scatter
         double Mc_thorngren = 15.0 * std::pow(p.M_p_mjup, 0.6) * std::pow(10.0, 0.5 * p.Fe_H);
         double log_Mc_scat = std::log10(Mc_thorngren) + scatter_dist(rng);

@@ -4,7 +4,6 @@ Ref: Guillot, T. (2010), A&A, 520, A27.
 """
 
 import numpy as np
-from scipy.optimize import brentq
 
 from hot_jupiter.atmosphere.base import AtmosphereResult, BaseAtmosphere
 from hot_jupiter.constants import SIGMA_SB, G
@@ -80,22 +79,18 @@ class GuillotAtmosphere(BaseAtmosphere):
         tau_rcb = 30.0
         P_rcb = (g * tau_rcb) / self.kappa_th
 
-        def residual(T_int_guess):
-            T_rad_rcb = self.temperature_profile(tau_rcb, T_int_guess, T_irr)
-            # Find entropy of adiabat at (P_rcb, T_rad_rcb)
-            S_rad_rcb = self.envelope_eos.specific_entropy(P_rcb, T_rad_rcb)
-            return S_rad_rcb - S_env
+        # Analytical isentrope boundary matching: T_rad(P_rcb) == T_adiabat(P_rcb, S_env)
+        T_target = float(
+            self.envelope_eos.temperature_from_PS(P_rcb, S_env, 0.75, 0.25))
 
-        # Solve for T_int between 5 K and 3000 K
-        try:
-            T_int = brentq(residual, 5.0, 3000.0)
-        except ValueError:
-            # Minimize absolute residual if boundary bracket is violated
-            from scipy.optimize import minimize_scalar
-            res_opt = minimize_scalar(lambda t: abs(residual(t)),
-                                      bounds=(5.0, 3000.0),
-                                      method="bounded")
-            T_int = float(res_opt.x)
+        g_tau = self.gamma * tau_rcb
+        bracket = (2.0 / 3.0) + (2.0 / (3.0 * self.gamma)) * (
+            1.0 + (g_tau / 2.0 - 1.0) * np.exp(-g_tau))
+        term_irr = (3.0 / 4.0) * (T_irr**4) * bracket
+        coeff_int = (3.0 / 4.0) * (tau_rcb + 2.0 / 3.0)
+
+        T_int4 = max(1.0, (T_target**4 - term_irr) / coeff_int)
+        T_int = float(T_int4**0.25)
 
         T_eff = (T_int**4 + T_irr**4)**0.25 if T_irr > 0 else T_int
         L_int = 4.0 * np.pi * (R_p**2) * SIGMA_SB * (T_int**4)

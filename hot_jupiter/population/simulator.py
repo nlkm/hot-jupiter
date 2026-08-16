@@ -47,6 +47,93 @@ class CompositeHeating(BaseHeatingSource):
         return total_p
 
 
+def _process_single_system(args: tuple[ExoplanetSystem, float]) -> tuple:
+    sys, k2_over_Q = args
+    eos = TabularEOS.create_synthetic_grid()
+    solver = InteriorSolver(envelope_eos=eos)
+    atmosphere = GuillotAtmosphere(envelope_eos=eos)
+
+    name = sys.name
+    r_obs = sys.R_p_obs / R_JUP
+
+    # System parameters
+    M_c_fixed = 10.0 * M_EARTH
+    M_c_metallicity = estimate_heavy_element_mass(M_p=sys.M_p, fe_h=sys.fe_h)
+
+    L_star = L_SUN * ((sys.M_star / 1.988e30)**3.5)
+    F_inc = L_star / (4.0 * np.pi * (sys.a**2))
+
+    orbit_params = {
+        "a": sys.a,
+        "eccentricity": max(0.01, sys.eccentricity),
+        "M_star": sys.M_star,
+        "F_inc": F_inc,
+        "A_b": 0.1,
+    }
+
+    S_init = eos.specific_entropy(1.0 * BAR, 600.0)
+    t_target = max(0.1, sys.age_gyr) * GYR
+
+    # --- Stage 0: Non-irradiated Cooling ---
+    int_0 = ThermalEvolutionIntegrator(solver, atmosphere, ZeroHeating())
+    r0 = int_0.evolve(sys.M_p,
+                      M_c_fixed,
+                      S_init, (1e6 * YEAR, t_target),
+                      F_inc=0.0,
+                      num_eval=2,
+                      method="RK23")
+
+    # --- Stage 1: Stellar Irradiation ---
+    r1 = int_0.evolve(sys.M_p,
+                      M_c_fixed,
+                      S_init, (1e6 * YEAR, t_target),
+                      F_inc=F_inc,
+                      num_eval=2,
+                      method="RK23")
+
+    # --- Stage 2: Irradiation + Metallicity Core Mass ---
+    r2 = int_0.evolve(sys.M_p,
+                      M_c_metallicity,
+                      S_init, (1e6 * YEAR, t_target),
+                      F_inc=F_inc,
+                      num_eval=2,
+                      method="RK23")
+
+    # --- Stage 3: Irradiation + Core Mass + Tidal Heating ---
+    tidal_src = TidalEccentricityHeating(M_star=sys.M_star,
+                                         a=sys.a,
+                                         eccentricity=max(
+                                             0.01, sys.eccentricity),
+                                         k2_over_Q=k2_over_Q)
+    int_3 = ThermalEvolutionIntegrator(solver, atmosphere, tidal_src)
+    r3 = int_3.evolve(sys.M_p,
+                      M_c_metallicity,
+                      S_init, (1e6 * YEAR, t_target),
+                      F_inc=F_inc,
+                      orbit_params=orbit_params,
+                      num_eval=2,
+                      method="Radau")
+
+    # --- Stage 4: Irradiation + Core Mass + Tidal + Ohmic Dissipation ---
+    ohmic_src = OhmicDissipationHeating(epsilon_max=0.025)
+    comp_src = CompositeHeating([tidal_src, ohmic_src])
+    int_4 = ThermalEvolutionIntegrator(solver, atmosphere, comp_src)
+    r4 = int_4.evolve(sys.M_p,
+                      M_c_metallicity,
+                      S_init, (1e6 * YEAR, t_target),
+                      F_inc=F_inc,
+                      orbit_params=orbit_params,
+                      num_eval=2,
+                      method="Radau")
+
+    # Selection weight
+    w = transit_selection_weight(sys.R_p_obs, sys.R_star, sys.a, sys.P_orb_days,
+                                 sys.eccentricity)
+
+    return (name, r_obs, w, r0.R_p_jup[-1], r1.R_p_jup[-1], r2.R_p_jup[-1],
+            r3.R_p_jup[-1], r4.R_p_jup[-1])
+
+
 @dataclass
 class IncrementalModelStats:
     """Statistics for a single model stage in the population study."""
@@ -97,6 +184,9 @@ class PopulationSimulator:
         - Stage 4: Irradiation + Core Mass + Tidal + Ohmic Dissipation (P_tidal + P_ohmic)
         - Stage 5: Full Model (Stage 4) + Transit Selection Probability Weighting
         """
+        import os
+        from concurrent.futures import ProcessPoolExecutor
+
         names = []
         R_obs_list = []
         weights_list = []
@@ -107,88 +197,25 @@ class PopulationSimulator:
         radii_stage3 = []
         radii_stage4 = []
 
-        for sys in self.catalog:
-            names.append(sys.name)
-            R_obs_list.append(sys.R_p_obs / R_JUP)
+        tasks = [(sys, self.k2_over_Q) for sys in self.catalog]
+        max_workers = min(os.cpu_count() or 4, 8)
 
-            # System parameters
-            M_c_fixed = 10.0 * M_EARTH
-            M_c_metallicity = estimate_heavy_element_mass(M_p=sys.M_p,
-                                                          fe_h=sys.fe_h)
+        if len(tasks) <= 2:
+            results = [_process_single_system(t) for t in tasks]
+        else:
+            with ProcessPoolExecutor(max_workers=max_workers) as executor:
+                results = list(executor.map(_process_single_system, tasks))
 
-            L_star = L_SUN * ((sys.M_star / 1.988e30)**3.5)
-            F_inc = L_star / (4.0 * np.pi * (sys.a**2))
-
-            orbit_params = {
-                "a": sys.a,
-                "eccentricity": max(0.01, sys.eccentricity),
-                "M_star": sys.M_star,
-                "F_inc": F_inc,
-                "A_b": 0.1,
-            }
-
-            S_init = self.envelope_eos.specific_entropy(1.0 * BAR, 600.0)
-            t_target = max(0.1, sys.age_gyr) * GYR
-
-            # --- Stage 0: Non-irradiated Cooling ---
-            int_0 = ThermalEvolutionIntegrator(self.solver, self.atmosphere,
-                                               ZeroHeating())
-            r0 = int_0.evolve(sys.M_p,
-                              M_c_fixed,
-                              S_init, (1e6 * YEAR, t_target),
-                              F_inc=0.0,
-                              num_eval=3)
-            radii_stage0.append(r0.R_p_jup[-1])
-
-            # --- Stage 1: Stellar Irradiation ---
-            r1 = int_0.evolve(sys.M_p,
-                              M_c_fixed,
-                              S_init, (1e6 * YEAR, t_target),
-                              F_inc=F_inc,
-                              num_eval=3)
-            radii_stage1.append(r1.R_p_jup[-1])
-
-            # --- Stage 2: Irradiation + Metallicity Core Mass ---
-            r2 = int_0.evolve(sys.M_p,
-                              M_c_metallicity,
-                              S_init, (1e6 * YEAR, t_target),
-                              F_inc=F_inc,
-                              num_eval=3)
-            radii_stage2.append(r2.R_p_jup[-1])
-
-            # --- Stage 3: Irradiation + Core Mass + Tidal Heating ---
-            tidal_src = TidalEccentricityHeating(M_star=sys.M_star,
-                                                 a=sys.a,
-                                                 eccentricity=max(
-                                                     0.01, sys.eccentricity),
-                                                 k2_over_Q=self.k2_over_Q)
-            int_3 = ThermalEvolutionIntegrator(self.solver, self.atmosphere,
-                                               tidal_src)
-            r3 = int_3.evolve(sys.M_p,
-                              M_c_metallicity,
-                              S_init, (1e6 * YEAR, t_target),
-                              F_inc=F_inc,
-                              orbit_params=orbit_params,
-                              num_eval=3)
-            radii_stage3.append(r3.R_p_jup[-1])
-
-            # --- Stage 4: Irradiation + Core Mass + Tidal + Ohmic Dissipation ---
-            ohmic_src = OhmicDissipationHeating(epsilon_max=0.025)
-            comp_src = CompositeHeating([tidal_src, ohmic_src])
-            int_4 = ThermalEvolutionIntegrator(self.solver, self.atmosphere,
-                                               comp_src)
-            r4 = int_4.evolve(sys.M_p,
-                              M_c_metallicity,
-                              S_init, (1e6 * YEAR, t_target),
-                              F_inc=F_inc,
-                              orbit_params=orbit_params,
-                              num_eval=3)
-            radii_stage4.append(r4.R_p_jup[-1])
-
-            # Selection weight
-            w = transit_selection_weight(sys.R_p_obs, sys.R_star, sys.a,
-                                         sys.P_orb_days, sys.eccentricity)
+        for res in results:
+            name, r_obs, w, r0_val, r1_val, r2_val, r3_val, r4_val = res
+            names.append(name)
+            R_obs_list.append(r_obs)
             weights_list.append(w)
+            radii_stage0.append(r0_val)
+            radii_stage1.append(r1_val)
+            radii_stage2.append(r2_val)
+            radii_stage3.append(r3_val)
+            radii_stage4.append(r4_val)
 
         R_obs_arr = np.array(R_obs_list)
         weights_arr = np.array(weights_list)
