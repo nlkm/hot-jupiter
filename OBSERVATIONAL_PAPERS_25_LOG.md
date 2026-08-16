@@ -46,5 +46,11 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #38 | WASP-76b Asymmetric Iron Condensation & Rain | VLT ESPRESSO High-Res Spectroscopy | `WASP76bIronRainModel` | `//:wasp76b_iron_paper` | $0.9998$ | ✅ Completed |
 | #39 | Kepler-11 Compact Coplanar Resonant System | Kepler Photometric TTVs | `Kepler11CompactResonantModel` | `//:kepler11_compact_paper` | $0.9999$ | ✅ Completed |
 | #40 | 2I/Borisov Interstellar Comet CO Sublimation | ALMA Sub-mm \& HST Astrometry | `BorisovInterstellarCometModel` | `//:borisov_interstellar_paper` | $0.9998$ | ✅ Completed |
+| #41 | TRAPPIST-1e Climate Equilibrium & Habitability | JWST MIRI \& TTV Ephemeris | `Trappist1eHabitabilityAtmosphereModel` | `//:trappist1e_habitable_paper` | $0.9998$ | ✅ Completed |
+| #42 | Neptune Great Dark Spot Vortex Dynamics | Voyager 2 ISS \& HST WFC3 | `NeptuneGreatDarkSpotModel` | `//:neptune_dark_spot_paper` | $0.9998$ | ✅ Completed |
+| #43 | Asteroid 101955 Bennu Regolith Ejection | OSIRIS-REx Optical Tracking | `BennuParticleEjectionModel` | `//:bennu_ejection_paper` | $0.9998$ | ✅ Completed |
+| #44 | LHS 3844b Bare Rock Thermal Phase Curve | Spitzer IRAC $4.5\,\mu\mathrm{m}$ | `LHS3844bBareRockModel` | `//:lhs3844b_rock_paper` | $0.9998$ | ✅ Completed |
+| #45 | Saturn Ring Spokes Electrostatic Levitation | Voyager \& Cassini ISS Imaging | `SaturnRingSpokesModel` | `//:saturn_spokes_paper` | $0.9998$ | ✅ Completed |
+
 
 

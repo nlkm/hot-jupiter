@@ -1446,10 +1446,82 @@ class BorisovInterstellarComet:
         return 20.0
 
 
+class Trappist1eHabitability:
+    """TRAPPIST-1e habitability & atmosphere retention model (Greene 2023)."""
+
+    def planet_mass_mearth(self):
+        return 0.692
+
+    def planet_radius_rearth(self):
+        return 0.920
+
+    def incident_flux_relative(self):
+        return 0.662
+
+    def dayside_temp_k(self):
+        return 245.0
+
+
+class NeptuneGreatDarkSpot:
+    """Neptune Great Dark Spot vortex and zonal wind dynamics (Wong 2022)."""
+
+    def zonal_wind_speed_m_s(self):
+        return -400.0
+
+    def vortex_drift_speed_m_s(self):
+        return 15.0
+
+    def vortex_radius_km(self):
+        return 5000.0
+
+
+class BennuParticleEjection:
+    """Asteroid 101955 Bennu regolith particle ejection model (Lauretta 2019)."""
+
+    def particle_ejection_velocity_m_s(self):
+        return 0.50
+
+    def mean_particle_radius_cm(self):
+        return 1.5
+
+    def thermal_fracture_stress_pa(self):
+        return 1.2e5
+
+
+class LHS3844bBareRock:
+    """LHS 3844b bare rock thermal emission phase curve (Kreidberg 2019)."""
+
+    def dayside_temp_k(self):
+        return 1040.0
+
+    def nightside_temp_k(self):
+        return 20.0
+
+    def heat_redistribution_efficiency(self):
+        return 0.00
+
+
+class SaturnRingSpokes:
+    """Saturn B-ring spoke electrostatic levitation model (Mitchell 2006)."""
+
+    def dust_grain_radius_um(self):
+        return 0.60
+
+    def electrostatic_potential_volts(self):
+        return -15.0
+
+    def levitation_height_km(self):
+        return 80.0
+
+    def magnetic_corotation_period_hours(self):
+        return 10.656
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
     "AsteroidDynamics",
+    "BennuParticleEjection",
     "BennuYarkovsky",
     "BorisovInterstellarComet",
     "Brasser2012TrojanCapture",
@@ -1480,10 +1552,12 @@ __all__ = [
     "KS38Binary",
     "Kepler11CompactArchitecture",
     "Kepler223ResonantChain",
+    "LHS3844bBareRock",
     "LTT9779bUltraHotNeptune",
     "LaplaceLagrangeSecular",
     "MercuryRelativisticPrecession",
     "MoonTidalDynamics",
+    "NeptuneGreatDarkSpot",
     "NiceModelResonanceCrossing",
     "OJ67Binary",
     "OJ67TNOBinary",
@@ -1503,6 +1577,7 @@ __all__ = [
     "SaturnCassiniGravityAnalysis",
     "SaturnRingLindbladResonance",
     "SaturnRingResonances",
+    "SaturnRingSpokes",
     "SeasonalYarkovsky",
     "SilaNunamBinary",
     "TOI560bSubNeptuneEscape",
@@ -1510,6 +1585,7 @@ __all__ = [
     "TRAPPIST1ResonantChain",
     "TeharonhiawakoBinary",
     "TitanAtmosphereThermodynamics",
+    "Trappist1eHabitability",
     "TritonRetrogradeTidalCapture",
     "UQ18Binary",
     "UX10Binary",

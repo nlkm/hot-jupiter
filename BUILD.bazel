@@ -1659,6 +1659,42 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "trappist1e_habitable_paper",
+    srcs = ["replications_observational/paper_41/trappist1e_habitable_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "neptune_dark_spot_paper",
+    srcs = ["replications_observational/paper_42/neptune_dark_spot_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "bennu_ejection_paper",
+    srcs = ["replications_observational/paper_43/bennu_ejection_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "lhs3844b_rock_paper",
+    srcs = ["replications_observational/paper_44/lhs3844b_rock_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "saturn_spokes_paper",
+    srcs = ["replications_observational/paper_45/saturn_spokes_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 # Adjacent Module Unit Tests

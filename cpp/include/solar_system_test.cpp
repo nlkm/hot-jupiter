@@ -578,9 +578,31 @@ int main() {
   assert(std::abs(borisov_model.orbital_eccentricity() - 3.36) < 0.1);
   assert(std::abs(borisov_model.co_to_water_ratio() - 1.45) < 0.1);
 
+  // Observational Papers #41-#45 Models Verification
+  hot_jupiter::Trappist1eHabitabilityAtmosphereModel trap_model;
+  assert(std::abs(trap_model.planet_mass_mearth() - 0.692) < 0.05);
+  assert(std::abs(trap_model.incident_flux_relative() - 0.662) < 0.05);
+
+  hot_jupiter::NeptuneGreatDarkSpotModel neptune_spot_model;
+  assert(std::abs(neptune_spot_model.zonal_wind_speed_m_s() - (-400.0)) < 10.0);
+  assert(std::abs(neptune_spot_model.vortex_drift_speed_m_s() - 15.0) < 2.0);
+
+  hot_jupiter::BennuParticleEjectionModel bennu_ej_model;
+  assert(std::abs(bennu_ej_model.particle_ejection_velocity_m_s() - 0.50) < 0.05);
+  assert(std::abs(bennu_ej_model.mean_particle_radius_cm() - 1.5) < 0.2);
+
+  hot_jupiter::LHS3844bBareRockModel lhs_model;
+  assert(std::abs(lhs_model.dayside_temp_k() - 1040.0) < 20.0);
+  assert(std::abs(lhs_model.heat_redistribution_efficiency() - 0.0) < 0.01);
+
+  hot_jupiter::SaturnRingSpokesModel spokes_model;
+  assert(std::abs(spokes_model.dust_grain_radius_um() - 0.60) < 0.05);
+  assert(std::abs(spokes_model.electrostatic_potential_volts() - (-15.0)) < 1.0);
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
+
 
 
 

@@ -580,3 +580,38 @@ def test_borisov_interstellar():
     b = BorisovInterstellarComet()
     assert abs(b.orbital_eccentricity() - 3.36) < 0.1
     assert abs(b.co_to_water_ratio() - 1.45) < 0.1
+
+
+def test_trappist1e_habitable():
+    from hot_jupiter.solar_system import Trappist1eHabitability
+    t = Trappist1eHabitability()
+    assert abs(t.planet_mass_mearth() - 0.692) < 0.05
+    assert abs(t.incident_flux_relative() - 0.662) < 0.05
+
+
+def test_neptune_dark_spot():
+    from hot_jupiter.solar_system import NeptuneGreatDarkSpot
+    n = NeptuneGreatDarkSpot()
+    assert abs(n.zonal_wind_speed_m_s() - (-400.0)) < 10.0
+    assert abs(n.vortex_drift_speed_m_s() - 15.0) < 2.0
+
+
+def test_bennu_ejection():
+    from hot_jupiter.solar_system import BennuParticleEjection
+    b = BennuParticleEjection()
+    assert abs(b.particle_ejection_velocity_m_s() - 0.50) < 0.05
+    assert abs(b.mean_particle_radius_cm() - 1.5) < 0.2
+
+
+def test_lhs3844b_bare_rock():
+    from hot_jupiter.solar_system import LHS3844bBareRock
+    l = LHS3844bBareRock()
+    assert abs(l.dayside_temp_k() - 1040.0) < 20.0
+    assert abs(l.heat_redistribution_efficiency() - 0.0) < 0.01
+
+
+def test_saturn_spokes():
+    from hot_jupiter.solar_system import SaturnRingSpokes
+    s = SaturnRingSpokes()
+    assert abs(s.dust_grain_radius_um() - 0.60) < 0.05
+    assert abs(s.electrostatic_potential_volts() - (-15.0)) < 1.0

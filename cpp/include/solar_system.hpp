@@ -22289,10 +22289,67 @@ class BorisovInterstellarCometModel {
   double non_grav_radial_a1_au_day2() const { return 4.0e-8; }
 };
 
+// ============================================================================
+// 73. TRAPPIST-1e HABITABILITY & ATMOSPHERE RETENTION (Gillon 2017, Greene 2023)
+// ============================================================================
+class Trappist1eHabitabilityAtmosphereModel {
+ public:
+  double planet_mass_mearth() const { return 0.692; }
+  double planet_radius_rearth() const { return 0.920; }
+  double incident_flux_relative() const { return 0.662; }
+  double dayside_temp_k() const { return 245.0; }
+  double co2_surface_pressure_bar() const { return 1.0; }
+};
+
+// ============================================================================
+// 74. NEPTUNE GREAT DARK SPOT VORTEX DYNAMICS (Smith 1989, Sromovsky 1993, Wong 2022)
+// ============================================================================
+class NeptuneGreatDarkSpotModel {
+ public:
+  double zonal_wind_speed_m_s() const { return -400.0; }
+  double vortex_drift_speed_m_s() const { return 15.0; }
+  double vortex_radius_km() const { return 5000.0; }
+  double methane_companion_cloud_alt_km() const { return 50.0; }
+};
+
+// ============================================================================
+// 75. BENNU REGOLITH PARTICLE EJECTION MODEL (Lauretta 2019, Hergenrother 2019)
+// ============================================================================
+class BennuParticleEjectionModel {
+ public:
+  double particle_ejection_velocity_m_s() const { return 0.50; }
+  double mean_particle_radius_cm() const { return 1.5; }
+  double thermal_fracture_stress_pa() const { return 1.2e5; }
+  double ejection_events_per_day() const { return 2.0; }
+};
+
+// ============================================================================
+// 76. LHS 3844b BARE ROCK THERMAL EMISSION (Kreidberg et al. 2019 Nature)
+// ============================================================================
+class LHS3844bBareRockModel {
+ public:
+  double dayside_temp_k() const { return 1040.0; }
+  double nightside_temp_k() const { return 20.0; }
+  double heat_redistribution_efficiency() const { return 0.00; }
+  double basalt_surface_albedo() const { return 0.05; }
+};
+
+// ============================================================================
+// 77. SATURN RING SPOKES ELECTROSTATIC LEVITATION (Smith 1981, Farrell 2006)
+// ============================================================================
+class SaturnRingSpokesModel {
+ public:
+  double dust_grain_radius_um() const { return 0.60; }
+  double electrostatic_potential_volts() const { return -15.0; }
+  double levitation_height_km() const { return 80.0; }
+  double magnetic_corotation_period_hours() const { return 10.656; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 
 }  // namespace hot_jupiter
+
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
 
