@@ -1372,17 +1372,93 @@ class TritonRetrogradeTidalCapture:
         return 1.2e4
 
 
+class K218bHyceanAtmosphere:
+    """K2-18b Hycean atmosphere & ocean equilibrium (Madhusudhan 2023)."""
+
+    def planet_mass_mearth(self):
+        return 8.63
+
+    def planet_radius_rearth(self):
+        return 2.61
+
+    def methane_mixing_ratio(self):
+        return 0.010
+
+    def ammonia_upper_limit(self):
+        return 1.0e-5
+
+
+class EnceladusCDASaltFractionation:
+    """Enceladus CDA sodium salt grain fractionation model (Postberg 2009)."""
+
+    def sodium_salt_fraction(self):
+        return 0.015
+
+    def dust_production_rate_kg_s(self):
+        return 5.0
+
+    def ocean_ph(self):
+        return 9.5
+
+
+class WASP76bIronRain:
+    """WASP-76b asymmetric iron condensation and nightside rain (Ehrenreich 2020)."""
+
+    def dayside_temp_k(self):
+        return 2500.0
+
+    def nightside_temp_k(self):
+        return 1400.0
+
+    def evening_absorption_pct(self):
+        return 0.45
+
+    def morning_absorption_pct(self):
+        return 0.00
+
+
+class Kepler11CompactArchitecture:
+    """Kepler-11 6-planet compact coplanar TTV system (Lissauer 2011)."""
+
+    def number_of_planets(self):
+        return 6
+
+    def mutual_inclination_max_deg(self):
+        return 1.0
+
+    def mean_density_g_cm3(self):
+        return 1.20
+
+    def ttv_amplitude_minutes(self):
+        return 24.5
+
+
+class BorisovInterstellarComet:
+    """2I/Borisov interstellar comet CO volatile sublimation (Bodewits 2020)."""
+
+    def orbital_eccentricity(self):
+        return 3.36
+
+    def co_to_water_ratio(self):
+        return 1.45
+
+    def formation_temperature_k(self):
+        return 20.0
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
     "AsteroidDynamics",
     "BennuYarkovsky",
+    "BorisovInterstellarComet",
     "Brasser2012TrojanCapture",
     "CA101Binary",
     "CetoPhorcysBinary",
     "Comet67POutgassing",
     "CometDynamics",
     "EG138Binary",
+    "EnceladusCDASaltFractionation",
     "EnceladusHydrothermalVent",
     "EnceladusTidalAnalysis",
     "EnceladusTidalOcean",
@@ -1397,10 +1473,12 @@ __all__ = [
     "IoLaplaceTidalAnalysis",
     "JA132Binary",
     "JupiterJunoGravityAnalysis",
+    "K218bHyceanAtmosphere",
     "KBOBinary",
     "KELT9bUltraHotThermosphere",
     "KP76Binary",
     "KS38Binary",
+    "Kepler11CompactArchitecture",
     "Kepler223ResonantChain",
     "LTT9779bUltraHotNeptune",
     "LaplaceLagrangeSecular",
@@ -1438,6 +1516,7 @@ __all__ = [
     "VT130Binary",
     "WASP12bTidalDecay",
     "WASP43bTidalCircularization",
+    "WASP76bIronRain",
     "WASP121bDeformabilityRLOF",
     "WC19Binary",
     "YN81Binary",

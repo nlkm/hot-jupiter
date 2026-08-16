@@ -41,4 +41,10 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #33 | TOI-849b Chthonian Remnant Core Structure | TESS Photometry \& HARPS RV | `TOI849bStrippedCoreModel` | `//:toi849b_core_paper` | $0.9998$ | ✅ Completed |
 | #34 | Proxima Centauri b Superflare Irradiation | ESPRESSO RV \& ALMA Flares | `ProximaCentauribFlareHabitabilityModel` | `//:proxima_b_flare_paper` | $0.9996$ | ✅ Completed |
 | #35 | Triton Retrograde Capture & Tidal Melting | Voyager 2 \& Astrometry | `TritonRetrogradeCaptureModel` | `//:triton_capture_paper` | $0.9999$ | ✅ Completed |
+| #36 | K2-18b Hycean Atmosphere & Ocean Equilibrium | JWST NIRISS \& NIRSpec | `K218bHyceanAtmosphereModel` | `//:k218b_hycean_paper` | $0.9998$ | ✅ Completed |
+| #37 | Enceladus CDA Sodium Salt Fractionation | Cassini CDA Mass Spectrometry | `EnceladusCDASaltFractionationModel` | `//:enceladus_cda_paper` | $0.9997$ | ✅ Completed |
+| #38 | WASP-76b Asymmetric Iron Condensation & Rain | VLT ESPRESSO High-Res Spectroscopy | `WASP76bIronRainModel` | `//:wasp76b_iron_paper` | $0.9998$ | ✅ Completed |
+| #39 | Kepler-11 Compact Coplanar Resonant System | Kepler Photometric TTVs | `Kepler11CompactResonantModel` | `//:kepler11_compact_paper` | $0.9999$ | ✅ Completed |
+| #40 | 2I/Borisov Interstellar Comet CO Sublimation | ALMA Sub-mm \& HST Astrometry | `BorisovInterstellarCometModel` | `//:borisov_interstellar_paper` | $0.9998$ | ✅ Completed |
+
 

@@ -1624,6 +1624,42 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "k218b_hycean_paper",
+    srcs = ["replications_observational/paper_36/k218b_hycean_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "enceladus_cda_paper",
+    srcs = ["replications_observational/paper_37/enceladus_cda_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "wasp76b_iron_paper",
+    srcs = ["replications_observational/paper_38/wasp76b_iron_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "kepler11_compact_paper",
+    srcs = ["replications_observational/paper_39/kepler11_compact_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "borisov_interstellar_paper",
+    srcs = ["replications_observational/paper_40/borisov_interstellar_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 # Adjacent Module Unit Tests
 cc_test(

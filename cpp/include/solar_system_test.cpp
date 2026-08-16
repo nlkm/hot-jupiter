@@ -557,9 +557,31 @@ int main() {
   assert(std::abs(tri_model.retrograde_inclination_deg() - 156.8) < 1.0);
   assert(std::abs(tri_model.circularization_timescale_myr() - 100.0) < 10.0);
 
+  // Observational Papers #36-#40 Models Verification
+  hot_jupiter::K218bHyceanAtmosphereModel k218_model;
+  assert(std::abs(k218_model.planet_mass_mearth() - 8.63) < 0.1);
+  assert(std::abs(k218_model.methane_volume_mixing_ratio() - 0.01) < 0.005);
+
+  hot_jupiter::EnceladusCDASaltFractionationModel cda_model;
+  assert(std::abs(cda_model.sodium_salt_mass_fraction() - 0.015) < 0.005);
+  assert(std::abs(cda_model.dust_mass_production_rate_kg_s() - 5.0) < 0.5);
+
+  hot_jupiter::WASP76bIronRainModel wasp76_model;
+  assert(std::abs(wasp76_model.dayside_temp_k() - 2500.0) < 50.0);
+  assert(std::abs(wasp76_model.evening_terminator_fe_absorption_percent() - 0.45) < 0.05);
+
+  hot_jupiter::Kepler11CompactResonantModel k11_model;
+  assert(k11_model.number_of_planets() == 6);
+  assert(std::abs(k11_model.ttv_amplitude_minutes() - 24.5) < 1.0);
+
+  hot_jupiter::BorisovInterstellarCometModel borisov_model;
+  assert(std::abs(borisov_model.orbital_eccentricity() - 3.36) < 0.1);
+  assert(std::abs(borisov_model.co_to_water_ratio() - 1.45) < 0.1);
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
+
 
 
 

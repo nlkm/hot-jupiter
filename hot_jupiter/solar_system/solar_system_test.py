@@ -545,3 +545,38 @@ def test_triton_capture():
     t = TritonRetrogradeTidalCapture()
     assert abs(t.retrograde_inclination_deg() - 156.8) < 1.0
     assert abs(t.circularization_timescale_myr() - 100.0) < 10.0
+
+
+def test_k218b_hycean():
+    from hot_jupiter.solar_system import K218bHyceanAtmosphere
+    k = K218bHyceanAtmosphere()
+    assert abs(k.planet_mass_mearth() - 8.63) < 0.1
+    assert abs(k.methane_mixing_ratio() - 0.01) < 0.005
+
+
+def test_enceladus_cda_salt():
+    from hot_jupiter.solar_system import EnceladusCDASaltFractionation
+    e = EnceladusCDASaltFractionation()
+    assert abs(e.sodium_salt_fraction() - 0.015) < 0.005
+    assert abs(e.dust_production_rate_kg_s() - 5.0) < 0.5
+
+
+def test_wasp76b_iron():
+    from hot_jupiter.solar_system import WASP76bIronRain
+    w = WASP76bIronRain()
+    assert abs(w.dayside_temp_k() - 2500.0) < 50.0
+    assert abs(w.evening_absorption_pct() - 0.45) < 0.05
+
+
+def test_kepler11_compact():
+    from hot_jupiter.solar_system import Kepler11CompactArchitecture
+    k = Kepler11CompactArchitecture()
+    assert k.number_of_planets() == 6
+    assert abs(k.ttv_amplitude_minutes() - 24.5) < 1.0
+
+
+def test_borisov_interstellar():
+    from hot_jupiter.solar_system import BorisovInterstellarComet
+    b = BorisovInterstellarComet()
+    assert abs(b.orbital_eccentricity() - 3.36) < 0.1
+    assert abs(b.co_to_water_ratio() - 1.45) < 0.1

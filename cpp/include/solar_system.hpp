@@ -22229,11 +22229,72 @@ class TritonRetrogradeCaptureModel {
   double present_orbital_radius_km() const { return 354760.0; }
 };
 
+// ============================================================================
+// 68. K2-18b HYCEAN ATMOSPHERE & OCEAN MODEL (Madhusudhan et al. 2023 ApJL)
+// ============================================================================
+class K218bHyceanAtmosphereModel {
+ public:
+  double planet_mass_mearth() const { return 8.63; }
+  double planet_radius_rearth() const { return 2.61; }
+  double methane_volume_mixing_ratio() const { return 0.010; }
+  double co2_volume_mixing_ratio() const { return 0.010; }
+  double ammonia_upper_limit() const { return 1.0e-5; }
+  double ocean_water_mass_fraction() const { return 0.50; }
+};
+
+// ============================================================================
+// 69. ENCELADUS CDA SODIUM SALT FRACTIONATION MODEL (Postberg et al. 2009, 2011 Nature)
+// ============================================================================
+class EnceladusCDASaltFractionationModel {
+ public:
+  double sodium_salt_mass_fraction() const { return 0.015; }
+  double dust_mass_production_rate_kg_s() const { return 5.0; }
+  double ocean_ph_value() const { return 9.5; }
+  double e_ring_grain_velocity_m_s() const { return 250.0; }
+};
+
+// ============================================================================
+// 70. WASP-76b ASYMMETRIC IRON CONDENSATION & RAIN (Ehrenreich et al. 2020 Nature)
+// ============================================================================
+class WASP76bIronRainModel {
+ public:
+  double dayside_temp_k() const { return 2500.0; }
+  double nightside_temp_k() const { return 1400.0; }
+  double evening_terminator_fe_absorption_percent() const { return 0.45; }
+  double morning_terminator_fe_absorption_percent() const { return 0.00; }
+  double iron_condensation_temp_k() const { return 1800.0; }
+};
+
+// ============================================================================
+// 71. KEPLER-11 COMPACT COPLANAR RESONANCE MODEL (Lissauer et al. 2011, 2013 Nature)
+// ============================================================================
+class Kepler11CompactResonantModel {
+ public:
+  int number_of_planets() const { return 6; }
+  double mutual_inclination_max_deg() const { return 1.0; }
+  double mean_bulk_density_g_cm3() const { return 1.20; }
+  double planet_c_d_period_ratio() const { return 1.74; }
+  double ttv_amplitude_minutes() const { return 24.5; }
+};
+
+// ============================================================================
+// 72. 2I/BORISOV INTERSTELLAR COMET CO ENRICHMENT (Bodewits 2020, Cordiner 2020)
+// ============================================================================
+class BorisovInterstellarCometModel {
+ public:
+  double orbital_eccentricity() const { return 3.36; }
+  double co_to_water_ratio() const { return 1.45; }
+  double water_production_2au_molecules_s() const { return 2.0e27; }
+  double formation_temperature_k() const { return 20.0; }
+  double non_grav_radial_a1_au_day2() const { return 4.0e-8; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 
 }  // namespace hot_jupiter
 
 #endif  // HOT_JUPITER_SOLAR_SYSTEM_HPP
+
 
 
