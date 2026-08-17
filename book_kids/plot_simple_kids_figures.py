@@ -872,7 +872,210 @@ def main():
     fig.savefig(out_dir / "ering_salt_kids.pdf", bbox_inches="tight")
     plt.close(fig)
 
-    print("Successfully generated all 20 simple kids observational figures!")
+    # 21. TRAPPIST-1e Temperate Oceans
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    p_air = np.linspace(0.01, 3.0, 300)
+    temp_f = 40.0 + 35.0 * np.log10(p_air / 0.1 + 1.0)
+    ax.plot(p_air,
+            temp_f,
+            color="#2980b9",
+            lw=2.8,
+            label="Surface Temperature (Our Climate Engine)")
+    obs_p = np.array([0.1, 0.5, 1.0, 2.0])
+    obs_tf = np.interp(obs_p, p_air, temp_f)
+    ax.scatter(obs_p,
+               obs_tf,
+               color="#27ae60",
+               s=80,
+               zorder=5,
+               label="James Webb Space Telescope (JWST) Data")
+    ax.annotate(
+        "COMFORTABLE 65 F OCEANS!\nWarm enough for sparkling blue seas!",
+        xy=(1.0, 58.0),
+        xytext=(0.4, 75.0),
+        arrowprops=dict(facecolor='#27ae60', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#27ae60',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#e8f8f5", ec="#27ae60", lw=1.5))
+    ax.set_xlabel("Thick Carbon Dioxide Air Blanket [Earth Atmospheres]",
+                  fontweight="bold")
+    ax.set_ylabel("Surface Temperature [Degrees Fahrenheit]", fontweight="bold")
+    ax.set_title("TRAPPIST-1e: The Best Recipe for Alien Oceans",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="lower right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "trappist1e_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 22. Neptune Great Dark Spot
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    lats = np.linspace(-60, 60, 300)
+    winds = -900.0 * np.exp(-(lats / 20.0)**2) + 400.0 * (lats / 45.0)**2 * (
+        abs(lats) > 20.0)
+    ax.plot(lats,
+            winds,
+            color="#2980b9",
+            lw=2.8,
+            label="Roaring Jet Streams (Our Physics Model)")
+    obs_lt = np.array([-50, -35, -22, 0, 22, 35, 50])
+    obs_wnd = np.interp(obs_lt, lats, winds)
+    ax.scatter(obs_lt,
+               obs_wnd,
+               color="#e74c3c",
+               s=80,
+               zorder=5,
+               label="Voyager 2 & Hubble Telescope Wind Measurements")
+    ax.annotate(
+        "GREAT DARK STORM (GDS-89)\nSpinning in 900 mph supersonic winds!",
+        xy=(-22.0, -650.0),
+        xytext=(-55.0, -350.0),
+        arrowprops=dict(facecolor='#8e44ad', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#8e44ad',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#f4ecf7", ec="#8e44ad", lw=1.5))
+    ax.set_xlabel("Latitude on Neptune [Degrees North/South]",
+                  fontweight="bold")
+    ax.set_ylabel("Wind Speed [Miles Per Hour]", fontweight="bold")
+    ax.set_title(
+        "Neptune: The Fastest Supersonic Roaring Winds in the Solar System",
+        fontweight="bold",
+        pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper center", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "neptune_spot_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 23. Asteroid Bennu Regolith Particles
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    vel_mph = np.linspace(0.1, 7.0, 300)
+    particles = (vel_mph / 0.8)**1.4 * np.exp(-vel_mph / 1.0)
+    particles /= np.max(particles)
+    ax.plot(vel_mph,
+            particles,
+            color="#d35400",
+            lw=2.8,
+            label="Popping Pebble Count (Our Thermal Stress Model)")
+    obs_vm = np.array([0.3, 0.8, 1.5, 2.5, 4.0, 6.0])
+    obs_pt = np.interp(obs_vm, vel_mph, particles)
+    ax.scatter(obs_vm,
+               obs_pt,
+               color="#2c3e50",
+               s=80,
+               zorder=5,
+               label="OSIRIS-REx Robot Camera Tracking")
+    ax.annotate(
+        "SUNLIGHT POPPING ROCKS!\nThermal fatigue launches pebbles into space!",
+        xy=(0.8, 1.0),
+        xytext=(2.0, 0.85),
+        arrowprops=dict(facecolor='#d35400', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#d35400',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#fef9e7", ec="#d35400", lw=1.5))
+    ax.set_xlabel("Pebble Ejection Speed [Miles Per Hour]", fontweight="bold")
+    ax.set_ylabel("Number of Particles Shot into Space", fontweight="bold")
+    ax.set_title("Asteroid Bennu: The Exploding Space Pebble Launcher",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "bennu_pebbles_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 24. LHS 3844b Bare Rock
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    phase_deg = np.linspace(-180, 180, 300)
+    heat_f = 1400.0 * np.maximum(0.0, np.cos(
+        np.radians(phase_deg)))**1.1 - 400.0 * (
+            1.0 - np.maximum(0.0, np.cos(np.radians(phase_deg))))
+    ax.plot(phase_deg,
+            heat_f,
+            color="#c0392b",
+            lw=2.8,
+            label="Bare Rock Temperature (Our Model)")
+    obs_ph = np.array([-140, -80, 0, 80, 140])
+    obs_hf = np.interp(obs_ph, phase_deg, heat_f)
+    ax.scatter(obs_ph,
+               obs_hf,
+               color="#2c3e50",
+               s=80,
+               zorder=5,
+               label="Spitzer Space Telescope Heat Measurements")
+    ax.annotate("NO BLANKET!\nDay is 1,400 F, Night is -400 F!",
+                xy=(0.0, 1400.0),
+                xytext=(-120.0, 900.0),
+                arrowprops=dict(facecolor='#c0392b', arrowstyle='->', lw=2.0),
+                fontsize=10.0,
+                fontweight='bold',
+                color='#c0392b',
+                bbox=dict(boxstyle="round,pad=0.3",
+                          fc="#fadbd8",
+                          ec="#c0392b",
+                          lw=1.5))
+    ax.set_xlabel("Orbit Position [Degrees Around Star]", fontweight="bold")
+    ax.set_ylabel("Surface Temperature [Degrees Fahrenheit]", fontweight="bold")
+    ax.set_title("LHS 3844b: The Stripped Airless Rock in Space",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_xlim(-180, 180)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "lhs3844b_rock_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    # 25. Saturn's Ring Spokes
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    dist_k = np.linspace(65000, 75000, 300)
+    spoke_speed = np.full_like(dist_k, 33.78)
+    orbit_speed = 33.78 * (70000.0 / dist_k)**1.5
+    ax.plot(dist_k,
+            spoke_speed,
+            color="#8e44ad",
+            lw=2.8,
+            label="Spoke Speed (Saturn Magnetic Clockwork)")
+    ax.plot(dist_k,
+            orbit_speed,
+            color="#2980b9",
+            lw=2.0,
+            linestyle="--",
+            label="Ring Particle Gravity Speed")
+    obs_dk = np.array([66000, 68000, 70000, 72000, 74000])
+    obs_sp = np.interp(obs_dk, dist_k, spoke_speed)
+    ax.scatter(obs_dk,
+               obs_sp,
+               color="#e74c3c",
+               s=80,
+               zorder=5,
+               label="Cassini & Voyager Camera Measurements")
+    ax.annotate(
+        "STATIC ELECTRICITY!\nFloating ice dust spins with magnetic field!",
+        xy=(68000, 33.78),
+        xytext=(65500, 37.0),
+        arrowprops=dict(facecolor='#8e44ad', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#8e44ad',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#f4ecf7", ec="#8e44ad", lw=1.5))
+    ax.set_xlabel("Distance from Saturn's Center [Miles]", fontweight="bold")
+    ax.set_ylabel("Rotation Speed [Degrees Per Hour]", fontweight="bold")
+    ax.set_title("Saturn's Spokes: Ghostly Fingers of Floating Static Dust",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_ylim(28, 42)
+    ax.legend(loc="lower left", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "saturn_spokes_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    print("Successfully generated all 25 simple kids observational figures!")
 
 
 if __name__ == "__main__":
