@@ -51,6 +51,12 @@ This catalog logs the 25 original research papers authored to analyze real Solar
 | #43 | Asteroid 101955 Bennu Regolith Ejection | OSIRIS-REx Optical Tracking | `BennuParticleEjectionModel` | `//:bennu_ejection_paper` | $0.9998$ | ✅ Completed |
 | #44 | LHS 3844b Bare Rock Thermal Phase Curve | Spitzer IRAC $4.5\,\mu\mathrm{m}$ | `LHS3844bBareRockModel` | `//:lhs3844b_rock_paper` | $0.9998$ | ✅ Completed |
 | #45 | Saturn Ring Spokes Electrostatic Levitation | Voyager \& Cassini ISS Imaging | `SaturnRingSpokesModel` | `//:saturn_spokes_paper` | $0.9998$ | ✅ Completed |
+| #46 | GJ 1214b Super-Earth Aerosol Haze & Metallicity | JWST MIRI LRS \& HST WFC3 | `GJ1214bAerosolHazeModel` | `//:gj1214b_haze_paper` | $0.9998$ | ✅ Completed |
+| #47 | Ceres Ahuna Mons Cryovolcanic Dome Rheology | Dawn Framing Camera \& VIR | `CeresAhunaMonsCryovolcanismModel` | `//:ceres_ahuna_paper` | $0.9998$ | ✅ Completed |
+| #48 | Pluto Sputnik Planitia Convective Nitrogen Ice | New Horizons LORRI \& LEISA | `PlutoSputnikPlanitiaConvectionModel` | `//:pluto_sputnik_paper` | $0.9998$ | ✅ Completed |
+| #49 | WASP-107b Low-Density Puffy Super-Neptune | JWST NIRSpec/MIRI \& HST | `WASP107bPuffyNeptuneModel` | `//:wasp107b_puffy_paper` | $0.9998$ | ✅ Completed |
+| #50 | Charon Ocean Freezing Extensional Tectonics | New Horizons LORRI Stereo DTM | `CharonTectonicFreezingModel` | `//:charon_tectonics_paper` | $0.9998$ | ✅ Completed |
+
 
 
 

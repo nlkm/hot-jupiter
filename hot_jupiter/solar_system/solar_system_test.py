@@ -615,3 +615,38 @@ def test_saturn_spokes():
     s = SaturnRingSpokes()
     assert abs(s.dust_grain_radius_um() - 0.60) < 0.05
     assert abs(s.electrostatic_potential_volts() - (-15.0)) < 1.0
+
+
+def test_gj1214b_haze():
+    from hot_jupiter.solar_system import GJ1214bAerosolHaze
+    g = GJ1214bAerosolHaze()
+    assert abs(g.planet_mass_mearth() - 8.17) < 0.1
+    assert abs(g.metallicity_solar_factor() - 500.0) < 10.0
+
+
+def test_ceres_ahuna():
+    from hot_jupiter.solar_system import CeresAhunaMonsCryovolcanism
+    c = CeresAhunaMonsCryovolcanism()
+    assert abs(c.dome_height_km() - 4.0) < 0.2
+    assert abs(c.sodium_carbonate_mass_fraction() - 0.20) < 0.02
+
+
+def test_pluto_sputnik():
+    from hot_jupiter.solar_system import PlutoSputnikPlanitiaConvection
+    p = PlutoSputnikPlanitiaConvection()
+    assert abs(p.cell_diameter_km() - 30.0) < 2.0
+    assert abs(p.nitrogen_ice_thickness_km() - 6.0) < 0.5
+
+
+def test_wasp107b_puffy():
+    from hot_jupiter.solar_system import WASP107bPuffyNeptune
+    w = WASP107bPuffyNeptune()
+    assert abs(w.planet_mass_mearth() - 30.5) < 0.5
+    assert abs(w.bulk_density_g_cm3() - 0.13) < 0.02
+
+
+def test_charon_tectonics():
+    from hot_jupiter.solar_system import CharonTectonicFreezing
+    ch = CharonTectonicFreezing()
+    assert abs(ch.volumetric_expansion_fraction() - 0.07) < 0.01
+    assert abs(ch.canyon_chasma_depth_km() - 8.0) < 0.5

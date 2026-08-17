@@ -599,9 +599,31 @@ int main() {
   assert(std::abs(spokes_model.dust_grain_radius_um() - 0.60) < 0.05);
   assert(std::abs(spokes_model.electrostatic_potential_volts() - (-15.0)) < 1.0);
 
+  // Observational Papers #46-#50 Models Verification
+  hot_jupiter::GJ1214bAerosolHazeModel gj1214_model;
+  assert(std::abs(gj1214_model.planet_mass_mearth() - 8.17) < 0.1);
+  assert(std::abs(gj1214_model.metallicity_solar_factor() - 500.0) < 10.0);
+
+  hot_jupiter::CeresAhunaMonsCryovolcanismModel ahuna_model;
+  assert(std::abs(ahuna_model.dome_height_km() - 4.0) < 0.2);
+  assert(std::abs(ahuna_model.sodium_carbonate_mass_fraction() - 0.20) < 0.02);
+
+  hot_jupiter::PlutoSputnikPlanitiaConvectionModel pluto_sput_model;
+  assert(std::abs(pluto_sput_model.cell_diameter_km() - 30.0) < 2.0);
+  assert(std::abs(pluto_sput_model.nitrogen_ice_thickness_km() - 6.0) < 0.5);
+
+  hot_jupiter::WASP107bPuffyNeptuneModel wasp107_model;
+  assert(std::abs(wasp107_model.planet_mass_mearth() - 30.5) < 0.5);
+  assert(std::abs(wasp107_model.bulk_density_g_cm3() - 0.13) < 0.02);
+
+  hot_jupiter::CharonTectonicFreezingModel charon_model;
+  assert(std::abs(charon_model.volumetric_expansion_fraction() - 0.07) < 0.01);
+  assert(std::abs(charon_model.canyon_chasma_depth_km() - 8.0) < 0.5);
+
   std::cout << "✅ All Solar System Dynamics C++ Tests PASSED!" << std::endl;
   return 0;
 }
+
 
 
 

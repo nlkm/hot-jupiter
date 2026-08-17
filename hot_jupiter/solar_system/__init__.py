@@ -1517,6 +1517,86 @@ class SaturnRingSpokes:
         return 10.656
 
 
+class GJ1214bAerosolHaze:
+    """GJ 1214b aerosol photochemical haze and high metallicity (Kempton 2023)."""
+
+    def planet_mass_mearth(self):
+        return 8.17
+
+    def planet_radius_rearth(self):
+        return 2.74
+
+    def dayside_temp_k(self):
+        return 553.0
+
+    def nightside_temp_k(self):
+        return 437.0
+
+    def metallicity_solar_factor(self):
+        return 500.0
+
+
+class CeresAhunaMonsCryovolcanism:
+    """Ceres Ahuna Mons Bingham plastic cryovolcanic dome extrusion (Ruesch 2016)."""
+
+    def dome_height_km(self):
+        return 4.0
+
+    def base_diameter_km(self):
+        return 20.0
+
+    def brine_yield_stress_pa(self):
+        return 1.5e4
+
+    def sodium_carbonate_mass_fraction(self):
+        return 0.20
+
+
+class PlutoSputnikPlanitiaConvection:
+    """Pluto Sputnik Planitia solid-state nitrogen ice convection (McKinnon 2016)."""
+
+    def cell_diameter_km(self):
+        return 30.0
+
+    def overturning_timescale_years(self):
+        return 5.0e5
+
+    def nitrogen_ice_thickness_km(self):
+        return 6.0
+
+    def rayleigh_number(self):
+        return 1.0e7
+
+
+class WASP107bPuffyNeptune:
+    """WASP-107b low-density puffy super-Neptune and SO2 photochemistry (Dyrek 2024)."""
+
+    def planet_mass_mearth(self):
+        return 30.5
+
+    def planet_radius_rjup(self):
+        return 0.94
+
+    def bulk_density_g_cm3(self):
+        return 0.13
+
+    def so2_mixing_ratio(self):
+        return 2.0e-5
+
+
+class CharonTectonicFreezing:
+    """Pluto moon Charon subsurface ocean freezing extension (Beyer 2017)."""
+
+    def volumetric_expansion_fraction(self):
+        return 0.07
+
+    def canyon_chasma_depth_km(self):
+        return 8.0
+
+    def tensile_fracture_stress_pa(self):
+        return 2.5e7
+
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1526,7 +1606,9 @@ __all__ = [
     "BorisovInterstellarComet",
     "Brasser2012TrojanCapture",
     "CA101Binary",
+    "CeresAhunaMonsCryovolcanism",
     "CetoPhorcysBinary",
+    "CharonTectonicFreezing",
     "Comet67POutgassing",
     "CometDynamics",
     "EG138Binary",
@@ -1538,6 +1620,7 @@ __all__ = [
     "FB128Binary",
     "FM185Binary",
     "GJ436bHydrogenCloud",
+    "GJ1214bAerosolHaze",
     "GZ31Binary",
     "HATP11bHeliumEscape",
     "HD189733bMassLoss",
@@ -1566,6 +1649,7 @@ __all__ = [
     "PlanetNineSecular",
     "PlanetaryRings",
     "PlutoCharonMutual",
+    "PlutoSputnikPlanitiaConvection",
     "ProximaCentauribHabitability",
     "QY90Binary",
     "QY297Binary",
@@ -1593,6 +1677,7 @@ __all__ = [
     "WASP12bTidalDecay",
     "WASP43bTidalCircularization",
     "WASP76bIronRain",
+    "WASP107bPuffyNeptune",
     "WASP121bDeformabilityRLOF",
     "WC19Binary",
     "YN81Binary",

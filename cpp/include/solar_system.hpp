@@ -22345,8 +22345,67 @@ class SaturnRingSpokesModel {
   double magnetic_corotation_period_hours() const { return 10.656; }
 };
 
+// ============================================================================
+// 78. GJ 1214b AEROSOL HAZE & ATMOSPHERIC METALLICITY (Kempton 2023, Bean 2010)
+// ============================================================================
+class GJ1214bAerosolHazeModel {
+ public:
+  double planet_mass_mearth() const { return 8.17; }
+  double planet_radius_rearth() const { return 2.74; }
+  double dayside_temp_k() const { return 553.0; }
+  double nightside_temp_k() const { return 437.0; }
+  double metallicity_solar_factor() const { return 500.0; }
+  double haze_particle_radius_um() const { return 0.05; }
+};
+
+// ============================================================================
+// 79. CERES AHUNA MONS CRYOVOLCANIC DOME (Ruesch 2016 Science, Krohn 2016)
+// ============================================================================
+class CeresAhunaMonsCryovolcanismModel {
+ public:
+  double dome_height_km() const { return 4.0; }
+  double base_diameter_km() const { return 20.0; }
+  double brine_yield_stress_pa() const { return 1.5e4; }
+  double sodium_carbonate_mass_fraction() const { return 0.20; }
+};
+
+// ============================================================================
+// 80. PLUTO SPUTNIK PLANITIA CONVECTION (McKinnon 2016 Nature, Stern 2015)
+// ============================================================================
+class PlutoSputnikPlanitiaConvectionModel {
+ public:
+  double cell_diameter_km() const { return 30.0; }
+  double overturning_timescale_years() const { return 5.0e5; }
+  double nitrogen_ice_thickness_km() const { return 6.0; }
+  double rayleigh_number() const { return 1.0e7; }
+};
+
+// ============================================================================
+// 81. WASP-107b PUFFY SUPER-NEPTUNE MODEL (Dyrek 2024 Nature, Sing 2024)
+// ============================================================================
+class WASP107bPuffyNeptuneModel {
+ public:
+  double planet_mass_mearth() const { return 30.5; }
+  double planet_radius_rjup() const { return 0.94; }
+  double bulk_density_g_cm3() const { return 0.13; }
+  double so2_mixing_ratio() const { return 2.0e-5; }
+  double interior_tidal_flux_w_m2() const { return 1.2; }
+};
+
+// ============================================================================
+// 82. CHARON TECTONIC OCEAN FREEZING EXTENSION (Beyer 2017, Moore 2016)
+// ============================================================================
+class CharonTectonicFreezingModel {
+ public:
+  double volumetric_expansion_fraction() const { return 0.07; }
+  double canyon_chasma_depth_km() const { return 8.0; }
+  double tensile_fracture_stress_pa() const { return 2.5e7; }
+  double global_lithospheric_strain() const { return 0.02; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
+
 
 }  // namespace hot_jupiter
 

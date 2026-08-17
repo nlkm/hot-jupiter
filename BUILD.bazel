@@ -1694,6 +1694,42 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "gj1214b_haze_paper",
+    srcs = ["replications_observational/paper_46/gj1214b_haze_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "ceres_ahuna_paper",
+    srcs = ["replications_observational/paper_47/ceres_ahuna_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "pluto_sputnik_paper",
+    srcs = ["replications_observational/paper_48/pluto_sputnik_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "wasp107b_puffy_paper",
+    srcs = ["replications_observational/paper_49/wasp107b_puffy_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+cc_binary(
+    name = "charon_tectonics_paper",
+    srcs = ["replications_observational/paper_50/charon_tectonics_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
