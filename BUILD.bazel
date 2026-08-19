@@ -26,7 +26,9 @@ cc_library(
         "cpp/include/ohmic_quenching_discovery.hpp",
         "cpp/include/usp_rlof_discovery.hpp",
         "cpp/include/terminator_aerosol_discovery.hpp",
+        "cpp/include/resonant_chain_discovery.hpp",
     ],
+
 
 
 
@@ -1765,6 +1767,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_resonant_chain_discovery",
+    srcs = ["discovery_campaigns/frontier_05_resonant_chains/run_resonant_chain_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1899,6 +1909,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "resonant_chain_discovery_test",
+    srcs = ["cpp/include/resonant_chain_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
