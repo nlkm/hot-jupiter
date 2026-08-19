@@ -15,12 +15,19 @@ from hot_jupiter.atmosphere.models import (
     SingTransmission,
     SpiegelBurrowsInversion,
 )
+from hot_jupiter.atmosphere.terminator_aerosol import (
+    JWSTTransmissionSpectrum,
+    LimbMicrophysicsResult,
+    TerminatorAerosolDiscovery,
+)
 
 __all__ = [
     "AtmosphereResult",
     "BaseAtmosphere",
     "GuillotAtmosphere",
+    "JWSTTransmissionSpectrum",
     "KomacekShowmanCirculation",
+    "LimbMicrophysicsResult",
     "MHDDrag",
     "MadhusudhanRetrieval",
     "MieClouds",
@@ -29,4 +36,5 @@ __all__ = [
     "ShowmanCirculation3D",
     "SingTransmission",
     "SpiegelBurrowsInversion",
+    "TerminatorAerosolDiscovery",
 ]
