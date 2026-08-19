@@ -25,7 +25,9 @@ cc_library(
         "cpp/include/radius_valley_discovery.hpp",
         "cpp/include/ohmic_quenching_discovery.hpp",
         "cpp/include/usp_rlof_discovery.hpp",
+        "cpp/include/terminator_aerosol_discovery.hpp",
     ],
+
 
 
 
@@ -1756,6 +1758,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_terminator_aerosol_discovery",
+    srcs = ["discovery_campaigns/frontier_04_terminator_aerosol/run_terminator_aerosol_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1882,6 +1892,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "terminator_aerosol_discovery_test",
+    srcs = ["cpp/include/terminator_aerosol_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
