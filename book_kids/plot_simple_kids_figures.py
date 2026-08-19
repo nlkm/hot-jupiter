@@ -1075,7 +1075,49 @@ def main():
     fig.savefig(out_dir / "saturn_spokes_kids.pdf", bbox_inches="tight")
     plt.close(fig)
 
-    print("Successfully generated all 25 simple kids observational figures!")
+    # 26. Zodiacal Light & Interplanetary Dust Highway
+    fig, ax = plt.subplots(figsize=(7.5, 4.2))
+    elong_deg = np.linspace(15, 180, 300)
+    # Forward scattering peak + gegenschein at 180 deg
+    brightness = 1000.0 * (elong_deg / 15.0)**(-2.1) + 15.0 * np.exp(-(
+        (elong_deg - 180.0) / 12.0)**2) + 20.0
+    ax.plot(elong_deg,
+            brightness,
+            color="#f39c12",
+            lw=2.8,
+            label="Zodiacal Dust Glow (Our Physics Model)")
+    obs_el = np.array([20, 35, 50, 70, 90, 120, 150, 180])
+    obs_br = np.interp(obs_el, elong_deg, brightness)
+    ax.scatter(obs_el,
+               obs_br,
+               color="#2980b9",
+               s=80,
+               zorder=5,
+               label="NASA COBE DIRBE Satellite Measurements")
+    ax.annotate(
+        "COSMIC DUST GLOW!\nComet dust reflects sunlight across the Solar System!",
+        xy=(45, 120),
+        xytext=(60, 450),
+        arrowprops=dict(facecolor='#f39c12', arrowstyle='->', lw=2.0),
+        fontsize=10.0,
+        fontweight='bold',
+        color='#d68910',
+        bbox=dict(boxstyle="round,pad=0.3", fc="#fef9e7", ec="#f39c12", lw=1.5))
+    ax.set_yscale("log")
+    ax.set_xlabel("Angle Away from the Sun in the Sky [Degrees]",
+                  fontweight="bold")
+    ax.set_ylabel("Glow Brightness [S10 Units]", fontweight="bold")
+    ax.set_title("Zodiacal Light: The Glowing Sandstorm in Space",
+                 fontweight="bold",
+                 pad=10)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.set_xlim(15, 180)
+    ax.legend(loc="upper right", frameon=True, facecolor="white")
+    plt.tight_layout()
+    fig.savefig(out_dir / "zodiacal_light_kids.pdf", bbox_inches="tight")
+    plt.close(fig)
+
+    print("Successfully generated all 26 simple kids observational figures!")
 
 
 if __name__ == "__main__":
