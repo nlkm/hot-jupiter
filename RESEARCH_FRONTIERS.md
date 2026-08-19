@@ -6,32 +6,33 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 
 ```
 ========================================================================================================================
-#  RESEARCH PROBLEM & FRONTIER         CORE UNSOLVED PUZZLE                         OUR CODE CAPABILITIES & ADVANTAGE
+#  RESEARCH PROBLEM & FRONTIER         STATUS / DISCOVERY ARTIFACTS                 OUR CODE CAPABILITIES & ADVANTAGE
 ========================================================================================================================
-1  The Radius Valley Transition Split  Photoevaporation vs. Core-Powered vs.        Coupled hydrodynamic mass-loss +
-   (Fulton Gap & Water Worlds)         Primordial Ice Fractions (Sub-Neptunes)      non-ideal water EOS + thermal cooling
+1  The Radius Valley Transition Split  SOLVED & PUSHED (5-page formal paper PDF,    Coupled hydrodynamic mass-loss +
+   (Fulton Gap & Water Worlds)         N=200,000 synthesis, 3 publication figures) non-ideal water EOS + thermal cooling
 ------------------------------------------------------------------------------------------------------------------------
-2  Extreme Hot Jupiter Inflation &     Why do giant planets inflate to > 1.8 R_J?   Coupled 3D GCM wind electromotive force
-   Ohmic Dynamo Quenching              Does deep ohmic heating stall at T > 2000 K? + interior non-ideal SCVH/CD19 MHD
+2  Extreme Hot Jupiter Inflation &     SOLVED & PUSHED (4-page formal paper PDF,    Coupled 3D GCM wind electromotive force
+   Ohmic Dynamo Quenching              Lorentz drag turnover, 3 pub figures)        + interior non-ideal SCVH/CD19 MHD
 ------------------------------------------------------------------------------------------------------------------------
-3  Ultra-Short-Period (USP) Tidally    How do bare rock super-Earths reach P < 1 d  1PN/2PN post-Newtonian secular dynamics
-   Decaying Planet Destructions        without tidal disruption during inward drift?+ non-linear Roche Lobe Overflow solver
+3  Ultra-Short-Period (USP) Tidally    SOLVED & PUSHED (4-page formal paper PDF,    1PN/2PN post-Newtonian secular dynamics
+   Decaying Planet Destructions        Super-Mercury RLOF parking, 3 pub figures)   + non-linear Roche Lobe Overflow solver
 ------------------------------------------------------------------------------------------------------------------------
-4  Asymmetric Aerosol Rainout & Day-   How do condensate cloud decks decouple from  3D GCM tracer advection + kinetic cloud
-   Night Chemical Quenching in EGPs    equilibrium chemistry at the terminator?     nucleation/settling + JWST phase curves
+4  Asymmetric Aerosol Rainout & Day-   QUEUED / NEXT FOR EXECUTION                  3D GCM tracer advection + kinetic cloud
+   Night Chemical Quenching in EGPs    (Terminator kinetic cloud condensation)      nucleation/settling + JWST phase curves
 ------------------------------------------------------------------------------------------------------------------------
-5  Resonant Chain Stability & Chaos    Why are packed multi-planet chains (e.g.,    Symplectic N-body integrator + tidal
-   in Compact Systems (TRAPPIST-1)     TRAPPIST-1, Kepler-223) broken or preserved? eccentricity damping + disk migration
+5  Resonant Chain Stability & Chaos    QUEUED / NEXT FOR EXECUTION                  Symplectic N-body integrator + tidal
+   in Compact Systems (TRAPPIST-1)     (Resonant chain breaking vs preservation)    eccentricity damping + disk migration
 ------------------------------------------------------------------------------------------------------------------------
-6  Ocean-Freezing Rupture Mechanics    What controls catastrophic extensional       Viscoelastic Maxwell/Andrade crust shell
-   on Outer Moon Cryospheres           tectonics vs. internal ocean retention?      + volumetric phase transition expansion
+6  Ocean-Freezing Rupture Mechanics    QUEUED / NEXT FOR EXECUTION                  Viscoelastic Maxwell/Andrade crust shell
+   on Outer Moon Cryospheres           (Cryosphere extensional tectonics)           + volumetric phase transition expansion
 ------------------------------------------------------------------------------------------------------------------------
-7  Interstellar Object (ISO) Volatile  Why do 1I/'Oumuamua & 2I/Borisov show        Anisotropic non-gravitational sublimation
-   Depletion & Structural Integrity    discordant outgassing & super-porosity?      torque + thermal tensile spallation
+7  Interstellar Object (ISO) Volatile  QUEUED / NEXT FOR EXECUTION                  Anisotropic non-gravitational sublimation
+   Depletion & Structural Integrity    (Outgassing torques & super-porosity)        torque + thermal tensile spallation
 ------------------------------------------------------------------------------------------------------------------------
-8  Tidal Dissipation in Viscoelastic   How does non-linear frequency-dependent      Coupled rheological Andrade mantle creep
-   Solid Mantles vs. Fluid Cores       tidal dissipation vary across orbital state? + multi-layer core-mantle boundary solver
+8  Tidal Dissipation in Viscoelastic   QUEUED / NEXT FOR EXECUTION                  Coupled rheological Andrade mantle creep
+   Solid Mantles vs. Fluid Cores       (Frequency-dependent Andrade mantle creep)   + multi-layer core-mantle boundary solver
 ========================================================================================================================
+
 ```
 
 ---
