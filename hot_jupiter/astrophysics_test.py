@@ -66,3 +66,29 @@ def test_terminator_aerosol_discovery():
     amp_eve = np.ptp(spec.transit_depth_evening_ppm)
     amp_mor = np.ptp(spec.transit_depth_morning_ppm)
     assert amp_eve > amp_mor  # Evening limb exhibits unmuted molecular features
+
+
+def test_resonant_chain_discovery():
+    from hot_jupiter.planet_formation import ResonantChainDiscovery
+    engine = ResonantChainDiscovery(star_mass_msun=0.09,
+                                    m1_mearth=1.0,
+                                    m2_mearth=1.3,
+                                    m3_mearth=0.9)
+
+    # 1. Resonance width
+    w_32 = engine.resonance_width(2.0, 1.0, 0.015, 1.3)
+    assert 1.0e-5 < w_32 < 1.0e-2
+
+    # 2. Critical separation
+    da_crit = engine.critical_overlap_separation(0.015, 1.0, 1.3)
+    assert 1.0e-4 < da_crit < 5.0e-3
+
+    # 3. Evolution
+    hist = engine.evolve_chain(0.012,
+                               0.018,
+                               tau_mig_kyr=50.0,
+                               k_damp=100.0,
+                               t_max_kyr=100.0,
+                               dt_kyr=0.2)
+    assert len(hist) > 0
+    assert abs(hist[-1].period_ratio - 1.50) < 0.05

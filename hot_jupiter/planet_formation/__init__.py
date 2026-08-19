@@ -60,9 +60,16 @@ class StreamingInstability:
         return 0.01 + 0.05 * (stokes_number - 0.1)**2
 
 
+from hot_jupiter.planet_formation.resonant_chain import (
+    ResonantChainDiscovery,
+    ResonantEvolutionStep,
+)
+
 __all__ = [
     "CoreAccretion",
     "DiskMigration",
     "PebbleAccretion",
+    "ResonantChainDiscovery",
+    "ResonantEvolutionStep",
     "StreamingInstability",
 ]
