@@ -11,6 +11,10 @@ from hot_jupiter.evolution.ohmic_quenching import (
     OhmicQuenchingDiscovery,
     OhmicQuenchingResult,
 )
+from hot_jupiter.evolution.usp_rlof import (
+    USPEvolutionStep,
+    USPRLOFDiscovery,
+)
 
 __all__ = [
     "CoupledEvolutionResult",
@@ -18,4 +22,6 @@ __all__ = [
     "OhmicQuenchingDiscovery",
     "OhmicQuenchingResult",
     "ThermalEvolutionIntegrator",
+    "USPEvolutionStep",
+    "USPRLOFDiscovery",
 ]

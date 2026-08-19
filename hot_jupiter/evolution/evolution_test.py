@@ -102,7 +102,31 @@ def test_ohmic_quenching_discovery():
     assert p_1800 > p_1200
     assert p_1800 > p_2600  # Non-monotonic peak
 
-    # 4. State evaluation
     res = oq.evaluate(2200.0)
     assert res.is_quenched
     assert res.inflated_radius_rjup > 1.2
+
+
+def test_usp_rlof_discovery():
+    from hot_jupiter.evolution import USPRLOFDiscovery
+    usp = USPRLOFDiscovery(star_mass_msun=0.4,
+                           star_radius_rsun=0.4,
+                           k2_q_star=1.0e-6)
+
+    # 1. Roche radius
+    a_roche = usp.roche_radius(5.0, 1.6)
+    assert 0.001 < a_roche < 0.03
+
+    # 2. Tidal decay
+    da = usp.tidal_decay_rate(0.015, 5.0)
+    assert da < 0.0
+
+    # 3. Evolution run
+    hist = usp.evolve(m_core_init_me=4.0,
+                      m_mantle_init_me=6.0,
+                      a_init_au=0.010,
+                      t_max_myr=2000.0,
+                      dt_myr=1.0)
+    assert len(hist) > 0
+    assert hist[0].planet_mass_mearth == 10.0
+    assert hist[-1].planet_mass_mearth < 10.0
