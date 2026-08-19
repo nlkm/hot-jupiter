@@ -17,10 +17,11 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 3  Ultra-Short-Period (USP) Tidally    SOLVED & PUSHED (4-page formal paper PDF,    1PN/2PN post-Newtonian secular dynamics
    Decaying Planet Destructions        Super-Mercury RLOF parking, 3 pub figures)   + non-linear Roche Lobe Overflow solver
 ------------------------------------------------------------------------------------------------------------------------
-4  Asymmetric Aerosol Rainout & Day-   QUEUED / NEXT FOR EXECUTION                  3D GCM tracer advection + kinetic cloud
-   Night Chemical Quenching in EGPs    (Terminator kinetic cloud condensation)      nucleation/settling + JWST phase curves
+4  Asymmetric Aerosol Rainout & Day-   SOLVED & PUSHED (4-page formal paper PDF,    3D GCM tracer advection + kinetic cloud
+   Night Chemical Quenching in EGPs    JWST transmission asymmetry, 3 pub figures)  nucleation/settling + JWST phase curves
 ------------------------------------------------------------------------------------------------------------------------
 5  Resonant Chain Stability & Chaos    QUEUED / NEXT FOR EXECUTION                  Symplectic N-body integrator + tidal
+
    in Compact Systems (TRAPPIST-1)     (Resonant chain breaking vs preservation)    eccentricity damping + disk migration
 ------------------------------------------------------------------------------------------------------------------------
 6  Ocean-Freezing Rupture Mechanics    QUEUED / NEXT FOR EXECUTION                  Viscoelastic Maxwell/Andrade crust shell
