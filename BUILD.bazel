@@ -24,7 +24,9 @@ cc_library(
         "cpp/include/star_formation.hpp",
         "cpp/include/radius_valley_discovery.hpp",
         "cpp/include/ohmic_quenching_discovery.hpp",
+        "cpp/include/usp_rlof_discovery.hpp",
     ],
+
 
 
     includes = ["cpp/include"],
@@ -1747,6 +1749,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_usp_rlof_discovery",
+    srcs = ["discovery_campaigns/frontier_03_usp_tidal_rlof/run_usp_rlof_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1865,6 +1875,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "usp_rlof_discovery_test",
+    srcs = ["cpp/include/usp_rlof_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
