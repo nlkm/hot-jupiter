@@ -26,11 +26,11 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 6  Ocean-Freezing Rupture Mechanics    SOLVED & PUSHED (4-page formal paper PDF,    Viscoelastic Maxwell/Andrade crust shell
    on Outer Moon Cryospheres           Charon/Tethys rifts, 3 pub figures)          + volumetric phase transition expansion
 ------------------------------------------------------------------------------------------------------------------------
-7  Interstellar Object (ISO) Volatile  QUEUED / NEXT FOR EXECUTION                  Anisotropic non-gravitational sublimation
-
-   Depletion & Structural Integrity    (Outgassing torques & super-porosity)        torque + thermal tensile spallation
+7  Interstellar Object (ISO) Volatile  SOLVED & PUSHED (4-page formal paper PDF,    Anisotropic non-gravitational sublimation
+   Depletion & Structural Integrity    1I/2I outgassing & spin, 3 pub figures)      torque + thermal tensile spallation
 ------------------------------------------------------------------------------------------------------------------------
 8  Tidal Dissipation in Viscoelastic   QUEUED / NEXT FOR EXECUTION                  Coupled rheological Andrade mantle creep
+
    Solid Mantles vs. Fluid Cores       (Frequency-dependent Andrade mantle creep)   + multi-layer core-mantle boundary solver
 ========================================================================================================================
 
