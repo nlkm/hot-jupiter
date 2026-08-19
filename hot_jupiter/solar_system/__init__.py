@@ -1597,6 +1597,11 @@ class CharonTectonicFreezing:
         return 2.5e7
 
 
+from hot_jupiter.solar_system.cryosphere_fracture import (
+    CryosphereEvolutionStep,
+    CryosphereFractureDiscovery,
+)
+
 __all__ = [
     "AZ84Binary",
     "AltjiraBinary",
@@ -1611,6 +1616,8 @@ __all__ = [
     "CharonTectonicFreezing",
     "Comet67POutgassing",
     "CometDynamics",
+    "CryosphereEvolutionStep",
+    "CryosphereFractureDiscovery",
     "EG138Binary",
     "EnceladusCDASaltFractionation",
     "EnceladusHydrothermalVent",

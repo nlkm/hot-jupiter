@@ -92,3 +92,32 @@ def test_resonant_chain_discovery():
                                dt_kyr=0.2)
     assert len(hist) > 0
     assert abs(hist[-1].period_ratio - 1.50) < 0.05
+
+
+def test_cryosphere_fracture_discovery():
+    from hot_jupiter.solar_system import CryosphereFractureDiscovery
+    engine = CryosphereFractureDiscovery(body_radius_km=606.0,
+                                         surface_gravity_m_s2=0.288,
+                                         bulk_density_kg_m3=1700.0,
+                                         shear_modulus_gpa=3.5,
+                                         tensile_strength_mpa=2.0)
+
+    # 1. Viscosity & relaxation
+    eta = engine.ice_viscosity_pa_s(260.0)
+    tau_m = engine.maxwell_time_years(260.0)
+    assert 1.0e13 < eta < 1.0e17
+    assert 1.0e-5 < tau_m < 1.0e4
+
+    # 2. Overpressure
+    dp = engine.compute_ocean_overpressure_mpa(50.0, 100.0, 5.0)
+    assert 0.1 < dp < 50.0
+
+    # 3. Evolution
+    hist = engine.evolve_cryosphere(30.0,
+                                    80.0,
+                                    lid_temp_k=120.0,
+                                    freezing_rate_km_myr=0.1,
+                                    t_max_myr=200.0,
+                                    dt_myr=2.0)
+    assert len(hist) > 0
+    assert hist[-1].is_fractured
