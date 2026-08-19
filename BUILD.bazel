@@ -28,7 +28,9 @@ cc_library(
         "cpp/include/terminator_aerosol_discovery.hpp",
         "cpp/include/resonant_chain_discovery.hpp",
         "cpp/include/cryosphere_fracture_discovery.hpp",
+        "cpp/include/interstellar_outgassing_discovery.hpp",
     ],
+
 
 
 
@@ -1783,6 +1785,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_interstellar_outgassing_discovery",
+    srcs = ["discovery_campaigns/frontier_07_interstellar_outgassing/run_interstellar_outgassing_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1933,6 +1943,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "interstellar_outgassing_discovery_test",
+    srcs = ["cpp/include/interstellar_outgassing_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
