@@ -23,7 +23,9 @@ cc_library(
         "cpp/include/stellar_evolution.hpp",
         "cpp/include/star_formation.hpp",
         "cpp/include/radius_valley_discovery.hpp",
+        "cpp/include/ohmic_quenching_discovery.hpp",
     ],
+
 
     includes = ["cpp/include"],
     copts = [
@@ -1738,6 +1740,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_ohmic_quenching_discovery",
+    srcs = ["discovery_campaigns/frontier_02_ohmic_quenching/run_ohmic_quenching_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1848,6 +1858,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "ohmic_quenching_discovery_test",
+    srcs = ["cpp/include/ohmic_quenching_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 # Simulation Executables
