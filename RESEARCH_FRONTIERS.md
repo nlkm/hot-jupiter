@@ -23,11 +23,11 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 5  Resonant Chain Stability & Chaos    SOLVED & PUSHED (5-page formal paper PDF,    Symplectic N-body integrator + tidal
    in Compact Systems (TRAPPIST-1)     critical damping criterion, 3 pub figures)   eccentricity damping + disk migration
 ------------------------------------------------------------------------------------------------------------------------
-6  Ocean-Freezing Rupture Mechanics    QUEUED / NEXT FOR EXECUTION                  Viscoelastic Maxwell/Andrade crust shell
-
-   on Outer Moon Cryospheres           (Cryosphere extensional tectonics)           + volumetric phase transition expansion
+6  Ocean-Freezing Rupture Mechanics    SOLVED & PUSHED (4-page formal paper PDF,    Viscoelastic Maxwell/Andrade crust shell
+   on Outer Moon Cryospheres           Charon/Tethys rifts, 3 pub figures)          + volumetric phase transition expansion
 ------------------------------------------------------------------------------------------------------------------------
 7  Interstellar Object (ISO) Volatile  QUEUED / NEXT FOR EXECUTION                  Anisotropic non-gravitational sublimation
+
    Depletion & Structural Integrity    (Outgassing torques & super-porosity)        torque + thermal tensile spallation
 ------------------------------------------------------------------------------------------------------------------------
 8  Tidal Dissipation in Viscoelastic   QUEUED / NEXT FOR EXECUTION                  Coupled rheological Andrade mantle creep
