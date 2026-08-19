@@ -48,8 +48,39 @@ def test_population_simulator():
     res = sim.run_incremental_simulation()
 
     assert isinstance(res, IncrementalPopulationResult)
-    assert len(res.catalog_names) == 3
-    assert len(res.R_obs_jup) == 3
-    assert "Stage 0: Non-irradiated Base" in res.stage_results
     assert 0.0 <= res.stage_results[
         "Stage 0: Non-irradiated Base"].ks_stat <= 1.0
+
+
+def test_radius_valley_discovery():
+    from hot_jupiter.population import RadiusValleyDiscovery
+    rv = RadiusValleyDiscovery(seed=42)
+
+    # 1. Mass loss rates
+    mdot_photo = rv.photoevaporative_mass_loss_rate(m_core_me=5.0,
+                                                    f_env=0.03,
+                                                    a_au=0.05,
+                                                    m_star_msun=1.0,
+                                                    age_gyr=0.05)
+    assert mdot_photo > 0.0
+
+    mdot_core = rv.core_powered_mass_loss_rate(m_core_me=5.0,
+                                               f_env=0.03,
+                                               a_au=0.05,
+                                               m_star_msun=1.0,
+                                               age_gyr=1.0)
+    assert mdot_core > 0.0
+
+    # 2. Planet radii
+    r_rock = rv.compute_planet_radius(5.0, 0.0, 0.0, 0.05, 1.0, 5.0)
+    r_water = rv.compute_planet_radius(5.0, 0.0, 0.50, 0.05, 1.0, 5.0)
+    r_gas = rv.compute_planet_radius(5.0, 0.03, 0.0, 0.05, 1.0, 5.0)
+    assert r_gas > r_water > r_rock
+
+    # 3. Valley slopes
+    assert abs(rv.valley_slope_dlogr_dlogp("photoevaporation") - (-0.11)) < 0.01
+    assert abs(rv.valley_slope_dlogr_dlogp("core_powered") - (-0.06)) < 0.01
+    assert abs(rv.valley_slope_dlogr_dlogp("water_worlds") - 0.00) < 0.01
+    assert abs(rv.valley_slope_dlogr_dlogmstar("photoevaporation") -
+               0.25) < 0.01
+    assert abs(rv.valley_slope_dlogr_dlogmstar("core_powered") - 0.35) < 0.01

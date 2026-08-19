@@ -7,6 +7,10 @@ from hot_jupiter.population.catalog import (
     get_curated_hot_jupiter_catalog,
 )
 from hot_jupiter.population.core_scaling import estimate_heavy_element_mass
+from hot_jupiter.population.radius_valley import (
+    RadiusValleyDiscovery,
+    ValleyDiscoveryResult,
+)
 from hot_jupiter.population.selection_effects import (
     geometric_transit_probability,
     transit_detection_completeness,
@@ -23,6 +27,8 @@ __all__ = [
     "IncrementalModelStats",
     "IncrementalPopulationResult",
     "PopulationSimulator",
+    "RadiusValleyDiscovery",
+    "ValleyDiscoveryResult",
     "estimate_heavy_element_mass",
     "geometric_transit_probability",
     "get_curated_hot_jupiter_catalog",
