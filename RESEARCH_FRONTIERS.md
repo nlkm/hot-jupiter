@@ -20,11 +20,11 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 4  Asymmetric Aerosol Rainout & Day-   SOLVED & PUSHED (4-page formal paper PDF,    3D GCM tracer advection + kinetic cloud
    Night Chemical Quenching in EGPs    JWST transmission asymmetry, 3 pub figures)  nucleation/settling + JWST phase curves
 ------------------------------------------------------------------------------------------------------------------------
-5  Resonant Chain Stability & Chaos    QUEUED / NEXT FOR EXECUTION                  Symplectic N-body integrator + tidal
-
-   in Compact Systems (TRAPPIST-1)     (Resonant chain breaking vs preservation)    eccentricity damping + disk migration
+5  Resonant Chain Stability & Chaos    SOLVED & PUSHED (5-page formal paper PDF,    Symplectic N-body integrator + tidal
+   in Compact Systems (TRAPPIST-1)     critical damping criterion, 3 pub figures)   eccentricity damping + disk migration
 ------------------------------------------------------------------------------------------------------------------------
 6  Ocean-Freezing Rupture Mechanics    QUEUED / NEXT FOR EXECUTION                  Viscoelastic Maxwell/Andrade crust shell
+
    on Outer Moon Cryospheres           (Cryosphere extensional tectonics)           + volumetric phase transition expansion
 ------------------------------------------------------------------------------------------------------------------------
 7  Interstellar Object (ISO) Volatile  QUEUED / NEXT FOR EXECUTION                  Anisotropic non-gravitational sublimation
