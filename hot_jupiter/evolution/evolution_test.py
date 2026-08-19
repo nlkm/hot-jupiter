@@ -79,3 +79,30 @@ def test_hot_jupiter_cooling_track():
     assert result.S[0] > result.S[-1]  # Entropy decreases (cooling)
     assert result.R_p[0] >= result.R_p[-1]  # Planet contracts as it cools
     assert result.L_int[0] > result.L_int[-1]  # Intrinsic luminosity decreases
+
+
+def test_ohmic_quenching_discovery():
+    from hot_jupiter.evolution import OhmicQuenchingDiscovery
+    oq = OhmicQuenchingDiscovery(b_field_gauss=5.0, planet_mass_mjup=1.0)
+
+    # 1. Conductivity
+    sig_1200 = oq.atmospheric_conductivity(1200.0)
+    sig_2400 = oq.atmospheric_conductivity(2400.0)
+    assert sig_2400 > sig_1200
+
+    # 2. Wind speed braking
+    v_1200 = oq.wind_speed(1200.0, sig_1200)
+    v_2400 = oq.wind_speed(2400.0, sig_2400)
+    assert v_2400 < v_1200  # Lorentz drag decelerates hot atmosphere
+
+    # 3. Ohmic dissipation peak
+    p_1200 = oq.ohmic_power(1200.0)
+    p_1800 = oq.ohmic_power(1800.0)
+    p_2600 = oq.ohmic_power(2600.0)
+    assert p_1800 > p_1200
+    assert p_1800 > p_2600  # Non-monotonic peak
+
+    # 4. State evaluation
+    res = oq.evaluate(2200.0)
+    assert res.is_quenched
+    assert res.inflated_radius_rjup > 1.2

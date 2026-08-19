@@ -7,7 +7,15 @@ from hot_jupiter.evolution.integrator import (
     EvolutionResult,
     ThermalEvolutionIntegrator,
 )
+from hot_jupiter.evolution.ohmic_quenching import (
+    OhmicQuenchingDiscovery,
+    OhmicQuenchingResult,
+)
 
 __all__ = [
-    "CoupledEvolutionResult", "EvolutionResult", "ThermalEvolutionIntegrator"
+    "CoupledEvolutionResult",
+    "EvolutionResult",
+    "OhmicQuenchingDiscovery",
+    "OhmicQuenchingResult",
+    "ThermalEvolutionIntegrator",
 ]
