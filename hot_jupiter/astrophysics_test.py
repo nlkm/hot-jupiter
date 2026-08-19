@@ -146,3 +146,29 @@ def test_interstellar_outgassing_discovery():
     hist = engine.evolve_flyby(0.255, 8.14, 60.0, 1.0)
     assert len(hist) > 0
     assert hist[len(hist) // 2].non_grav_accel_m_s2 > a_ng
+
+
+def test_viscoelastic_tides_discovery():
+    from hot_jupiter.heating import ViscoelasticTidesDiscovery
+    engine = ViscoelasticTidesDiscovery(planet_radius_m=1.8216e6,
+                                        planet_mass_kg=8.9319e22,
+                                        star_mass_kg=1.89813e27,
+                                        semi_major_axis_m=4.217e8,
+                                        eccentricity=0.0041,
+                                        shear_modulus_gpa=65.0,
+                                        andrade_alpha=0.30,
+                                        andrade_zeta=1.0)
+
+    # 1. Forcing frequency & period
+    omega = engine.tidal_forcing_frequency_rad_s()
+    period_days = (2.0 * np.pi / omega) / 86400.0
+    assert abs(period_days - 1.769) < 0.05
+
+    # 2. Love number
+    k2 = engine.compute_complex_love_number(omega, 1500.0, "andrade")
+    assert 0.01 < k2.real < 1.5
+    assert 1.0e-5 < abs(k2.imag) < 0.5
+
+    # 3. Io power
+    p_w = engine.compute_tidal_heating_power_watts(1550.0, "andrade")
+    assert 10.0 < (p_w / 1.0e12) < 500.0
