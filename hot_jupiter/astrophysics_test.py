@@ -121,3 +121,28 @@ def test_cryosphere_fracture_discovery():
                                     dt_myr=2.0)
     assert len(hist) > 0
     assert hist[-1].is_fractured
+
+
+def test_interstellar_outgassing_discovery():
+    from hot_jupiter.solar_system import InterstellarOutgassingDiscovery
+    engine = InterstellarOutgassingDiscovery(eff_radius_m=100.0,
+                                             axis_ratio_a_over_b=6.0,
+                                             bulk_density_kg_m3=300.0,
+                                             porosity_fraction=0.70,
+                                             tensile_strength_pa=10.0,
+                                             ice_type="H2")
+
+    # 1. Sublimation & exhaust velocity
+    z = engine.sublimation_flux_kg_m2_s(1.0)
+    v_th = engine.thermal_exhaust_velocity_m_s(280.0)
+    assert 1.0e-4 < z < 1.0e-1
+    assert 500.0 < v_th < 2500.0
+
+    # 2. Non-gravitational acceleration
+    a_ng = engine.compute_non_grav_acceleration(1.0, 0.25)
+    assert 1.0e-7 < a_ng < 1.0e-4
+
+    # 3. Evolution
+    hist = engine.evolve_flyby(0.255, 8.14, 60.0, 1.0)
+    assert len(hist) > 0
+    assert hist[len(hist) // 2].non_grav_accel_m_s2 > a_ng

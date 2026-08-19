@@ -1601,6 +1601,10 @@ from hot_jupiter.solar_system.cryosphere_fracture import (
     CryosphereEvolutionStep,
     CryosphereFractureDiscovery,
 )
+from hot_jupiter.solar_system.interstellar_outgassing import (
+    InterstellarOutgassingDiscovery,
+    OutgassingEvolutionStep,
+)
 
 __all__ = [
     "AZ84Binary",
@@ -1632,6 +1636,7 @@ __all__ = [
     "HATP11bHeliumEscape",
     "HD189733bMassLoss",
     "HD209458bPhotoevaporation",
+    "InterstellarOutgassingDiscovery",
     "IoLaplaceTidalAnalysis",
     "JA132Binary",
     "JupiterJunoGravityAnalysis",
@@ -1651,6 +1656,7 @@ __all__ = [
     "NiceModelResonanceCrossing",
     "OJ67Binary",
     "OJ67TNOBinary",
+    "OutgassingEvolutionStep",
     "PD149Binary",
     "PlanetNineFinder",
     "PlanetNineSecular",
