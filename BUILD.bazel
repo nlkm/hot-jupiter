@@ -29,7 +29,9 @@ cc_library(
         "cpp/include/resonant_chain_discovery.hpp",
         "cpp/include/cryosphere_fracture_discovery.hpp",
         "cpp/include/interstellar_outgassing_discovery.hpp",
+        "cpp/include/viscoelastic_tides_discovery.hpp",
     ],
+
 
 
 
@@ -1792,6 +1794,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "run_viscoelastic_tides_discovery",
+    srcs = ["discovery_campaigns/frontier_08_viscoelastic_tides/run_viscoelastic_tides_discovery.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
@@ -1950,6 +1960,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "viscoelastic_tides_discovery_test",
+    srcs = ["cpp/include/viscoelastic_tides_discovery_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
