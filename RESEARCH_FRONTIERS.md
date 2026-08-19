@@ -29,10 +29,10 @@ Our unified C++ physics library (`hot_jupiter`) combines non-ideal equations of 
 7  Interstellar Object (ISO) Volatile  SOLVED & PUSHED (4-page formal paper PDF,    Anisotropic non-gravitational sublimation
    Depletion & Structural Integrity    1I/2I outgassing & spin, 3 pub figures)      torque + thermal tensile spallation
 ------------------------------------------------------------------------------------------------------------------------
-8  Tidal Dissipation in Viscoelastic   QUEUED / NEXT FOR EXECUTION                  Coupled rheological Andrade mantle creep
-
-   Solid Mantles vs. Fluid Cores       (Frequency-dependent Andrade mantle creep)   + multi-layer core-mantle boundary solver
+8  Tidal Dissipation in Viscoelastic   SOLVED & PUSHED (4-page formal paper PDF,    Coupled rheological Andrade mantle creep
+   Solid Mantles vs. Fluid Cores       Io/TRAPPIST-1e heating, 3 pub figures)       + multi-layer core-mantle boundary solver
 ========================================================================================================================
+
 
 ```
 
