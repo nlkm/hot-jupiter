@@ -1927,6 +1927,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "paper_69_driver",
+    srcs = ["replications_observational/paper_69/toi849b_chthonian_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
