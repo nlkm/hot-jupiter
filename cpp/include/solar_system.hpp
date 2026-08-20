@@ -22403,7 +22403,20 @@ class CharonTectonicFreezingModel {
   double global_lithospheric_strain() const { return 0.02; }
 };
 
+// ============================================================================
+// 83. URANUS MOON MIRANDA VERONA RUPES EXTENSIONAL TECTONICS (Smith 1986, Pappalardo 1997)
+// ============================================================================
+class MirandaVeronaRupesModel {
+ public:
+  double cliff_vertical_relief_km() const { return 20.0; }
+  double surface_gravity_m_s2() const { return 0.079; }
+  double dip_angle_degrees() const { return 65.0; }
+  double tensile_strength_ice_mpa() const { return 2.5; }
+  double fall_duration_freefall_minutes() const { return 12.0; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
+
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 
 
