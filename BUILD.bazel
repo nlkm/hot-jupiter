@@ -1913,6 +1913,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "paper_67_driver",
+    srcs = ["replications_observational/paper_67/bennu_ejection_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
