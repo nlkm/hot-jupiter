@@ -2095,6 +2095,14 @@ cc_binary(
     deps = [":hot_jupiter_lib"],
 )
 
+cc_binary(
+    name = "paper_93_driver",
+    srcs = ["replications_observational/paper_93/sputnik_convection_paper.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
+
 
 
 
