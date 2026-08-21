@@ -667,6 +667,48 @@ class QuaoarWeywotBinaryModel {
 };
 
 // ============================================================================
+// 27b. (50000) QUAOAR DENSE RING SYSTEM BEYOND ROCHE LIMIT (Morgado et al. 2023 Nature, Pereira 2023)
+// ============================================================================
+class QuaoarRingSystemModel {
+ public:
+  // Classical Fluid Roche Limit Radius [km]
+  double classical_roche_limit_km(double R_q_km = 555.0, double rho_q = 2000.0, double rho_ring = 1000.0) const {
+    return 2.456 * R_q_km * std::pow(rho_q / rho_ring, 1.0 / 3.0); // ~ 1720 km (~ 3.1 R_Q)
+  }
+
+  // Primary Ring Q1R Radius [km] (Morgado et al. 2023 Nature)
+  double q1r_ring_radius_km() const {
+    return 4100.0; // ~ 7.4 R_Q (far outside classical Roche limit!)
+  }
+
+  // Secondary Ring Q2R Radius [km] (Pereira et al. 2023 A&A)
+  double q2r_ring_radius_km() const {
+    return 2520.0; // ~ 4.5 R_Q
+  }
+
+  // 6:1 Spin-Orbit Resonance Radius [km] (P_rot = 8.84 hr, M_q = 1.2e21 kg)
+  double spin_orbit_resonance_radius_km(int p = 6, int q = 1, double P_rot_hr = 8.84, double M_q_kg = 1.20e21) const {
+    double P_rot_s = P_rot_hr * 3600.0;
+    double P_orb_s = P_rot_s * (static_cast<double>(p) / static_cast<double>(q));
+    double n_orb = 2.0 * M_PI / P_orb_s;
+    double a_m = std::pow(G * M_q_kg / (n_orb * n_orb), 1.0 / 3.0);
+    return a_m / 1000.0; // ~ 4190 km (near Q1R ring!)
+  }
+
+  // Inhomogeneous Occultation Optical Depth Profile tau(r)
+  double occultation_optical_depth(double r_km) const {
+    double r_q1r = 4100.0;
+    double w_dense = 5.0; // km
+    double w_sheet = 60.0; // km
+    // Dense clump + broad tenuous sheet
+    double tau_dense = 0.70 * std::exp(-std::pow((r_km - r_q1r) / w_dense, 2.0));
+    double tau_sheet = 0.05 * std::exp(-std::pow((r_km - r_q1r) / w_sheet, 2.0));
+    return tau_dense + tau_sheet;
+  }
+};
+
+
+// ============================================================================
 // 28. SCATTERED TNO BINARY (144897) 2004 UX10 DYNAMICS (Grundy et al. 2012)
 // ============================================================================
 class UX10BinaryModel {
