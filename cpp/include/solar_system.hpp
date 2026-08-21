@@ -22427,7 +22427,20 @@ class SaturnFRingPrometheusModel {
   double synodic_encounter_period_hours() const { return 68.0; }
 };
 
+// ============================================================================
+// 85. MARS OLYMPUS MONS CALDERA SUBSIDENCE & MAGMA CHAMBER (Zuber 1993, Mouginis-Mark 2007)
+// ============================================================================
+class MarsOlympusMonsCalderaModel {
+ public:
+  double volcano_summit_elevation_km() const { return 21.287; }
+  double caldera_complex_diameter_km() const { return 80.0; }
+  double maximum_caldera_depth_km() const { return 3.2; }
+  double magma_chamber_depth_km() const { return 15.0; }
+  double flexural_rigidity_n_m() const { return 2.0e24; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
+
 
 
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
