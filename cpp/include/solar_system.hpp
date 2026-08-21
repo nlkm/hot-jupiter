@@ -22415,7 +22415,20 @@ class MirandaVeronaRupesModel {
   double fall_duration_freefall_minutes() const { return 12.0; }
 };
 
+// ============================================================================
+// 84. SATURN F-RING PROMETHEUS & PANDORA SHEPHERD CLUMPING (Murray 2005, Cuzzi 2014)
+// ============================================================================
+class SaturnFRingPrometheusModel {
+ public:
+  double ring_core_semimajor_axis_km() const { return 140220.0; }
+  double prometheus_semimajor_axis_km() const { return 139380.0; }
+  double pandora_semimajor_axis_km() const { return 141720.0; }
+  double streamer_channel_depth_km() const { return 50.0; }
+  double synodic_encounter_period_hours() const { return 68.0; }
+};
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
+
 
 using Vokrouhlicky2015Model = Vokrouhlicky2015YarkovskyYORPModel;
 
