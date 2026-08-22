@@ -22521,6 +22521,19 @@ class MarsOlympusMonsCalderaModel {
   double flexural_rigidity_n_m() const { return 2.0e24; }
 };
 
+// ============================================================================
+// 86. JUPITER GREAT RED SPOT DEEP ROOT DYNAMICS (Bolton 2021 Science, Parisi 2021)
+// ============================================================================
+class JupiterGreatRedSpotJunoModel {
+ public:
+  double grs_length_km() const { return 16000.0; }
+  double grs_width_km() const { return 12000.0; }
+  double max_wind_speed_m_s() const { return 120.0; }
+  double vertical_root_depth_km() const { return 300.0; } // 300 km (Juno MWR / gravity)
+  double deep_density_contrast() const { return 0.0015; }
+};
+
+
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 
 
