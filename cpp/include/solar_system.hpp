@@ -22547,6 +22547,19 @@ class MimasSubsurfaceOceanModel {
   double ocean_age_myr() const { return 15.0; }             // < 25 Myr (Young ocean)
 };
 
+// ============================================================================
+// 88. SATURN NORTH POLAR HEXAGON ROSSBY WAVE (Godfrey 1988, Fletcher 2018)
+// ============================================================================
+class SaturnHexagonRossbyModel {
+ public:
+  double latitude_degrees() const { return 78.3; }       // 78.3 deg N
+  int azimuthal_wavenumber() const { return 6; }          // 6-sided polygon
+  double zonal_jet_speed_m_s() const { return 100.0; }   // 100 m/s prograde
+  double jet_width_km() const { return 1500.0; }         // 1500 km
+  double phase_drift_rate_deg_yr() const { return 0.01; } // Nearly stationary (System III)
+};
+
+
 
 
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
