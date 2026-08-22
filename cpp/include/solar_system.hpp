@@ -22559,6 +22559,19 @@ class SaturnHexagonRossbyModel {
   double phase_drift_rate_deg_yr() const { return 0.01; } // Nearly stationary (System III)
 };
 
+// ============================================================================
+// 89. MARS SUBSURFACE GLACIAL SCARP & SHARAD STRATIGRAPHY (Dundas 2018, Holt 2008)
+// ============================================================================
+class MarsSubsurfaceGlacialScarpModel {
+ public:
+  double exposed_ice_thickness_m() const { return 130.0; } // 100-150 m scarp exposure
+  double dry_lag_thickness_m() const { return 1.5; }        // 1-2 m regolith lag
+  double ice_volume_purity_percent() const { return 95.0; } // > 90-98% pure H2O ice
+  double dielectric_permittivity() const { return 3.15; }   // Pure water ice (SHARAD)
+  double scarp_slope_degrees() const { return 45.0; }       // Steep eroding scarp
+};
+
+
 
 
 
