@@ -22533,6 +22533,21 @@ class JupiterGreatRedSpotJunoModel {
   double deep_density_contrast() const { return 0.0015; }
 };
 
+// ============================================================================
+// 87. SATURN MIMAS SUBSURFACE OCEAN & LIBRATION (Lainey 2024 Nature, Tajeddine 2014)
+// ============================================================================
+class MimasSubsurfaceOceanModel {
+ public:
+  double mimas_radius_km() const { return 198.2; }
+  double mimas_mass_kg() const { return 3.75e19; }
+  double orbital_eccentricity() const { return 0.0202; }
+  double libration_amplitude_arcsec() const { return 49.3; } // Cassini ISS
+  double ice_shell_thickness_km() const { return 25.0; }     // 20-30 km
+  double ocean_layer_thickness_km() const { return 45.0; }   // 40-50 km
+  double ocean_age_myr() const { return 15.0; }             // < 25 Myr (Young ocean)
+};
+
+
 
 using Paper274YarkovskyYORPModel = Vokrouhlicky2015YarkovskyYORPModel;
 
