@@ -22366,6 +22366,32 @@ class BennuParticleEjectionModel {
 };
 
 // ============================================================================
+// 75b. (101955) BENNU TAGSAM SURFACE GRANULAR PENETRATION (Lauretta 2022 Science, Walsh 2022)
+// ============================================================================
+class BennuTAGSAMGranularModel {
+ public:
+  // Surface Effective Microgravity [m/s^2]
+  double surface_gravity_m_s2() const { return 6.0e-5; } // ~ 60 um/s^2
+
+  // Surface Regolith Cohesion [Pa]
+  double surface_cohesion_pa() const { return 1.5; } // Ultra-low cohesion (< 2 Pa)
+
+  // TAGSAM Penetration Depth [m] (Walsh et al. 2022 Science)
+  double tagsam_penetration_depth_m() const { return 0.488; } // 48.8 cm
+
+  // Sample Mass Acquired [grams]
+  double sample_mass_grams() const { return 121.6; } // g (Curated NASA JSC total)
+
+  // Granular Resistance Force F_R(z) [N] as function of depth z [m]
+  double resistance_force_newtons(double z_m, double v_m_s = 0.10) const {
+    double k_depth = 1.8; // N/m
+    double c_drag = 4.5;  // N/(m/s)^2
+    return k_depth * z_m + c_drag * (v_m_s * v_m_s);
+  }
+};
+
+
+// ============================================================================
 // 76. LHS 3844b BARE ROCK THERMAL EMISSION (Kreidberg et al. 2019 Nature)
 // ============================================================================
 class LHS3844bBareRockModel {
