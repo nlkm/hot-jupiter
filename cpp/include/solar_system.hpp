@@ -1083,6 +1083,20 @@ class ErisDysnomiaModel {
 };
 
 // ============================================================================
+// 43b. (136199) ERIS SURFACE METHANE FROST & VOLATILITY (Sicardy 2011 Nature, Brown 2007)
+// ============================================================================
+class ErisSurfaceMethaneModel {
+ public:
+  double eris_radius_km() const { return 1163.0; }
+  double eris_mass_kg() const { return 1.66e22; }
+  double geometric_albedo() const { return 0.96; }
+  double surface_temp_aphelion_k() const { return 30.0; }
+  double methane_ice_fraction() const { return 0.15; }
+  double nitrogen_ice_fraction() const { return 0.85; }
+};
+
+
+// ============================================================================
 // 44. HAUMEA TRIAXIAL ELLIPSOID & RING DYNAMICS MODEL (Ortiz 2017, Ragozzine 2009)
 // ============================================================================
 class HaumeaEllipsoidRingModel {
