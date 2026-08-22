@@ -72,13 +72,18 @@ class RadiusValleyDiscoveryEngine {
     double m_tot = m_core_me * (1.0 + f_env);
     double m_tot_kg = m_tot * M_EARTH;
 
+    // Thermal sound speed in hydrogen-helium envelope (mu ~ 2.3 amu)
+    double c_s = std::sqrt(KB * t_eq / (2.35 * MASS_P));
 
-    // Core cooling luminosity: L_core = E_thermal / (C * age)
+    // Core cooling luminosity: L_core = E_thermal / (C * age) (Gupta & Schlichting 2019)
     double e_core = 1.0e31 * m_core_me;  // Joules
     double l_core = e_core / (age_gyr * 3.15576e16 + 1.0e14);
     double r_planet_m = ComputePlanetRadius(m_core_me, f_env, 0.0, a_au, m_star_msun, age_gyr) * R_EARTH;
 
-    double mdot_kg_s = l_core / (G * m_tot_kg / r_planet_m);
+    double phi_grav = G * m_tot_kg / r_planet_m;
+    double thermal_enhancement = 1.0 + std::pow(c_s, 2) / std::max(1.0e4, phi_grav);
+
+    double mdot_kg_s = (l_core / phi_grav) * thermal_enhancement;
     double mdot_me_gyr = (mdot_kg_s * 3.15576e16) / M_EARTH;
     return std::max(0.0, mdot_me_gyr);
   }

@@ -30,6 +30,7 @@ cc_library(
         "cpp/include/cryosphere_fracture_discovery.hpp",
         "cpp/include/interstellar_outgassing_discovery.hpp",
         "cpp/include/viscoelastic_tides_discovery.hpp",
+        "cpp/include/frontier_independent_validation.hpp",
     ],
 
 
@@ -2503,6 +2504,14 @@ cc_test(
     copts = ["-std=c++17", "-O3"],
     deps = [":hot_jupiter_lib"],
 )
+
+cc_test(
+    name = "frontier_independent_validation_test",
+    srcs = ["cpp/include/frontier_independent_validation_test.cpp"],
+    copts = ["-std=c++17", "-O3"],
+    deps = [":hot_jupiter_lib"],
+)
+
 
 
 
